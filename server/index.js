@@ -1,12 +1,12 @@
 import "dotenv/config";
-import cors from 'cors';
-import express from 'express';
-import http from 'http';
-import {Server} from 'socket.io';
+import cors from "cors";
+import express from "express";
+import http from "http";
+import { Server } from "socket.io";
 
 import dbConnection from "./config/mongo.js";
 
-import Match from "./models/matche.js";
+import Match from "./models/match.js";
 
 import authRouter from "./routes/auth.js";
 // import userRouter from "./routes/user.js";
@@ -23,25 +23,33 @@ app.use(cors());
 
 const server = http.createServer(app);
 const io = new Server(server, {
-    cors: {
-        origin: process.env.REACT_ADDRESS,
-        methods: ["GET", "POST"]
-    }
-})
+	cors: {
+		origin: process.env.REACT_ADDRESS,
+		methods: ["GET", "POST"],
+	},
+});
+
+// Connect to DB
+await dbConnection();
+
+// // Formula to check if the match is started
+// const match = (await Match.find())[1];
+// console.log(match.kickoffTime);
+// console.log(new Date())
 
 // Start watching Match collection
-const changeStream = Match.watch();
-changeStream.on('change', async change => {
-    if (change.prerationType === 'update' || change.operationType === 'replace') {
-        const matchId = change.documentKey._id;
-        const updatedMatch = await Match.findById(matchId);
+Match.watch().on("change", async (change) => {
+	if (change.operationType === "update" || change.operationType === "replace" || change.operationType === "insert") {
+		const matchId = change.documentKey._id;
+		const updatedMatch = await Match.findById(matchId);
         if (updatedMatch) {
-            io.emit('match_updated', updatedMatch);
-        }
-    }
-    io.emit('match', change.fullDocument);
-})
-dbConnection();
+			console.log(updatedMatch);
+
+			io.emit("match-updated", updatedMatch);
+		}
+	}
+	io.emit("match", change.fullDocument);
+});
 
 app.use("/auth", authRouter);
 

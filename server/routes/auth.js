@@ -29,7 +29,7 @@ router.post("/login", async (req, res) => {
     }
 })
 
-router.post("/register", async () => {
+router.post("/register", async (req, res) => {
     const userData = req.body;
     try {
         const user = await createUser(userData);

@@ -4,8 +4,9 @@ const GroupSchema = new Schema(
 	{
 		name: { type: String, required: true },
 		code: { type: String, required: true },
-		owner: { type: Schema.Types.ObjectId, ref: "user", required: true },
-		members: [{ type: Schema.Types.ObjectId, ref: "user" }],
+		owner: { type: Schema.Types.ObjectId, ref: "User", required: true },
+		members: [{ type: Schema.Types.ObjectId, ref: "User" }],
+		tournaments: { type: Schema.Types.ObjectId, ref: 'Tournament', required: true },
 	},
 	{ versionKey: false }
 );

@@ -2,8 +2,8 @@ import { Schema, model } from "mongoose";
 
 const BetSchema = new Schema(
 	{
-		userId: { type: String, required: true },
-		matchId: { type: Number, required: true },
+		userId: { type: Schema.Types.ObjectId, ref: "User", required: true },
+		matchId: { type: Schema.Types.ObjectId, ref: "Match", required: true },
 		finalScore: {
 			homeScore: { type: Number, required: true },
 			awayScore: { type: Number, required: true },

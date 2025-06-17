@@ -7,6 +7,7 @@ const UserSchema = new Schema(
         username: { type: String, required: true },
         email: { type: String, required: true },
         password: { type: String },
+        admin: { type: Boolean, default: false },
         // Field to check if the user is verified(active the account with mail)
         isVerified: { type: Boolean, default: false },
         groups: [{ type: Schema.Types.ObjectId, ref: "Group" }],

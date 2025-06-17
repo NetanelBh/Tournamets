@@ -8,11 +8,13 @@ import dbConnection from "./config/mongo.js";
 import matchWatch from "./collectionWatch/matchWatch.js";
 
 import authentication from "./middleware/authentication.js";
+
 import authRouter from "./routes/auth.js";
+import userRouter from "./routes/userRoute.js";
 import groupRouter from "./routes/groupRoute.js";
-// import userRouter from "./routes/user.js";
-// import matchRouter from "./routes/match.js";
-// import betRouter from "./routes/bet.js";
+import tounamentRouter from "./routes/tournamentsRoute.js";
+// import matchRouter from "./routes/matchRouter.js";
+// import betRouter from "./routes/betRouter.js";
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -45,11 +47,8 @@ matchWatch(io);
 
 // Middleware to check if the user logged and sent the token
 app.use(authentication)
+app.use("/tournament", tounamentRouter);
+app.use("/user", userRouter);
 app.use("/group", groupRouter);
-
-// // Formula to check if the match is started
-// const match = (await Match.find())[1];
-// console.log(match.kickoffTime);
-// console.log(new Date())
 
 app.listen(PORT, () => console.log(`Server is running on port ${PORT}`));

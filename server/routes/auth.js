@@ -11,7 +11,8 @@ const router = express.Router();
 
 router.post("/login", async (req, res) => {
 	const { username, password } = req.body;
-
+	const isTokenExist = req.headers.authorization;
+	
 	try {
 		const user = await getUserbyUsername(username);
 		if (!user.isVerified) {
@@ -24,14 +25,25 @@ router.post("/login", async (req, res) => {
 			return;
 		}
 
+		// If the token exist, it means the user is logged in already
+		if(isTokenExist) {
+			res.send({status: false, data: "המשתמש כבר מחובר"});
+			return;
+		}
+
 		const isMatch = await bcrypt.compare(password, user.password);
 		if (!isMatch) {
 			res.send({ status: false, data: "סיסמא שגויה" });
 			return;
 		}
 
-		const token = jwt.sign({ id: user.username }, process.env.JWT_SECRET, { expiresIn: "1h" });
-		res.send({ status: true, data: token });
+		const token = jwt.sign({ username: user.username }, process.env.JWT_SECRET, { expiresIn: "4h" });
+		const returnedUser = user.toObject();
+		// Delete the password from the object
+		delete returnedUser.password;
+		// Add the token to the user
+		returnedUser.token = token;
+		res.send({ status: true, data: returnedUser });
 	} catch (error) {
 		res.send({ status: false, data: error.message });
 	}
@@ -61,7 +73,7 @@ router.post("/register", async (req, res) => {
 			return;
 		}
 
-		const token = jwt.sign({ id: user.username }, process.env.JWT_SECRET, { expiresIn: "1h" });
+		const token = jwt.sign({ username: user.username }, process.env.JWT_SECRET, { expiresIn: "1h" });
 		const url = `${process.env.REACT_ADDRESS}/verify/${token}`;
 		await resend.emails.send({
 			from: "onboarding@resend.dev",
@@ -83,6 +95,7 @@ router.get("/verify/:token", async (req, res) => {
 		const decode = jwt.verify(token, process.env.JWT_SECRET);
 		const user = await getUserbyUsername(decode.username);
 		if (!user) {
+
 			res.send({ status: false, data: "שם משתמש לא קיים" });
 			return;
 		}
@@ -97,9 +110,6 @@ router.get("/verify/:token", async (req, res) => {
 			res.send({ status: false, data: "אירעה בעיה בעדכון המשתמש" });
 			return;
 		}
-
-		console.log(updatedUser);
-		
 
 		res.send({ status: true, data: "המשתמש אומת בהצלחה" });
 	} catch (error) {
@@ -117,7 +127,7 @@ router.post("/forgot-password", async (req, res) => {
 			return;
 		}
 
-		const token = jwt.sign({ id: user.username }, process.env.JWT_SECRET, { expiresIn: "1h" });
+		const token = jwt.sign({ username: user.username }, process.env.JWT_SECRET, { expiresIn: "1h" });
 		const url = `${process.env.REACT_ADDRESS}/reset-password/${token}`;
 		await resend.emails.send({
 			from: "onboarding@resend.dev",

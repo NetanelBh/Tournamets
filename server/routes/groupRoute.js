@@ -7,7 +7,7 @@ const router = express.Router();
 // Entry point: localhost:3000/group
 
 router.post("/create", async (req, res) => {
-	const { name, code, userId } = req.body;
+	const { name, code } = req.body;
 	try {
 		// First check if the group exist
 		const isGroupExist = await groupServices.isGroupExist(name);

@@ -29,7 +29,7 @@ router.get("/myTournaments", async (req, res) => {
 });
 
 // Add tournament to user.tournaments
-router.post('/addTournament', async (req, res) => {
+router.post('/joinTournament', async (req, res) => {
     try {
         const {tournamentId} = req.body;
         const user = await userServices.getUserbyUsername(req.user.username);

@@ -73,11 +73,7 @@ router.post("/register", async (req, res) => {
 			return;
 		}
 
-<<<<<<< HEAD
 		const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: "1h" });
-=======
-		const token = jwt.sign({ username: createdUser.username }, process.env.JWT_SECRET, { expiresIn: "1h" });
->>>>>>> group-branch
 		const url = `${process.env.REACT_ADDRESS}/verify/${token}`;
 		await resend.emails.send({
 			from: "onboarding@resend.dev",

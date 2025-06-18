@@ -54,8 +54,8 @@ router.post("/register", async (req, res) => {
 
 	try {
 		// Check if user is exist already
-		const username = await getUserbyUsername(userData.username);
-		if (username) {
+		const user = await getUserbyUsername(userData.username);
+		if (user) {
 			res.send({ status: false, data: "שם משתמש קיים, אנא בחר שם אחר" });
 			return;
 		}
@@ -67,17 +67,21 @@ router.post("/register", async (req, res) => {
 			return;
 		}
 
-		const user = await createUser(userData);
-		if (!user) {
+		const createdUser = await createUser(userData);
+		if (!createdUser) {
 			res.send({ status: false, data: "אירעה בעיה ביצירת המשתמש" });
 			return;
 		}
 
+<<<<<<< HEAD
 		const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: "1h" });
+=======
+		const token = jwt.sign({ username: createdUser.username }, process.env.JWT_SECRET, { expiresIn: "1h" });
+>>>>>>> group-branch
 		const url = `${process.env.REACT_ADDRESS}/verify/${token}`;
 		await resend.emails.send({
 			from: "onboarding@resend.dev",
-			to: user.email,
+			to: createdUser.email,
 			subject: "Verify your email",
 			html: `<p>Please click the link to verify your email:</p><a href="${url}">${url}</a>`,
 		});

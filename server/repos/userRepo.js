@@ -1,6 +1,8 @@
 import Users from "../models/user.js";
 
-export const getUserbyId = (userId) => Users.findOne({ userId });
+export const getUserbyId = (userId) => Users.findOne({ _id: userId });
+
+export const getUserbyUsername = (username) => Users.findOne({ username });
 
 export const getUserByEmail = (email) => Users.findOne({ email });
 

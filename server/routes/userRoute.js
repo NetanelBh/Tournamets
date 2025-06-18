@@ -10,10 +10,6 @@ router.get("/myTournaments", async (req, res) => {
 	try {
 		// Get the user from the DB
 		const user = await userServices.getUserbyId(req.user.id);
-		if (!user) {
-			res.send({ status: false, data: "משתמש לא קיים במערכת" });
-			return;
-		}
 
 		// Get the user tournaments
 		const tournaments = await userServices.getUserTournaments(user.tournaments);
@@ -32,12 +28,11 @@ router.get("/myTournaments", async (req, res) => {
 router.post("/joinTournament", async (req, res) => {
 	try {
 		const { tournamentId } = req.body;
-		const user = await userServices.getUserbyId(req.user.id);
-		if (!user) {
-			res.send({ status: false, data: "משתמש לא קיים במערכת" });
-			return;
-		}
 
+		// Get the user from DB(he exists because he is logged in)
+		const user = await userServices.getUserbyId(req.user.id);
+		
+		// Update the tournament in the user.tournaments
 		const updatedUser = await userServices.addTournamentToUser(user.username, tournamentId);
 		if (!updatedUser) {
 			res.send({ status: false, data: "אירעה בעיה בהוספת הטורניר, אנא נסה שנית" });
@@ -46,7 +41,8 @@ router.post("/joinTournament", async (req, res) => {
 
 		res.send({ status: true, data: "הטורניר התווסף בהצלחה לרשימת הטורנירים שלך" });
 	} catch (error) {
-		res.send({ status: false, data: "אירעה שגיאה בהוספת הטורניר, אנא נסה שנית" });
+		// res.send({ status: false, data: "אירעה שגיאה בהוספת הטורניר, אנא נסה שנית" });
+		res.send({ status: false, data: error.message });
 	}
 });
 

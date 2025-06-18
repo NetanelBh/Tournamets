@@ -12,5 +12,6 @@ export const createTournament = (name, startDate, endDate, startTime, tournament
         startTime,
         symbol: tournamentImage
     }
+    
     return tournamentRepo.createTournament(tournament);
 }

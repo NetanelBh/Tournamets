@@ -2,7 +2,7 @@ import express from "express";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
-import { getUserbyId, createUser, getUserByEmail, updateUser } from "../services/userServices.js";
+import { getUserbyId, getUserbyUsername, createUser, getUserByEmail, updateUser } from "../services/userServices.js";
 
 import { Resend } from "resend";
 
@@ -14,7 +14,7 @@ router.post("/login", async (req, res) => {
 	const isTokenExist = req.headers.authorization;
 	
 	try {
-		const user = await getUserbyId(req.user.id);
+		const user = await getUserbyUsername(username);
 		if (!user) {
 			res.send({ status: false, data: "המשתמש לא רשום במערכת" });
 			return;
@@ -55,28 +55,30 @@ router.post("/login", async (req, res) => {
 });
 
 router.post("/register", async (req, res) => {
-	const userData = req.body;
+	const userData = req.body
 
 	try {
+		const isUserExist = await getUserbyUsername(userData.username);
 		// Check if user is exist already
-		if (user.username) {
-			res.send({ status: false, data: "שם משתמש קיים, אנא בחר שם אחר" });
+		if (isUserExist) {
+			res.send({ status: false, data: "משתמש קיים במערכת , אנא בחר שם אחר" });
 			return;
 		}
 
 		// Check if the email exist already
-		if (userData.email) {
+		const isMailExist = await getUserByEmail(userData.email);
+		if (isMailExist) {
 			res.send({ status: false, data: "דואר אלקטרוני קיים כבר במערכת" });
 			return;
 		}
 
-		const createdUser = await createUser(userData);
+		const createdUser = await createUser(userData);		
 		if (!createdUser) {
 			res.send({ status: false, data: "אירעה בעיה ביצירת המשתמש" });
 			return;
 		}
 
-		const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: "1h" });
+		const token = jwt.sign({ id: createdUser._id }, process.env.JWT_SECRET, { expiresIn: "1h" });
 		const url = `${process.env.REACT_ADDRESS}/verify/${token}`;
 		await resend.emails.send({
 			from: "onboarding@resend.dev",
@@ -96,7 +98,7 @@ router.get("/verify/:token", async (req, res) => {
 
 	try {
 		const decode = jwt.verify(token, process.env.JWT_SECRET);
-		const user = await getUserbyUsername(decode.username);
+		const user = await getUserbyId(decode.id);
 		if (!user) {
 
 			res.send({ status: false, data: "שם משתמש לא קיים" });
@@ -150,7 +152,7 @@ router.post("/reset-password/:token", async (req, res) => {
 	const { newPassword } = req.body;
 	try {
 		const decode = jwt.verify(token, process.env.JWT_SECRET);
-		const user = await getUserbyUsername(decode.username);
+		const user = await getUserbyId(decode.id);
 		if (!user) {
 			res.send({ status: false, data: "שם משתמש לא קיים" });
 			return;

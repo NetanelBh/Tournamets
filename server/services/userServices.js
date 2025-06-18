@@ -5,6 +5,8 @@ import bcrypt from "bcrypt";
 
 export const getUserbyId = (userId) => userRepo.getUserbyId(userId);
 
+export const getUserbyUsername = (username) => userRepo.getUserbyUsername(username);
+
 export const getUserByEmail = (email) => userRepo.getUserByEmail(email);
 
 export const createUser = (user) => {

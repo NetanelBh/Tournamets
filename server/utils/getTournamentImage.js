@@ -1,15 +1,9 @@
 import axios from "axios";
 
-const getImageFromWikipedia = async (tournamentName) => {
+const getImageFromWikipediaApi = async (imageParams) => {
 	try {
 		const res = await axios.get("https://en.wikipedia.org/w/api.php", {
-			params: {
-				action: "query",
-				titles: tournamentName,
-				prop: "pageimages",
-				format: "json",
-				pithumbsize: 500,
-			},
+			params: imageParams
 		});
 
 		return res;
@@ -19,4 +13,4 @@ const getImageFromWikipedia = async (tournamentName) => {
 	}
 };
 
-export default getImageFromWikipedia;
+export default getImageFromWikipediaApi;

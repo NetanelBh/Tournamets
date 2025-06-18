@@ -2,7 +2,7 @@ import express from "express";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
-import { getUserbyUsername, createUser, getUserByEmail, updateUser } from "../services/userServices.js";
+import { getUserbyId, createUser, getUserByEmail, updateUser } from "../services/userServices.js";
 
 import { Resend } from "resend";
 
@@ -14,14 +14,19 @@ router.post("/login", async (req, res) => {
 	const isTokenExist = req.headers.authorization;
 	
 	try {
-		const user = await getUserbyUsername(username);
-		if (!user.isVerified) {
-			res.send({ status: false, data: "יש לאמת תחילה את כתובת המייל בלינק שנשלח אליך" });
+		const user = await getUserbyId(req.user.id);
+		if (!user) {
+			res.send({ status: false, data: "המשתמש לא רשום במערכת" });
 			return;
 		}
 
-		if (!user) {
-			res.send({ status: false, data: "שם משתמש לא קיים" });
+		if (user.username !== username) {
+			res.send({ status: false, data: "שם משתמש שגוי, אנא נסה שנית" });
+			return;
+		}
+
+		if (!user.isVerified) {
+			res.send({ status: false, data: "יש לאמת תחילה את כתובת המייל בלינק שנשלח אליך" });
 			return;
 		}
 
@@ -54,15 +59,13 @@ router.post("/register", async (req, res) => {
 
 	try {
 		// Check if user is exist already
-		const user = await getUserbyUsername(userData.username);
-		if (user) {
+		if (user.username) {
 			res.send({ status: false, data: "שם משתמש קיים, אנא בחר שם אחר" });
 			return;
 		}
 
 		// Check if the email exist already
-		const email = await getUserByEmail(userData.email);
-		if (email) {
+		if (userData.email) {
 			res.send({ status: false, data: "דואר אלקטרוני קיים כבר במערכת" });
 			return;
 		}

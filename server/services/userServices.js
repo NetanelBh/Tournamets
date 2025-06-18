@@ -3,7 +3,7 @@ import {getTournametsListByIds} from "../repos/tournamentRepo.js";
 
 import bcrypt from "bcrypt";
 
-export const getUserbyUsername = (username) => userRepo.getUserbyUsername(username);
+export const getUserbyId = (userId) => userRepo.getUserbyId(userId);
 
 export const getUserByEmail = (email) => userRepo.getUserByEmail(email);
 

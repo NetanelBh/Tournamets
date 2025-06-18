@@ -12,7 +12,7 @@ const GroupSchema = new Schema(
 			knockoutExactly: { type: Number, required: true },
 			knockoutDirection: { type: Number, required: true },
 		},
-		members: [{ type: String, required: true }],
+		members: [{ type: Schema.Types.ObjectId, ref: "User", required: true }],
 		tournament: { type: Schema.Types.ObjectId, ref: "Tournament", required: true },
 	},
 	{ versionKey: false }

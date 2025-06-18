@@ -7,7 +7,7 @@ const router = express.Router();
 // Entry point: localhost:3000/group
 
 router.post("/create", async (req, res) => {
-	const { name, code } = req.body;
+	const { name, code, tournamentId } = req.body;
 	try {
 		// First check if the group exist
 		const isGroupExist = await groupServices.isGroupExist(name);
@@ -17,10 +17,10 @@ router.post("/create", async (req, res) => {
 		}
 
 		// Create the group
-		const group = await groupServices.createGroup(name, code, userId);
+		const group = await groupServices.createGroup(name, code, req.user.id);
 		if (group) {
 			// Add the group to the user groups(for effieicency)
-			const updatedUser = await addGroupToUser(userId, group._id);
+			const updatedUser = await addGroupToUser(req.user.id, group._id);
 			if (updatedUser) {
 				res.send({ status: true, data: "קבוצה נוצרה בהצלחה" });
 			} else {

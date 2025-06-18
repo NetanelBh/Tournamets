@@ -9,7 +9,7 @@ const router = express.Router();
 router.get("/myTournaments", async (req, res) => {
 	try {
 		// Get the user from the DB
-		const user = await userServices.getUserbyUsername(req.user.username);
+		const user = await userServices.getUserbyId(req.user.id);
 		if (!user) {
 			res.send({ status: false, data: "משתמש לא קיים במערכת" });
 			return;
@@ -29,25 +29,43 @@ router.get("/myTournaments", async (req, res) => {
 });
 
 // Add tournament to user.tournaments
-router.post('/addTournament', async (req, res) => {
-    try {
-        const {tournamentId} = req.body;
-        const user = await userServices.getUserbyUsername(req.user.username);
-        if(!user) {
-            res.send({ status: false, data: "משתמש לא קיים במערכת" });
-            return;
-        }
+router.post("/addTournament", async (req, res) => {
+	try {
+		const { tournamentId } = req.body;
+		const user = await userServices.getUserbyId(req.user.id);
+		if (!user) {
+			res.send({ status: false, data: "משתמש לא קיים במערכת" });
+			return;
+		}
 
-        const updatedUser = await userServices.addTournamentToUser(user.username, tournamentId);
-        if(!updatedUser) {
-            res.send({ status: false, data: "אירעה בעיה בהוספת הטורניר, אנא נסה שנית" });
-            return;
-        }
+		const updatedUser = await userServices.addTournamentToUser(user.username, tournamentId);
+		if (!updatedUser) {
+			res.send({ status: false, data: "אירעה בעיה בהוספת הטורניר, אנא נסה שנית" });
+			return;
+		}
 
-        res.send({ status: true, data: "הטורניר התווסף בהצלחה לרשימת הטורנירים שלך" });
-    } catch (error) {
-        res.send({ status: false, data: "אירעה שגיאה בהוספת הטורניר, אנא נסה שנית" });
-    }
-})
+		res.send({ status: true, data: "הטורניר התווסף בהצלחה לרשימת הטורנירים שלך" });
+	} catch (error) {
+		res.send({ status: false, data: "אירעה שגיאה בהוספת הטורניר, אנא נסה שנית" });
+	}
+});
+
+// get user's groups
+router.get("/myGroups", async (req, res) => {
+	try {
+		// Get the user from the DB
+		const userGroups = await userServices.getUserbyId(req.user.id).populate("groups");
+		if (!userGroups) {
+			res.send({ status: false, data: "המשתמש לא רשום לאף קבוצה" });
+			return;
+		}
+
+		console.log(userGroups.groups);
+		
+		res.send({ status: true, data: userGroups.groups });
+	} catch (error) {
+		res.send({ status: false, data: "אירעה שגיאה בהוספת הטורניר, אנא נסה שנית" });
+	}
+});
 
 export default router;

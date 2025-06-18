@@ -37,7 +37,7 @@ router.post("/login", async (req, res) => {
 			return;
 		}
 
-		const token = jwt.sign({ username: user.username }, process.env.JWT_SECRET, { expiresIn: "4h" });
+		const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: "4h" });
 		const returnedUser = user.toObject();
 		// Delete the password from the object
 		delete returnedUser.password;
@@ -73,7 +73,7 @@ router.post("/register", async (req, res) => {
 			return;
 		}
 
-		const token = jwt.sign({ username: user.username }, process.env.JWT_SECRET, { expiresIn: "1h" });
+		const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: "1h" });
 		const url = `${process.env.REACT_ADDRESS}/verify/${token}`;
 		await resend.emails.send({
 			from: "onboarding@resend.dev",
@@ -127,7 +127,7 @@ router.post("/forgot-password", async (req, res) => {
 			return;
 		}
 
-		const token = jwt.sign({ username: user.username }, process.env.JWT_SECRET, { expiresIn: "1h" });
+		const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: "1h" });
 		const url = `${process.env.REACT_ADDRESS}/reset-password/${token}`;
 		await resend.emails.send({
 			from: "onboarding@resend.dev",

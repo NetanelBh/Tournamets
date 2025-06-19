@@ -4,7 +4,7 @@ export const getAllTournaments = () => tournamentRepo.getAllTournaments();
 
 export const getTournamentByName = (name) => tournamentRepo.getTournamentByName(name);
 
-export const createTournament = (name, startDate, endDate, startTime, tournamentImage) =>  {
+export const create = (name, startDate, endDate, startTime, tournamentImage) =>  {
     const tournament = {
         name,
         startDate,
@@ -13,5 +13,5 @@ export const createTournament = (name, startDate, endDate, startTime, tournament
         symbol: tournamentImage
     }
     
-    return tournamentRepo.createTournament(tournament);
+    return tournamentRepo.create(tournament);
 }

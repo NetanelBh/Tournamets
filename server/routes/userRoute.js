@@ -5,7 +5,6 @@ const router = express.Router();
 
 // Entry point: localhost:3000/user
 
-// Get all tourmanents that the user is in
 router.get("/myTournaments", async (req, res) => {
 	try {
 		// Get the user from the DB

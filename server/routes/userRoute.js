@@ -1,6 +1,6 @@
 import * as userServices from "../services/userServices.js";
-
 import express from "express";
+
 const router = express.Router();
 
 // Entry point: localhost:3000/user
@@ -8,17 +8,10 @@ const router = express.Router();
 // Get the user's list of tournaments he is in 
 router.get("/myTournaments", async (req, res) => {
 	try {
-		// Get the user from the DB
-		const user = await userServices.getUserbyId(req.user.id);
+		// Get the user's tournaments from the DB(with populate we get the entire tournament objects list)
+		const userTournaments = await userServices.getUserbyId(req.user.id).populate("tournaments");
 
-		// Get the user tournaments
-		const tournaments = await userServices.getUserTournaments(user.tournaments);
-		if (!tournaments) {
-			res.send({ status: false, data: "אין טורנירים זמינים עבור המשתמש" });
-			return;
-		}
-
-		res.send({ status: true, data: tournaments });
+		res.send({ status: true, data: userTournaments.tournaments });
 	} catch (error) {
 		res.send({ status: false, data: "אירעה בעיה בקבלת המידע, אנא נסה שנית" });
 	}

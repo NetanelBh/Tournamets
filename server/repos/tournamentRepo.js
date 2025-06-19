@@ -6,6 +6,4 @@ export const getTournamentByName = (name) => TournamentModel.findOne({ name });
 
 export const getTournamentById = (id) => TournamentModel.findById(id);
 
-export const getTournametsListByIds = (idsList) => TournamentModel.find({ _id: { $in: idsList } });
-
 export const create = (tournament) => TournamentModel(tournament).save();

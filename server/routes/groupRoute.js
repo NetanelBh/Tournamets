@@ -7,10 +7,14 @@ const router = express.Router();
 // Entry point: localhost:3000/group
 
 router.post("/create", async (req, res) => {
+	// TODO: FINISH THE CREATE GROUP LOGIC
+
+
+
 	const { name, code, tournamentId } = req.body;
 	try {
 		// First check if the group exist
-		const isGroupExist = await groupServices.isGroupExist(name);
+		const isGroupExist = await groupServices.isExist({name});
 		if (isGroupExist) {
 			res.send({ status: false, data: "שם הקבוצה קיים, אנא בחר שם אחר" });
 			return;
@@ -38,7 +42,7 @@ router.post("/join", async (req, res) => {
 	const { code, groupName, userId } = req.body;
 	try {
 		// Check if the group exist in DB
-		const group = await groupServices.isGroupExist(groupName);
+		const group = await groupServices.isExist({name: groupName});
 		if (!group) {
 			res.send({ status: false, data: "הקבוצה לא קיימת, אנא הזן שם קבוצה קיימת" });
 			return;

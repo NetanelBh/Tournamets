@@ -13,6 +13,7 @@ export const createUser = (user) => {
 	return userRepo.createUser(newUser);
 };
 
+// Uses by auth router 
 export const updateUser = (userId, updatedUser) => userRepo.updateUser(userId, updatedUser);
 
 export const addTournamentToUser = (username, tournamentId) => userRepo.addTournamentToUser(username, tournamentId);
@@ -20,3 +21,5 @@ export const addTournamentToUser = (username, tournamentId) => userRepo.addTourn
 export const leaveTournament = (userId, tournamentId) => userRepo.leaveTournament(userId, tournamentId);
 
 export const addGroupToUser = (userId, groupId) => userRepo.addUserToGroup(userId, groupId);
+
+export const leaveGroup = (userId, groupId) => userRepo.leaveGroup(userId, groupId);

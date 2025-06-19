@@ -5,6 +5,7 @@ const router = express.Router();
 
 // Entry point: localhost:3000/user
 
+// Get the user's list of tournaments he is in 
 router.get("/myTournaments", async (req, res) => {
 	try {
 		// Get the user from the DB

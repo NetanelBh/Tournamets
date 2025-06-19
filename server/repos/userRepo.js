@@ -21,6 +21,14 @@ export const addTournamentToUser = (username, tournamentId) => {
 	return Users.findOneAndUpdate({ username }, { $addToSet: { tournaments: tournamentId } }, { new: true });
 };
 
+export const leaveTournament = (userId, tournamentId) => {
+	return Users.findByIdAndUpdate(
+      userId,
+      { $pull: { tournaments: tournamentId } },
+      { new: true }
+    );
+}
+
 export const addUserToGroup = (userId, groupId) => {
 	// Add to groups only if the group not exist in the array
 	return Users.findOneAndUpdate({ _id: userId }, { $addToSet: { groups: groupId } }, { new: true });

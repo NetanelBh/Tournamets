@@ -17,4 +17,6 @@ export const updateUser = (userId, updatedUser) => userRepo.updateUser(userId, u
 
 export const addTournamentToUser = (username, tournamentId) => userRepo.addTournamentToUser(username, tournamentId);
 
+export const leaveTournament = (userId, tournamentId) => userRepo.leaveTournament(userId, tournamentId);
+
 export const addGroupToUser = (userId, groupId) => userRepo.addUserToGroup(userId, groupId);

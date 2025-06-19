@@ -39,6 +39,21 @@ router.post("/joinTournament", async (req, res) => {
 	}
 });
 
+router.delete("/leaveTournament/:id", async (req, res) => {
+	try {
+		const tournamentId = req.params.id;
+		const updatedUser = await userServices.leaveTournament(req.user.id, tournamentId);
+		if (!updatedUser) {
+			res.send({status: false, data: "אירעה שגיאה במהלך יציאה מהטורניר, אנא נסה שנית"})
+			return;
+		}
+		
+		res.send({status: true, data: "המשתמש יצא מהטורניר בהצלחה"})
+	} catch (error) {
+		res.send({status: false, data: "אירעה שגיאה במהלך יציאה מהטורניר, אנא נסה שנית"})
+	}
+})
+
 // get user's groups
 router.get("/myGroups", async (req, res) => {
 	try {

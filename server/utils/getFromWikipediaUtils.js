@@ -1,10 +1,10 @@
 import axios from "axios";
 
-const getImageFromWikipediaApi = async (tournamentName) => {
+export const getImageFromWikipediaApi = async (tournamentName) => {
 	try {
-		// Set the image width 
+		// Set the image width
 		const width = 100;
-		
+
 		// Step 1: Wikipedia API to get thumbnail
 		const wikiResponse = await axios.get("https://en.wikipedia.org/w/api.php", {
 			params: {
@@ -42,5 +42,3 @@ const getImageFromWikipediaApi = async (tournamentName) => {
 		return null;
 	}
 };
-
-export default getImageFromWikipediaApi;

@@ -1,12 +1,9 @@
 import * as groupRepo from "../repos/groupRepo.js";
+import {createGroupData} from "../utils/groupUtils.js";
 
-export const createGroup = async (name, code, userId) => {
-	const group = { name, code, owner: userId, members: [userId] };
+export const createGroup = async (groupData) => {
+	const group = createGroupData(groupData);
 	return groupRepo.createGroup(group);
-};
-
-export const isExist = (paramObj) => {
-	return groupRepo.isExist(paramObj);
 };
 
 export const getGroupByFilter = (filterObj) => {

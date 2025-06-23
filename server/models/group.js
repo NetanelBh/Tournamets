@@ -7,10 +7,35 @@ const GroupSchema = new Schema(
 		owner: { type: Schema.Types.ObjectId, ref: "User", required: true },
 		// The group owner will determine the points for each stage in the tournament
 		points: {
-			groupexactly: { type: Number, required: true },
-			groupDirection: { type: Number, required: true },
-			knockoutExactly: { type: Number, required: true },
-			knockoutDirection: { type: Number, required: true },
+			groupStage: {
+				exactScore: { type: Number, required: true },
+				directionScore: { type: Number, required: true },
+			},
+			knockoutStage: {
+				pointsMethod: { type: String, enum: ["samePoints", "differentPoints"], required: true },
+				samePoints: {
+					exactScore: Number,
+					directionScore: Number,
+				},
+				differentPoints: {
+					roundOf16: {
+						exactScore: Number,
+						directionScore: Number,
+					},
+					quarterFinal: {
+						exactScore: Number,
+						directionScore: Number,
+					},
+					semiFinal: {
+						exactScore: Number,
+						directionScore: Number,
+					},
+					final: {
+						exactScore: Number,
+						directionScore: Number,
+					},
+				},
+			},
 		},
 		members: [{ type: Schema.Types.ObjectId, ref: "User", required: true }],
 		tournament: { type: Schema.Types.ObjectId, ref: "Tournament", required: true },

@@ -7,70 +7,76 @@ const router = express.Router();
 // Entry point: localhost:3000/group
 
 router.post("/create", async (req, res) => {
-	// TODO: FINISH THE CREATE GROUP LOGIC
+	const data = {...req.body, userId: req.user.id};
 
-
-
-	const { name, code, tournamentId } = req.body;
 	try {
 		// First check if the group exist
-		const isGroupExist = await groupServices.isExist({name});
+		const isGroupExist = await groupServices.getGroupByFilter({ name: data.name, tournament: data.tournamentId });
 		if (isGroupExist) {
 			res.send({ status: false, data: "שם הקבוצה קיים, אנא בחר שם אחר" });
 			return;
 		}
 
-		// Create the group
-		const group = await groupServices.createGroup(name, code, req.user.id);
-		if (group) {
-			// Add the group to the user groups(for effieicency)
-			const updatedUser = await addGroupToUser(req.user.id, group._id);
-			if (updatedUser) {
-				res.send({ status: true, data: "קבוצה נוצרה בהצלחה" });
-			} else {
-				res.send({ status: false, data: "אירעה בעיה בהוספת המשתמש לקבוצה הנוכחית" });
-			}
-		} else {
-			res.send({ status: false, data: "אירעה בעיה ביצירת הקבוצה" });
+		const group = await groupServices.createGroup(data);
+		if(!group) {
+			res.send({ status: false, data: "אירעה בעיה ביצירת הקבוצה בבסיס הנתונים" });
+			return;
 		}
+
+		const updatedUser = await addGroupToUser(data.userId, group._id);
+		if(!updatedUser) {
+			res.send({ status: false, data: "אירעה בעיה בהוספת הקבוצה הנוכחית למשתמש" });
+			return;
+		}
+
+		res.send({ status: true, data: "הקבוצה נוצרה בהצלחה" });
 	} catch (error) {
 		res.send({ status: false, data: "אירעה בעיה ביצירת הקבוצה" });
 	}
 });
 
 router.post("/join", async (req, res) => {
-	const { code, groupName, userId } = req.body;
 	try {
-		// Check if the group exist in DB
-		const group = await groupServices.isExist({name: groupName});
+		const { groupName, code, tournamentId } = req.body;
+
+		// Get the group that match the current tournament(maybe there is more group with same name in other tournament)
+		const group = await groupServices.getGroupByFilter({ name: groupName, tournament: tournamentId });
 		if (!group) {
-			res.send({ status: false, data: "הקבוצה לא קיימת, אנא הזן שם קבוצה קיימת" });
+			res.send({ status: false, data: "הקבוצה לא קיימת בטורניר זה, אנא הזן שם קבוצה שקיימת בטורניר זה" });
 			return;
 		}
 
-		// Check the password
-		if (group.code !== code) {
+		const isMatch = await bcrypt.compare(code, group.code);
+		if (!isMatch) {
 			res.send({ status: false, data: "קוד הקבוצה שגוי" });
 			return;
 		}
 
-		// Add the group to the user groups(for effieicency)
-		const updatedUser = await addGroupToUser(userId, group._id);
+		// Get the user from DB(he exists because he is logged in)
+		const user = await userServices.getUserbyId(req.user.id);
+
+		// Add the group to the user groups array
+		const updatedUser = await userServices.addGroupToUser(user._id, group._id);
 		if (!updatedUser) {
+			res.send({ status: false, data: "אירעה בעיה בהוספת הקבוצה הנוכחית למשתמש" });
+			return;
+		}
+		// The insertion with $set to prevent duplicates, if after insertion is the same lenght, he is already inside
+		if (updatedUser.groups.length === user.groups.length) {
+			res.send({ status: false, data: "אתה קיים כבר בתוך הקבוצה" });
+			return;
+		}
+
+		// Add the user to the group
+		const updatedGroup = await groupServices.addGroupMember(group._id, user._id);
+		if (!updatedGroup) {
 			res.send({ status: false, data: "אירעה בעיה בהוספת המשתמש לקבוצה הנוכחית" });
 			return;
 		}
 
-        // Add the user to the group
-        const updatedGroup = await groupServices.addGroupMember(group._id, userId);
-        if (!updatedGroup) {
-            res.send({ status: false, data: "אירעה בעיה בהוספת המשתמש לקבוצה הנוכחית" });
-            return;
-        }
-
-		res.send({ status: true, data: "התווספת לקבוצה בהצלחה" });
+		res.send({ status: true, data: "המשתמש הצטרף לקבוצה בהצלחה" });
 	} catch (error) {
-		res.send({ status: false, data: "אירעה שגיאה, אנא נסה להכנס לקבוצה שנית" });
+		res.send({ status: false, data: "אירעה שגיאה בהצטרפות לקבוצה, אנא נסה שנית" });
 	}
 });
 

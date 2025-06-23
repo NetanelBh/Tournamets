@@ -9,8 +9,8 @@ const MatchSchema = new Schema(
 		stage: { type: String, required: true },
 		round: { type: String, required: true },
 		finalScore: {
-			homeScore: { type: Number, required: true },
-			awayScore: { type: Number, required: true },
+			homeScore: { type: Number },
+			awayScore: { type: Number },
 		},
 	},
 	{ versionKey: false }

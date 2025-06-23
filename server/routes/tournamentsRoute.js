@@ -2,7 +2,7 @@ import express from "express";
 import * as tournamentServices from "../services/tournamentServices.js";
 
 import israelToUTC from "../utils/ConvertIsraelTimeToUtc.js";
-import getImageFromWikipediaApi from "../utils/getTournamentImage.js";
+import {getImageFromWikipediaApi} from "../utils/getFromWikipediaUtils.js";
 
 const router = express.Router();
 
@@ -46,6 +46,28 @@ router.post("/create", async (req, res) => {
 		res.send({ status: true, data: "הטורניר נוצר בהצלחה" });
 	} catch (error) {
 		res.send({ status: false, data: "אירעה בעיה ביצירת הטורניר, אנא נסה שנית" });
+	}
+});
+
+// Add tournament to user.tournaments
+router.post("/joinTournament", async (req, res) => {
+	try {
+		const { tournamentId } = req.body;
+
+		// Get the user from DB(he exists because he is logged in)
+		const user = await userServices.getUserbyId(req.user.id);
+
+		// Update the tournament in the user.tournaments
+		const updatedUser = await userServices.addTournamentToUser(user.username, tournamentId);
+		if (!updatedUser) {
+			res.send({ status: false, data: "אירעה בעיה בהוספת הטורניר, אנא נסה שנית" });
+			return;
+		}
+
+		res.send({ status: true, data: "הטורניר התווסף בהצלחה לרשימת הטורנירים שלך" });
+	} catch (error) {
+		// res.send({ status: false, data: "אירעה שגיאה בהוספת הטורניר, אנא נסה שנית" });
+		res.send({ status: false, data: error.message });
 	}
 });
 

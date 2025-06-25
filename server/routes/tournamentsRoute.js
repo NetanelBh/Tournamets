@@ -71,4 +71,14 @@ router.post("/joinTournament", async (req, res) => {
 	}
 });
 
+// Get the tournament's teams by the tournament id
+router.get('/teams/:id', async (req, res) => {
+	try {
+		const teams = await tournamentServices.getAllTeams(req.params.id);
+		res.send({status: true, data: teams});
+	} catch (error) {
+		res.send({status: false, data: "אירעה שגיאה בבקשת הקבוצות של הטורניר, אנא נסה שנית"})
+	}
+})
+
 export default router;

@@ -5,17 +5,12 @@ const BetSchema = new Schema(
 	{
 		tournament: { type: Schema.Types.ObjectId, ref: "Tournament", required: true },
 		userId: { type: Schema.Types.ObjectId, ref: "User", required: true },
-		matchBets: [
-			{
-				match: { type: Schema.Types.ObjectId, ref: "Match", required: true },
-				finalScore: {
-					homeScore: { type: Number, required: true },
-					awayScore: { type: Number, required: true },
-				},
-			},
-		],
-		topScorerBet: { type: Schema.Types.ObjectId, ref: "Player" },
-		winnerTeam: { type: String },
+		groupId: { type: Schema.Types.ObjectId, ref: "Group", required: true },
+		match: { type: Schema.Types.ObjectId, ref: "Match", required: true },
+		betScore: {
+			homeScore: { type: Number, required: true },
+			awayScore: { type: Number, required: true },
+		},
 	},
 	{ versionKey: false }
 );

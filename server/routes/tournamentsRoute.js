@@ -39,10 +39,10 @@ router.post("/create", async (req, res) => {
 		// Create the tournament
 		const tournament = await tournamentServices.create(officialName, startDate, endDate, utcDate, tournamentImg);
 		if (!tournament) {
-			res.send({ status: false, data: "קבוצה לא נוצרה, אנא נסה שנית" });
+			res.send({ status: false, data: "טורניר לא נוצר, אנא נסה שנית" });
 			return;
 		}
-
+		// TODO: WHEN CREATE THE TOURNAMENT, ALSO FETCH THE MATCHES FROM FREE API AND STORE IT IN THE DB(FIND FREE API)
 		res.send({ status: true, data: "הטורניר נוצר בהצלחה" });
 	} catch (error) {
 		res.send({ status: false, data: "אירעה בעיה ביצירת הטורניר, אנא נסה שנית" });

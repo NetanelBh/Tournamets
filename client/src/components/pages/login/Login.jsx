@@ -1,27 +1,51 @@
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import API from "../../utils/Api";
 import { useNavigate } from "react-router-dom";
 
-import styles from './styles.js';
+import styles from './loginStyles.js';
 
 const Login = () => {
-	const usernameRef = useRef();
+	const emailRef = useRef();
 	const passwordRef = useRef();
+	const [isEmailVerified, setIsEmailVerified] = useState(true);
+	const [isPasswordVerified, setIsPasswordVerified] = useState(true);
 	const navigate = useNavigate();
 
 	const loginHandler = async (e) => {
 		e.preventDefault();
-		
-		const username = usernameRef.current.value;
-		const password = passwordRef.current.value;
-		const res = await API.post("/auth/login", { username, password });
-		if (!res.data.status) {
-			alert(res.data.data);
-			return;
-		}
 
-		localStorage.setItem("token", res.data.data);
-		navigate("/");
+		setIsEmailVerified(true);
+		setIsPasswordVerified(true);
+		
+		const email = emailRef.current.value;
+		const password = passwordRef.current.value;
+
+		try {
+			const res = (await API.post("/auth/login", { email, password })).data;
+			console.log(res);
+			
+			if (!res.status && res.data.includes("מייל")) {
+				setIsEmailVerified(false);
+				return;
+			}
+
+			if (!res.status && res.data.includes("סיסמא")) {
+				setIsPasswordVerified(false);
+				return;
+			}
+
+			if (!res.status) {
+				setIsEmailVerified(false);
+				return;
+			}
+	
+			localStorage.setItem("token", res.data.token);
+			localStorage.setItem("admin", res.data.admin);
+			navigate("/");
+			
+		} catch (error) {
+			alert("אירעה שגיאה בהתחברות, אנא נסה שנית");
+		}
 	};
 
 	return (
@@ -31,7 +55,7 @@ const Login = () => {
 			</header>
 
 			<div className={styles.login_container}>
-				<h2 className="text-2xl font-bold text-gray-900 mb-6 text-center">Sign In</h2>
+				<h2 className="text-2xl font-bold text-gray-900 mb-6 text-center">כניסה</h2>
 
 				<form className="space-y-4" onSubmit={loginHandler}>
 					<div>
@@ -44,8 +68,9 @@ const Login = () => {
 							placeholder="your@email.com"
 							id="email"
 							autoComplete="email"
-							ref={usernameRef}
+							ref={emailRef}
 						/>
+						{!isEmailVerified && <p className="font-bold text-red-500 text-sm mt-1">{"כתובת מייל שגויה"}</p>}
 					</div>
 
 					<div>
@@ -60,6 +85,7 @@ const Login = () => {
 							autoComplete="current-password"
 							ref={passwordRef}
 						/>
+						{!isPasswordVerified && <p className="font-bold text-red-500 text-sm mt-1">{"סיסמה שגויה"}</p>}
 					</div>
 
 					<div className="flex items-center justify-between">

@@ -1,0 +1,18 @@
+import { createSlice } from "@reduxjs/toolkit";
+
+const initialState = {
+    tournaments: [],
+};
+
+const tournamentSlice = createSlice({
+    initialState,
+    name: "tournaments",
+    reducers: {
+        load(state, action) {
+            state.tournaments = action.payload;
+        }
+    }
+})
+
+export const tournamentsAction = tournamentSlice.actions;
+export default tournamentSlice.reducer;

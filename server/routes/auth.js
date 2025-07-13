@@ -10,18 +10,18 @@ const resend = new Resend(process.env.RESEND_API_KEY);
 const router = express.Router();
 
 router.post("/login", async (req, res) => {
-	const { username, password } = req.body;
+	const { email, password } = req.body;
 	const isTokenExist = req.headers.authorization;
 	
 	try {
-		const user = await getUserbyUsername(username);
+		const user = await getUserByEmail(email);
 		if (!user) {
 			res.send({ status: false, data: "המשתמש לא רשום במערכת" });
 			return;
 		}
 
-		if (user.username !== username) {
-			res.send({ status: false, data: "שם משתמש שגוי, אנא נסה שנית" });
+		if (user.email !== email) {
+			res.send({ status: false, data: "כתובת מייל שגויה, אנא נסה שנית" });
 			return;
 		}
 

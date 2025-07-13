@@ -60,7 +60,7 @@ const Login = () => {
 				<form className="space-y-4" onSubmit={loginHandler}>
 					<div>
 						<label className="block text-sm font-medium text-gray-700 mb-1" htmlFor="email">
-							Email
+							מייל
 						</label>
 						<input
 							type="email"
@@ -75,7 +75,7 @@ const Login = () => {
 
 					<div>
 						<label className="block text-sm font-medium text-gray-700 mb-1" htmlFor="password">
-							Password
+							סיסמא
 						</label>
 						<input
 							type="password"
@@ -90,19 +90,19 @@ const Login = () => {
 
 					<div className="flex items-center justify-between">
 						<a href="#" className="text-sm text-indigo-600 hover:text-indigo-500">
-							Forgot password?
+							שכחת סיסמא ?
 						</a>
 					</div>
 
 					<button className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2.5 rounded-lg transition-colors">
-						Sign In
+						כניסה
 					</button>
 				</form>
 
 				<div className="mt-6 text-center text-sm text-gray-600" >
-					Don't have an account?
-					<a href="#" className="text-indigo-600 hover:text-indigo-500 font-medium ml-1">
-						Sign up
+					אין לך חשבון?
+					<a href="#" className="text-indigo-600 hover:text-indigo-500 font-medium mr-1">
+						הירשם
 					</a>
 				</div>
 			</div>

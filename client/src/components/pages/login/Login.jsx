@@ -11,7 +11,7 @@ const Login = () => {
 
 	const loginHandler = async (e) => {
 		e.preventDefault();
-
+		
 		const username = usernameRef.current.value;
 		const password = passwordRef.current.value;
 		const res = await API.post("/auth/login", { username, password });
@@ -44,6 +44,7 @@ const Login = () => {
 							placeholder="your@email.com"
 							id="email"
 							autoComplete="email"
+							ref={usernameRef}
 						/>
 					</div>
 
@@ -57,6 +58,7 @@ const Login = () => {
 							placeholder="••••••••"
 							id="password"
 							autoComplete="current-password"
+							ref={passwordRef}
 						/>
 					</div>
 

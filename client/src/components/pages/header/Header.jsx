@@ -1,12 +1,11 @@
 import { useState } from "react";
 
 const Header = () => {
-    const [activeLink, setActiveLink] = useState("home");
+	const [activeLink, setActiveLink] = useState("home");
+	const [isOpenMenu, setIsOpenMenu] = useState(false);
 
-  const getLinkClass = (key) =>
-    `hover:text-gray-300 transition-all ${
-      activeLink === key ? "text-yellow-400 font-semibold" : ""
-    }`;
+	const getLinkClass = (key) =>
+		`hover:text-gray-300 transition-all ${activeLink === key ? "text-yellow-400 font-semibold" : ""}`;
 
 	return (
 		<header class="bg-blue-900 text-white">
@@ -47,7 +46,11 @@ const Header = () => {
 
 					{/* Mobile Menu Button (for smaller screens)  */}
 					<div class="md:hidden flex items-center">
-						<button id="menu-button" class="text-white focus:outline-none">
+						<button
+							id="menu-button"
+							class="text-white focus:outline-none"
+							onClick={() => setIsOpenMenu(!isOpenMenu)}
+						>
 							<svg
 								class="h-6 w-6"
 								fill="none"
@@ -67,20 +70,22 @@ const Header = () => {
 				</div>
 
 				{/* Mobile Navigation Menu  */}
-				<div id="mobile-menu" class="md:hidden mt-5 hidden space-y-4">
-					<a href="#" class="block text-lg hover:text-gray-300 transition-all">
-						Home
-					</a>
-					<a href="#services" class="block text-lg hover:text-gray-300 transition-all">
-						Services
-					</a>
-					<a href="#about" class="block text-lg hover:text-gray-300 transition-all">
-						About Us
-					</a>
-					<a href="#contact" class="block text-lg hover:text-gray-300 transition-all">
-						Contact
-					</a>
-				</div>
+				{isOpenMenu && (
+					<div id="mobile-menu" class="md:hidden mt-5 space-y-4">
+						<a href="#" class="block text-lg hover:text-gray-300 transition-all">
+							Home
+						</a>
+						<a href="#services" class="block text-lg hover:text-gray-300 transition-all">
+							Services
+						</a>
+						<a href="#about" class="block text-lg hover:text-gray-300 transition-all">
+							About Us
+						</a>
+						<a href="#contact" class="block text-lg hover:text-gray-300 transition-all">
+							Contact
+						</a>
+					</div>
+				)}
 			</div>
 		</header>
 	);

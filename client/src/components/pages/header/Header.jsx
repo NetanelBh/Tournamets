@@ -2,6 +2,7 @@ import { useState } from "react";
 
 const Header = () => {
 	const [activeLink, setActiveLink] = useState("home");
+	// When using small screens like mobile, When click the menu button I want to open the menu.
 	const [isOpenMenu, setIsOpenMenu] = useState(false);
 
 	const getLinkClass = (key) =>

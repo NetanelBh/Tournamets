@@ -2,8 +2,6 @@ import { useRef, useState } from "react";
 import API from "../../utils/Api";
 import { useNavigate } from "react-router-dom";
 
-import styles from './loginStyles.js';
-
 const Login = () => {
 	const emailRef = useRef();
 	const passwordRef = useRef();
@@ -16,14 +14,13 @@ const Login = () => {
 
 		setIsEmailVerified(true);
 		setIsPasswordVerified(true);
-		
+
 		const email = emailRef.current.value;
 		const password = passwordRef.current.value;
 
 		try {
 			const res = (await API.post("/auth/login", { email, password })).data;
-			console.log(res);
-			
+
 			if (!res.status && res.data.includes("מייל")) {
 				setIsEmailVerified(false);
 				return;
@@ -38,23 +35,22 @@ const Login = () => {
 				setIsEmailVerified(false);
 				return;
 			}
-	
-			localStorage.setItem("token", res.data.token);
-			localStorage.setItem("admin", res.data.admin);
-			navigate("/");
-			
+
+			// Session storage persists when refresh the page, clear only when close the tab in contrast to localStorage
+			sessionStorage.setItem("user", JSON.stringify(res.data.user));
+			navigate("/layout");
 		} catch (error) {
 			alert("אירעה שגיאה בהתחברות, אנא נסה שנית");
 		}
 	};
 
 	return (
-		<div className={styles.background}>
-			<header className={styles.header_container}>
-				<h1 className={styles.header_text}>ברוך הבא</h1>
+		<div className="min-h-screen bg-[url('/images/login.jpg')] bg-cover bg-center flex flex-col items-center p-4">
+			<header className="w-full text-center mt-10 mb-16">
+				<h1 className="text-5xl font-bold text-white">ברוך הבא</h1>
 			</header>
 
-			<div className={styles.login_container}>
+			<div className="max-w-md w-full bg-white rounded-xl shadow-lg p-8">
 				<h2 className="text-2xl font-bold text-gray-900 mb-6 text-center">כניסה</h2>
 
 				<form className="space-y-4" onSubmit={loginHandler}>
@@ -70,7 +66,9 @@ const Login = () => {
 							autoComplete="email"
 							ref={emailRef}
 						/>
-						{!isEmailVerified && <p className="font-bold text-red-500 text-sm mt-1">{"כתובת מייל שגויה"}</p>}
+						{!isEmailVerified && (
+							<p className="font-bold text-red-500 text-sm mt-1">{"כתובת מייל שגויה"}</p>
+						)}
 					</div>
 
 					<div>
@@ -99,7 +97,7 @@ const Login = () => {
 					</button>
 				</form>
 
-				<div className="mt-6 text-center text-sm text-gray-600" >
+				<div className="mt-6 text-center text-sm text-gray-600">
 					אין לך חשבון?
 					<a href="#" className="text-indigo-600 hover:text-indigo-500 font-medium mr-1">
 						הירשם

@@ -11,7 +11,6 @@ const router = express.Router();
 
 router.post("/login", async (req, res) => {
 	const { email, password } = req.body;
-	const isTokenExist = req.headers.authorization;
 	
 	try {
 		const user = await getUserByEmail(email);
@@ -27,12 +26,6 @@ router.post("/login", async (req, res) => {
 
 		if (!user.isVerified) {
 			res.send({ status: false, data: "יש לאמת תחילה את כתובת המייל בלינק שנשלח אליך" });
-			return;
-		}
-
-		// If the token exist, it means the user is logged in already
-		if(isTokenExist) {
-			res.send({status: false, data: "המשתמש כבר מחובר"});
 			return;
 		}
 

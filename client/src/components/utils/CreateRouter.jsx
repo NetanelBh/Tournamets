@@ -2,6 +2,7 @@ import { createBrowserRouter } from "react-router-dom";
 
 import Login from "../pages/login/Login";    
 import Register from "../pages/register/Register";
+import MainLayout from "../pages/layout/MainLayout";
 import VerifyEmail from "../pages/verifyEmail/VerifyEmail";
 import ResetPassword from "../pages/resetPassword/ResetPassword";
 import ForgotPassword from "../pages/forgotPassword/ForgotPassword";
@@ -12,7 +13,8 @@ const CreateRouter = () => {
         { path: "/register", element: <Register /> },
         { path: "/reset-password/:token", element: <ResetPassword /> },
         { path: "/verify/:token", element: <VerifyEmail /> },
-        {path: "/forgot-password", element: <ForgotPassword />}
+        {path: "/forgot-password", element: <ForgotPassword />},
+        {path: "/layout", element: <MainLayout />, children: []},
     ]);
 
     return router;

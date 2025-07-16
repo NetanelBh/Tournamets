@@ -7,6 +7,8 @@ import VerifyEmail from "../pages/verifyEmail/VerifyEmail";
 import ResetPassword from "../pages/resetPassword/ResetPassword";
 import ForgotPassword from "../pages/forgotPassword/ForgotPassword";
 
+import AllTournaments from "../pages/tournaments/AllTournaments";
+
 const CreateRouter = () => {
     const router = createBrowserRouter([
         { path: "/", element: <Login /> },
@@ -14,7 +16,9 @@ const CreateRouter = () => {
         { path: "/reset-password/:token", element: <ResetPassword /> },
         { path: "/verify/:token", element: <VerifyEmail /> },
         {path: "/forgot-password", element: <ForgotPassword />},
-        {path: "/layout", element: <MainLayout />, children: []},
+        {path: "/layout", element: <MainLayout />, children: [
+            {path: "/layout/all-tournaments", element: <AllTournaments />}
+        ]},
     ]);
 
     return router;

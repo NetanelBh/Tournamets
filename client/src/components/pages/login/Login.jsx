@@ -2,12 +2,17 @@ import { useRef, useState } from "react";
 import API from "../../utils/Api";
 import { useNavigate } from "react-router-dom";
 
+import ErrorModal from "../../errorModal/ErrorModal";
+
 const Login = () => {
 	const emailRef = useRef();
 	const passwordRef = useRef();
 	const [isEmailVerified, setIsEmailVerified] = useState(true);
 	const [isPasswordVerified, setIsPasswordVerified] = useState(true);
+	const [isError, setIsError] = useState(false);
 	const navigate = useNavigate();
+
+	// TODO: CREATE ALSO LOGIN WITH GOOGLE
 
 	const loginHandler = async (e) => {
 		e.preventDefault();
@@ -37,73 +42,86 @@ const Login = () => {
 			}
 
 			// Session storage persists when refresh the page, clear only when close the tab in contrast to localStorage
-			sessionStorage.setItem("user", JSON.stringify(res.data.user));
-			navigate("/layout");
+			sessionStorage.setItem("user", JSON.stringify(res.data));
+			navigate("/layout/all-tournaments");
 		} catch (error) {
-			alert("אירעה שגיאה בהתחברות, אנא נסה שנית");
+			setIsError(true);
 		}
 	};
 
+	const closeModal = () => {
+		setIsError(false);
+		navigate("/");
+	}
+
 	return (
 		<div className="min-h-screen bg-[url('/images/login.jpg')] bg-cover bg-center flex flex-col items-center p-4">
-			<header className="w-full text-center mt-10 mb-16">
-				<h1 className="text-5xl font-bold text-white">ברוך הבא</h1>
-			</header>
+			{!isError && (
+				<>
+					<header className="w-full text-center mt-10 mb-16">
+						<h1 className="text-5xl font-bold text-white">ברוך הבא</h1>
+					</header>
 
-			<div className="max-w-md w-full bg-white rounded-xl shadow-lg p-8">
-				<h2 className="text-2xl font-bold text-gray-900 mb-6 text-center">כניסה</h2>
+					<div className="max-w-md w-full bg-white rounded-xl shadow-lg p-8">
+						<h2 className="text-2xl font-bold text-gray-900 mb-6 text-center">כניסה</h2>
 
-				<form className="space-y-4" onSubmit={loginHandler}>
-					<div>
-						<label className="block text-sm font-medium text-gray-700 mb-1" htmlFor="email">
-							מייל
-						</label>
-						<input
-							type="email"
-							className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all"
-							placeholder="your@email.com"
-							id="email"
-							autoComplete="email"
-							ref={emailRef}
-						/>
-						{!isEmailVerified && (
-							<p className="font-bold text-red-500 text-sm mt-1">{"כתובת מייל שגויה"}</p>
-						)}
+						<form className="space-y-4" onSubmit={loginHandler}>
+							<div>
+								<label className="block text-sm font-medium text-gray-700 mb-1" htmlFor="email">
+									מייל
+								</label>
+								<input
+									type="email"
+									className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all"
+									placeholder="your@email.com"
+									id="email"
+									autoComplete="email"
+									ref={emailRef}
+								/>
+								{!isEmailVerified && (
+									<p className="font-bold text-red-500 text-sm mt-1">{"כתובת מייל שגויה"}</p>
+								)}
+							</div>
+
+							<div>
+								<label className="block text-sm font-medium text-gray-700 mb-1" htmlFor="password">
+									סיסמא
+								</label>
+								<input
+									type="password"
+									className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all"
+									placeholder="••••••••"
+									id="password"
+									autoComplete="current-password"
+									ref={passwordRef}
+								/>
+								{!isPasswordVerified && (
+									<p className="font-bold text-red-500 text-sm mt-1">{"סיסמה שגויה"}</p>
+								)}
+							</div>
+
+							<div className="flex items-center justify-between">
+								<a href="#" className="text-sm text-indigo-600 hover:text-indigo-500">
+									שכחת סיסמא ?
+								</a>
+							</div>
+
+							<button className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2.5 rounded-lg transition-colors">
+								כניסה
+							</button>
+						</form>
+
+						<div className="mt-6 text-center text-sm text-gray-600">
+							אין לך חשבון?
+							<a href="#" className="text-indigo-600 hover:text-indigo-500 font-medium mr-1">
+								הירשם
+							</a>
+						</div>
 					</div>
+				</>
+			)}
 
-					<div>
-						<label className="block text-sm font-medium text-gray-700 mb-1" htmlFor="password">
-							סיסמא
-						</label>
-						<input
-							type="password"
-							className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all"
-							placeholder="••••••••"
-							id="password"
-							autoComplete="current-password"
-							ref={passwordRef}
-						/>
-						{!isPasswordVerified && <p className="font-bold text-red-500 text-sm mt-1">{"סיסמה שגויה"}</p>}
-					</div>
-
-					<div className="flex items-center justify-between">
-						<a href="#" className="text-sm text-indigo-600 hover:text-indigo-500">
-							שכחת סיסמא ?
-						</a>
-					</div>
-
-					<button className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2.5 rounded-lg transition-colors">
-						כניסה
-					</button>
-				</form>
-
-				<div className="mt-6 text-center text-sm text-gray-600">
-					אין לך חשבון?
-					<a href="#" className="text-indigo-600 hover:text-indigo-500 font-medium mr-1">
-						הירשם
-					</a>
-				</div>
-			</div>
+			{isError && <ErrorModal title="שגיאה" text="שגיאה בהתחברות, אנא נסה שנית" onClick={closeModal}/>}
 		</div>
 	);
 };

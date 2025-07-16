@@ -2,11 +2,20 @@ import { Outlet, useNavigate } from "react-router-dom";
 import Header from "../header/Header";
 
 const MainLayout = () => {
+    const navigate = useNavigate();
+
+    const userData = JSON.parse(sessionStorage.getItem("user"));
+    console.log(userData);
+    
+    const logout = () => {
+        sessionStorage.clear();
+        navigate("/");
+    };
+
 	return (
 		<>
-            <Header />
-			<div>MainLayout</div>
-			{Outlet}
+            <Header name={`${userData.firstname} ${userData.lastname}`} isAdmin={userData.admin} logout={logout}/>
+            <Outlet />
 		</>
 	);
 };

@@ -115,6 +115,7 @@ router.get("/verify/:token", async (req, res) => {
 	}
 });
 
+// When user forgot the password, enter his mail and get link to reset the password
 router.post("/forgot-password", async (req, res) => {
 	const { email } = req.body;
 
@@ -158,7 +159,7 @@ router.post("/reset-password/:token", async (req, res) => {
 			return;
 		}
 
-		res.send({ status: true, data: "סיסמה שונתה בהצלחה" });
+		res.send({ status: true, data: "הסיסמה עודכנה בהצלחה" });
 	} catch {
 		res.send({ status: false, data: "בעיה בעדכון הסיסמה, אנא נסה שנית" });
 	}

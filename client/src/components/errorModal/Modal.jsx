@@ -1,4 +1,4 @@
-const ErrorModal = ({title, text, onClick}) => {
+const Modal = ({title, text, onClick}) => {
 	return (
 		<div
   className="fixed inset-0 z-50 grid place-content-center bg-black/50 p-4"
@@ -54,4 +54,4 @@ const ErrorModal = ({title, text, onClick}) => {
 	);
 };
 
-export default ErrorModal;
+export default Modal;

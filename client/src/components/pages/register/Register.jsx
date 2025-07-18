@@ -18,7 +18,7 @@ const Register = () => {
 
 		fetchData();
 	}, []);
-	return <div>Register</div>;
+	return <div className="min-h-screen bg-[url('/images/login.jpg')] bg-cover bg-center flex flex-col items-center p-4">Register</div>;
 };
 
 export default Register;

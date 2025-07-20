@@ -5,7 +5,6 @@ const MainLayout = () => {
     const navigate = useNavigate();
 
     const userData = JSON.parse(sessionStorage.getItem("user"));
-    console.log(userData);
     
     const logout = () => {
         sessionStorage.clear();

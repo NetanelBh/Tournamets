@@ -1,17 +1,15 @@
 import express from "express";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import sendEmail from "../utils/nodemailerConfig.js";
 
 import { getUserbyId, getUserbyUsername, createUser, getUserByEmail, updateUser } from "../services/userServices.js";
 
-import { Resend } from "resend";
-
-const resend = new Resend(process.env.RESEND_API_KEY);
 const router = express.Router();
 
 router.post("/login", async (req, res) => {
 	const { email, password } = req.body;
-	
+
 	try {
 		const user = await getUserByEmail(email);
 		if (!user) {
@@ -35,7 +33,7 @@ router.post("/login", async (req, res) => {
 			return;
 		}
 
-		const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET/*, { expiresIn: "12h" }*/);
+		const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET /*, { expiresIn: "12h" }*/);
 		const returnedUser = user.toObject();
 		// Delete the password from the object
 		delete returnedUser.password;
@@ -48,7 +46,7 @@ router.post("/login", async (req, res) => {
 });
 
 router.post("/register", async (req, res) => {
-	const userData = req.body
+	const userData = req.body;
 
 	try {
 		const isUserExist = await getUserbyUsername(userData.username);
@@ -65,20 +63,30 @@ router.post("/register", async (req, res) => {
 			return;
 		}
 
-		const createdUser = await createUser(userData);		
+		const createdUser = await createUser(userData);
 		if (!createdUser) {
 			res.send({ status: false, data: "אירעה בעיה ביצירת המשתמש" });
 			return;
 		}
 
-		const token = jwt.sign({ id: createdUser._id }, process.env.JWT_SECRET /*, { expiresIn: "12h" }*/);
-		const url = `${process.env.REACT_ADDRESS}/verify/${token}`;
-		await resend.emails.send({
-			from: "onboarding@resend.dev",
-			to: createdUser.email,
-			subject: "Verify your email",
-			html: `<p>Please click the link to verify your email:</p><a href="${url}">${url}</a>`,
-		});
+		const token = jwt.sign({ id: createdUser._id }, process.env.JWT_SECRET, { expiresIn: "5m" });
+		const verificationLink = `${process.env.REACT_ADDRESS}/verify/${token}`;
+		await sendEmail(
+			createdUser.email,
+			"אימות חשבון",
+			`
+			<p>כדי לאמת את החשבון שלך, לחץ על הקישור הבא:</p>
+			<a href="${verificationLink}" style="
+      			background-color: #28a745;
+      			color: white;
+      			padding: 12px 24px;
+      			text-decoration: none;
+      			border-radius: 6px;
+      			display: inline-block;
+      			font-size: 16px;
+    		">אימות חשבון</a>
+			`
+		);
 
 		res.send({ status: true, data: "נא לאמת את המשתמש באמצעות המייל שנשלח אליך" });
 	} catch (error) {
@@ -93,7 +101,6 @@ router.get("/verify/:token", async (req, res) => {
 		const decode = jwt.verify(token, process.env.JWT_SECRET);
 		const user = await getUserbyId(decode.id);
 		if (!user) {
-
 			res.send({ status: false, data: "שם משתמש לא קיים" });
 			return;
 		}
@@ -126,14 +133,24 @@ router.post("/forgot-password", async (req, res) => {
 			return;
 		}
 
-		const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET/*, { expiresIn: "12h" }*/);
+		const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET , { expiresIn: "5m" });
 		const url = `${process.env.REACT_ADDRESS}/reset-password/${token}`;
-		await resend.emails.send({
-			from: "onboarding@resend.dev",
-			to: email,
-			subject: "Reset your password",
-			html: `<p>Click the link below to reset your password:</p><a href="${url}">${url}</a>`,
-		});
+		await sendEmail(
+			email,
+			"איפוס סיסמא",
+			`
+			<p>כדי לאפס את הסיסמה שלך, לחץ על הקישור הבא:</p>
+			<a href="${url}" style="
+      			background-color: #28a745;
+      			color: white;
+      			padding: 12px 24px;
+      			text-decoration: none;
+      			border-radius: 6px;
+      			display: inline-block;
+      			font-size: 16px;
+    		">איפוס סיסמה</a>
+			`
+		);
 
 		res.send({ status: true, data: "מייל לאיפוס סיסמא נשלח בהצלחה" });
 	} catch (error) {

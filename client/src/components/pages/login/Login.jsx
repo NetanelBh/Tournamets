@@ -5,11 +5,11 @@ import { useNavigate, NavLink } from "react-router-dom";
 import Modal from "../../errorModal/Modal";
 
 const Login = () => {
-	const emailRef = useRef();
-	const passwordRef = useRef();
 	const [isEmailVerified, setIsEmailVerified] = useState(true);
 	const [isPasswordVerified, setIsPasswordVerified] = useState(true);
 	const [isError, setIsError] = useState(false);
+	const emailRef = useRef();
+	const passwordRef = useRef();
 	const navigate = useNavigate();
 
 	const loginHandler = async (e) => {
@@ -64,7 +64,7 @@ const Login = () => {
 						<h2 className="text-2xl font-bold text-gray-900 mb-6 text-center">כניסה</h2>
 
 						<form className="space-y-4" onSubmit={loginHandler}>
-							<div>
+							<>
 								<label className="block text-sm font-medium text-gray-700 mb-1" htmlFor="email">
 									מייל
 								</label>
@@ -79,9 +79,9 @@ const Login = () => {
 								{!isEmailVerified && (
 									<p className="font-bold text-red-500 text-sm mt-1">{"כתובת מייל שגויה"}</p>
 								)}
-							</div>
+							</>
 
-							<div>
+							<>
 								<label className="block text-sm font-medium text-gray-700 mb-1" htmlFor="password">
 									סיסמא
 								</label>
@@ -96,7 +96,7 @@ const Login = () => {
 								{!isPasswordVerified && (
 									<p className="font-bold text-red-500 text-sm mt-1">{"סיסמה שגויה"}</p>
 								)}
-							</div>
+							</>
 
 							<div className="flex items-center justify-between">
 								<NavLink
@@ -108,7 +108,7 @@ const Login = () => {
 								</NavLink>
 							</div>
 
-							<button className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2.5 rounded-lg transition-colors">
+							<button className="w-full bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-500 text-white font-medium py-2.5 rounded-lg transition-colors">
 								כניסה
 							</button>
 						</form>

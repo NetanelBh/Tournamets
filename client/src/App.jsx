@@ -5,9 +5,9 @@ const App = () => {
 	const router = CreateRouter();
 
 	return (
-		<>
+		<div className="bg-gray-500 min-h-screen">
 			<RouterProvider router={router} />
-		</>
+		</div>
 	);
 };
 

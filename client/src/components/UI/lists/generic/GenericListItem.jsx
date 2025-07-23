@@ -1,7 +1,6 @@
 import styles from './GenericListItem.module.css';
 const GenericListItem = ({item, index}) => {
-  console.log(index);
-  const classes = `${styles.list_item} border-gray-200 border rounded-lg mt-3 mb-1 shadow`;
+  const classes = `${styles.list_item} border-gray-200 border rounded-lg mb-3 shadow bg-white`;
   
     return (
     <li className={classes} style={{animationDelay: `${index * 0.2}s` }}>

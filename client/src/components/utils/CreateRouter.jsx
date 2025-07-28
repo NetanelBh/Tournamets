@@ -8,8 +8,13 @@ import ForgotPassword from "../pages/forgotPassword/ForgotPassword";
 
 import MainLayout from "../pages/layouts/MainLayout";
 
-import AllTournaments from "../pages/tournaments/AllTournaments";
 import MyTournaments from "../pages/tournaments/MyTournaments";
+import AllTournaments from "../pages/tournaments/AllTournaments";
+import CreateTournament from "../pages/tournaments/CreateTournament";
+
+import MyGroups from "../pages/groups/MyGroups";
+import JoinGroups from "../pages/groups/JoinGroups";
+import GroupsLayout from "../pages/layouts/GroupsLayout";
 
 const CreateRouter = () => {
 	const router = createBrowserRouter([
@@ -24,6 +29,15 @@ const CreateRouter = () => {
 			children: [
 				{ path: "/layout/all-tournaments", element: <AllTournaments /> },
 				{ path: "/layout/my-tournaments", element: <MyTournaments /> },
+				{ path: "/layout/create-tournament", element: <CreateTournament /> },
+				{
+					path: "/layout/groups-layout",
+					element: <GroupsLayout />,
+					children: [
+						{ path: "/layout/groups-layout/my-groups", element: <MyGroups /> },
+						{ path: "/layout/groups-layout/join-groups", element: <JoinGroups /> },
+					],
+				},
 			],
 		},
 	]);

@@ -1,21 +1,16 @@
 import { useState } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useLocation } from "react-router-dom";
 
 const Header = ({ name, logout }) => {
 	// When using small screens like mobile, When click the menu button I want to open the menu.
 	const [isOpenMenu, setIsOpenMenu] = useState(false);
+	const { pathname } = useLocation();
 
 	// I did the condition because the data stored in the session storage is a string and not as boolean
-	const isAdmin = sessionStorage.getItem("isAdmin") === "true";	
-
-	const getClass = (isActiveLink) => {
-		return `hover:text-gray-300 transition-all ${
-			isActiveLink ? "text-yellow-400 font-semibold hover:text-yellow-400" : ""
-		}`;
-	};
+	const isAdmin = sessionStorage.getItem("isAdmin") === "true";
 
 	return (
-		<header className="bg-gray-700 text-white">
+		<header className="bg-gray-700 text-white shadow-sm shadow-gray-400 sticky top-0">
 			<div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5">
 				<div className="flex items-center justify-between">
 					{/* Logo Section */}
@@ -25,17 +20,41 @@ const Header = ({ name, logout }) => {
 
 					{/* Navigation Menu */}
 					<nav className="hidden md:flex space-x-10 text-lg">
-						<NavLink to="/layout/all-tournaments" end className={({ isActive }) => getClass(isActive)}>
+						<NavLink
+							to="/layout/all-tournaments"
+							className={`hover:text-gray-300 transition-all ${
+								pathname.includes("all-tournaments")
+									? "text-yellow-400 font-semibold hover:text-yellow-400"
+									: ""
+							}`}
+						>
 							כל הטורנירים
 						</NavLink>
 
-						<NavLink to="/layout/my-tournaments" end className={({ isActive }) => getClass(isActive)}>
+						<NavLink
+							to="/layout/my-tournaments"
+							className={`hover:text-gray-300 transition-all ${
+								// Only my tournaments component has nested child, so we need it always active
+								pathname.includes("my-tournaments") ||
+								pathname.includes("my-groups") ||
+								pathname.includes("join-groups")
+									? "text-yellow-400 font-semibold hover:text-yellow-400"
+									: ""
+							}`}
+						>
 							הטורנירים שלי
 						</NavLink>
 
 						{/* Only for admin, the option of create tournament is valid */}
 						{isAdmin && (
-							<NavLink to="/layout/bla" end className={({ isActive }) => getClass(isActive)}>
+							<NavLink
+								to="/layout/create-tournament"
+								className={`hover:text-gray-300 transition-all ${
+									pathname.includes("create-tournament")
+										? "text-yellow-400 font-semibold hover:text-yellow-400"
+										: ""
+								}`}
+							>
 								צור טורניר
 							</NavLink>
 						)}

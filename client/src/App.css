@@ -3,7 +3,7 @@
 .fade_up {
     opacity: 0;
     transform: translateY(15vh);
-    animation: fadeup 0.5s ease forwards;
+    animation: fadeup 0.5s forwards;
   }
   
   @keyframes fadeup {

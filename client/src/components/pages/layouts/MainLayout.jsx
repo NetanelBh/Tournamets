@@ -1,10 +1,11 @@
 import { Outlet, useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 import Header from "../header/Header";
 
 const MainLayout = () => {
     const navigate = useNavigate();
 
-    const userData = JSON.parse(sessionStorage.getItem("user"));
+    const user = useSelector((state) => state.user.user);
     
     const logout = () => {
         sessionStorage.clear();
@@ -13,7 +14,7 @@ const MainLayout = () => {
 
 	return (
 		<>
-            <Header name={`${userData.firstname} ${userData.lastname}`} isAdmin={userData.admin} logout={logout}/>
+            <Header name={`${user.firstname} ${user.lastname}`} logout={logout}/>
             <Outlet />
 		</>
 	);

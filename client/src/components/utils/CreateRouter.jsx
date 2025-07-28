@@ -9,6 +9,7 @@ import ForgotPassword from "../pages/forgotPassword/ForgotPassword";
 import MainLayout from "../pages/layouts/MainLayout";
 
 import AllTournaments from "../pages/tournaments/AllTournaments";
+import MyTournaments from "../pages/tournaments/MyTournaments";
 
 const CreateRouter = () => {
 	const router = createBrowserRouter([
@@ -20,7 +21,10 @@ const CreateRouter = () => {
 		{
 			path: "/layout",
 			element: <MainLayout />,
-			children: [{ path: "/layout/all-tournaments", element: <AllTournaments /> }],
+			children: [
+				{ path: "/layout/all-tournaments", element: <AllTournaments /> },
+				{ path: "/layout/my-tournaments", element: <MyTournaments /> },
+			],
 		},
 	]);
 

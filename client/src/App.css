@@ -1,1 +1,14 @@
 @import "tailwindcss";
+
+.fade_up {
+    opacity: 0;
+    transform: translateY(15vh);
+    animation: fadeup 0.5s ease forwards;
+  }
+  
+  @keyframes fadeup {
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }

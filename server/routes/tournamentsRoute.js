@@ -4,6 +4,8 @@ import * as tournamentServices from "../services/tournamentServices.js";
 import israelToUTC from "../utils/ConvertIsraelTimeToUtc.js";
 import {getImageFromWikipediaApi} from "../utils/getFromWikipediaUtils.js";
 
+import {getUserbyId, addTournamentToUser} from "../services/userServices.js";
+
 const router = express.Router();
 
 // Entry point: localhost:3000/tournament
@@ -50,16 +52,17 @@ router.post("/create", async (req, res) => {
 });
 
 // Add tournament to user.tournaments
-router.post("/joinTournament", async (req, res) => {
+router.post("/join", async (req, res) => {
 	try {
 		const { tournamentId } = req.body;
 
 		// Get the user from DB(he exists because he is logged in)
-		const user = await userServices.getUserbyId(req.user.id);
-
+		const user = await getUserbyId(req.user.id);
+		
 		// Update the tournament in the user.tournaments
-		const updatedUser = await userServices.addTournamentToUser(user.username, tournamentId);
-		if (!updatedUser) {
+		const updatedUser = await addTournamentToUser(user.username, tournamentId);
+		
+		if (!updatedUser) {			
 			res.send({ status: false, data: "אירעה בעיה בהוספת הטורניר, אנא נסה שנית" });
 			return;
 		}

@@ -1,8 +1,12 @@
+import "../../../App.css";
+
 import { useRef, useState } from "react";
-import API from "../../utils/Api";
+import { useDispatch } from "react-redux";
 import { useNavigate, NavLink } from "react-router-dom";
 
+import API from "../../utils/Api";
 import Modal from "../../errorModal/Modal";
+import { userActions } from "../../store/slices/userSlice";
 
 const Login = () => {
 	const [isEmailVerified, setIsEmailVerified] = useState(true);
@@ -11,6 +15,7 @@ const Login = () => {
 	const emailRef = useRef();
 	const passwordRef = useRef();
 	const navigate = useNavigate();
+	const dispatch = useDispatch();
 
 	// Clear session storage when reach to login page
 	sessionStorage.clear();
@@ -43,7 +48,13 @@ const Login = () => {
 			}
 
 			// Session storage persists when refresh the page, clear only when close the tab in contrast to localStorage
-			sessionStorage.setItem("user", JSON.stringify(res.data));
+			sessionStorage.setItem("token", res.data.token);
+			sessionStorage.setItem("isAdmin", res.data.admin);
+
+			// Extract the data from the response to remove the token and the isAdmin from the response(store in redux)
+			const { token, admin, isVerified, ...data } = res.data;
+			dispatch(userActions.load(data));
+
 			navigate("/layout/all-tournaments");
 		} catch (error) {
 			setIsError(true);
@@ -58,7 +69,7 @@ const Login = () => {
 	return (
 		<div className="min-h-screen bg-[url('/images/login.jpg')] bg-cover bg-center flex flex-col items-center p-4">
 			{!isError && (
-				<div className="max-w-md w-full bg-white rounded-xl shadow-lg p-8 mt-8">
+				<div className="fade_up max-w-md w-full bg-white rounded-xl shadow-lg p-8 mt-8">
 					<h2 className="text-2xl font-bold text-gray-900 mb-6 text-center">כניסה</h2>
 
 					<form className="space-y-4" onSubmit={loginHandler}>

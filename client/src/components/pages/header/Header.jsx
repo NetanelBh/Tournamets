@@ -1,14 +1,18 @@
 import { useState } from "react";
+import { NavLink } from "react-router-dom";
 
-const Header = ({ name, isAdmin, logout }) => {
-	const [activeLink, setActiveLink] = useState("כל הטורנירים");
+const Header = ({ name, logout }) => {
 	// When using small screens like mobile, When click the menu button I want to open the menu.
 	const [isOpenMenu, setIsOpenMenu] = useState(false);
 
-	const getClass = (key) =>
-		`hover:text-gray-300 transition-all ${
-			activeLink === key ? "text-yellow-400 font-semibold hover:text-yellow-400" : ""
+	// I did the condition because the data stored in the session storage is a string and not as boolean
+	const isAdmin = sessionStorage.getItem("isAdmin") === "true";	
+
+	const getClass = (isActiveLink) => {
+		return `hover:text-gray-300 transition-all ${
+			isActiveLink ? "text-yellow-400 font-semibold hover:text-yellow-400" : ""
 		}`;
+	};
 
 	return (
 		<header className="bg-gray-700 text-white">
@@ -16,29 +20,24 @@ const Header = ({ name, isAdmin, logout }) => {
 				<div className="flex items-center justify-between">
 					{/* Logo Section */}
 					<div className="flex-shrink-0">
-						<p className="text-2xl font-bold text-yellow-400">
-							{name}{" "}
-						</p>
+						<p className="text-2xl font-bold text-yellow-400">{name} </p>
 					</div>
 
 					{/* Navigation Menu */}
 					<nav className="hidden md:flex space-x-10 text-lg">
-						<a href="#" className={getClass("כל הטורנירים")} onClick={() => setActiveLink("כל הטורנירים")}>
+						<NavLink to="/layout/all-tournaments" end className={({ isActive }) => getClass(isActive)}>
 							כל הטורנירים
-						</a>
-						<a
-							href="#הטורנירים שלי"
-							className={getClass("הטורנירים שלי")}
-							onClick={() => setActiveLink("הטורנירים שלי")}
-						>
+						</NavLink>
+
+						<NavLink to="/layout/my-tournaments" end className={({ isActive }) => getClass(isActive)}>
 							הטורנירים שלי
-						</a>
+						</NavLink>
 
 						{/* Only for admin, the option of create tournament is valid */}
 						{isAdmin && (
-							<a href="#about" className={getClass("about")} onClick={() => setActiveLink("about")}>
+							<NavLink to="/layout/bla" end className={({ isActive }) => getClass(isActive)}>
 								צור טורניר
-							</a>
+							</NavLink>
 						)}
 					</nav>
 
@@ -80,16 +79,16 @@ const Header = ({ name, isAdmin, logout }) => {
 				{/* Mobile Navigation Menu  */}
 				{isOpenMenu && (
 					<div id="mobile-menu" className="md:hidden mt-5 space-y-4">
-						<a href="#" className="block text-lg hover:text-gray-300 transition-all">
+						<a href="#" className="block text-lg active:text-gray-300 transition-all">
 							כל הטורנירים
 						</a>
-						<a href="#הטורנירים שלי" className="block text-lg hover:text-gray-300 transition-all">
+						<a href="#הטורנירים שלי" className="block text-lg active:text-gray-300 transition-all">
 							הטורנירים שלי
 						</a>
-						<a href="#about" className="block text-lg hover:text-gray-300 transition-all">
+						<a href="#about" className="block text-lg active:text-gray-300 transition-all">
 							צור טורניר
 						</a>
-						<a href="#contact" className="block text-lg hover:text-gray-300 transition-all">
+						<a href="#contact" className="block text-lg active:text-gray-300 transition-all">
 							התנתק
 						</a>
 					</div>

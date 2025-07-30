@@ -9,23 +9,26 @@ const Header = ({ name, logout }) => {
 	// I did the condition because the data stored in the session storage is a string and not as boolean
 	const isAdmin = sessionStorage.getItem("isAdmin") === "true";
 
+	const activeClass = "text-yellow-400 font-bold hover:text-yellow-400";
+	const navLinkClass = "hover:text-gray-300 transition-all";
+	const buttonClass =
+		"bg-yellow-300 hover:bg-red-600 hover:text-white text-black py-1 px-4 rounded-xl text-lg transition-all";
+
 	return (
-		<header className="bg-gray-700 text-white shadow-sm shadow-gray-400 sticky top-0">
+		<header className="bg-gradient-to-r from-teal-500 to-teal-900 text-white shadow-sm shadow-white sticky top-0">
 			<div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5">
 				<div className="flex items-center justify-between">
 					{/* Logo Section */}
 					<div className="flex-shrink-0">
-						<p className="text-2xl font-bold text-yellow-400">{name} </p>
+						<p className="text-2xl font-bold text-yellow-300">{name} </p>
 					</div>
 
 					{/* Navigation Menu */}
 					<nav className="hidden md:flex space-x-10 text-lg">
 						<NavLink
 							to="/layout/all-tournaments"
-							className={`hover:text-gray-300 transition-all ${
-								pathname.includes("all-tournaments")
-									? "text-yellow-400 font-semibold hover:text-yellow-400"
-									: ""
+							className={`${navLinkClass} ${
+								pathname.includes("all-tournaments") ? activeClass : ""
 							}`}
 						>
 							כל הטורנירים
@@ -33,12 +36,12 @@ const Header = ({ name, logout }) => {
 
 						<NavLink
 							to="/layout/my-tournaments"
-							className={`hover:text-gray-300 transition-all ${
+							className={`${navLinkClass} ${
 								// Only my tournaments component has nested child, so we need it always active
 								pathname.includes("my-tournaments") ||
 								pathname.includes("my-groups") ||
 								pathname.includes("join-groups")
-									? "text-yellow-400 font-semibold hover:text-yellow-400"
+									? activeClass
 									: ""
 							}`}
 						>
@@ -49,10 +52,8 @@ const Header = ({ name, logout }) => {
 						{isAdmin && (
 							<NavLink
 								to="/layout/create-tournament"
-								className={`hover:text-gray-300 transition-all ${
-									pathname.includes("create-tournament")
-										? "text-yellow-400 font-semibold hover:text-yellow-400"
-										: ""
+								className={`${navLinkClass} ${
+									pathname.includes("create-tournament") ? activeClass : ""
 								}`}
 							>
 								צור טורניר
@@ -62,10 +63,7 @@ const Header = ({ name, logout }) => {
 
 					{/* Call to action button */}
 					<div className="hidden md:block">
-						<button
-							className="bg-yellow-400 hover:bg-red-500 hover:text-white text-black py-1 px-4 rounded-full text-lg transition-all"
-							onClick={logout}
-						>
+						<button className={buttonClass} onClick={logout}>
 							התנתק
 						</button>
 					</div>

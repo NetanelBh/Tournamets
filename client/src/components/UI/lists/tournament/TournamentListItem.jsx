@@ -7,7 +7,7 @@ const TournamentListItem = ({ item, index, btnText, onClick }) => {
 
 	const userTournaments = useSelector((state) => state.user.user.tournaments);
 
-	const main_style = `relative overflow-hidden fade_up mb-3 group rounded-xl border-1 border-yellow-100`;
+	const main_style = `relative overflow-hidden fade_up mb-3 group rounded-xl border-2 border-yellow-100/70`;
 
 	// Create template from the same object Date
 	const now = new Date();
@@ -24,7 +24,8 @@ const TournamentListItem = ({ item, index, btnText, onClick }) => {
 
 	return (
 		<li className={main_style} style={{ animationDelay: `${index * 0.15}s` }}>
-			<div className="absolute inset-0 bg-cyan-900/60 group-hover:bg-cyan-900/10 transition duration-300 z-0 border-1 rounded-xl"></div>
+			{/* This div is an overlay to the next div to make the item transparent */}
+			<div className="absolute inset-0 bg-cyan-900/60 group-hover:bg-cyan-900/10 transition duration-300 z-0"></div>
 			<div className="px-4 py-4 sm:px-4 relative z-10">
 				<div className="flex items-center justify-between h-16">
 					<img src={item.symbol} alt="tournament symbol" style={{ width: "20%", height: "auto" }} />

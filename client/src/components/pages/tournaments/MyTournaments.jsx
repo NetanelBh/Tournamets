@@ -1,6 +1,6 @@
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import TournamentList from "../../UI/lists/tournament/TournamentList";
+import GenericList from "../../UI/lists/tournament/GenericList";
 
 const MyTournaments = () => {
 	const myTournaments = useSelector((state) => state.user.user.tournaments);
@@ -12,8 +12,15 @@ const MyTournaments = () => {
     const enterGroupHandler = () => {
         navigate("/layout/groups-layout/my-groups");
     };
+
+    	// send props object to generic list component
+	const data = {
+		dataList: filteredTournamets,
+		btnText: "כניסה",
+		onClick: enterGroupHandler
+	}
     
-    return <TournamentList dataList={filteredTournamets} btnText="כניסה" onClick={enterGroupHandler}/>
+    return <GenericList data={data}/>
 };
 
 export default MyTournaments;

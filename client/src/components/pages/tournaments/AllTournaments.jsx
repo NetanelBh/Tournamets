@@ -5,7 +5,7 @@ import { tournamentsActions } from "../../store/slices/tournamentsSlice";
 import { userActions } from "../../store/slices/userSlice";
 
 import Modal from "../../errorModal/Modal";
-import TournamentList from "../../UI/lists/tournament/TournamentList";
+import GenericList from "../../UI/lists/tournament/GenericList";
 import { useNavigate } from "react-router-dom";
 
 const AllTournaments = () => {
@@ -69,10 +69,17 @@ const AllTournaments = () => {
 		setOpenModal(false);
 		navigate(navigateTo);
 	};
+
+	// send props object to generic list component
+	const data = {
+		dataList: tournaments,
+		btnText: "הצטרף",
+		onClick: joinHandler
+	}
 	
 	return (
 		<>
-			{!openModal && <TournamentList dataList={tournaments} btnText="הצטרף" onClick={joinHandler} />}
+			{!openModal && <GenericList data={data} />}
 			{openModal && (
 				<Modal title={modalText.title} text={modalText.text} onClick={closeModalHandler} />
 			)}

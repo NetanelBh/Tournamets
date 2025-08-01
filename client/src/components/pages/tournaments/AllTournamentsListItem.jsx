@@ -17,9 +17,9 @@ const TournamentListItem = ({ item, index, btnText, onClick }) => {
 	const isJoined = userTournaments.includes(item._id);
 	// Compate the dates to determine if the tournament is started
 	const tournamentStatus = startTime > now.toISOString() ? "הטורניר התחיל" : "ניתן להצטרף";
-	let statusColor = "text-green-600";
+	let statusColor = "text-green-400 font-bold";
 	if (tournamentStatus === "הטורניר התחיל" || isJoined) {
-		statusColor = "text-red-500";
+		statusColor = "text-red-500 font-bold";
 	}
 
 	return (

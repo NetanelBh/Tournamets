@@ -5,7 +5,7 @@ const App = () => {
 	const router = CreateRouter();
 
 	return (
-		<div className="bg-[url('/images/background.jpg')] bg-cover min-h-screen">
+		<div className="bg-[url('/images/background.jpg')] bg-top bg-cover min-h-screen">
 			<RouterProvider router={router} />
 		</div>
 	);

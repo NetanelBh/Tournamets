@@ -15,7 +15,7 @@ const Header = ({ name, logout }) => {
 		"bg-yellow-300 hover:bg-red-600 hover:text-white text-black py-1 px-4 rounded-xl text-lg transition-all";
 
 	return (
-		<header className="bg-gradient-to-r from-teal-500 to-teal-900 text-white shadow-sm shadow-white sticky top-0">
+		<header className="bg-gradient-to-r from-teal-500 to-teal-900 text-white shadow-sm shadow-white sticky top-0 z-50">
 			<div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5">
 				<div className="flex items-center justify-between">
 					{/* Logo Section */}

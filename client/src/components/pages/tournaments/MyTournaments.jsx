@@ -1,6 +1,6 @@
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import GenericList from "../../UI/lists/tournament/GenericList";
+import GenericList from "../../UI/list/GenericList";
 
 const MyTournaments = () => {
 	const myTournaments = useSelector((state) => state.user.user.tournaments);

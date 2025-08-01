@@ -1,4 +1,6 @@
-import AllTournamentsListItem from "./AllTournamentsListItem";
+import AllTournamentsListItem from "../../pages/tournaments/AllTournamentsListItem";
+// TODO: to use it generic, in the data obj, will insert property type to check which component to render in map
+// TODO: IT COULD BE ALLTOURNAMENTSLISTITEM OR TABLELISTITEM(FOR THE POINTS TABLE AND ETC..)
 
 const GenericList = ({ data }) => {
 	return (

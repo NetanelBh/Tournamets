@@ -5,7 +5,7 @@ import { tournamentsActions } from "../../store/slices/tournamentsSlice";
 import { userActions } from "../../store/slices/userSlice";
 
 import Modal from "../../errorModal/Modal";
-import GenericList from "../../UI/lists/tournament/GenericList";
+import GenericList from "../../UI/list/GenericList";
 import { useNavigate } from "react-router-dom";
 
 const AllTournaments = () => {

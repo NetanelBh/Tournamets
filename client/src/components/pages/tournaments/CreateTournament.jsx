@@ -1,6 +1,10 @@
 import { useRef } from "react";
 import API from "../../utils/Api";
+
+import {tournamentsActions} from "../../store/slices/tournamentsSlice";
 import createTournamentData from "./CreateTournamentData";
+
+// TODO: CHECK THE DATA FROM THE REFS AND SEND THE POST REQUEST TO UPDATE THE DB AND ALSO UPDATE REDUX
 
 const CreateTournament = () => {
 	const inputData = createTournamentData();

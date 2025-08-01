@@ -1,6 +1,6 @@
 import { useSelector } from "react-redux";
 
-import "../../../../App.css";
+import "../../../App.css";
 
 const TournamentListItem = ({ item, index, btnText, onClick }) => {
 	/* buttonText determine if the text will be join or enter(if came from alltournaments or mytournaments)*/

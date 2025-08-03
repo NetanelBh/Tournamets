@@ -4,31 +4,31 @@ const createTournamentData = () => {
             htmlFor: "name",
             label: "שם הטורניר",
             type: "text",
-            defaultValue: "2016_FIFA_Club_World_Cup"
+            clue: "...pedia.org/wiki/HERE_IS_THE_NAME"
         },
         {
             htmlFor: "startDate",
             label: "תאריך תחילת הטורניר",
             type: "text",
-            defaultValue: "2025-08-10"
+            clue: "yyyy-mm-dd"
         },
         {
             htmlFor: "endDate",
             label: "תאריך סיום הטורניר",
             type: "text",
-            defaultValue: "2025-09-10"
+            clue: "yyyy-mm-dd"
         },
         {
             htmlFor: "startTime",
             label: "שעת פתיחת הטורניר",
             type: "text",
-            defaultValue: "20:00"
+            clue: "שעון ישראל לדוגמא: 20:00"
         },
         {
             htmlFor: "topScorer",
             label: "לכלול מלך שערים?",
             type: "text",
-            defaultValue: "כן"
+            clue: "כן/לא"
         }
     ]
 };

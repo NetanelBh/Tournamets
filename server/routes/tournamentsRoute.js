@@ -19,17 +19,17 @@ router.get("/getAll", async (req, res) => {
 	}
 });
 
-router.post("/create", async (req, res) => {
+router.post("/create", async (req, res) => {	
 	try {
-		const { name, startDate, endDate, startTime } = req.body;
-
+		const { name, startDate, endDate, startTime, isTopScorerIncluded } = req.body;
+		
 		// First get the tournament image from wikipedia with the wikipedia tournament source name(with _)
-		const tournamentImg = await getImageFromWikipediaApi(name);
+		const img = await getImageFromWikipediaApi(name);		
 		
 		// Remove the _ from the tournament name
-		const officialName = name.replace(/_/g, " ");	
+		const newName = name.replace(/_/g, " ");	
 		
-		const isTournamentExist = await tournamentServices.getTournamentByName(officialName);
+		const isTournamentExist = await tournamentServices.getTournamentByName(newName);
 		if (isTournamentExist) {
 			res.send({ status: false, data: "הטורניר כבר קיים" });
 			return;
@@ -38,14 +38,17 @@ router.post("/create", async (req, res) => {
 		// Should convert the date entered to DATE object as UTC
 		const utcDate = israelToUTC(startDate, startTime);
 
+		// TODO: WHEN CREATE THE TOURNAMENT, ALSO FETCH THE MATCHES FROM FREE API AND STORE IT IN THE DB(FIND FREE API)
+		const teams = ["a", "b", "c", "d"];
+		
 		// Create the tournament
-		const tournament = await tournamentServices.create(officialName, startDate, endDate, utcDate, tournamentImg);
+		const tournament = await tournamentServices.create(newName, endDate, utcDate, img, isTopScorerIncluded, teams);
+		
 		if (!tournament) {
 			res.send({ status: false, data: "טורניר לא נוצר, אנא נסה שנית" });
 			return;
 		}
-		// TODO: WHEN CREATE THE TOURNAMENT, ALSO FETCH THE MATCHES FROM FREE API AND STORE IT IN THE DB(FIND FREE API)
-		res.send({ status: true, data: "הטורניר נוצר בהצלחה" });
+		res.send({ status: true, data: tournament });
 	} catch (error) {
 		res.send({ status: false, data: "אירעה בעיה ביצירת הטורניר, אנא נסה שנית" });
 	}

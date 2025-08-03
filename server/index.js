@@ -33,6 +33,7 @@ app.use("/auth", authRouter);
 
 // Middleware to check if the user logged and sent the token
 app.use(authentication)
+
 app.use("/tournament", tounamentRouter);
 app.use("/user", userRouter);
 app.use("/group", groupRouter);

@@ -10,7 +10,10 @@ const tournamentsSlice = createSlice({
     reducers: {
         load(state, action) {    
             state.tournaments = action.payload;
-        }
+        },
+        addTournament(state, action) {
+            state.tournaments.push(action.payload);
+        },
     },
 });
 

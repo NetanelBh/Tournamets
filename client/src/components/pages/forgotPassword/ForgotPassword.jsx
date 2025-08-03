@@ -2,7 +2,7 @@ import { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import API from "../../utils/Api";
-import Modal from "../../errorModal/Modal";
+import Modal from "../../modal/Modal";
 
 const ForgotPassword = () => {
 	const emailRef = useRef();

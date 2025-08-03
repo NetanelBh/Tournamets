@@ -10,16 +10,19 @@ const TournamentListItem = ({ item, index, btnText, onClick }) => {
 	const main_style = `relative overflow-hidden fade_up mb-3 group rounded-xl border-2 border-yellow-100/70`;
 
 	// Create template from the same object Date
-	const now = new Date();
+	const now = (new Date()).toISOString();;
 	const startTime = item.startTime;
 
 	// Check if the user joined the tournament already
 	const isJoined = userTournaments.includes(item._id);
-	// Compate the dates to determine if the tournament is started
-	const tournamentStatus = startTime > now.toISOString() ? "הטורניר התחיל" : "ניתן להצטרף";
+	// Compate the dates to determine if the tournament is started	
+
+	const tournamentStatus = startTime < now ? "הטורניר התחיל" : "ניתן להצטרף";
 	let statusColor = "text-green-400 font-bold";
-	if (tournamentStatus === "הטורניר התחיל" || isJoined) {
+	if (tournamentStatus === "הטורניר התחיל" && !isJoined) {
 		statusColor = "text-red-500 font-bold";
+	} else if (isJoined) {
+		statusColor = "text-yellow-400 font-bold";
 	}
 
 	return (

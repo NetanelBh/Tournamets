@@ -1,10 +1,11 @@
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import API from "../../utils/Api";
 
-import {tournamentsActions} from "../../store/slices/tournamentsSlice";
+import { tournamentsActions } from "../../store/slices/tournamentsSlice";
+import Modal from "../../modal/Modal";
 import createTournamentData from "./CreateTournamentData";
-
-// TODO: CHECK THE DATA FROM THE REFS AND SEND THE POST REQUEST TO UPDATE THE DB AND ALSO UPDATE REDUX
+import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
 
 const CreateTournament = () => {
 	const inputData = createTournamentData();
@@ -13,52 +14,96 @@ const CreateTournament = () => {
 	const endDateRef = useRef();
 	const startTimeRef = useRef();
 	const topScorerRef = useRef();
+	const [openModal, setOpenModal] = useState(false);
+	const [modalText, setModalText] = useState("");
+	const navigate = useNavigate();
+	const dispatch = useDispatch();
+
 	inputData[0].ref = nameRef;
 	inputData[1].ref = startDateRef;
 	inputData[2].ref = endDateRef;
 	inputData[3].ref = startTimeRef;
 	inputData[4].ref = topScorerRef;
 
-	const createTournamentHandler = (event) => {
+	const createTournamentHandler = async (event) => {
 		event.preventDefault();
 
-		console.log(nameRef.current.value);
-		console.log(startDateRef.current.value);
-		console.log(endDateRef.current.value);
-		console.log(startTimeRef.current.value);
-		console.log(topScorerRef.current.value);
+		const newTournamentData = {
+			name: nameRef.current.value,
+			startDate: startDateRef.current.value,
+			endDate: endDateRef.current.value,
+			startTime: startTimeRef.current.value,
+			isTopScorerIncluded: topScorerRef.current.value === "כן" ? true : false,
+		};
+
+		try {
+			const resp = await API.post("/tournament/create", newTournamentData, {
+				headers: {
+					Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+				},
+			});
+
+			setOpenModal(resp.data.status);
+
+			// If the resopnse is true, it means the tournament successfully created and will store in redux
+			if (resp.data.status) {
+				dispatch(tournamentsActions.addTournament(resp.data.data));
+				setModalText("הטורניר נוצר בהצלחה");
+			} else {
+				setModalText(resp.data.data);
+			}
+		} catch (error) {
+			setOpenModal(true);
+			setModalText("אירעה שגיאה ביצירת הטורניר, אנא נסה שנית");
+		}
 	};
+
+	const closeModalHandler = () => {
+		setOpenModal(false);
+		setModalText("");
+		navigate("/layout/all-tournaments");
+	};
+
 	return (
-		<div className="flex flex-col items-center p-4">
-			<form
-				className="fade_up max-w-md w-full bg-cyan-900/50 rounded-xl shadow-lg p-8 mt-8 space-y-4 shadow-md shadow-gray-400"
-				onSubmit={createTournamentHandler}
-			>
-				{inputData.map((item) => {
-					return (
-						<div key={item.label}>
-							<label className="block font-medium text-base text-yellow-400 mb-1" htmlFor={item.htmlFor}>
-								{item.label}
-							</label>
-							<input
-								type={item.type}
-								className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all font-medium text-white"
-								id={item.htmlFor}
-								ref={item.ref}
-								defaultValue={item.defaultValue}
-								autoComplete="off"
-							/>
-						</div>
-					);
-				})}
-				<button
-					className="mt-4 w-full bg-gradient-to-r from-teal-500 to-teal-800 shadow-md shadow-gray-400/80 hover:scale-95 active:bg-gradient-to-r from-teal-500 to-teal-800 text-white font-medium py-2.5 rounded-lg transition-colors"
-					type="submit"
-				>
-					צור טורניר
-				</button>
-			</form>
-		</div>
+		<>
+			{!openModal && (
+				<div className="flex flex-col items-center p-4">
+					<form
+						className="fade_up max-w-md w-full bg-cyan-900/50 rounded-xl shadow-lg p-8 mt-8 space-y-4 shadow-md shadow-gray-400"
+						onSubmit={createTournamentHandler}
+					>
+						{inputData.map((item) => {
+							return (
+								<div key={item.label}>
+									<label
+										className="block font-medium text-base text-yellow-400 mb-1"
+										htmlFor={item.htmlFor}
+									>
+										{item.label}
+									</label>
+									<input
+										type={item.type}
+										className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all font-medium text-white"
+										id={item.htmlFor}
+										ref={item.ref}
+										autoComplete="off"
+										placeholder={item.clue}
+									/>
+								</div>
+							);
+						})}
+						<button
+							className="mt-4 w-full bg-gradient-to-r from-teal-500 to-teal-800 shadow-md shadow-gray-400/80 hover:scale-95 active:bg-gradient-to-r from-teal-500 to-teal-800 text-white font-medium py-2.5 rounded-lg transition-colors"
+							type="submit"
+						>
+							צור טורניר
+						</button>
+					</form>
+				</div>
+			)}
+
+			{openModal && <Modal title="יצירת טורניר" text={modalText} onClick={closeModalHandler} />}
+		</>
 	);
 };
 

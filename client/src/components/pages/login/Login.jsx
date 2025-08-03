@@ -5,7 +5,7 @@ import { useDispatch } from "react-redux";
 import { useNavigate, NavLink } from "react-router-dom";
 
 import API from "../../utils/Api";
-import Modal from "../../errorModal/Modal";
+import Modal from "../../modal/Modal";
 import { userActions } from "../../store/slices/userSlice";
 
 const Login = () => {

@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import API from "../../utils/Api";
 
-import Modal from "../../errorModal/Modal";
+import Modal from "../../modal/Modal";
 
 function VerifyEmail() {
 	const [openModal, setOpenModal] = useState(false);

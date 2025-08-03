@@ -1,7 +1,7 @@
 import API from "../../utils/Api";
 import { useRef, useState } from "react";
 
-import Modal from "../../errorModal/Modal";
+import Modal from "../../modal/Modal";
 import { useNavigate } from "react-router-dom";
 
 const Register = () => {

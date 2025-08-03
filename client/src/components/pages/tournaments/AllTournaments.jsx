@@ -4,7 +4,7 @@ import API from "../../utils/Api";
 import { tournamentsActions } from "../../store/slices/tournamentsSlice";
 import { userActions } from "../../store/slices/userSlice";
 
-import Modal from "../../errorModal/Modal";
+import Modal from "../../modal/Modal";
 import GenericList from "../../UI/list/GenericList";
 import { useNavigate } from "react-router-dom";
 

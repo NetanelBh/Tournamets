@@ -2,8 +2,6 @@ import express from "express";
 import * as tournamentServices from "../services/tournamentServices.js";
 
 import israelToUTC from "../utils/ConvertIsraelTimeToUtc.js";
-import {getImageFromWikipediaApi} from "../utils/getFromWikipediaUtils.js";
-
 import {getUserbyId, addTournamentToUser} from "../services/userServices.js";
 
 const router = express.Router();
@@ -21,15 +19,9 @@ router.get("/getAll", async (req, res) => {
 
 router.post("/create", async (req, res) => {	
 	try {
-		const { name, startDate, endDate, startTime, isTopScorerIncluded } = req.body;
+		const { name, startDate, endDate, startTime, isTopScorerIncluded, imgUrl } = req.body;
 		
-		// First get the tournament image from wikipedia with the wikipedia tournament source name(with _)
-		const img = await getImageFromWikipediaApi(name);		
-		
-		// Remove the _ from the tournament name
-		const newName = name.replace(/_/g, " ");	
-		
-		const isTournamentExist = await tournamentServices.getTournamentByName(newName);
+		const isTournamentExist = await tournamentServices.getTournamentByName(name);
 		if (isTournamentExist) {
 			res.send({ status: false, data: "הטורניר כבר קיים" });
 			return;
@@ -42,7 +34,7 @@ router.post("/create", async (req, res) => {
 		const teams = ["a", "b", "c", "d"];
 		
 		// Create the tournament
-		const tournament = await tournamentServices.create(newName, endDate, utcDate, img, isTopScorerIncluded, teams);
+		const tournament = await tournamentServices.create(name, endDate, utcDate, imgUrl, isTopScorerIncluded, teams);
 		
 		if (!tournament) {
 			res.send({ status: false, data: "טורניר לא נוצר, אנא נסה שנית" });

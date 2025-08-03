@@ -31,7 +31,7 @@ const TournamentListItem = ({ item, index, btnText, onClick }) => {
 			<div className="absolute inset-0 bg-cyan-900/60 group-hover:bg-cyan-900/10 transition duration-300 z-0"></div>
 			<div className="px-4 py-4 sm:px-4 relative z-10">
 				<div className="flex items-center justify-between h-16">
-					<img src={item.symbol} alt="tournament symbol" style={{ width: "20%", height: "auto" }} />
+					<img src={item.symbol} alt="tournament symbol" style={{ width: "20%", height: "100%" }} />
 					<p className="mt-1 max-w-2xl text-xl text-white font-medium">{item.name}</p>
 				</div>
 				<div className="mt-4 flex items-center justify-between">

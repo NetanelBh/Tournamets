@@ -8,22 +8,24 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 
 const CreateTournament = () => {
-	const inputData = createTournamentData();
 	const nameRef = useRef();
 	const startDateRef = useRef();
 	const endDateRef = useRef();
 	const startTimeRef = useRef();
 	const topScorerRef = useRef();
+	const imgRef = useRef();
 	const [openModal, setOpenModal] = useState(false);
 	const [modalText, setModalText] = useState("");
 	const navigate = useNavigate();
 	const dispatch = useDispatch();
-
+	
+	const inputData = createTournamentData();
 	inputData[0].ref = nameRef;
 	inputData[1].ref = startDateRef;
 	inputData[2].ref = endDateRef;
 	inputData[3].ref = startTimeRef;
 	inputData[4].ref = topScorerRef;
+	inputData[5].ref = imgRef;
 
 	const createTournamentHandler = async (event) => {
 		event.preventDefault();
@@ -34,6 +36,7 @@ const CreateTournament = () => {
 			endDate: endDateRef.current.value,
 			startTime: startTimeRef.current.value,
 			isTopScorerIncluded: topScorerRef.current.value === "כן" ? true : false,
+			imgUrl: imgRef.current.value,
 		};
 
 		try {
@@ -43,7 +46,8 @@ const CreateTournament = () => {
 				},
 			});
 
-			setOpenModal(resp.data.status);
+			// Always open the modal for both cases if the tournament created or occurred an error
+			setOpenModal(true);
 
 			// If the resopnse is true, it means the tournament successfully created and will store in redux
 			if (resp.data.status) {
@@ -69,7 +73,7 @@ const CreateTournament = () => {
 			{!openModal && (
 				<div className="flex flex-col items-center p-4">
 					<form
-						className="fade_up max-w-md w-full bg-cyan-900/50 rounded-xl shadow-lg p-8 mt-8 space-y-4 shadow-md shadow-gray-400"
+						className="fade_up max-w-md w-fit sm:w-full bg-cyan-900/50 rounded-xl shadow-lg p-6 mt-2 space-y-4 shadow-md shadow-gray-400"
 						onSubmit={createTournamentHandler}
 					>
 						{inputData.map((item) => {
@@ -83,11 +87,12 @@ const CreateTournament = () => {
 									</label>
 									<input
 										type={item.type}
-										className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all font-medium text-white"
+										className="w-full h-10 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-300 focus:border-cayn-400 outline-none transition-all font-medium text-white"
 										id={item.htmlFor}
 										ref={item.ref}
 										autoComplete="off"
 										placeholder={item.clue}
+										defaultValue={item.defaultValue}
 									/>
 								</div>
 							);

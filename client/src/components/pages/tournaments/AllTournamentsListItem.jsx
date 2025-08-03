@@ -10,16 +10,18 @@ const TournamentListItem = ({ item, index, btnText, onClick }) => {
 	const main_style = `relative overflow-hidden fade_up mb-3 group rounded-xl border-2 border-yellow-100/70`;
 
 	// Create template from the same object Date
-	const now = (new Date()).toISOString();;
-	const startTime = item.startTime;
+	const now = (new Date()).toISOString();
 
 	// Check if the user joined the tournament already
 	const isJoined = userTournaments.includes(item._id);
 	// Compate the dates to determine if the tournament is started	
 
-	const tournamentStatus = startTime < now ? "הטורניר התחיל" : "ניתן להצטרף";
+	let tournamentStatus = item.endDate < now ? "הסתיים" : false;
+	if (!tournamentStatus) {
+		tournamentStatus = item.startTime <= now ? "התחיל" : "ניתן להצטרף";
+	}
 	let statusColor = "text-green-400 font-bold";
-	if (tournamentStatus === "הטורניר התחיל" && !isJoined) {
+	if ((tournamentStatus === "התחיל" || tournamentStatus === "הסתיים") && !isJoined) {
 		statusColor = "text-red-500 font-bold";
 	} else if (isJoined) {
 		statusColor = "text-yellow-400 font-bold";
@@ -45,7 +47,7 @@ const TournamentListItem = ({ item, index, btnText, onClick }) => {
 
 					<button
 						className={`px-4 w-fill bg-yellow-200 text-black font-medium font-bold hover:scale-95 active:bg-yellow-200 py-2.5 rounded-lg transition-colors ${
-							(tournamentStatus === "הטורניר התחיל" || isJoined) && btnText !== "כניסה" ? "invisible" : ""
+							(tournamentStatus === "התחיל" || tournamentStatus === "הסתיים" || isJoined) && btnText !== "כניסה" ? "invisible" : ""
 						}`}
 						onClick={onClick}
 					>

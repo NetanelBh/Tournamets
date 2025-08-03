@@ -21,14 +21,25 @@ const GroupsHeader = () => {
 						</NavLink>
 
 						<NavLink
-							to="/layout/groups-layout/join-groups"
+							to="/layout/groups-layout/join-group"
 							className={`hover:text-gray-300 transition-all ${
-								pathname.includes("join-groups")
+								pathname.includes("join-group")
 									? "text-yellow-400 font-semibold hover:text-yellow-400"
 									: ""
 							}`}
 						>
 							הצטרף לקבוצה
+						</NavLink>
+
+						<NavLink
+							to="/layout/groups-layout/create-group"
+							className={`hover:text-gray-300 transition-all ${
+								pathname.includes("create-group")
+									? "text-yellow-400 font-semibold hover:text-yellow-400"
+									: ""
+							}`}
+						>
+							צור קבוצה
 						</NavLink>
 					</nav>
 				</div>

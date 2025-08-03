@@ -40,6 +40,15 @@ const AllTournaments = () => {
 	}, []);
 
 	const joinHandler = async (item) => {
+		// Prevent a scenario that the user enter to tournament after he started(when he didn't refresh the browser)
+		const now = (new Date()).toISOString();
+		if (now >= item.startTime) {
+			setOpenModal(true);
+			setModalText({ title: "הצטרפת לטורניר", text: "הטורניר החל, לא ניתן להצטרף יותר" });
+			setNavigateTo("/layout/all-tournaments");
+			return;
+		}
+		
 		setOpenModal(true);
 		setIsLoading(true);
 		try {

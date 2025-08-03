@@ -40,7 +40,7 @@ const Header = ({ name, logout }) => {
 								// Only my tournaments component has nested child, so we need it always active
 								pathname.includes("my-tournaments") ||
 								pathname.includes("my-groups") ||
-								pathname.includes("join-groups")
+								pathname.includes("join-group")
 									? activeClass
 									: ""
 							}`}

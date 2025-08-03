@@ -4,31 +4,33 @@ import API from "../../utils/Api";
 import { tournamentsActions } from "../../store/slices/tournamentsSlice";
 import { userActions } from "../../store/slices/userSlice";
 
+import Loading from "../../UI/loading/Loading";
 import Modal from "../../modal/Modal";
 import GenericList from "../../UI/list/GenericList";
 import { useNavigate } from "react-router-dom";
 
 const AllTournaments = () => {
-	const token = sessionStorage.getItem("token");
+	const [isLoading, setIsLoading] = useState(false);
 	const [modalText, setModalText] = useState({});
 	const [openModal, setOpenModal] = useState(false);
 	const [navigateTo, setNavigateTo] = useState("");
 	const navigate = useNavigate();
-
+	
 	const dispatch = useDispatch();
 	const tournaments = useSelector((state) => state.tournaments.tournaments);
-
-
+	
 	useEffect(() => {
 		const fetchData = async () => {
+			setIsLoading(true);
 			try {
 				const fetchedTournaments = await API.get("/tournament/getAll", {
 					headers: {
-						Authorization: `Bearer ${token}`,
+						Authorization: `Bearer ${sessionStorage.getItem("token")}`,
 					},
 				});
 
 				dispatch(tournamentsActions.load(fetchedTournaments.data.data));
+				setIsLoading(false);
 			} catch (error) {
 				setOpenModal(true);
 			}
@@ -37,8 +39,9 @@ const AllTournaments = () => {
 		fetchData();
 	}, []);
 
-	const joinHandler = async (item) => {		
+	const joinHandler = async (item) => {
 		setOpenModal(true);
+		setIsLoading(true);
 		try {
 			const resp = (
 				await API.post(
@@ -48,17 +51,18 @@ const AllTournaments = () => {
 				)
 			).data;
 
-			if (resp.status) {				
+			if (resp.status) {
 				// Add the tournament to the user
 				dispatch(userActions.joinTournament(item._id));
-				const modalObj = {title: "הצטרפות לטורניר", text: "הצטרפת לטורניר בהצלחה"};
-				setModalText({...modalObj});
+				const modalObj = { title: "הצטרפות לטורניר", text: "הצטרפת לטורניר בהצלחה" };
+				setModalText({ ...modalObj });
 				setNavigateTo("/layout/my-tournaments");
 			} else {
-				const modalObj = {title: "הצטרפת לטורניר", text: "אירעה שגיאה בהצטרפת לטורניר, אנא נסה שנית"};
-				setModalText({...modalObj});
+				const modalObj = { title: "הצטרפת לטורניר", text: "אירעה שגיאה בהצטרפת לטורניר, אנא נסה שנית" };
+				setModalText({ ...modalObj });
 				setNavigateTo("/layout/all-tournaments");
 			}
+			setIsLoading(false);
 		} catch (error) {
 			setModalText("אירעה שגיאה בהצטרפות לטורניר, אנא נסה שנית");
 			setNavigateTo("/layout/all-tournaments");
@@ -74,15 +78,18 @@ const AllTournaments = () => {
 	const data = {
 		dataList: tournaments,
 		btnText: "הצטרף",
-		onClick: joinHandler
-	}
-	
+		onClick: joinHandler,
+	};
+
 	return (
 		<>
-			{!openModal && <GenericList data={data} />}
-			{openModal && (
-				<Modal title={modalText.title} text={modalText.text} onClick={closeModalHandler} />
+			{!isLoading && (
+				<>
+					{!openModal && <GenericList data={data} />}
+					{openModal && <Modal title={modalText.title} text={modalText.text} onClick={closeModalHandler} />}
+				</>
 			)}
+			{isLoading && <Loading />}
 		</>
 	);
 };

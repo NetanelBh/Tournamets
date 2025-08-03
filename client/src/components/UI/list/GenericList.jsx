@@ -2,7 +2,7 @@ import AllTournamentsListItem from "../../pages/tournaments/AllTournamentsListIt
 // TODO: to use it generic, in the data obj, will insert property type to check which component to render in map
 // TODO: IT COULD BE ALLTOURNAMENTSLISTITEM OR TABLELISTITEM(FOR THE POINTS TABLE AND ETC..)
 
-const GenericList = ({ data }) => {
+const GenericList = ({ data }) => {	
 	return (
 		<ul className="overflow-hidden sm:rounded-md max-w-md mx-auto mt-16">
 			{data.dataList.map((item, index) => (

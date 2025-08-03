@@ -1,6 +1,7 @@
 import { useRef, useState } from "react";
 import API from "../../utils/Api";
 
+import Loading from "../../UI/loading/Loading";
 import { tournamentsActions } from "../../store/slices/tournamentsSlice";
 import Modal from "../../modal/Modal";
 import createTournamentData from "./CreateTournamentData";
@@ -8,6 +9,7 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 
 const CreateTournament = () => {
+	const [isLoading, setIsLoading] = useState(false);
 	const nameRef = useRef();
 	const startDateRef = useRef();
 	const endDateRef = useRef();
@@ -18,7 +20,7 @@ const CreateTournament = () => {
 	const [modalText, setModalText] = useState("");
 	const navigate = useNavigate();
 	const dispatch = useDispatch();
-	
+
 	const inputData = createTournamentData();
 	inputData[0].ref = nameRef;
 	inputData[1].ref = startDateRef;
@@ -40,11 +42,13 @@ const CreateTournament = () => {
 		};
 
 		try {
+			setIsLoading(true);
 			const resp = await API.post("/tournament/create", newTournamentData, {
 				headers: {
 					Authorization: `Bearer ${sessionStorage.getItem("token")}`,
 				},
 			});
+			setIsLoading(false);
 
 			// Always open the modal for both cases if the tournament created or occurred an error
 			setOpenModal(true);
@@ -70,44 +74,49 @@ const CreateTournament = () => {
 
 	return (
 		<>
-			{!openModal && (
-				<div className="flex flex-col items-center p-4">
-					<form
-						className="fade_up max-w-md w-fit sm:w-full bg-cyan-900/50 rounded-xl shadow-lg p-6 mt-2 space-y-4 shadow-md shadow-gray-400"
-						onSubmit={createTournamentHandler}
-					>
-						{inputData.map((item) => {
-							return (
-								<div key={item.label}>
-									<label
-										className="block font-medium text-base text-yellow-400 mb-1"
-										htmlFor={item.htmlFor}
-									>
-										{item.label}
-									</label>
-									<input
-										type={item.type}
-										className="w-full h-10 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-300 focus:border-cayn-400 outline-none transition-all font-medium text-white"
-										id={item.htmlFor}
-										ref={item.ref}
-										autoComplete="off"
-										placeholder={item.clue}
-										defaultValue={item.defaultValue}
-									/>
-								</div>
-							);
-						})}
-						<button
-							className="mt-4 w-full bg-gradient-to-r from-teal-500 to-teal-800 shadow-md shadow-gray-400/80 hover:scale-95 active:bg-gradient-to-r from-teal-500 to-teal-800 text-white font-medium py-2.5 rounded-lg transition-colors"
-							type="submit"
-						>
-							צור טורניר
-						</button>
-					</form>
-				</div>
-			)}
+			{isLoading && <Loading />}
+			{!isLoading && (
+				<>
+					{!openModal && (
+						<div className="flex flex-col items-center p-4">
+							<form
+								className="fade_up max-w-md w-fit sm:w-full bg-cyan-900/50 rounded-xl shadow-lg p-6 mt-2 space-y-4 shadow-md shadow-gray-400"
+								onSubmit={createTournamentHandler}
+							>
+								{inputData.map((item) => {
+									return (
+										<div key={item.label}>
+											<label
+												className="block font-medium text-base text-yellow-400 mb-1"
+												htmlFor={item.htmlFor}
+											>
+												{item.label}
+											</label>
+											<input
+												type={item.type}
+												className="w-full h-10 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-300 focus:border-cayn-400 outline-none transition-all font-medium text-white"
+												id={item.htmlFor}
+												ref={item.ref}
+												autoComplete="off"
+												placeholder={item.clue}
+												defaultValue={item.defaultValue}
+											/>
+										</div>
+									);
+								})}
+								<button
+									className="mt-4 w-full bg-gradient-to-r from-teal-500 to-teal-800 shadow-md shadow-gray-400/80 hover:scale-95 active:bg-gradient-to-r from-teal-500 to-teal-800 text-white font-medium py-2.5 rounded-lg transition-colors"
+									type="submit"
+								>
+									צור טורניר
+								</button>
+							</form>
+						</div>
+					)}
 
-			{openModal && <Modal title="יצירת טורניר" text={modalText} onClick={closeModalHandler} />}
+					{openModal && <Modal title="יצירת טורניר" text={modalText} onClick={closeModalHandler} />}
+				</>
+			)}
 		</>
 	);
 };

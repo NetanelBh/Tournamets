@@ -12,3 +12,14 @@
       transform: translateY(0);
     }
   }
+
+  .show_up {
+    opacity: 0;
+    animation: showup 1s forwards;
+  }
+  
+  @keyframes showup {
+    to {
+      opacity: 1;
+    }
+  }

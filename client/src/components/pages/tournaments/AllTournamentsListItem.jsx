@@ -10,11 +10,11 @@ const TournamentListItem = ({ item, index, btnText, onClick }) => {
 	const main_style = `relative overflow-hidden fade_up mb-3 group rounded-xl border-2 border-yellow-100/70`;
 
 	// Create template from the same object Date
-	const now = (new Date()).toISOString();
+	const now = new Date().toISOString();
 
 	// Check if the user joined the tournament already
 	const isJoined = userTournaments.includes(item._id);
-	// Compate the dates to determine if the tournament is started	
+	// Compate the dates to determine if the tournament is started
 
 	let tournamentStatus = item.endDate < now ? "הסתיים" : false;
 	if (!tournamentStatus) {
@@ -46,10 +46,16 @@ const TournamentListItem = ({ item, index, btnText, onClick }) => {
 					</p>
 
 					<button
-						className={`px-4 w-fill bg-yellow-200 text-black font-medium font-bold hover:scale-95 active:bg-yellow-200 py-2.5 rounded-lg transition-colors ${
-							(tournamentStatus === "התחיל" || tournamentStatus === "הסתיים" || isJoined) && btnText !== "כניסה" ? "invisible" : ""
+						className={`px-4 w-fill bg-yellow-200 text-black font-medium font-bold hover:scale-95 active:bg-yellow-200 py-2.5 rounded-lg transition-colors cursor-pointer ${
+							(tournamentStatus === "התחיל" || tournamentStatus === "הסתיים" || isJoined) &&
+							btnText !== "כניסה"
+								? "invisible"
+								: ""
 						}`}
-						onClick={onClick}
+						onClick={() => {
+							localStorage.setItem("tournamentId", item._id);
+							onClick();
+						}}
 					>
 						{btnText}
 					</button>

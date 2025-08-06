@@ -19,6 +19,7 @@ const Login = () => {
 
 	// Clear session storage when reach to login page
 	sessionStorage.clear();
+	localStorage.clear();
 
 	const loginHandler = async (e) => {
 		e.preventDefault();

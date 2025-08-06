@@ -4,7 +4,7 @@ import API from "../../utils/Api";
 import Loading from "../../UI/loading/Loading";
 import { tournamentsActions } from "../../store/slices/tournamentsSlice";
 import Modal from "../../modal/Modal";
-import createTournamentData from "./CreateTournamentData";
+import tournamentData from "./CreateTournamentData";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 
@@ -21,13 +21,15 @@ const CreateTournament = () => {
 	const navigate = useNavigate();
 	const dispatch = useDispatch();
 
-	const inputData = createTournamentData();
-	inputData[0].ref = nameRef;
-	inputData[1].ref = startDateRef;
-	inputData[2].ref = endDateRef;
-	inputData[3].ref = startTimeRef;
-	inputData[4].ref = topScorerRef;
-	inputData[5].ref = imgRef;
+	tournamentData[0].ref = nameRef;
+	tournamentData[1].ref = startDateRef;
+	tournamentData[2].ref = endDateRef;
+	tournamentData[3].ref = startTimeRef;
+	tournamentData[4].ref = topScorerRef;
+	tournamentData[5].ref = imgRef;
+
+	// When enter to some tournament, it keep the id in localStorage to case we will create group. in will other remove
+	localStorage.removeItem("tournamentId");
 
 	const createTournamentHandler = async (event) => {
 		event.preventDefault();
@@ -83,7 +85,8 @@ const CreateTournament = () => {
 								className="fade_up max-w-md w-fit sm:w-full bg-cyan-900/50 rounded-xl shadow-lg p-6 mt-2 space-y-4 shadow-md shadow-gray-400"
 								onSubmit={createTournamentHandler}
 							>
-								{inputData.map((item) => {
+								{tournamentData
+								.map((item) => {
 									return (
 										<div key={item.label}>
 											<label

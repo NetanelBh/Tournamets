@@ -18,6 +18,9 @@ const AllTournaments = () => {
 	
 	const dispatch = useDispatch();
 	const tournaments = useSelector((state) => state.tournaments.tournaments);
+
+	// When enter to some tournament, keep the id in localStorage to case we will create a group. in other case remove
+	localStorage.removeItem("tournamentId");
 	
 	useEffect(() => {
 		const fetchData = async () => {

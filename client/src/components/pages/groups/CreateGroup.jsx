@@ -45,6 +45,8 @@ const CreateGroup = () => {
 		console.log(groupData.groupInputs[0].ref.current.value);
 	};
 
+    const SameRankPointsTitles = ["מדויק", "כיוון"];
+
 	return (
 		<div className="flex flex-col items-center">
 			<form
@@ -55,15 +57,9 @@ const CreateGroup = () => {
 				<GroupInfo data={groupData.groupInputs} />
 
 				{/* Contains the exact and direction points for the group stage */}
-				<label
-					htmlFor="groutPoints"
-					className="mb-2 block text-lg font-medium text-yellow-400 dark:text-gray-200"
-				>
-					שלב הבתים
-				</label>
+				<span className="mb-2 block text-lg font-medium text-yellow-400 dark:text-gray-200">שלב הבתים</span>
 				<div className="flex flex-col sm:flex-row gap-2">
-					<SameRankPoints title="מדויק" />
-					<SameRankPoints title="כיוון" />
+                    {SameRankPointsTitles.map((title) => <SameRankPoints key={title} title={title} />)}
 				</div>
 
 				{/* Contains the points method for the knockout stage */}

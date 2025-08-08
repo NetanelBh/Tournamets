@@ -57,7 +57,7 @@ const CreateGroup = () => {
 				<GroupInfo data={groupData.groupInputs} />
 
 				{/* Contains the exact and direction points for the group stage */}
-				<span className="mb-2 block text-lg font-medium text-yellow-400 dark:text-gray-200">שלב הבתים</span>
+				<span className="mb-2 block text-lg font-medium text-yellow-400 dark:text-gray-200">ניקוד שלב הבתים</span>
 				<div className="flex flex-col sm:flex-row gap-2">
                     {SameRankPointsTitles.map((title) => <SameRankPoints key={title} title={title} />)}
 				</div>

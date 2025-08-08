@@ -1,7 +1,7 @@
 export const groupInputs = [
 	{
 		htmlFor: "name",
-		label: "שם הקבוצה",
+		label: "בחר שם לקבוצה",
 		type: "text",
 	},
 	{

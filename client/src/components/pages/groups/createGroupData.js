@@ -17,9 +17,36 @@ export const groupInputs = [
 	},
 ];
 
-export const pointsMethodStyle = "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500";
+export const pointsMethodStyle =
+	"bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500";
 
 export const knockoutPointsMethod = [
-	{ htmlFor: "different", type: "checkbox", text: "ניקוד משתנה", pointMethod: "differentPoints" },
+	{ htmlFor: "different", type: "checkbox", text: "ניקוד משתנה לכל סיבוב", pointMethod: "differentPoints" },
 	{ htmlFor: "same", type: "checkbox", text: "ניקוד קבוע", pointMethod: "samePoints" },
+];
+
+// data array pass to PointsRank component
+export const groupPointsData = [{ title: "מדויק" }, { title: "כיוון" }];
+
+// data array pass to PointsRank component
+export const knockoutSamePoints = [{ title: "מדויק" }, { title: "כיוון" }];
+
+// Array contains knockout stage groups for each round
+export const knockoutDifferentPoints = [
+	{
+		header: "שמינית גמר",
+		data: [{ title: "מדויק" }, { title: "כיוון" }],
+	},
+	{
+		header: "רבע גמר",
+		data: [{ title: "מדויק" }, { title: "כיוון" }],
+	},
+	{
+		header: "חצי גמר",
+		data: [{ title: "מדויק" }, { title: "כיוון" }],
+	},
+	{
+		header: "גמר",
+		data: [{ title: "מדויק" }, { title: "כיוון" }],
+	},
 ];

@@ -4,7 +4,7 @@ const KnockoutPointsMethod = ({ data, pointMethod, onChange }) => {
 			<legend className="sr-only">Points</legend>
 
 			<div className="flex flex-col">
-				<span className="mb-1 block text-lg font-medium text-yellow-400 dark:text-gray-200">שלב הנוקאאוט</span>
+				<span className="mb-1 block text-lg font-medium text-yellow-400 dark:text-gray-200">שיטת ניקוד לשלב הנוקאאוט</span>
 
 				<div className="flex flex-col sm:flex-row items-start gap-5">
 					{data.map((item) => {

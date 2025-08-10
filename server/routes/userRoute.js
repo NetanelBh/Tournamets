@@ -1,5 +1,4 @@
 import express from "express";
-import bcrypt from "bcrypt";
 
 import * as userServices from "../services/userServices.js";
 import { leaveGroup } from "../services/groupServices.js";

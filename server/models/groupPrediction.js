@@ -1,5 +1,6 @@
 import { Schema, model } from "mongoose";
 
+// TODO: CHECK IF WE CAN GET THE PLAYERS AND THE TEAMS IN HEBREW FROM WEB, IF SO, CHANGE THE WINNER-TEAM TO REFERENCE
 const GroupPredictionSchema = new Schema(
     {
         user: { type: Schema.Types.ObjectId, ref: "User", required: true },

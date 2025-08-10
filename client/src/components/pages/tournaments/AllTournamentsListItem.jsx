@@ -9,7 +9,7 @@ const TournamentListItem = ({ item, index, btnText, onClick }) => {
 
 	const main_style = `relative overflow-hidden fade_up mb-3 group rounded-xl border-2 border-yellow-100/70`;
 
-	// Create template from the same object Date
+	// Get the current date as UTC(as stored in mongoDB)
 	const now = new Date().toISOString();
 
 	// Check if the user joined the tournament already

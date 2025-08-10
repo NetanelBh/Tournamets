@@ -1,15 +1,15 @@
 import express from "express";
-import * as groupPredictServices from "../services/groupPredictServices.js";
+import * as topScorerPredictServices from "../services/topScorerPredictServices.js";
 
 const router = express.Router();
 
-// Entry point: localhost:3000/groupPredict
+// Entry point: localhost:3000/topScorerBet
 
 router.get("/getUserPredict", async (req, res) => {
 	const { tournamentId, groupId } = req.body;
 
 	try {
-		const userPredict = await groupPredictServices.getUserPredict(req.user.id, tournamentId, groupId);
+		const userPredict = await topScorerPredictServices.getUserPredict(req.user.id, tournamentId, groupId);
 		res.send({ status: true, data: userPredict });
 	} catch (error) {
 		res.send({ status: false, data: "אירעה בעיה בקבלת הניחוש הנכון, אנא נסה שנית" });
@@ -17,15 +17,14 @@ router.get("/getUserPredict", async (req, res) => {
 });
 
 router.post("/createPredict", async (req, res) => {
-	const { tournamentId, groupId, topScorerId, winnerTeam } = req.body;
+	const { tournamentId, groupId, topScorerId } = req.body;
 
 	try {
-		const userPredict = await groupPredictServices.createPredict(
+		const userPredict = await topScorerPredictServices.createPredict(
 			req.user.id,
 			tournamentId,
 			groupId,
-			topScorerId,
-			winnerTeam
+			topScorerId
 		);
 		res.send({ status: true, data: userPredict });
 	} catch (error) {
@@ -35,15 +34,14 @@ router.post("/createPredict", async (req, res) => {
 
 // As long as the tournament didn't start, the user can change the predict
 router.patch("/updatePredict", async (req, res) => {
-    const { tournamentId, groupId, topScorerId, winnerTeam } = req.body;
+    const { tournamentId, groupId, topScorerId } = req.body;
 
     try {
-        const userPredict = await groupPredictServices.updatePredict(
+        const userPredict = await topScorerPredictServices.updatePredict(
             req.user.id,
             tournamentId,
             groupId,
             topScorerId,
-            winnerTeam
         );
         res.send({ status: true, data: userPredict });
     } catch (error) {

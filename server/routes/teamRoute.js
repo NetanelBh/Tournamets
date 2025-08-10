@@ -1,15 +1,15 @@
 import express from "express";
-import * as playerServices from "../services/playerServices.js";
+import * as teamServices from "../services/teamServices.js";
 
 const router = express.Router();
 
-// Entry point: localhost:3000/player 
+// Entry point: localhost:3000/team
 
 router.post("/createCollection", async (req, res) => {
-    const {players} = req.body;
+    const {teams} = req.body;
 
     try {
-        const updatedPlayers = await playerServices.createPlayersCollection(players);
+        const updatedPlayers = await teamServices.createPlayersCollection(teams);
         res.send({ status: true, data: updatedPlayers });
     } catch (error) {
         res.send({ status: false, data: "אירעה בעיה ביצירת השחקנים, אנא נסה שנית" });

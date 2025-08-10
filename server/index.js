@@ -10,7 +10,9 @@ import userRouter from "./routes/userRoute.js";
 import groupRouter from "./routes/groupRoute.js";
 import playerRouter from "./routes/playerRoute.js";
 import tounamentRouter from "./routes/tournamentsRoute.js";
-import groupPredictionRouter from "./routes/groupPredictRoute.js";
+import topScorerPredictionRouter from "./routes/topScorerPredictRoute.js";
+import teamRouter from "./routes/teamRoute.js";
+import winnerTeamRouter from "./routes/winnerTeamPredictRoute.js";
 // import matchRouter from "./routes/matchRouter.js";
 // import betRouter from "./routes/betRouter.js";
 
@@ -34,10 +36,12 @@ app.use("/auth", authRouter);
 // Middleware to check if the user logged and sent the token
 app.use(authentication)
 
-app.use("/tournament", tounamentRouter);
 app.use("/user", userRouter);
+app.use("/team", teamRouter);
 app.use("/group", groupRouter);
 app.use("/player", playerRouter);
-app.use("/groupPrediction", groupPredictionRouter);
+app.use("/tournament", tounamentRouter);
+app.use("/winnerTeamBet", winnerTeamRouter);
+app.use("/topScorerBet", topScorerPredictionRouter);
 
 app.listen(PORT, () => console.log(`Server is running on port ${PORT}`));

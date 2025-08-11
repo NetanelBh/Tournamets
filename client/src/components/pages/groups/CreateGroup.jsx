@@ -1,4 +1,5 @@
 import { useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 import * as groupData from "./CreateGroupData";
 
@@ -7,6 +8,7 @@ import Modal from "../../modal/Modal";
 import PointsRank from "./points/PointsRank";
 import Loading from "../../UI/loading/Loading";
 import CheckboxesChoiceArea from "./points/CheckboxesChoiceArea";
+import API from "../../utils/Api";
 
 const CreateGroup = () => {
 	// "samePoints" or "differentPoints" for knockout matches
@@ -15,6 +17,8 @@ const CreateGroup = () => {
 	const [isLoading, setIsLoading] = useState(false);
 	const [openModal, setOpenModal] = useState(false);
 	const [modalText, setModalText] = useState("");
+	const [navigateTo, setNavigateTo] = useState("/layout/groups-layout/create-group");
+	const navigate = useNavigate();
 
 	const nameRef = useRef();
 	const codeRef = useRef();
@@ -70,8 +74,8 @@ const CreateGroup = () => {
 			payboxLink: isPaymentIncluded === true ? payboxRef.current.value : null,
 			points: {
 				groupStage: {
-					exactScore: groupExactRef.current.value,
-					directionScore: groupDirectionRef.current.value,
+					exactScore: Number(groupExactRef.current.value),
+					directionScore: Number(groupDirectionRef.current.value),
 				},
 				knockoutStage: {
 					pointsMethod,
@@ -81,29 +85,29 @@ const CreateGroup = () => {
 
 		if (pointsMethod === "samePoints") {
 			newGroup.points.knockoutStage.samePoints = {
-				exactScore: knockoutExactRef.current.value,
-				directionScore: knockoutDirectionRef.current.value,
+				exactScore: Number(knockoutExactRef.current.value),
+				directionScore: Number(knockoutDirectionRef.current.value),
 			};
 		} else {
 			newGroup.points.knockoutStage.differentPoints = {
 				roundOf16: {
-					exactScore: roundOf16ExactRef.current.value,
-					directionScore: roundOf16DirectionRef.current.value,
+					exactScore: Number(roundOf16ExactRef.current.value),
+					directionScore: Number(roundOf16DirectionRef.current.value),
 				},
 				quarterFinal: {
-					exactScore: quarterFinalExactRef.current.value,
-					directionScore: quarterFinalDirectionRef.current.value,
+					exactScore: Number(quarterFinalExactRef.current.value),
+					directionScore: Number(quarterFinalDirectionRef.current.value),
 				},
 				semiFinal: {
-					exactScore: semiFinalExactRef.current.value,
-					directionScore: semiFinalDirectionRef.current.value,
+					exactScore: Number(semiFinalExactRef.current.value),
+					directionScore: Number(semiFinalDirectionRef.current.value),
 				},
 				final: {
-					exactScore: finalExactRef.current.value,
-					directionScore: finalDirectionRef.current.value,
+					exactScore: Number(finalExactRef.current.value),
+					directionScore: Number(finalDirectionRef.current.value),
 				},
 			};
-		}
+		}     
 
 		try {
 			setIsLoading(true);
@@ -113,32 +117,36 @@ const CreateGroup = () => {
 						Authorization: `Bearer ${sessionStorage.getItem("token")}`,
 					},
 				})
-			).data;
+			)
 			setIsLoading(false);
-
 			setOpenModal(true);
 			if (resp.status) {
 				setModalText("הקבוצה נוצרה בהצלחה");
+				setNavigateTo("/layout/groups-layout/my-groups");
 			} else {
 				setModalText(resp.data);
+				setNavigateTo("/layout/groups-layout/create-group");
 			}
 		} catch (error) {
 			setOpenModal(true);
 			setModalText("אירעה שגיאה ביצירת הקבוצה, אנא נסה שנית");
+			setNavigateTo("/layout/groups-layout/create-group");
 		}
 	};
 
 	const closeModalHandler = () => {
 		setOpenModal(false);
 		setModalText("");
+		setIsLoading(false);
+		navigate(navigateTo);
 	};
 
 	return (
 		<>
-			{isLoading && <Loading />}
-			{!isLoading && (
+			{!openModal && (
 				<>
-					{!openModal && (
+					{isLoading && <Loading />}
+					{!isLoading && (
 						<div className="flex flex-col items-center">
 							<form
 								className="show_up max-w-md w-fit sm:w-full bg-cyan-900/50 rounded-xl p-6 mt-2 mb-8 space-y-4 shadow-sm shadow-gray-400"
@@ -187,10 +195,9 @@ const CreateGroup = () => {
 							</form>
 						</div>
 					)}
-
-                    {openModal && <Modal title="יצירת קבוצה" text={modalText} closeModalHandler={closeModalHandler} />}
 				</>
 			)}
+			{openModal && <Modal title="יצירת קבוצה" text={modalText} onClick={closeModalHandler} />}
 		</>
 	);
 };

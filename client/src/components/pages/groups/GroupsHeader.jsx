@@ -3,11 +3,12 @@ import { NavLink, useLocation } from "react-router-dom";
 
 const GroupsHeader = () => {
 	const { pathname } = useLocation();
-	// Get the tournament to check if the tournament is started, if started, we can't create a group
+	// Get the tournament
 	const tournaments = useSelector((state) => state.tournaments.tournaments);
-	
+	// Get the entered tournamet
 	const currentTournament = tournaments.find((t) => t._id === localStorage.getItem("tournamentId"));
 	
+	// check if the tournament is started, if started, we can't create a group
 	const now = new Date().toISOString();
 	const isStarted = currentTournament.startTime <= now;
 

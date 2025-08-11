@@ -8,7 +8,6 @@ const MainLayout = () => {
     const user = useSelector((state) => state.user.user);
     
     const logout = () => {
-        sessionStorage.clear();
         navigate("/");
     };
 

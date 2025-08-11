@@ -94,20 +94,46 @@ const Header = ({ name, logout }) => {
 
 				{/* Mobile Navigation Menu  */}
 				{isOpenMenu && (
-					<div id="mobile-menu" className="md:hidden mt-5 space-y-4">
-						<a href="#" className="block text-lg active:text-gray-300 transition-all">
+					<nav id="mobile-menu" className="md:hidden mt-5 space-y-4">
+						<NavLink
+							to="/layout/all-tournaments"
+							className={`${"block text-lg active:text-gray-300 transition-all"} ${
+								pathname.includes("all-tournaments") ? activeClass : ""
+							}`}
+						>
 							כל הטורנירים
-						</a>
-						<a href="#הטורנירים שלי" className="block text-lg active:text-gray-300 transition-all">
+						</NavLink>
+
+						<NavLink
+							to="/layout/my-tournaments"
+							className={`${"block text-lg active:text-gray-300 transition-all"} ${
+								// Only my tournaments component has nested child, so we need it always active
+								pathname.includes("my-tournaments") ||
+								pathname.includes("my-groups") ||
+								pathname.includes("join-group") ||
+								pathname.includes("create-group")
+									? activeClass
+									: ""
+							}`}
+						>
 							הטורנירים שלי
-						</a>
-						<a href="#about" className="block text-lg active:text-gray-300 transition-all">
-							צור טורניר
-						</a>
-						<a href="#contact" className="block text-lg active:text-gray-300 transition-all">
+						</NavLink>
+
+						{isAdmin && (
+							<NavLink
+								to="/layout/create-tournament"
+								className={`${"block text-lg active:text-gray-300 transition-all"} ${
+									pathname.includes("create-tournament") ? activeClass : ""
+								}`}
+							>
+								צור טורניר
+							</NavLink>
+						)}
+
+						<NavLink to="/" className="block text-lg active:text-gray-300 transition-all">
 							התנתק
-						</a>
-					</div>
+						</NavLink>
+					</nav>
 				)}
 			</div>
 		</header>

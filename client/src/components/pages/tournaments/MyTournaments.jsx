@@ -10,7 +10,7 @@ const MyTournaments = () => {
 
 	const filteredTournamets = allTournaments.filter((t) => myTournaments.includes(t._id));
 
-	// When enter to some tournament, it keep the id in localStorage to case we will create group. in will other remove
+	// When enter to some tournament, it keep the id in localStorage in case we will create group.
 	localStorage.removeItem("tournamentId");
 
 	const enterGroupHandler = () => {

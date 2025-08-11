@@ -1,7 +1,15 @@
+import { useSelector } from "react-redux";
 import { NavLink, useLocation } from "react-router-dom";
 
 const GroupsHeader = () => {
 	const { pathname } = useLocation();
+	// Get the tournament to check if the tournament is started, if started, we can't create a group
+	const tournaments = useSelector((state) => state.tournaments.tournaments);
+	
+	const currentTournament = tournaments.find((t) => t._id === localStorage.getItem("tournamentId"));
+	
+	const now = new Date().toISOString();
+	const isStarted = currentTournament.startTime <= now;
 
 	return (
 		<header className="text-white">
@@ -31,8 +39,8 @@ const GroupsHeader = () => {
 							הצטרף לקבוצה
 						</NavLink>
 
-						{/* ONly admin can create a group */}
-						{sessionStorage.getItem("isAdmin") === "true" && (
+						{/* ONly admin can create a group and only if the tournament didn't start yet */}
+						{sessionStorage.getItem("isAdmin") === "true" && !isStarted && (
 							<NavLink
 								to="/layout/groups-layout/create-group"
 								className={`hover:text-gray-300 transition-all ${

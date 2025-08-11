@@ -12,6 +12,7 @@ const GenericList = ({ data }) => {
 					index={index}
 					btnText={data.btnText}
 					onClick={() => data.onClick(item)}
+					leave={data.leave}
 				/>
 			))}
 		</ul>

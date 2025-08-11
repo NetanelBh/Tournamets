@@ -1,10 +1,11 @@
 import { useSelector } from "react-redux";
+import { useLocation } from "react-router-dom";
 
 import "../../../App.css";
 
-const TournamentListItem = ({ item, index, btnText, onClick }) => {
-	/* buttonText determine if the text will be join or enter(if came from alltournaments or mytournaments)*/
-
+/* buttonText determine if the text will be join or enter(if came from alltournaments or mytournaments)*/
+const TournamentListItem = ({ item, index, btnText, onClick, leave = undefined }) => {
+	const { pathname } = useLocation();
 	const userTournaments = useSelector((state) => state.user.user.tournaments);
 
 	const main_style = `relative overflow-hidden fade_up mb-3 group rounded-xl border-2 border-yellow-100/70`;
@@ -45,20 +46,36 @@ const TournamentListItem = ({ item, index, btnText, onClick }) => {
 						</span>
 					</p>
 
-					<button
-						className={`px-4 w-fill bg-yellow-200 text-black font-medium font-bold hover:scale-95 active:bg-yellow-200 py-2.5 rounded-lg transition-colors cursor-pointer ${
-							(tournamentStatus === "הטורניר התחיל" || tournamentStatus === "הסתיים" || isJoined) &&
-							btnText !== "כניסה"
-								? "invisible"
-								: ""
-						}`}
-						onClick={() => {
-							localStorage.setItem("tournamentId", item._id);
-							onClick();
-						}}
-					>
-						{btnText}
-					</button>
+					<div className="flex flex-start">
+						<button
+							type="button"
+							className={`text-white bg-red-700 hover:scale-95 font-medium rounded-lg shadow-md shadow-gray-700 hover:shadow-sm hover:shadow-gray-400 text-sm px-5 py-2.5 me-2 mb-2 dark:bg-red-600 dark:hover:scale-95 cursor-pointer ${
+								pathname.includes("all-tournaments")
+									? "invisible"
+									: ""
+							}`}
+							onClick={() => {
+								leave(item._id);
+							}}
+						>
+							עזיבה
+						</button>
+
+						<button
+							className={`text-gray-900 bg-yellow-300 hover:scale-95 font-medium rounded-lg shadow-md shadow-gray-700 hover:shadow-sm hover:shadow-gray-400 text-sm px-5 py-2.5 me-2 mb-2 dark:hover:scale-95 cursor-pointer ${
+								(tournamentStatus === "הטורניר התחיל" || tournamentStatus === "הסתיים" || isJoined) &&
+								btnText !== "כניסה"
+									? "invisible"
+									: ""
+							}`}
+							onClick={() => {
+								localStorage.setItem("tournamentId", item._id);
+								onClick();
+							}}
+						>
+							{btnText}
+						</button>
+					</div>
 				</div>
 			</div>
 		</li>

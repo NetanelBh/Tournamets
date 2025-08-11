@@ -5,8 +5,17 @@ const GroupSchema = new Schema(
 		name: { type: String, required: true },
 		code: { type: String, required: true },
 		owner: { type: Schema.Types.ObjectId, ref: "User", required: true },
-		members: [{ type: Schema.Types.ObjectId, ref: "User", required: true }],
 		tournament: { type: Schema.Types.ObjectId, ref: "Tournament", required: true },
+		// Determine if the group with money or not
+		isPaid: { type: Boolean, default: false, required: true },
+		payboxLink: { type: String, default: null },
+		members: [
+			{
+				_id: false,
+				id: { type: Schema.Types.ObjectId, ref: "User", required: true },
+				hasPaid: { type: Boolean, default: false },
+			},
+		],
 		// The group owner will determine the points for each stage in the tournament
 		points: {
 			groupStage: {

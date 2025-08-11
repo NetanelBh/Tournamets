@@ -15,6 +15,9 @@ export const create = (name, endDate, startTime, tournamentImage, isTopScorerInc
         winnerTeam: null,
         symbol: tournamentImage
     }
+
+    // Create chemistry to enforce the unpaid users and delete them from groups after the tournament started
+    
  
     return tournamentRepo.create(tournament);
 }

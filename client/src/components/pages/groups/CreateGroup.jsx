@@ -4,18 +4,21 @@ import * as groupData from "./CreateGroupData";
 
 import GroupInfo from "./GroupInfo";
 import PointsRank from "./points/PointsRank";
-import KnockoutPointsMethod from "./points/KnockoutPointsMethod";
+import CheckboxesChoiceArea from "./points/CheckboxesChoiceArea";
 
 const CreateGroup = () => {
 	// "samePoints" or "differentPoints" for knockout matches
 	const [pointsMethod, setPointsMethod] = useState("");
+	const [isPaymentIncluded, setIsPaymentIncluded] = useState("");
 
 	const nameRef = useRef();
 	const codeRef = useRef();
-	const payboxRef = useRef();
 	groupData.groupInputs[0].ref = nameRef;
 	groupData.groupInputs[1].ref = codeRef;
-	groupData.groupInputs[2].ref = payboxRef;
+
+	// Payment decicion
+	const payboxRef = useRef();
+	groupData.paymentData[0].ref = payboxRef;
 
 	// Refs for group stage
 	const groupExactRef = useRef();
@@ -55,30 +58,51 @@ const CreateGroup = () => {
 	const createGroupHandler = (event) => {
 		event.preventDefault();
 
-		// TODO: CRETE AN OBJECT FROM THIS DATA. JUST NEED TO MAKE A CONDITION IF ITS SAME OR DIFFERENT POINTS
-		// TODO: FOR DIFFERENT POINTS THE LINES BELOW WILL BE THE OBJECT + TOURNAMENT ID
-		// console.log(groupData.groupInputs[0].ref.current.value);
-		// console.log(groupData.groupInputs[1].ref.current.value);
-		// console.log(groupData.groupInputs[2].ref.current.value);
-		// console.log(groupData.groupPointsData[0].ref.current.value);
-		// console.log(groupData.groupPointsData[1].ref.current.value);
-		// console.log(groupData.knockoutDifferentPoints[0].data[0].ref.current.value);
-		// console.log(groupData.knockoutDifferentPoints[0].data[1].ref.current.value);
-		// console.log(groupData.knockoutDifferentPoints[1].data[0].ref.current.value);
-		// console.log(groupData.knockoutDifferentPoints[1].data[1].ref.current.value);
-		// console.log(groupData.knockoutDifferentPoints[2].data[0].ref.current.value);
-		// console.log(groupData.knockoutDifferentPoints[2].data[1].ref.current.value);
-		// console.log(groupData.knockoutDifferentPoints[3].data[0].ref.current.value);
-		// console.log(groupData.knockoutDifferentPoints[3].data[1].ref.current.value);
+		const newGroup = {
+			name: nameRef.current.value,
+			code: codeRef.current.value,
+			tournamentId,
+			isPaid: isPaymentIncluded === "true" ? true : false,
+			payboxLink: isPaymentIncluded === "true" ? payboxRef.current.value : null,
+			points: {
+				groupStage: {
+					exactScore: groupExactRef.current.value,
+					directionScore: groupDirectionRef.current.value,
+				},
+                knockoutStage: {
+                    pointsMethod,
+                }
+			},
+		};
+        
+		if (pointsMethod === "samePoints") {
+            newGroup.points.knockoutStage.samePoints = {
+                exactScore: knockoutExactRef.current.value,
+                directionScore: knockoutDirectionRef.current.value,
+            };
+        } else {
+            newGroup.points.knockoutStage.differentPoints = {
+                roundOf16: {
+                    exactScore: roundOf16ExactRef.current.value,
+                    directionScore: roundOf16DirectionRef.current.value,
+                },
+                quarterFinal: {
+                    exactScore: quarterFinalExactRef.current.value,
+                    directionScore: quarterFinalDirectionRef.current.value,
+                },
+                semiFinal: {
+                    exactScore: semiFinalExactRef.current.value,
+                    directionScore: semiFinalDirectionRef.current.value,
+                },
+                final: {
+                    exactScore: finalExactRef.current.value,
+                    directionScore: finalDirectionRef.current.value,
+                },
+            };
+        }
 
-		// TODO: FOR SAME POINTS THE OBJECT WILL BE WITH THE DATA OF: + TOURNAMENT ID
-		console.log(groupData.groupInputs[0].ref.current.value);
-		console.log(groupData.groupInputs[1].ref.current.value);
-		console.log(groupData.groupInputs[2].ref.current.value);
-		console.log(groupData.groupPointsData[0].ref.current.value);
-		console.log(groupData.groupPointsData[1].ref.current.value);
-		console.log(groupData.knockoutSamePoints[0].ref.current.value);
-		console.log(groupData.knockoutSamePoints[1].ref.current.value);
+		console.log(newGroup);
+        
 	};
 
 	return (
@@ -90,13 +114,23 @@ const CreateGroup = () => {
 				{/* Contains the name, code and paybox */}
 				<GroupInfo data={groupData.groupInputs} />
 
+				{/* Contains the payment decision (with/without payment) */}
+				<CheckboxesChoiceArea
+					header="שיטת טורניר"
+					data={groupData.paymentChoice}
+					check={isPaymentIncluded}
+					onChange={setIsPaymentIncluded}
+				/>
+				{isPaymentIncluded === true && <GroupInfo data={groupData.paymentData} />}
+
 				{/* Contains the exact and direction points for the group stage */}
 				<PointsRank header="ניקוד שלב הבתים" pointsData={groupData.groupPointsData} />
 
 				{/* Contains the points method for the knockout stage - checkboxes */}
-				<KnockoutPointsMethod
+				<CheckboxesChoiceArea
+					header="שיטת ניקוד לשלב הנוקאאוט"
 					data={groupData.knockoutPointsMethod}
-					pointMethod={pointsMethod}
+					check={pointsMethod}
 					onChange={setPointsMethod}
 				/>
 

@@ -3,6 +3,7 @@ import * as tournamentServices from "../services/tournamentServices.js";
 
 import israelToUTC from "../utils/ConvertIsraelTimeToUtc.js";
 import {getUserbyId, addTournamentToUser} from "../services/userServices.js";
+import findUnpaidUsers from "../utils/findUnpaidUsers.js";
 
 const router = express.Router();
 
@@ -36,6 +37,9 @@ router.post("/create", async (req, res) => {
 		// Create the tournament
 		const tournament = await tournamentServices.create(name, endDate, utcDate, imgUrl, isTopScorerIncluded, teams);
 		
+		// Create a job scheduler to find unpaid users in group that included payment and delete them from the group
+		findUnpaidUsers(tournament._id);
+
 		if (!tournament) {
 			res.send({ status: false, data: "טורניר לא נוצר, אנא נסה שנית" });
 			return;

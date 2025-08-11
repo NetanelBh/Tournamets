@@ -16,15 +16,15 @@ export const pointsMethodStyle =
 	"bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500";
 
 export const knockoutPointsMethod = [
-	{ htmlFor: "same", type: "checkbox", text: "ניקוד קבוע", method: "samePoints" },
-	{ htmlFor: "different", type: "checkbox", text: "ניקוד משתנה לכל סיבוב", method: "differentPoints" },
+	{ htmlFor: "same", type: "radio", text: "ניקוד קבוע", method: "samePoints" },
+	{ htmlFor: "different", type: "radio", text: "ניקוד משתנה לכל סיבוב", method: "differentPoints" },
 ];
 
 export const paymentData = [{ htmlFor: "paybox", label: "קישור לפייבוקס", type: "text" }];
 
 export const paymentChoice = [
-	{ htmlFor: "forFun", type: "checkbox", text: "בשביל הכבוד", method: false },
-	{ htmlFor: "payment", type: "checkbox", text: "על כסף בין חברים", method: true },
+	{ htmlFor: "forFun", type: "radio", text: "בשביל הכבוד", method: false },
+	{ htmlFor: "payment", type: "radio", text: "על כסף בין חברים", method: true },
 ];
 
 // data array pass to PointsRank component

@@ -7,7 +7,7 @@ import GroupInfo from "./GroupInfo";
 import Modal from "../../modal/Modal";
 import PointsRank from "./points/PointsRank";
 import Loading from "../../UI/loading/Loading";
-import CheckboxesChoiceArea from "./points/CheckboxesChoiceArea";
+import RadioButtonsArea from "./points/RadioButtonsArea";
 import API from "../../utils/Api";
 
 const CreateGroup = () => {
@@ -156,7 +156,7 @@ const CreateGroup = () => {
 								<GroupInfo data={groupData.groupInputs} />
 
 								{/* Contains the payment decision (with/without payment) */}
-								<CheckboxesChoiceArea
+								<RadioButtonsArea
 									header="שיטת טורניר"
 									data={groupData.paymentChoice}
 									check={isPaymentIncluded}
@@ -168,7 +168,7 @@ const CreateGroup = () => {
 								<PointsRank header="ניקוד שלב הבתים" pointsData={groupData.groupPointsData} />
 
 								{/* Contains the points method for the knockout stage - checkboxes */}
-								<CheckboxesChoiceArea
+								<RadioButtonsArea
 									header="שיטת ניקוד לשלב הנוקאאוט"
 									data={groupData.knockoutPointsMethod}
 									check={pointsMethod}

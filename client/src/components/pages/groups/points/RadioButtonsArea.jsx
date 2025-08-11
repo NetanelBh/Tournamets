@@ -1,4 +1,4 @@
-const CheckboxesChoiceArea = ({ header, data, check, onChange }) => {    
+const RadioButtonsArea = ({ header, data, check, onChange }) => {    
 	return (
 		<fieldset>
 			<legend className="sr-only">Points</legend>
@@ -30,4 +30,4 @@ const CheckboxesChoiceArea = ({ header, data, check, onChange }) => {
 	);
 };
 
-export default CheckboxesChoiceArea;
+export default RadioButtonsArea;

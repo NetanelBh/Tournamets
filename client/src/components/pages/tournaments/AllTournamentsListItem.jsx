@@ -18,10 +18,10 @@ const TournamentListItem = ({ item, index, btnText, onClick }) => {
 
 	let tournamentStatus = item.endDate < now ? "הסתיים" : false;
 	if (!tournamentStatus) {
-		tournamentStatus = item.startTime <= now ? "התחיל" : "ניתן להצטרף";
+		tournamentStatus = item.startTime <= now ? "הטורניר התחיל" : "ניתן להצטרף";
 	}
 	let statusColor = "text-green-400 font-bold";
-	if ((tournamentStatus === "התחיל" || tournamentStatus === "הסתיים") && !isJoined) {
+	if ((tournamentStatus === "הטורניר התחיל" || tournamentStatus === "הסתיים") && !isJoined) {
 		statusColor = "text-red-500 font-bold";
 	} else if (isJoined) {
 		statusColor = "text-yellow-400 font-bold";
@@ -47,7 +47,7 @@ const TournamentListItem = ({ item, index, btnText, onClick }) => {
 
 					<button
 						className={`px-4 w-fill bg-yellow-200 text-black font-medium font-bold hover:scale-95 active:bg-yellow-200 py-2.5 rounded-lg transition-colors cursor-pointer ${
-							(tournamentStatus === "התחיל" || tournamentStatus === "הסתיים" || isJoined) &&
+							(tournamentStatus === "הטורניר התחיל" || tournamentStatus === "הסתיים" || isJoined) &&
 							btnText !== "כניסה"
 								? "invisible"
 								: ""

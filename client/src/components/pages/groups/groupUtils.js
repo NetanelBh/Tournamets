@@ -52,3 +52,22 @@ export const knockoutDifferentPoints = [
 		data: [{ title: "מדויק" }, { title: "כיוון" }],
 	},
 ];
+
+export const joinGroupData = [
+	{
+      htmlFor: "name",
+      label: "שם הקבוצה",
+      type: "text",
+      autoComplete: "off",
+      placeholder: "",
+      defaultValue: "",
+  },
+  {
+	htmlFor: "code",
+      label: "הזן את קוד הקבוצה",
+      type: "text",
+      autoComplete: "off",
+      placeholder: "בקש את הקוד ממנהל הקבוצה",
+      defaultValue: "",
+  }
+];

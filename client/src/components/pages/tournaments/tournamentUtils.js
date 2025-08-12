@@ -1,4 +1,4 @@
-const createTournamentData = [
+export const createTournamentData = [
 	{
 		htmlFor: "name",
 		label: "שם הטורניר",
@@ -35,5 +35,3 @@ const createTournamentData = [
 		clue: "Image URL",
 	},
 ];
-
-export default createTournamentData;

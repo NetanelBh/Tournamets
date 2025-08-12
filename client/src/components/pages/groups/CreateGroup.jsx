@@ -1,7 +1,7 @@
 import { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import * as groupData from "./CreateGroupData";
+import * as groupUtils from "./groupUtils";
 
 import GroupInfo from "./GroupInfo";
 import Modal from "../../modal/Modal";
@@ -22,25 +22,25 @@ const CreateGroup = () => {
 
 	const nameRef = useRef();
 	const codeRef = useRef();
-	groupData.groupInputs[0].ref = nameRef;
-	groupData.groupInputs[1].ref = codeRef;
+	groupUtils.groupInputs[0].ref = nameRef;
+	groupUtils.groupInputs[1].ref = codeRef;
 
 	// Payment decicion
 	const payboxRef = useRef();
-	groupData.paymentData[0].ref = payboxRef;
+	groupUtils.paymentData[0].ref = payboxRef;
 
 	// Refs for group stage
 	const groupExactRef = useRef();
 	const groupDirectionRef = useRef();
 
-	groupData.groupPointsData[0].ref = groupExactRef;
-	groupData.groupPointsData[1].ref = groupDirectionRef;
+	groupUtils.groupPointsData[0].ref = groupExactRef;
+	groupUtils.groupPointsData[1].ref = groupDirectionRef;
 
 	// Refs for knockout stage with samePoints method
 	const knockoutExactRef = useRef();
 	const knockoutDirectionRef = useRef();
-	groupData.knockoutSamePoints[0].ref = knockoutExactRef;
-	groupData.knockoutSamePoints[1].ref = knockoutDirectionRef;
+	groupUtils.knockoutSamePoints[0].ref = knockoutExactRef;
+	groupUtils.knockoutSamePoints[1].ref = knockoutDirectionRef;
 
 	// Refs for knockout stage with differentPoints method
 	const roundOf16ExactRef = useRef();
@@ -51,14 +51,14 @@ const CreateGroup = () => {
 	const semiFinalDirectionRef = useRef();
 	const finalExactRef = useRef();
 	const finalDirectionRef = useRef();
-	groupData.knockoutDifferentPoints[0].data[0].ref = roundOf16ExactRef;
-	groupData.knockoutDifferentPoints[0].data[1].ref = roundOf16DirectionRef;
-	groupData.knockoutDifferentPoints[1].data[0].ref = quarterFinalExactRef;
-	groupData.knockoutDifferentPoints[1].data[1].ref = quarterFinalDirectionRef;
-	groupData.knockoutDifferentPoints[2].data[0].ref = semiFinalExactRef;
-	groupData.knockoutDifferentPoints[2].data[1].ref = semiFinalDirectionRef;
-	groupData.knockoutDifferentPoints[3].data[0].ref = finalExactRef;
-	groupData.knockoutDifferentPoints[3].data[1].ref = finalDirectionRef;
+	groupUtils.knockoutDifferentPoints[0].data[0].ref = roundOf16ExactRef;
+	groupUtils.knockoutDifferentPoints[0].data[1].ref = roundOf16DirectionRef;
+	groupUtils.knockoutDifferentPoints[1].data[0].ref = quarterFinalExactRef;
+	groupUtils.knockoutDifferentPoints[1].data[1].ref = quarterFinalDirectionRef;
+	groupUtils.knockoutDifferentPoints[2].data[0].ref = semiFinalExactRef;
+	groupUtils.knockoutDifferentPoints[2].data[1].ref = semiFinalDirectionRef;
+	groupUtils.knockoutDifferentPoints[3].data[0].ref = finalExactRef;
+	groupUtils.knockoutDifferentPoints[3].data[1].ref = finalDirectionRef;
 
 	// Get the tournament id from local storage to determine the tournament the group is belongs
 	const tournamentId = localStorage.getItem("tournamentId");
@@ -153,42 +153,42 @@ const CreateGroup = () => {
 								onSubmit={createGroupHandler}
 							>
 								{/* Contains the name, code and paybox */}
-								<GroupInfo data={groupData.groupInputs} />
+								<GroupInfo data={groupUtils.groupInputs} />
 
 								{/* Contains the payment decision (with/without payment) */}
 								<RadioButtonsArea
 									header="שיטת טורניר"
-									data={groupData.paymentChoice}
+									data={groupUtils.paymentChoice}
 									check={isPaymentIncluded}
 									onChange={setIsPaymentIncluded}
 								/>
-								{isPaymentIncluded === true && <GroupInfo data={groupData.paymentData} />}
+								{isPaymentIncluded === true && <GroupInfo data={groupUtils.paymentData} />}
 
 								{/* Contains the exact and direction points for the group stage */}
-								<PointsRank header="ניקוד שלב הבתים" pointsData={groupData.groupPointsData} />
+								<PointsRank header="ניקוד שלב הבתים" pointsData={groupUtils.groupPointsData} />
 
 								{/* Contains the points method for the knockout stage - checkboxes */}
 								<RadioButtonsArea
 									header="שיטת ניקוד לשלב הנוקאאוט"
-									data={groupData.knockoutPointsMethod}
+									data={groupUtils.knockoutPointsMethod}
 									check={pointsMethod}
 									onChange={setPointsMethod}
 								/>
 
 								{/* Determine the points for the knockout according to the chosen points method */}
 								{pointsMethod === "samePoints" && (
-									<PointsRank header="ניקוד שלב הנוקאאוט" pointsData={groupData.knockoutSamePoints} />
+									<PointsRank header="ניקוד שלב הנוקאאוט" pointsData={groupUtils.knockoutSamePoints} />
 								)}
 
 								{pointsMethod === "differentPoints" &&
-									groupData.knockoutDifferentPoints.map((item) => {
+									groupUtils.knockoutDifferentPoints.map((item) => {
 										return (
 											<PointsRank header={item.header} pointsData={item.data} key={item.header} />
 										);
 									})}
 
 								<div className="flex justify-end">
-									<button className="w-1/4 bg-gradient-to-r from-teal-500 to-teal-800 shadow-md shadow-gray-400/80 hover:scale-95 active:bg-gradient-to-r from-teal-500 to-teal-800 text-yellow-300 font-bold py-2.5 rounded-lg hover:shadow-sm transition-colors me-2 mb-2">
+									<button className="w-1/4 bg-gradient-to-r from-teal-500 to-teal-800 shadow-md shadow-gray-400/80 hover:scale-95 active:bg-gradient-to-r from-teal-500 to-teal-800 text-yellow-300 font-bold py-2.5 rounded-lg hover:shadow-sm transition-colors me-2 mb-2 mt-2">
 										צור קבוצה
 									</button>
 								</div>

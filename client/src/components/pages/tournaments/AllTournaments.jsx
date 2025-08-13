@@ -33,9 +33,10 @@ const AllTournaments = () => {
 				});
 
 				dispatch(tournamentsActions.load(fetchedTournaments.data.data));
-				setIsLoading(false);
 			} catch (error) {
 				setOpenModal(true);
+			} finally {
+				setIsLoading(false);
 			}
 		};
 
@@ -74,10 +75,11 @@ const AllTournaments = () => {
 				setModalText({ ...modalObj });
 				setNavigateTo("/layout/all-tournaments");
 			}
-			setIsLoading(false);
 		} catch (error) {
 			setModalText("אירעה שגיאה בהצטרפות לטורניר, אנא נסה שנית");
 			setNavigateTo("/layout/all-tournaments");
+		} finally {
+			setIsLoading(false);
 		}
 	};
 

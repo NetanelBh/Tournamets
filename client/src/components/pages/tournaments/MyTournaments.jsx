@@ -27,13 +27,12 @@ const MyTournaments = () => {
 	};
 
 	const leaveTournamentHandler = async (tournamentId) => {		
+		setIsLoading(true);
 		try {
-			setIsLoading(true);
 			const resp = await API.delete(`/user/leaveTournament/${tournamentId}`, {
 				headers: {
 					Authorization: `Bearer ${sessionStorage.getItem("token")}`,
-			}});
-			setIsLoading(false);			
+			}});		
 			
 			// If the delete succeed, will remove it also from redux
 			if (resp.data.status) {
@@ -47,6 +46,8 @@ const MyTournaments = () => {
 			setModalText("אירעה שגיאה ביציאה מהטורניר, אנא נסה שנית");
 			setOpenModal(true);
 			navigate("/layout/my-tournaments");
+		} finally {
+			setIsLoading(false);
 		}
 	};
 

@@ -109,8 +109,8 @@ const CreateGroup = () => {
 			};
 		}     
 
+		setIsLoading(true);
 		try {
-			setIsLoading(true);
 			const resp = (
 				await API.post("/group/create", newGroup, {
 					headers: {
@@ -118,26 +118,26 @@ const CreateGroup = () => {
 					},
 				})
 			)
-			setIsLoading(false);
+			
 			setOpenModal(true);
-			if (resp.status) {
-				setModalText("הקבוצה נוצרה בהצלחה");
+			setModalText(resp.data.data);
+			if (resp.data.status) {
 				setNavigateTo("/layout/groups-layout/my-groups");
 			} else {
-				setModalText(resp.data);
 				setNavigateTo("/layout/groups-layout/create-group");
 			}
 		} catch (error) {
 			setOpenModal(true);
 			setModalText("אירעה שגיאה ביצירת הקבוצה, אנא נסה שנית");
 			setNavigateTo("/layout/groups-layout/create-group");
+		} finally {
+			setIsLoading(false);
 		}
 	};
 
 	const closeModalHandler = () => {
 		setOpenModal(false);
 		setModalText("");
-		setIsLoading(false);
 		navigate(navigateTo);
 	};
 

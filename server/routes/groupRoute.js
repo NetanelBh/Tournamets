@@ -1,4 +1,5 @@
 import express from "express";
+import * as userServices from "../services/userServices.js";
 import * as groupServices from "../services/groupServices.js";
 import { addGroupToUser } from "../services/userServices.js";
 
@@ -46,15 +47,14 @@ router.post("/join", async (req, res) => {
 			return;
 		}
 
-		const isMatch = await bcrypt.compare(code, group.code);
-		if (!isMatch) {
+		const isMatch = await groupServices.getGroupCode(groupName, tournamentId);
+		if (isMatch.code !== code) {
 			res.send({ status: false, data: "קוד הקבוצה שגוי" });
 			return;
 		}
-
+		
 		// Get the user from DB(he exists because he is logged in)
 		const user = await userServices.getUserbyId(req.user.id);
-
 		// Add the group to the user groups array
 		const updatedUser = await userServices.addGroupToUser(user._id, group._id);
 		if (!updatedUser) {
@@ -66,15 +66,16 @@ router.post("/join", async (req, res) => {
 			res.send({ status: false, data: "אתה קיים כבר בתוך הקבוצה" });
 			return;
 		}
-
+		
 		// Add the user to the group
 		const updatedGroup = await groupServices.addGroupMember(group._id, user._id);
+		
 		if (!updatedGroup) {
 			res.send({ status: false, data: "אירעה בעיה בהוספת המשתמש לקבוצה הנוכחית" });
 			return;
 		}
 
-		res.send({ status: true, data: "המשתמש הצטרף לקבוצה בהצלחה" });
+		res.send({ status: true, data: updatedGroup._id });
 	} catch (error) {
 		res.send({ status: false, data: "אירעה שגיאה בהצטרפות לקבוצה, אנא נסה שנית" });
 	}

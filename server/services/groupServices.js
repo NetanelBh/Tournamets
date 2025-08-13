@@ -10,6 +10,10 @@ export const getGroupByFilter = (filterObj) => {
 	return groupRepo.getGroupByFilter(filterObj);
 };
 
+export const getGroupCode =async (groupName, tournamentId) => {
+	return groupRepo.getGroupByFilter({ name: groupName, tournament: tournamentId });
+};
+
 export const addGroupMember = (groupId, userId) => {
     return groupRepo.addGroupMember(groupId, userId);
 };

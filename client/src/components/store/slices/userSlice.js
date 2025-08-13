@@ -13,6 +13,9 @@ const userSlice = createSlice({
 		joinTournament(state, action) {			
 			state.user.tournaments.push(action.payload);
 		},
+		joinGroup(state, action) {
+			state.user.groups.push(action.payload);
+		},
 		leaveTournament(state, action) {			
 			state.user.tournaments = state.user.tournaments.filter((t) => {
 				return t !== action.payload});

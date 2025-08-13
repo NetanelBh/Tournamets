@@ -44,14 +44,13 @@ const CreateTournament = () => {
 			imgUrl: imgRef.current.value,
 		};
 
+		setIsLoading(true);
 		try {
-			setIsLoading(true);
 			const resp = await API.post("/tournament/create", newTournamentData, {
 				headers: {
 					Authorization: `Bearer ${sessionStorage.getItem("token")}`,
 				},
 			});
-			setIsLoading(false);
 
 			// Always open the modal for both cases if the tournament created or occurred an error
 			setOpenModal(true);
@@ -66,6 +65,8 @@ const CreateTournament = () => {
 		} catch (error) {
 			setOpenModal(true);
 			setModalText("אירעה שגיאה ביצירת הטורניר, אנא נסה שנית");
+		} finally {
+			setIsLoading(false);
 		}
 	};
 

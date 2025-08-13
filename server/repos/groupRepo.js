@@ -11,7 +11,7 @@ export const updateGroup = (groupId, userId) => {
 };
 
 export const addGroupMember = (groupId, userId) => {
-	return GroupModel.findByIdAndUpdate(groupId, { $addToSet: { members: userId } }, { new: true });
+	return GroupModel.findByIdAndUpdate(groupId, { $addToSet: { members: {id: userId} } }, { new: true });
 };
 
 export const leaveGroup = (userId, groupId) => {

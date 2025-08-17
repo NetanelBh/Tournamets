@@ -99,7 +99,7 @@ const AllTournaments = () => {
 		<>
 			{!isLoading && (
 				<>
-					{!openModal && <GenericList data={data} />}
+					{!openModal && <GenericList data={data} type="tournament" />}
 					{openModal && <Modal title={modalText.title} text={modalText.text} onClick={closeModalHandler} />}
 				</>
 			)}

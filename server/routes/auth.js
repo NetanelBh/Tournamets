@@ -11,13 +11,13 @@ router.post("/login", async (req, res) => {
 	const { email, password } = req.body;
 
 	try {
-		const user = await getUserByEmail(email);
+		let user = await getUserByEmail(email);
 		if (!user) {
 			res.send({ status: false, data: "המשתמש לא רשום במערכת" });
 			return;
 		}
 
-		if (user.email !== email) {
+		if (user.email !== email) {	
 			res.send({ status: false, data: "כתובת מייל שגויה, אנא נסה שנית" });
 			return;
 		}
@@ -32,8 +32,11 @@ router.post("/login", async (req, res) => {
 			res.send({ status: false, data: "סיסמא שגויה" });
 			return;
 		}
-
+		
 		const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET /*, { expiresIn: "12h" }*/);
+		// Get the full user's group to use it in frontend instead of send request each page browsing
+		
+		user = await user.populate("groups");
 		const returnedUser = user.toObject();
 		// Delete the password from the object
 		delete returnedUser.password;

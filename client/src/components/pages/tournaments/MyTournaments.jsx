@@ -77,7 +77,7 @@ const MyTournaments = () => {
 					{openModal && <Modal title="הטורנירים שלי" text={modalText} onClick={closeModalHandler} />}
 					{!openModal && (
 						<>
-							{filteredTournamets.length > 0 && <GenericList data={data} />}
+							{filteredTournamets.length > 0 && <GenericList data={data} type="tournament" />}
 							{filteredTournamets.length === 0 && (
 								<Modal
 									title="הטורנירים שלי"

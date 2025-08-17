@@ -59,8 +59,7 @@ export const joinGroupData = [
       label: "שם הקבוצה",
       type: "text",
       autoComplete: "off",
-      placeholder: "",
-      defaultValue: "אליפות",
+      placeholder: "הזן את שם הקבוצה",
   },
   {
 	htmlFor: "code",
@@ -68,6 +67,5 @@ export const joinGroupData = [
       type: "text",
       autoComplete: "off",
       placeholder: "בקש את הקוד ממנהל הקבוצה",
-      defaultValue: "123",
   }
 ];

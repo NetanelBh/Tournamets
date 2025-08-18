@@ -25,7 +25,6 @@ const MyGroups = () => {
 	const enterGroupHandler = (groupId) => {
     // Store the groupId in localStorage to use it in the bets pages
     localStorage.setItem("groupId", groupId);
-    // TODO: CREATE THE PAGE: LAYOUT/BETS-LAYOUT (WITH OUTLET AND BETS HEADER)
     navigate("/layout/bets-layout/my-bets")
   };
 

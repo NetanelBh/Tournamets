@@ -17,6 +17,12 @@ import JoinGroup from "../pages/groups/JoinGroup";
 import CreateGroup from "../pages/groups/CreateGroup";
 import GroupsLayout from "../pages/layouts/GroupsLayout";
 
+import BetsLayout from "../pages/layouts/BetsLayout";
+import MyBets from "../pages/bets/MyBets";
+import ClosedMatches from "../pages/bets/ClosedMatches";
+import FriendsBets from "../pages/bets/FriendsBets";
+import Table from "../pages/bets/Table";
+
 const CreateRouter = () => {
 	const router = createBrowserRouter([
 		{ path: "/", element: <Login /> },
@@ -28,8 +34,8 @@ const CreateRouter = () => {
 			path: "/layout",
 			element: <MainLayout />,
 			children: [
-				{ path: "/layout/all-tournaments", element: <AllTournaments /> },
 				{ path: "/layout/my-tournaments", element: <MyTournaments /> },
+				{ path: "/layout/all-tournaments", element: <AllTournaments /> },
 				{ path: "/layout/create-tournament", element: <CreateTournament /> },
 				{
 					path: "/layout/groups-layout",
@@ -42,11 +48,12 @@ const CreateRouter = () => {
 				},
 				{
 					path: "/layout/bets-layout",
-					element: <h1>bets</h1>,
+					element: <BetsLayout />,
 					children: [
-						{ path: "/layout/bets-layout/my-bets", element: <h1>my-bets</h1> },
-						{ path: "/layout/bets-layout/frients-bets", element: <h1>friends-bets</h1> },
-						{ path: "/layout/bets-layout/bets-table", element: <h1>table</h1> },
+						{ path: "/layout/bets-layout/my-bets", element: <MyBets /> },
+						{ path: "/layout/bets-layout/bets-table", element: <Table /> },
+						{ path: "/layout/bets-layout/frients-bets", element: <FriendsBets /> },
+						{ path: "/layout/bets-layout/closed-matches", element: <ClosedMatches /> },
 					],
 				},
 			],

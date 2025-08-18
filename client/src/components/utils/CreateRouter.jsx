@@ -40,6 +40,15 @@ const CreateRouter = () => {
 						{ path: "/layout/groups-layout/create-group", element: <CreateGroup /> },
 					],
 				},
+				{
+					path: "/layout/bets-layout",
+					element: <h1>bets</h1>,
+					children: [
+						{ path: "/layout/bets-layout/my-bets", element: <h1>my-bets</h1> },
+						{ path: "/layout/bets-layout/frients-bets", element: <h1>friends-bets</h1> },
+						{ path: "/layout/bets-layout/bets-table", element: <h1>table</h1> },
+					],
+				},
 			],
 		},
 	]);

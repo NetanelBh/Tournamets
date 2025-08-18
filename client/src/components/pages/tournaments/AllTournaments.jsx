@@ -15,23 +15,18 @@ const AllTournaments = () => {
 	const [openModal, setOpenModal] = useState(false);
 	const [navigateTo, setNavigateTo] = useState("");
 	const navigate = useNavigate();
-	
+
 	const dispatch = useDispatch();
 	const tournaments = useSelector((state) => state.tournaments.tournaments);
 
 	// When enter to some tournament, keep the id in localStorage to case we will create a group. in other case remove
 	localStorage.removeItem("tournamentId");
-	
+
 	useEffect(() => {
 		const fetchData = async () => {
 			setIsLoading(true);
 			try {
-				const fetchedTournaments = await API.get("/tournament/getAll", {
-					headers: {
-						Authorization: `Bearer ${sessionStorage.getItem("token")}`,
-					},
-				});
-
+				const fetchedTournaments = await API.get("/tournament/getAll");
 				dispatch(tournamentsActions.load(fetchedTournaments.data.data));
 			} catch (error) {
 				setOpenModal(true);
@@ -45,24 +40,18 @@ const AllTournaments = () => {
 
 	const joinHandler = async (item) => {
 		// Prevent a scenario that the user enter to tournament after he started(when he didn't refresh the browser)
-		const now = (new Date()).toISOString();
+		const now = new Date().toISOString();
 		if (now >= item.startTime) {
 			setOpenModal(true);
 			setModalText({ title: "הצטרפת לטורניר", text: "הטורניר החל, לא ניתן להצטרף יותר" });
 			setNavigateTo("/layout/all-tournaments");
 			return;
 		}
-		
+
 		setOpenModal(true);
 		setIsLoading(true);
 		try {
-			const resp = (
-				await API.post(
-					"/tournament/join",
-					{ tournamentId: item._id },
-					{ headers: { Authorization: `Bearer ${sessionStorage.getItem("token")}` } }
-				)
-			).data;
+			const resp = (await API.post("/tournament/join", { tournamentId: item._id })).data;
 
 			if (resp.status) {
 				// Add the tournament to the user

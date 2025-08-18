@@ -21,21 +21,24 @@ const MyGroups = () => {
 
 	const filtereGroups = userGroups.filter((group) => group.tournament === tournamentId);
 
-	const enterGroupHandler = (groupId) => {};
+  // When enter to some group in my groups list(specific for each tournament)
+	const enterGroupHandler = (groupId) => {
+    // Store the groupId in localStorage to use it in the bets pages
+    localStorage.setItem("groupId", groupId);
+    // TODO: CREATE THE PAGE: LAYOUT/BETS-LAYOUT (WITH OUTLET AND BETS HEADER)
+    navigate("/layout/bets-layout/my-bets")
+  };
 
-	const joinGroup = () => {
+	// This function is called when we enter to myTournaments/myGroups, and I didn't join to any group yet.
+  const joinGroup = () => {
 		navigate("/layout/groups-layout/join-group");
 	};
 
 	const leaveGroupHandler = async (groupId) => {
-    // TODO: CHECK THIS PART OF THE LEAVE GROUP
+		// TODO: CHECK THIS PART OF THE LEAVE GROUP
 		setIsLoading(true);
 		try {
-			const user = await API.delete(`/user/leaveGroup/${groupId}`, {
-				headers: {
-					Authorization: `Bearer ${localStorage.getItem("token")}`,
-				},
-			});
+			const user = await API.delete(`/user/leaveGroup/${groupId}`);
 
 			setOpenModal(true);
 

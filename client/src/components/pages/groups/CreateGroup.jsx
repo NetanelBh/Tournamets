@@ -107,18 +107,12 @@ const CreateGroup = () => {
 					directionScore: Number(finalDirectionRef.current.value),
 				},
 			};
-		}     
+		}
 
 		setIsLoading(true);
 		try {
-			const resp = (
-				await API.post("/group/create", newGroup, {
-					headers: {
-						Authorization: `Bearer ${sessionStorage.getItem("token")}`,
-					},
-				})
-			)
-			
+			const resp = await API.post("/group/create", newGroup);
+
 			setOpenModal(true);
 			setModalText(resp.data.data);
 			if (resp.data.status) {
@@ -177,7 +171,10 @@ const CreateGroup = () => {
 
 								{/* Determine the points for the knockout according to the chosen points method */}
 								{pointsMethod === "samePoints" && (
-									<PointsRank header="ניקוד שלב הנוקאאוט" pointsData={groupUtils.knockoutSamePoints} />
+									<PointsRank
+										header="ניקוד שלב הנוקאאוט"
+										pointsData={groupUtils.knockoutSamePoints}
+									/>
 								)}
 
 								{pointsMethod === "differentPoints" &&

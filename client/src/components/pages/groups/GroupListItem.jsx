@@ -7,7 +7,7 @@ const GroupListItem = ({ item, index, btnText, onClick, leave = undefined }) => 
 			<div className="px-4 py-4 sm:px-4 relative z-10">
 				<div className="flex items-center justify-between h-16">
 					<p className="mt-1 max-w-2xl text-xl text-white font-medium">
-						<span className="text-yellow-400 underline"> שם:</span> {item.name}
+						<span className="text-yellow-400 underline"> שם הקבוצה:</span> {item.name}
 					</p>
 				</div>
 				<div className="mt-4 flex items-center justify-between">

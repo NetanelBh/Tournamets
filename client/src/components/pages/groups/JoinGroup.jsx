@@ -36,14 +36,10 @@ const JoinGroup = () => {
 		setIsLoading(true);
 
 		try {
-			const resp = await API.post("/group/join", newGroup, {
-				headers: {
-					Authorization: `Bearer ${sessionStorage.getItem("token")}`,
-				},
-			});
+			const resp = await API.post("/group/join", newGroup);
 
 			setOpenModal(true);
-			
+
 			if (resp.data.status) {
 				setNavigateTo("/layout/groups-layout/my-groups");
 				setModalText("הצטרפת לקבוצה בהצלחה");

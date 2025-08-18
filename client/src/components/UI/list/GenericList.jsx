@@ -1,6 +1,5 @@
 import AllTournamentsListItem from "../../pages/tournaments/AllTournamentsListItem";
 import GroupListItem from "../../pages/groups/GroupListItem";
-// TODO: IT COULD BE ALLTOURNAMENTSLISTITEM OR TABLELISTITEM(FOR THE POINTS TABLE AND ETC..)
 
 const GenericList = ({ data, type }) => {
 	// data is an object which contains the list properties

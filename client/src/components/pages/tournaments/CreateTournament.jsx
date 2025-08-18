@@ -46,11 +46,7 @@ const CreateTournament = () => {
 
 		setIsLoading(true);
 		try {
-			const resp = await API.post("/tournament/create", newTournamentData, {
-				headers: {
-					Authorization: `Bearer ${sessionStorage.getItem("token")}`,
-				},
-			});
+			const resp = await API.post("/tournament/create", newTournamentData);
 
 			// Always open the modal for both cases if the tournament created or occurred an error
 			setOpenModal(true);

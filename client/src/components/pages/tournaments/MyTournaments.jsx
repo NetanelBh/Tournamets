@@ -26,14 +26,11 @@ const MyTournaments = () => {
 		navigate("/layout/groups-layout/my-groups");
 	};
 
-	const leaveTournamentHandler = async (tournamentId) => {		
+	const leaveTournamentHandler = async (tournamentId) => {
 		setIsLoading(true);
 		try {
-			const resp = await API.delete(`/user/leaveTournament/${tournamentId}`, {
-				headers: {
-					Authorization: `Bearer ${sessionStorage.getItem("token")}`,
-			}});		
-			
+			const resp = await API.delete(`/user/leaveTournament/${tournamentId}`);
+
 			// If the delete succeed, will remove it also from redux
 			if (resp.data.status) {
 				dispatch(userActions.leaveTournament(tournamentId));

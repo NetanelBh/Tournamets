@@ -53,7 +53,7 @@ const CreateRouter = () => {
 						{ path: "/layout/bets-layout/my-bets", element: <MyBets /> },
 						{ path: "/layout/bets-layout/bets-table", element: <Table /> },
 						{ path: "/layout/bets-layout/frients-bets", element: <FriendsBets /> },
-						{ path: "/layout/bets-layout/closed-matches", element: <ClosedMatches /> },
+						{ path: "/layout/bets-layout/closed-bets", element: <ClosedMatches /> },
 					],
 				},
 			],

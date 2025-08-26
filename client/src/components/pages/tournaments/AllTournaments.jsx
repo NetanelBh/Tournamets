@@ -21,6 +21,7 @@ const AllTournaments = () => {
 
 	// When enter to some tournament, keep the id in localStorage to case we will create a group. in other case remove
 	localStorage.removeItem("tournamentId");
+	localStorage.removeItem("groupId");
 
 	useEffect(() => {
 		const fetchData = async () => {

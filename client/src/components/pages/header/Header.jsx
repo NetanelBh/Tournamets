@@ -37,9 +37,8 @@ const Header = ({ name, logout }) => {
 							className={`${navLinkClass} ${
 								// Only my tournaments component has nested child, so we need it always active
 								pathname.includes("my-tournaments") ||
-								pathname.includes("my-groups") ||
-								pathname.includes("join-group") ||
-								pathname.includes("create-group")
+								pathname.includes("groups-layout") ||
+								pathname.includes("bets-layout")
 									? activeClass
 									: ""
 							}`}

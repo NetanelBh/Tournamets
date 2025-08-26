@@ -31,6 +31,7 @@ const CreateTournament = () => {
 
 	// When enter to some tournament, it keep the id in localStorage to case we will create group. in will other remove
 	localStorage.removeItem("tournamentId");
+	localStorage.removeItem("groupId");
 
 	const createTournamentHandler = async (event) => {
 		event.preventDefault();

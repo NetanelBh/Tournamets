@@ -22,11 +22,11 @@ router.get("/getAll", async (req, res) => {
 router.post("/create", async (req, res) => {
 	try {
 		const { name, startDate, endDate, startTime, isTopScorerIncluded, imgUrl } = req.body;
-
-		// Remove the _ from the original name to store in DB(the name with _ just to fetch data from wikipedia)
-		const nameToDB = name.replace(/_/g, " ");
 		
-		const isTournamentExist = await tournamentServices.getTournamentByName(nameToDB);
+		// Remove the _ from the original name to store in DB(the name with _ just to fetch data from wikipedia)
+		const dbName = name.replace(/_/g, " ");
+
+		const isTournamentExist = await tournamentServices.getTournamentByName(dbName);
 		if (isTournamentExist) {
 			res.send({ status: false, data: "הטורניר כבר קיים" });
 			return;
@@ -35,21 +35,32 @@ router.post("/create", async (req, res) => {
 		// Should convert the date entered to DATE object as UTC
 		const utcDate = israelToUTC(startDate, startTime);
 
-		// Create the tournament
-		const tournament = await tournamentServices.create(nameToDB, endDate, utcDate, imgUrl, isTopScorerIncluded);
-
 		// Get the fixtures from wikipedia (translated to hebrew)
 		const fixtures = await fetchFixtures(name);
-		// TODO: CREATE THE MATCHES DOCUMENTS FOR THE MATCH COLLECTION (INSERT MANY)
+
+		// From the fixtures, extract the teams(with set to avoid duplicates)
+		const teams = new Set();
+		for (const fixture of fixtures) {
+			teams.add(fixture.home);
+			teams.add(fixture.away);
+		}
+
+		// Convert the set to array to insert the DB
+		const teamsArray = Array.from(teams);
+
+		// Create the tournament
+		const t = await tournamentServices.create(dbName, endDate, utcDate, imgUrl, isTopScorerIncluded, teamsArray);
 
 		// Create a job scheduler to find unpaid users in group that included payment and delete them from the group
-		findUnpaidUsers(tournament._id);
+		findUnpaidUsers(t._id);
 
-		if (!tournament) {
+		if (!t) {
 			res.send({ status: false, data: "טורניר לא נוצר, אנא נסה שנית" });
 			return;
 		}
-		res.send({ status: true, data: tournament });
+
+		// TODO: CREATE THE MATCHES DOCUMENTS FOR THE MATCH COLLECTION (INSERT MANY) FROM THE FIXTURES DATA
+		res.send({ status: true, data: t });
 	} catch (error) {
 		res.send({ status: false, data: "אירעה בעיה ביצירת הטורניר, אנא נסה שנית" });
 	}

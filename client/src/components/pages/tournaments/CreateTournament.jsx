@@ -91,8 +91,9 @@ const CreateTournament = () => {
 										htmlFor: item.htmlFor,
 										ref: item.ref,
 										autoComplete: "off",
-										placeholder: item.clue,
-										defaultValue: "",
+										// placeholder: item.clue,
+										// defaultValue: "",
+										defaultValue: item.clue
 									};
 
 									return <Input key={item.label} data={data}/>;

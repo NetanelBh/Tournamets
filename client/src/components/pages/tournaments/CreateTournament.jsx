@@ -91,6 +91,7 @@ const CreateTournament = () => {
 										htmlFor: item.htmlFor,
 										ref: item.ref,
 										autoComplete: "off",
+										// TODO: WHEN FINISH TO TEST, UNCOMMENT THE 2 LINES AND REMOVE THE DEFAULT VALUE
 										// placeholder: item.clue,
 										// defaultValue: "",
 										defaultValue: item.clue

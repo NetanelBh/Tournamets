@@ -22,45 +22,38 @@ router.get("/getAll", async (req, res) => {
 router.post("/create", async (req, res) => {
 	try {
 		const { name, startDate, endDate, startTime, isTopScorerIncluded, imgUrl } = req.body;
-		
-		// Remove the _ from the original name to store in DB(the name with _ just to fetch data from wikipedia)
-		const dbName = name.replace(/_/g, " ");
-
-		const isTournamentExist = await tournamentServices.getTournamentByName(dbName);
-		if (isTournamentExist) {
-			res.send({ status: false, data: "הטורניר כבר קיים" });
-			return;
-		}
-
-		// Should convert the date entered to DATE object as UTC
-		const utcDate = israelToUTC(startDate, startTime);
 
 		// Get the fixtures from wikipedia (translated to hebrew)
 		const fixtures = await fetchFixtures(name);
+		console.log("fixtures", fixtures);	
+		
+		// // Remove the _ from the original name to store in DB(the name with _ just to fetch data from wikipedia)
+		// const dbName = name.replace(/_/g, " ");
 
-		// From the fixtures, extract the teams(with set to avoid duplicates)
-		const teams = new Set();
-		for (const fixture of fixtures) {
-			teams.add(fixture.home);
-			teams.add(fixture.away);
-		}
+		// const isTournamentExist = await tournamentServices.getTournamentByName(dbName);
+		// if (isTournamentExist) {
+		// 	res.send({ status: false, data: "הטורניר כבר קיים" });
+		// 	return;
+		// }
 
-		// Convert the set to array to insert the DB
-		const teamsArray = Array.from(teams);
+		// // Should convert the date entered to DATE object as UTC
+		// const utcDate = israelToUTC(startDate, startTime);
 
-		// Create the tournament
-		const t = await tournamentServices.create(dbName, endDate, utcDate, imgUrl, isTopScorerIncluded, teamsArray);
+		// // Get the fixtures from wikipedia (translated to hebrew)
+		// const fixtures = await fetchFixtures(name);
 
-		// Create a job scheduler to find unpaid users in group that included payment and delete them from the group
-		findUnpaidUsers(t._id);
+		// // From the fixtures, extract the teams(with set to avoid duplicates)
+		// const teams = new Set();
+		// for (const fixture of fixtures) {
+		// 	teams.add(fixture.home);
+		// 	teams.add(fixture.away);
+		// }
 
-		if (!t) {
-			res.send({ status: false, data: "טורניר לא נוצר, אנא נסה שנית" });
-			return;
-		}
+		// // Convert the set to array to insert the DB
+		// const teamsArray = Array.from(teams);
 
-		// TODO: CREATE THE MATCHES DOCUMENTS FOR THE MATCH COLLECTION (INSERT MANY) FROM THE FIXTURES DATA
-		res.send({ status: true, data: t });
+		// 
+		res.send({ status: true, data: "הדגמה" });
 	} catch (error) {
 		res.send({ status: false, data: "אירעה בעיה ביצירת הטורניר, אנא נסה שנית" });
 	}

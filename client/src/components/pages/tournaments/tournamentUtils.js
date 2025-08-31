@@ -5,7 +5,7 @@ export const createTournamentData = [
 		label: "שם הטורניר",
 		type: "text",
 		// clue: "name after /wiki/ (from wikipedia)",
-		clue: "UEFA_Euro_2020"
+		clue: "2026_FIFA_World_Cup"
 	},
 	{
 		htmlFor: "startDate",

@@ -9,7 +9,7 @@ const GenericList = ({ data, type }) => {
 			{type === "tournament" &&
 				data.dataList.map((item, index) => (
 					<AllTournamentsListItem
-						key={item._id}
+						key={index}
 						item={item}
 						index={index}
 						btnText={data.btnText}

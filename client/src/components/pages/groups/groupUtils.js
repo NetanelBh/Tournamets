@@ -36,6 +36,10 @@ export const knockoutSamePoints = [{ title: "מדויק" }, { title: "כיוון
 // Array contains knockout stage groups for each round
 export const knockoutDifferentPoints = [
 	{
+		header: "round of 32",
+		data: [{ title: "מדויק" }, { title: "כיוון" }],
+	},
+	{
 		header: "שמינית גמר",
 		data: [{ title: "מדויק" }, { title: "כיוון" }],
 	},

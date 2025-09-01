@@ -25,10 +25,6 @@ const CreateGroup = () => {
 	groupUtils.groupInputs[0].ref = nameRef;
 	groupUtils.groupInputs[1].ref = codeRef;
 
-	// Payment decicion
-	const payboxRef = useRef();
-	groupUtils.paymentData[0].ref = payboxRef;
-
 	// Refs for group stage
 	const groupExactRef = useRef();
 	const groupDirectionRef = useRef();
@@ -71,7 +67,6 @@ const CreateGroup = () => {
 			code: codeRef.current.value,
 			tournamentId,
 			isPaid: isPaymentIncluded === true ? true : false,
-			payboxLink: isPaymentIncluded === true ? payboxRef.current.value : null,
 			points: {
 				groupStage: {
 					exactScore: Number(groupExactRef.current.value),
@@ -156,8 +151,7 @@ const CreateGroup = () => {
 									check={isPaymentIncluded}
 									onChange={setIsPaymentIncluded}
 								/>
-								{isPaymentIncluded === true && <GroupInfo data={groupUtils.paymentData} />}
-
+				
 								{/* Contains the exact and direction points for the group stage */}
 								<PointsRank header="ניקוד שלב הבתים" pointsData={groupUtils.groupPointsData} />
 

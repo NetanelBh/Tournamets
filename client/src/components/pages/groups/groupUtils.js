@@ -20,8 +20,6 @@ export const knockoutPointsMethod = [
 	{ htmlFor: "different", type: "radio", text: "ניקוד משתנה לכל סיבוב", method: "differentPoints" },
 ];
 
-export const paymentData = [{ htmlFor: "paybox", label: "קישור לפייבוקס", type: "text" }];
-
 export const paymentChoice = [
 	{ htmlFor: "forFun", type: "radio", text: "בשביל הכבוד", method: false },
 	{ htmlFor: "payment", type: "radio", text: "על כסף בין חברים", method: true },

@@ -1,4 +1,6 @@
 const GroupInfo = ({data}) => {
+	console.log(data);
+	
 	return (
 		<>
 			{data.map((item) => {

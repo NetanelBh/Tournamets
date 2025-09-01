@@ -8,7 +8,6 @@ const GroupSchema = new Schema(
 		tournament: { type: Schema.Types.ObjectId, ref: "Tournament", required: true },
 		// Determine if the group with money or not
 		isPaid: { type: Boolean, default: false, required: true },
-		payboxLink: { type: String, default: null },
 		members: [
 			{
 				_id: false,
@@ -29,6 +28,10 @@ const GroupSchema = new Schema(
 					directionScore: Number,
 				},
 				differentPoints: {
+					roundOf32: {
+						exactScore: Number,
+						directionScore: Number,
+					},
 					roundOf16: {
 						exactScore: Number,
 						directionScore: Number,

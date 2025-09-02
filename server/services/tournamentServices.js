@@ -4,12 +4,12 @@ export const getAllTournaments = () => tournamentRepo.getAllTournaments();
 
 export const getTournamentByName = (name) => tournamentRepo.getTournamentByName(name);
 
-export const create = (name, endDate, startTime, tournamentImage, isTopScorerIncluded, teams) =>  {    
+export const create = (name, endDate, startTime, tournamentImage, topScorerBet, teams) =>  {    
     const tournament = {
         name,
         endDate,
         startTime,
-        includesTopScorer: isTopScorerIncluded,
+        topScorerBet,
         topScorer: null,
         teams,
         winnerTeam: null,

@@ -3,10 +3,13 @@ import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
 import API from "../../utils/Api";
-import Input from "../../UI/input/Input";
 import Modal from "../../modal/Modal";
+import Input from "../../UI/input/Input";
 import Loading from "../../UI/loading/Loading";
-import {createTournamentData} from "./tournamentUtils";
+import { topScorers } from "./tournamentUtils";
+import { isTopScorerIncluded } from "./tournamentUtils";
+import { createTournamentData } from "./tournamentUtils";
+import RadioButtonsArea from "../groups/points/RadioButtonsArea";
 import { tournamentsActions } from "../../store/slices/tournamentsSlice";
 
 const CreateTournament = () => {
@@ -15,10 +18,15 @@ const CreateTournament = () => {
 	const startDateRef = useRef();
 	const endDateRef = useRef();
 	const startTimeRef = useRef();
-	const topScorerRef = useRef();
 	const imgRef = useRef();
+	const topScorersRef = useRef();
+
+	// Modal states
 	const [openModal, setOpenModal] = useState(false);
 	const [modalText, setModalText] = useState("");
+	// States for topScorer bet
+	const [topScorerBet, setTopScorerBet] = useState(false);
+	// Navigation
 	const navigate = useNavigate();
 	const dispatch = useDispatch();
 
@@ -26,8 +34,7 @@ const CreateTournament = () => {
 	createTournamentData[1].ref = startDateRef;
 	createTournamentData[2].ref = endDateRef;
 	createTournamentData[3].ref = startTimeRef;
-	createTournamentData[4].ref = topScorerRef;
-	createTournamentData[5].ref = imgRef;
+	createTournamentData[4].ref = imgRef;
 
 	// When enter to some tournament, it keep the id in localStorage to case we will create group. in will other remove
 	localStorage.removeItem("tournamentId");
@@ -41,8 +48,9 @@ const CreateTournament = () => {
 			startDate: startDateRef.current.value,
 			endDate: endDateRef.current.value,
 			startTime: startTimeRef.current.value,
-			isTopScorerIncluded: topScorerRef.current.value === "כן" ? true : false,
+			topScorerBet: topScorerBet,
 			imgUrl: imgRef.current.value,
+			topScorersList: topScorersRef.current.value.split(",")
 		};
 
 		setIsLoading(true);
@@ -84,7 +92,7 @@ const CreateTournament = () => {
 								className="fade_up max-w-md w-fit sm:w-full bg-cyan-900/50 rounded-xl shadow-lg p-6 mt-2 space-y-4 shadow-md shadow-gray-400"
 								onSubmit={createTournamentHandler}
 							>
-								{createTournamentData.map((item) => {								
+								{createTournamentData.map((item) => {
 									const data = {
 										label: item.label,
 										type: item.type,
@@ -94,11 +102,22 @@ const CreateTournament = () => {
 										// TODO: WHEN FINISH TO TEST, UNCOMMENT THE 2 LINES AND REMOVE THE DEFAULT VALUE
 										// placeholder: item.clue,
 										// defaultValue: "",
-										defaultValue: item.clue
+										defaultValue: item.clue,
 									};
 
-									return <Input key={item.label} data={data}/>;
+									return <Input key={item.label} data={data} />;
 								})}
+
+								<RadioButtonsArea
+									header="לכלול מלך שערים?"
+									data={isTopScorerIncluded}
+									check={topScorerBet}
+									onChange={setTopScorerBet}
+								/>
+								{topScorerBet && (
+									<Input data={{...topScorers, ref: topScorersRef, placeholder: topScorers.clue, defaultValue: ""}}/>
+								)}
+
 								<button
 									className="mt-4 w-full bg-gradient-to-r from-teal-500 to-teal-800 shadow-md shadow-gray-400/80 hover:shadow-sm hover:scale-95 active:bg-gradient-to-r from-teal-500 to-teal-800 text-yellow-300 font-bold py-2.5 rounded-lg transition-colors"
 									type="submit"

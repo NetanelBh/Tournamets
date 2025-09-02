@@ -5,7 +5,7 @@ const tournamentSchema = new Schema({
   name: { type: String, required: true },
   endDate: {type: String, required: true}, 
   startTime: {type: String, required: true},
-  includesTopScorer: {type: Boolean, required: true},
+  topScorerBet: {type: Boolean, required: true},
   topScorer: { type: Schema.Types.ObjectId, ref: "Player" },
   teams: [{type: String, required: true}],
   winnerTeam: {type: String},

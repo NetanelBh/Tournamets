@@ -29,13 +29,6 @@ export const createTournamentData = [
 		clue: "20:00",
 	},
 	{
-		htmlFor: "topScorer",
-		label: "לכלול מלך שערים?",
-		type: "text",
-		// clue: "כן/לא",
-		clue: "כן"
-	},
-	{
 		htmlFor: "symbol",
 		label: "תמונה",
 		type: "text",
@@ -43,3 +36,15 @@ export const createTournamentData = [
 		clue: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6c/UEFA_Euro_2020_logo.svg/1200px-UEFA_Euro_2020_logo.svg.png",
 	},
 ];
+
+export const isTopScorerIncluded = [
+	{ htmlFor: "excluded", type: "radio", text: "לא", method: false },
+	{ htmlFor: "included", type: "radio", text: "כן", method: true },
+];
+
+export const topScorers = {
+	htmlFor: "topScorers",
+	label: "רשימת שחקנים למלך שערים",
+	type: "text",
+	clue: "שחקנים למלך שערים(מופרד בפסיק ללא רווחים)",
+}

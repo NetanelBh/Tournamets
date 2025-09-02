@@ -16,7 +16,7 @@ const RadioButtonsArea = ({ header, data, check, onChange }) => {
 										className="size-5 rounded border-gray-300 checked:bg:yellow-400 shadow-sm dark:border-gray-600 dark:bg-gray-900 dark:ring-offset-gray-900 dark:checked:bg-blue-600"
 										id={item.htmlFor}
 										checked={check === item.method}
-										onChange={(e) => onChange(e.target.checked ? item.method : "")}
+										onChange={() => onChange(item.method)}
 									/>
 
 									<span className="font-medium text-white dark:text-gray-200">{item.text}</span>

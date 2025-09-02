@@ -8,15 +8,20 @@ const MyBets = () => {
 	const currentTourmanent = allTournaments.find((t) => t._id === localStorage.getItem("tournamentId"));
 	console.log(currentTourmanent);
 
+  const data = {
+    dropdownHeader: "הקבוצה הזוכה",
+    list: currentTourmanent.teams
+  };
+
   // TODO: 1) USE THE USEEFFECT TO FETCH THE PLAYERS FROM DB ONLY IF THE TOURNAMENT DEFINED WITH TOP SCORER BETS
 	// TODO: 2) CREATE A LIST WITH THE MATCHES THAT DIDN'T START YET
 	return (
 		<div className="flex flex-col">
 			<div className="flex gap-8">
-        <Dropdown data={currentTourmanent.teams}/>
+        <Dropdown data={data}/>
         
         {/* Show the topScorer dropdown only if the tournament defined to be with top scorer bet */}
-        {currentTourmanent.includesTopScorer && <Dropdown data={[]}/>}
+        {currentTourmanent.includesTopScorer && <Dropdown data={data}/>}
       </div>
 		</div>
 	);

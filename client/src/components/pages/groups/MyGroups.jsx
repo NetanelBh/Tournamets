@@ -2,7 +2,6 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 
-import axios from "axios";
 import API from "../../utils/Api";
 import Modal from "../../modal/Modal";
 import Loading from "../../UI/loading/Loading";

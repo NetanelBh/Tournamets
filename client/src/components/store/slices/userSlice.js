@@ -9,7 +9,9 @@ const userSlice = createSlice({
 		load(state, action) {
 			state.user = action.payload;
 		},
-		addGroup(state, action) {},
+		addGroup(state, action) {
+			state.user.groups.push(action.payload);
+		},
 		joinTournament(state, action) {
 			state.user.tournaments.push(action.payload);
 		},

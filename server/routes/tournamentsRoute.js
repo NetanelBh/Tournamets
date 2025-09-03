@@ -1,10 +1,11 @@
 import express from "express";
-import * as tournamentServices from "../services/tournamentServices.js";
 import fetchFixtures from "../utils/fixturesFromWiki.js";
+import { createPlayer } from "../services/playerServices.js";
+import * as tournamentServices from "../services/tournamentServices.js";
 
+import findUnpaidUsers from "../utils/findUnpaidUsers.js";
 import israelToUTC from "../utils/ConvertIsraelTimeToUtc.js";
 import { getUserbyId, addTournamentToUser } from "../services/userServices.js";
-import findUnpaidUsers from "../utils/findUnpaidUsers.js";
 
 const router = express.Router();
 
@@ -22,7 +23,7 @@ router.get("/getAll", async (req, res) => {
 router.post("/create", async (req, res) => {
 	try {
 		const { name, startDate, endDate, startTime, topScorerBet, imgUrl, topScorersList } = req.body;
-		
+
 		// Remove the _ from the original name to store in DB(the name with _ just to fetch data from wikipedia)
 		const dbName = name.replace(/_/g, " ");
 
@@ -48,18 +49,35 @@ router.post("/create", async (req, res) => {
 		// Convert the set to array to insert the DB
 		const teamsArray = Array.from(teams);
 
-		// TODO: THINK HOW TO STORE THE PLAYERS FOR THE SPECIFIC TOURNAMENT(IN OTHER TOURNAMENTS WILL BE OTHER PLAYERS). NEED EFFICIENT WAY TO STORE
+		const players = [];
+		// If the tournament includes bet on the top scorer store the players in the DB(players collection)
 		if (topScorerBet) {
-
-		};
+			for (const name of topScorersList) {
+				try {
+					const player = await createPlayer(name);
+					players.push(player._id);
+				} catch (error) {
+					res.send({ status: false, data: "אירעה בעיה ביצירת השחקנים, אנא נסה שנית" });
+					return;
+				}
+			}
+		}
 
 		// Create the tournament
-		const tournament = await tournamentServices.create(dbName, endDate, utcDate, imgUrl, topScorerBet, teamsArray);
+		const tournament = await tournamentServices.create(
+			dbName,
+			endDate,
+			utcDate,
+			imgUrl,
+			topScorerBet,
+			teamsArray,
+			players
+		);
 		if (!tournament) {
 			res.send({ status: false, data: "טורניר לא נוצר, אנא נסה שנית" });
 			return;
 		}
-		
+
 		// Create a job scheduler to find unpaid users in group that included payment and delete them from the group
 		findUnpaidUsers(tournament._id);
 

@@ -1,39 +1,33 @@
-// TODO: WHEN FINISH CHECK THE FIXTURES AND MATCH DOCUMENTS IN DB, REMOVE THE CLUE AND UNCOMMENT THE ORIGINAL CLUE
 export const createTournamentData = [
 	{
 		htmlFor: "name",
 		label: "שם הטורניר",
 		type: "text",
-		// clue: "name after /wiki/ (from wikipedia)",
-		clue: "2026_FIFA_World_Cup"
+		clue: "name after /wiki/ (from wikipedia)",
 	},
 	{
 		htmlFor: "startDate",
 		label: "תאריך תחילת הטורניר",
 		type: "text",
-		// clue: "yyyy-mm-dd",
-		clue: "2020-06-15",
+		clue: "yyyy-mm-dd",
 	},
 	{
 		htmlFor: "endDate",
 		label: "תאריך סיום הטורניר",
 		type: "text",
-		// clue: "yyyy-mm-dd",
-		clue: "2020-06-22",
+		clue: "yyyy-mm-dd",
 	},
 	{
 		htmlFor: "startTime",
 		label: "שעת פתיחת הטורניר",
 		type: "text",
-		// clue: "שעון ישראל לדוגמא: 20:00",
-		clue: "20:00",
+		clue: "שעון ישראל לדוגמא: 20:00",
 	},
 	{
 		htmlFor: "symbol",
 		label: "תמונה",
 		type: "text",
-		// clue: "Image URL",
-		clue: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6c/UEFA_Euro_2020_logo.svg/1200px-UEFA_Euro_2020_logo.svg.png",
+		clue: "Image URL",
 	},
 ];
 

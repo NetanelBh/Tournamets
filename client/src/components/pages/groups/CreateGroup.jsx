@@ -3,12 +3,14 @@ import { useNavigate } from "react-router-dom";
 
 import * as groupUtils from "./groupUtils";
 
+import API from "../../utils/Api";
 import GroupInfo from "./GroupInfo";
 import Modal from "../../modal/Modal";
 import PointsRank from "./points/PointsRank";
 import Loading from "../../UI/loading/Loading";
 import RadioButtonsArea from "./points/RadioButtonsArea";
-import API from "../../utils/Api";
+
+// TODO: CHECK WHEN GROUP IS CREATED, WHY I CAN'T SEE IT IM MY GROUPS(MAYBE NEED TO UPDATE REDUX WITH GROUP IN THE USER GROUPS LIST)
 
 const CreateGroup = () => {
 	// "samePoints" or "differentPoints" for knockout matches
@@ -39,6 +41,8 @@ const CreateGroup = () => {
 	groupUtils.knockoutSamePoints[1].ref = knockoutDirectionRef;
 
 	// Refs for knockout stage with differentPoints method
+	const roundOf32ExactRef = useRef();
+	const roundOf32DirectionRef = useRef();
 	const roundOf16ExactRef = useRef();
 	const roundOf16DirectionRef = useRef();
 	const quarterFinalExactRef = useRef();
@@ -47,14 +51,16 @@ const CreateGroup = () => {
 	const semiFinalDirectionRef = useRef();
 	const finalExactRef = useRef();
 	const finalDirectionRef = useRef();
-	groupUtils.knockoutDifferentPoints[0].data[0].ref = roundOf16ExactRef;
-	groupUtils.knockoutDifferentPoints[0].data[1].ref = roundOf16DirectionRef;
-	groupUtils.knockoutDifferentPoints[1].data[0].ref = quarterFinalExactRef;
-	groupUtils.knockoutDifferentPoints[1].data[1].ref = quarterFinalDirectionRef;
-	groupUtils.knockoutDifferentPoints[2].data[0].ref = semiFinalExactRef;
-	groupUtils.knockoutDifferentPoints[2].data[1].ref = semiFinalDirectionRef;
-	groupUtils.knockoutDifferentPoints[3].data[0].ref = finalExactRef;
-	groupUtils.knockoutDifferentPoints[3].data[1].ref = finalDirectionRef;
+	groupUtils.knockoutDifferentPoints[0].data[0].ref = roundOf32ExactRef;
+	groupUtils.knockoutDifferentPoints[0].data[1].ref = roundOf32DirectionRef;
+	groupUtils.knockoutDifferentPoints[1].data[0].ref = roundOf16ExactRef;
+	groupUtils.knockoutDifferentPoints[1].data[1].ref = roundOf16DirectionRef;
+	groupUtils.knockoutDifferentPoints[2].data[0].ref = quarterFinalExactRef;
+	groupUtils.knockoutDifferentPoints[2].data[1].ref = quarterFinalDirectionRef;
+	groupUtils.knockoutDifferentPoints[3].data[0].ref = semiFinalExactRef;
+	groupUtils.knockoutDifferentPoints[3].data[1].ref = semiFinalDirectionRef;
+	groupUtils.knockoutDifferentPoints[4].data[0].ref = finalExactRef;
+	groupUtils.knockoutDifferentPoints[4].data[1].ref = finalDirectionRef;
 
 	// Get the tournament id from local storage to determine the tournament the group is belongs
 	const tournamentId = localStorage.getItem("tournamentId");
@@ -85,6 +91,10 @@ const CreateGroup = () => {
 			};
 		} else {
 			newGroup.points.knockoutStage.differentPoints = {
+				roundOf32: {
+					exactScore: Number(roundOf32ExactRef.current.value),
+					directionScore: Number(roundOf32DirectionRef.current.value),
+				},
 				roundOf16: {
 					exactScore: Number(roundOf16ExactRef.current.value),
 					directionScore: Number(roundOf16DirectionRef.current.value),

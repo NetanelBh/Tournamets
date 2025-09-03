@@ -9,7 +9,8 @@ const router = express.Router();
 
 router.post("/create", async (req, res) => {
 	const data = {...req.body, userId: req.user.id};
-
+	console.log(data.points.knockoutStage.differentPoints);
+	
 	try {
 		// First check if the group exist
 		const isGroupExist = await groupServices.getGroupByFilter({ name: data.name, tournament: data.tournamentId });

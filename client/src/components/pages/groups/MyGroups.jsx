@@ -10,6 +10,7 @@ import { userActions } from "../../store/slices/userSlice";
 
 const MyGroups = () => {
 	const userGroups = useSelector((state) => state.user.user.groups);
+	
 	const tournamentId = localStorage.getItem("tournamentId");
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
@@ -33,7 +34,6 @@ const MyGroups = () => {
 	};
 
 	const leaveGroupHandler = async (groupId) => {
-		// TODO: CHECK THIS PART OF THE LEAVE GROUP
 		setIsLoading(true);
 		try {
 			const user = await API.delete(`/user/leaveGroup/${groupId}`);

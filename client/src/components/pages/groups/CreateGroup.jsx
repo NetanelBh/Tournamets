@@ -1,4 +1,5 @@
 import { useRef, useState } from "react";
+import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
 import * as groupUtils from "./groupUtils";
@@ -9,6 +10,7 @@ import Modal from "../../modal/Modal";
 import PointsRank from "./points/PointsRank";
 import Loading from "../../UI/loading/Loading";
 import RadioButtonsArea from "./points/RadioButtonsArea";
+import { userActions } from "../../store/slices/userSlice";
 
 // TODO: CHECK WHEN GROUP IS CREATED, WHY I CAN'T SEE IT IM MY GROUPS(MAYBE NEED TO UPDATE REDUX WITH GROUP IN THE USER GROUPS LIST)
 
@@ -21,6 +23,7 @@ const CreateGroup = () => {
 	const [modalText, setModalText] = useState("");
 	const [navigateTo, setNavigateTo] = useState("/layout/groups-layout/create-group");
 	const navigate = useNavigate();
+	const dispatch = useDispatch();
 
 	const nameRef = useRef();
 	const codeRef = useRef();
@@ -119,10 +122,13 @@ const CreateGroup = () => {
 			const resp = await API.post("/group/create", newGroup);
 
 			setOpenModal(true);
-			setModalText(resp.data.data);
 			if (resp.data.status) {
+				// Update the redux - attach the group to the the user who created it
+				dispatch(userActions.joinGroup(resp.data.data));
 				setNavigateTo("/layout/groups-layout/my-groups");
+				setModalText("הקבוצה נוצרה בהצלחה");
 			} else {
+				setModalText(resp.data.data);
 				setNavigateTo("/layout/groups-layout/create-group");
 			}
 		} catch (error) {
@@ -161,7 +167,7 @@ const CreateGroup = () => {
 									check={isPaymentIncluded}
 									onChange={setIsPaymentIncluded}
 								/>
-				
+
 								{/* Contains the exact and direction points for the group stage */}
 								<PointsRank header="ניקוד שלב הבתים" pointsData={groupUtils.groupPointsData} />
 

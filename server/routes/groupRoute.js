@@ -9,7 +9,6 @@ const router = express.Router();
 
 router.post("/create", async (req, res) => {
 	const data = {...req.body, userId: req.user.id};
-	console.log(data.points.knockoutStage.differentPoints);
 	
 	try {
 		// First check if the group exist
@@ -31,7 +30,7 @@ router.post("/create", async (req, res) => {
 			return;
 		}
 
-		res.send({ status: true, data: "הקבוצה נוצרה בהצלחה" });
+		res.send({ status: true, data: group });
 	} catch (error) {
 		res.send({ status: false, data: "אירעה בעיה ביצירת הקבוצה" });
 	}
@@ -76,7 +75,7 @@ router.post("/join", async (req, res) => {
 			return;
 		}
 
-		res.send({ status: true, data: updatedGroup._id });
+		res.send({ status: true, data: updatedGroup });
 	} catch (error) {
 		res.send({ status: false, data: "אירעה שגיאה בהצטרפות לקבוצה, אנא נסה שנית" });
 	}

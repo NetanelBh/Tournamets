@@ -4,7 +4,7 @@ import { useLocation } from "react-router-dom";
 import "../../../App.css";
 
 /* buttonText determine if the text will be join or enter(if came from alltournaments or mytournaments)*/
-const TournamentListItem = ({ item, index, btnText, onClick, leave = undefined }) => {
+const TournamentsListItem = ({ item, index, btnText, onClick, leave = undefined }) => {
 	const { pathname } = useLocation();
 	const userTournaments = useSelector((state) => state.user.user.tournaments);
 
@@ -46,7 +46,7 @@ const TournamentListItem = ({ item, index, btnText, onClick, leave = undefined }
 						</span>
 					</p>
 
-					<div className="flex flex-start">
+					<div className="flex flex-start gap-4">
 						<button
 							type="button"
 							className={`text-white bg-red-700 hover:scale-95 font-medium rounded-lg shadow-md shadow-gray-700 hover:shadow-sm hover:shadow-gray-400 text-sm px-5 py-2.5 me-2 mb-2 dark:bg-red-600 dark:hover:scale-95 cursor-pointer ${
@@ -82,4 +82,4 @@ const TournamentListItem = ({ item, index, btnText, onClick, leave = undefined }
 	);
 };
 
-export default TournamentListItem;
+export default TournamentsListItem;

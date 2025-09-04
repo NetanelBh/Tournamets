@@ -2,7 +2,7 @@ import { useSelector } from "react-redux";
 import axios from "axios";
 
 import Dropdown from "../../UI/Dropdown";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 // TODO: ADD MODAL AND LOADING FOR THIS PAGE.
 const MyBets = () => {

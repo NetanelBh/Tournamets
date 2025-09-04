@@ -1,4 +1,4 @@
-import AllTournamentsListItem from "../../pages/tournaments/AllTournamentsListItem";
+import TournamentsListItem from "../../pages/tournaments/TournamentsListItem";
 import GroupListItem from "../../pages/groups/GroupListItem";
 
 const GenericList = ({ data, type }) => {
@@ -8,7 +8,7 @@ const GenericList = ({ data, type }) => {
 		<ul className="overflow-hidden sm:rounded-md max-w-md mx-auto mt-16">
 			{type === "tournament" &&
 				data.dataList.map((item, index) => (
-					<AllTournamentsListItem
+					<TournamentsListItem
 						key={index}
 						item={item}
 						index={index}

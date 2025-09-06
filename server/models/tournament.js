@@ -7,8 +7,10 @@ const tournamentSchema = new Schema({
   startTime: {type: String, required: true},
   // TopScorerBet determine if the tournament includes the top scorer bet
   topScorerBet: {type: Boolean, required: true},
+  // This property is the winner player(who got the most goals in the torunament)
   topScorer: { type: Schema.Types.ObjectId, ref: "Player" },
   teams: [{type: String, required: true}],
+  // The players candidates list for the tournament
   players: [{type: Schema.Types.ObjectId, ref: "Player", required: true}],
   winnerTeam: {type: String},
   symbol: {type: String, required: true},

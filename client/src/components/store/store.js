@@ -5,10 +5,11 @@ import storage from "redux-persist/lib/storage";
 import { combineReducers } from "redux";
 
 import userReducer from "./slices/userSlice.js";
+import playersReducer from "./slices/playersSlice.js";
 import tournamentsReducer from "./slices/tournamentsSlice.js";
 
 const rootReducer = combineReducers(
-	{ user: userReducer, tournaments: tournamentsReducer }
+	{ user: userReducer, tournaments: tournamentsReducer, players: playersReducer },
 	// Add other reducers here
 );
 

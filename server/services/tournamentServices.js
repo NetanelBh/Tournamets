@@ -21,3 +21,5 @@ export const create = (name, endDate, startTime, tournamentImage, topScorerBet, 
 }
 
 export const getAllTeams = (id) => tournamentRepo.getAllTeams(id);
+
+export const getTournamentById = (id) => tournamentRepo.getTournamentById(id);

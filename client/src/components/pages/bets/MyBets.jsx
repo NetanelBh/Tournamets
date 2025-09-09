@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 
 import API from "../../utils/Api";
 import Modal from "../../modal/Modal";
-import Dropdown from "../../UI/Dropdown";
+import Dropdown from "../../UI/dropdown/Dropdown";
 import Loading from "../../UI/loading/Loading";
 import {playersActions} from "../../store/slices/playersSlice";
 
@@ -57,6 +57,8 @@ const MyBets = () => {
 			fetchPlayers();
 		}
 	}, []);
+
+  // TODO: I CREATED IN TOPSCORERPREDICTION ROUTE THE ABILITY TO FETCH THE USER'S PREDICTION TOP PLAYER, I NEED TO CREATE IT ALSO FOR THE PREDICTION TEAM, THEN CREATE IN USER ROUTE A GET FUNCTION TO GET THE USER PREDICTIONS AND STORE IN REDUX(CHECK IT WHEN "MYBET" PAGE IS LOADED TO UPLOAD DIRECTLY THE TEAM AND TOPSCORER THAT THE USER BET)
 
 	const closeModalHandler = () => {
 		setOpenModal(false);

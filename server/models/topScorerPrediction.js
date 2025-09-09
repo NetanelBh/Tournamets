@@ -10,6 +10,6 @@ const topScorerPredictionSchema = new Schema(
     { versionKey: false }
 );
 
-const topScorerPrediction = model("TopScorer", topScorerPredictionSchema);
+const topScorerPrediction = model("TopScorerPrediction", topScorerPredictionSchema);
 
 export default topScorerPrediction;

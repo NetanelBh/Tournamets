@@ -1,8 +1,8 @@
 import * as topScorerPredictRepo from "../repos/topScorerPredictRepo.js";
 
-export const getUserPredict = (userId, tournamentId, groupId) => {
+export const getTopScorerPredict = (userId, tournamentId, groupId) => {
     const filterObj = {user: userId, group: groupId, tournament: tournamentId};
-	return topScorerPredictRepo.getUserPredict(filterObj);
+	return topScorerPredictRepo.getTopScorerPredict(filterObj);
 };
 
 export const createPredict = (userId, tournamentId, groupId, topScorerId) => {

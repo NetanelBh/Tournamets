@@ -1,6 +1,6 @@
 import topScorerPredictionModel from "../models/topScorerPrediction.js";
 
-export const getUserPredict = (filterObj) => topScorerPredictionModel.findOne(filterObj);
+export const getTopScorerPredict = (filterObj) => topScorerPredictionModel.findOne(filterObj);
 
 export const createPredict = (data) => topScorerPredictionModel(data).save();
 

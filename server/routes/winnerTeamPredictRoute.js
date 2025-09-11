@@ -5,11 +5,15 @@ const router = express.Router();
 
 // Entry point: localhost:3000/winnerTeamBet
 
-router.get("/getUserPredict", async (req, res) => {
+router.get("/getTeamPredict", async (req, res) => {
     const { tournamentId, groupId } = req.body;
 
     try {
-        const userPredict = await winnerTeamPredictServices.getUserPredict(req.user.id, tournamentId, groupId);
+        const userPredict = await winnerTeamPredictServices.getTeamPredict(req.user.id, tournamentId, groupId);
+        if(!userPredict) {
+            res.send({ status: false, data: "המשתמש עדיין לא הימר על הזוכה" });
+            return;
+        }   
         res.send({ status: true, data: userPredict });
     } catch (error) {
         res.send({ status: false, data: "אירעה בעיה בקבלת הניחוש הנכון, אנא נסה שנית" });

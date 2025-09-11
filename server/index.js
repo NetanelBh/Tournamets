@@ -10,8 +10,9 @@ import userRouter from "./routes/userRoute.js";
 import groupRouter from "./routes/groupRoute.js";
 import playerRouter from "./routes/playerRoute.js";
 import tounamentRouter from "./routes/tournamentsRoute.js";
-import topScorerPredictionRouter from "./routes/topScorerPredictRoute.js";
+import predictionsRouter from "./routes/predictionsRoute.js";
 import winnerTeamRouter from "./routes/winnerTeamPredictRoute.js";
+import topScorerPredictionRouter from "./routes/topScorerPredictRoute.js";
 // import matchRouter from "./routes/matchRouter.js";
 // import betRouter from "./routes/betRouter.js";
 
@@ -39,6 +40,7 @@ app.use("/user", userRouter);
 app.use("/group", groupRouter);
 app.use("/player", playerRouter);
 app.use("/tournament", tounamentRouter);
+app.use("/predictions", predictionsRouter);
 app.use("/winnerTeamBet", winnerTeamRouter);
 app.use("/topScorerBet", topScorerPredictionRouter);
 

@@ -1,6 +1,6 @@
 import winnerTeamPredictionModel from "../models/tournamentWinnerTeamBet.js";
 
-export const getUserPredict = (filterObj) => winnerTeamPredictionModel.findOne(filterObj);
+export const getTeamPredict = (filterObj) => winnerTeamPredictionModel.findOne(filterObj);
 
 export const createPredict = (data) => winnerTeamPredictionModel(data).save();
 

@@ -10,6 +10,6 @@ const winnerTeamPredictionSchema = new Schema(
     { versionKey: false }
 );
 
-const winnerTeamPrediction = model("WinnerTeam", winnerTeamPredictionSchema);
+const winnerTeamPrediction = model("WinnerTeamPrediction", winnerTeamPredictionSchema);
 
 export default winnerTeamPrediction;

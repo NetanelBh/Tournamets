@@ -5,12 +5,12 @@ const router = express.Router();
 
 // Entry point: localhost:3000/topScorerBet
 
-router.get("/getUserPredict", async (req, res) => {
+router.get("/getTopScorerPredict", async (req, res) => {
 	const { tournamentId, groupId } = req.body;
 
 	try {
 		const userPredict = await topScorerPredictServices
-			.getUserPredict(req.user.id, tournamentId, groupId)
+			.getTopScorerPredict(req.user.id, tournamentId, groupId)
 			.populate("topScorer");
 		if (!userPredict) {
 			res.send({ status: false, data: "המשתמש עדיין לא הימר על מלך השערים" });

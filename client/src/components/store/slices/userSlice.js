@@ -1,13 +1,15 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-const initialState = {};
+// The curWinnerTeam and curTopScoret are for comparing between the DB value to know if need to send update request
+const initialState = {dbTopScorer: null, dbWinnerTeam: null, curTopScorerChoice: null, curWinnerTeamChoice: null};
 
 const userSlice = createSlice({
 	initialState,
 	name: "user",
 	reducers: {
 		load(state, action) {
-			state.user = action.payload;
+			const {type, data} = action.payload;
+			state[type] = data;
 		},
 		joinTournament(state, action) {
 			state.user.tournaments.push(action.payload);

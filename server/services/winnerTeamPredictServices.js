@@ -1,8 +1,8 @@
 import * as winnerTeamPredictRepo from "../repos/winnerTeamPredictRepo.js";
 
-export const getUserPredict = (userId, tournamentId, groupId) => {
+export const getTeamPredict = (userId, tournamentId, groupId) => {
     const filterObj = {user: userId, group: groupId, tournament: tournamentId};
-    return winnerTeamPredictRepo.getUserPredict(filterObj);
+    return winnerTeamPredictRepo.getTeamPredict(filterObj);
 };
 
 export const createPredict = (userId, tournamentId, groupId, winnerTeam) => {

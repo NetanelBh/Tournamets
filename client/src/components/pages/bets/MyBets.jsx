@@ -1,10 +1,11 @@
 import { useSelector, useDispatch } from "react-redux";
-import { useEffect, useState } from "react";
+import { use, useEffect, useState } from "react";
 
 import API from "../../utils/Api";
 import Modal from "../../modal/Modal";
-import Dropdown from "../../UI/dropdown/Dropdown";
 import Loading from "../../UI/loading/Loading";
+import Dropdown from "../../UI/dropdown/Dropdown";
+import { userActions } from "../../store/slices/userSlice";
 import {playersActions} from "../../store/slices/playersSlice";
 
 const MyBets = () => {
@@ -15,21 +16,27 @@ const MyBets = () => {
 
 	const allTournaments = useSelector((state) => state.tournaments.tournaments);
 	const candidatesTopScorerPlayers = useSelector((state) => state.players.players);
+  const user = useSelector((state) => state.user);
 
+  const groupId = localStorage.getItem("groupId");
 	const tournamentId = localStorage.getItem("tournamentId");
 	// Get the current tournament to use the teams for the winner team prediction of the user
 	const currentTourmanent = allTournaments.find((t) => t._id === tournamentId);
-
+  
 	// Data to dropdown compenent for the winner team
 	const winnerTeamData = {
 		dropdownHeader: "הקבוצה הזוכה",
 		list: currentTourmanent.teams,
+    currentChoice: user.dbWinnerTeam,
+    // TODO: ADD SAVE HANDLER FUNCTION TO HANDLE THE USER CHOICE WHEN HE SAVE THE TOPSCORER
 	};
 
 	// Data to dropdown compenent for the top scorer players list
 	const playersData = {
 		dropdownHeader: "מלך השערים",
 		list: candidatesTopScorerPlayers,
+    currentChoice: user.dbTopScorer,
+    // TODO: ADD SAVE HANDLER FUNCTION TO HANDLE THE USER CHOICE WHEN HE SAVE THE WINNER TEAM
 	};
 
 	useEffect(() => {
@@ -58,7 +65,28 @@ const MyBets = () => {
 		}
 	}, []);
 
-  // TODO: I CREATED IN TOPSCORERPREDICTION ROUTE THE ABILITY TO FETCH THE USER'S PREDICTION TOP PLAYER, I NEED TO CREATE IT ALSO FOR THE PREDICTION TEAM, THEN CREATE IN USER ROUTE A GET FUNCTION TO GET THE USER PREDICTIONS AND STORE IN REDUX(CHECK IT WHEN "MYBET" PAGE IS LOADED TO UPLOAD DIRECTLY THE TEAM AND TOPSCORER THAT THE USER BET)
+  // Get the user predictions(for tournament winner team and top scorer) to update the relevant dropdown
+  useEffect(() => {
+    const fetchPredictions = async () => {
+      setIsLoading(true);
+      try {
+        const predictions = await API.post("predictions", { tournamentId, groupId });
+        if (!predictions.data.status) {
+          setModalText("אירעה שגיאה בטעינת הנתונים, אנא נסה שנית");
+          return;
+        }
+        dispatch(userActions.load({type: "dbTopScorer", data: predictions.data.data.topScorer}));
+        dispatch(userActions.load({type: "dbWinnerTeam", data: predictions.data.data.winnerTeam}));
+        
+      } catch (error) {
+        setModalText("אירעה שגיאה בטעינת הנתונים, אנא נסה שנית");
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    
+    fetchPredictions();
+  }, []);
 
 	const closeModalHandler = () => {
 		setOpenModal(false);

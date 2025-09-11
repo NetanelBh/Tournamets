@@ -53,7 +53,7 @@ const Login = () => {
 
 			// Extract the data from the response to remove the token and the isAdmin from the response(store in redux)
 			const { token, admin, isVerified, ...data } = res.data;
-			dispatch(userActions.load(data));
+			dispatch(userActions.load({type: "user", data: data}));
 			navigate("/layout/all-tournaments");
 		} catch (error) {
 			setIsError(true);

@@ -131,36 +131,6 @@ const MyBets = () => {
 						</div>
 					)}
 
-					<h1>sdfsdsdf</h1>
-					<h1>sdfsdsdf</h1>
-					<h1>sdfsdsdf</h1>
-					<h1>sdfsdsdf</h1>
-					<h1>sdfsdsdf</h1>
-					<h1>sdfsdsdf</h1>
-					<h1>sdfsdsdf</h1>
-					<h1>sdfsdsdf</h1>
-					<h1>sdfsdsdf</h1>
-					<h1>sdfsdsdf</h1>
-					<h1>sdfsdsdf</h1>
-					<h1>sdfsdsdf</h1>
-					<h1>sdfsdsdf</h1>
-					<h1>sdfsdsdf</h1>
-					<h1>sdfsdsdf</h1>
-					<h1>sdfsdsdf</h1>
-					<h1>sdfsdsdf</h1>
-					<h1>sdfsdsdf</h1>
-					<h1>sdfsdsdf</h1>
-					<h1>sdfsdsdf</h1>
-					<h1>sdfsdsdf</h1>
-					<h1>sdfsdsdf</h1>
-					<h1>sdfsdsdf</h1>
-					<h1>sdfsdsdf</h1>
-					<h1>sdfsdsdf</h1>
-					<h1>sdfsdsdf</h1>
-					<h1>sdfsdsdf</h1>
-					<h1>sdfsdsdf</h1>
-					<h1>sdfsdsdf</h1>
-					<h1>sdfsdsdf</h1>
 					<footer className="w-full text-center sm:w-1/4 fixed bottom-0 p-6 hover:py-8 active:py-8 hover:cursor-pointer active:cursor-pointer text-black font-bold bg-yellow-300 rounded-tl-3xl rounded-tr-3xl">
 						שמור שינויים
 					</footer>

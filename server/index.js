@@ -13,7 +13,7 @@ import tounamentRouter from "./routes/tournamentsRoute.js";
 import predictionsRouter from "./routes/predictionsRoute.js";
 import winnerTeamRouter from "./routes/winnerTeamPredictRoute.js";
 import topScorerPredictionRouter from "./routes/topScorerPredictRoute.js";
-// import matchRouter from "./routes/matchRouter.js";
+import matchRouter from "./routes/matchRoute.js";
 // import betRouter from "./routes/betRouter.js";
 
 const app = express();
@@ -38,6 +38,7 @@ app.use(authentication)
 
 app.use("/user", userRouter);
 app.use("/group", groupRouter);
+app.use("/match", matchRouter);
 app.use("/player", playerRouter);
 app.use("/tournament", tounamentRouter);
 app.use("/predictions", predictionsRouter);

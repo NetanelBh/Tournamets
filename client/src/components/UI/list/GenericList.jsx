@@ -1,5 +1,6 @@
-import TournamentsListItem from "../../pages/tournaments/TournamentsListItem";
+import MatchListItem from "../../pages/bets/MatchListItem";
 import GroupListItem from "../../pages/groups/GroupListItem";
+import TournamentsListItem from "../../pages/tournaments/TournamentsListItem";
 
 const GenericList = ({ data, type }) => {
 	// data is an object which contains the list properties
@@ -29,6 +30,9 @@ const GenericList = ({ data, type }) => {
 						leave={data.leave}
 					/>
 				))}
+
+			{type === "matches" &&
+				data.dataList.map((item, index) => <MatchListItem key={index} />)}
 		</ul>
 	);
 };

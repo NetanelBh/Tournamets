@@ -3,9 +3,9 @@ import { useEffect, useState } from "react";
 
 import API from "../../utils/Api";
 import Modal from "../../modal/Modal";
+import MatchesList from "./MatchesList";
 import Loading from "../../UI/loading/Loading";
 import Dropdown from "../../UI/dropdown/Dropdown";
-import GenericList from "../../UI/list/GenericList";
 import { userActions } from "../../store/slices/userSlice";
 import { matchesActions } from "../../store/slices/matchesSlice";
 import { playersActions } from "../../store/slices/playersSlice";
@@ -120,11 +120,8 @@ const MyBets = () => {
 		// TODO: ADD SAVE HANDLER FUNCTION TO HANDLE THE USER CHOICE WHEN HE SAVE THE WINNER TEAM
 	};
 
-	// Create the object with the data that matches for generic list component
-	const notStartedMatchesData = {
-		// Filter only the matches that didn't start yet(to give the user the option to bet on them)
-		dataList: matches.filter((match) => match.kickoffTime > new Date().toISOString()),
-	};
+	// Filter only the matches that didn't start yet(to give the user the option to bet on them  ,
+	const notStartedMatchesData = matches.filter((match) => match.kickoffTime > new Date().toISOString());
 
 	return (
 		<>
@@ -158,15 +155,14 @@ const MyBets = () => {
 										</h3>
 									)}
 								</div>
-
 							</div>
 						</div>
 					)}
 
 					{/* Not started matches list - for betting */}
-					<GenericList data={notStartedMatchesData} type="matches" />
+					<MatchesList matches={notStartedMatchesData} />
 
-					<footer className="w-full text-center sm:w-1/4 fixed bottom-0 p-6 hover:py-8 active:py-8 hover:cursor-pointer active:cursor-pointer text-black font-bold bg-yellow-300 rounded-tl-3xl rounded-tr-3xl">
+					<footer className="w-full text-center sm:w-1/4 fixed bottom-0 p-6 hover:py-8 active:py-8 hover:cursor-pointer active:cursor-pointer text-xl text-black font-bold bg-yellow-300 rounded-tl-3xl rounded-tr-3xl">
 						שמור שינויים
 					</footer>
 

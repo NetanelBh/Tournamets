@@ -1,7 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-// The curWinnerTeam and curTopScoret are for comparing between the DB value to know if need to send update request
-const initialState = {dbTopScorer: null, dbWinnerTeam: null, curTopScorerChoice: null, curWinnerTeamChoice: null};
+const initialState = {};
 
 const userSlice = createSlice({
 	initialState,

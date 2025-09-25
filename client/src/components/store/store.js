@@ -4,14 +4,19 @@ import { persistStore, persistReducer } from "redux-persist";
 import storage from "redux-persist/lib/storage";
 import { combineReducers } from "redux";
 
+import betsReducer from "./slices/betSlice.js";
 import userReducer from "./slices/userSlice.js";
 import playersReducer from "./slices/playersSlice.js";
 import matchesReducer from "./slices/matchesSlice.js";
 import tournamentsReducer from "./slices/tournamentsSlice.js";
 
-const rootReducer = combineReducers(
-	{ user: userReducer, tournaments: tournamentsReducer, players: playersReducer, matches: matchesReducer },
-);
+const rootReducer = combineReducers({
+	user: userReducer,
+	bets: betsReducer,
+	players: playersReducer,
+	matches: matchesReducer,
+	tournaments: tournamentsReducer,
+});
 
 const persistConfig = {
 	key: "root",

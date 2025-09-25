@@ -5,7 +5,7 @@ import { useState } from "react";
 const Dropdown = ({ data }) => {
 	const [dropText, setDropText] = useState(data.currentChoice ? data.currentChoice : data.dropdownHeader);
 	// TODO: WHEN SAVE THE CHOICE, CALL TO THE SAVE FUNCTION FROM THE PARENT COMPONENT WITH THE PLAYER/TEAM NAME
-	
+
 	return (
 		<Menu as="div" className="relative inline-block">
 			<MenuButton className="inline-flex w-full justify-center gap-x-2 rounded-md bg-gradient-to-r from-teal-600 to-teal-800 px-3 py-2 text-md font-semibold text-white inset-ring-1 inset-ring-white/5">
@@ -19,15 +19,20 @@ const Dropdown = ({ data }) => {
 			>
 				<div className="py-1">
 					{data.list.map((item) => {
-						return <MenuItem key={item}>
-							<a
-								href="#"
-								className="block px-4 py-2 text-sm text-yellow-200 data-focus:bg-white/5 data-focus:text-yellow-500 data-focus:outline-hidden"
-								onClick={() => setDropText(item)}
-							>
-								{item}
-							</a>
-						</MenuItem>;
+						return (
+							<MenuItem key={item}>
+								<a
+									href="#"
+									className="block px-4 py-2 text-sm text-yellow-200 data-focus:bg-white/5 data-focus:text-yellow-500 data-focus:outline-hidden"
+									onClick={() => {
+										setDropText(item);
+										data.onClick(item);
+									}}
+								>
+									{item}
+								</a>
+							</MenuItem>
+						);
 					})}
 				</div>
 			</MenuItems>

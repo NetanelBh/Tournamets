@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-    matches: [],
+    matches: []
 };
 
 const matchessSlice = createSlice({
@@ -10,7 +10,7 @@ const matchessSlice = createSlice({
     reducers: {
         load(state, action) {    
             state.matches = action.payload;
-        },
+        }
     },
 });
 

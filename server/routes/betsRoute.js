@@ -4,7 +4,7 @@ import { getTeamPredict } from "../services/winnerTeamPredictServices.js";
 
 const router = express.Router();
 
-// Entry point: localhost:3000/predictions
+// Entry point: localhost:3000/bets
 
 router.post("/", async (req, res) => {
 	const { tournamentId, groupId } = req.body;
@@ -19,6 +19,10 @@ router.post("/", async (req, res) => {
 	} catch (error) {
 		res.send({ status: false, data: "אירעה בעיה בקבלת הימורי הקבוצה הזוכה ומלך השערים" });
 	}
+});
+
+router.post("/save", async (req, res) => {
+	const { tournamentId, groupId } = req.body;
 });
 
 export default router;

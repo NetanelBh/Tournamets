@@ -1,12 +1,12 @@
 import { useSelector, useDispatch } from "react-redux";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef, createRef } from "react";
 
 import API from "../../utils/Api";
 import Modal from "../../modal/Modal";
 import MatchesList from "./MatchesList";
 import Loading from "../../UI/loading/Loading";
 import Dropdown from "../../UI/dropdown/Dropdown";
-import { userActions } from "../../store/slices/userSlice";
+import { betsActions } from "../../store/slices/betSlice";
 import { matchesActions } from "../../store/slices/matchesSlice";
 import { playersActions } from "../../store/slices/playersSlice";
 
@@ -16,9 +16,12 @@ const MyBets = () => {
 	const [isLoading, setIsLoading] = useState(false);
 	const [openModal, setOpenModal] = useState(false);
 
+	// Ref list for the matches <input> when I want to create a request to send the bets
+	const refs = useRef([]);
+
 	const allTournaments = useSelector((state) => state.tournaments.tournaments);
 	const candidatesTopScorerPlayers = useSelector((state) => state.players.players);
-	const user = useSelector((state) => state.user);
+	const bets = useSelector((state) => state.bets);
 	const matches = useSelector((state) => state.matches.matches);
 
 	const groupId = localStorage.getItem("groupId");
@@ -58,13 +61,14 @@ const MyBets = () => {
 		const fetchPredictions = async () => {
 			setIsLoading(true);
 			try {
-				const predictions = await API.post("predictions", { tournamentId, groupId });
+				// Get the topScorer and winnerTeam predictions from the DB
+				const predictions = await API.post("/bets", { tournamentId, groupId });
 				if (!predictions.data.status) {
 					setModalText("אירעה שגיאה בטעינת הנתונים, אנא נסה שנית");
 					return;
 				}
-				dispatch(userActions.load({ type: "dbTopScorer", data: predictions.data.data.topScorer }));
-				dispatch(userActions.load({ type: "dbWinnerTeam", data: predictions.data.data.winnerTeam }));
+				dispatch(betsActions.load({ type: "dbTopScorer", data: predictions.data.data.topScorer }));
+				dispatch(betsActions.load({ type: "dbWinnerTeam", data: predictions.data.data.winnerTeam }));
 			} catch (error) {
 				setModalText("אירעה שגיאה בטעינת הנתונים, אנא נסה שנית");
 			} finally {
@@ -101,6 +105,15 @@ const MyBets = () => {
 		setModalText("");
 	};
 
+	const saveBetHandler = () => {
+		notStartedMatches.forEach((match) => {
+			console.log(`${match.homeTeam}: `, match.refs.homeRef.current.value);
+			console.log(`${match.awayTeam}: `, match.refs.awayRef.current.value);
+			console.log(bets);
+			// TODO: NOW IT GOT THE DATA PERFECT. COMPARE THE DATA BETWEEN THE DB AND THE CURRENT CHOICE TO KNOW IF NEED TO SEDT AN UPDATE REQUEST
+		});
+	};
+
 	// Check if the tournament started to display the top player and winner team bets
 	const istournamentStarted = currentTourmanent.startTime > new Date().toISOString();
 
@@ -108,20 +121,30 @@ const MyBets = () => {
 	const winnerTeamData = {
 		dropdownHeader: "הקבוצה הזוכה",
 		list: currentTourmanent.teams,
-		currentChoice: user.dbWinnerTeam,
-		// TODO: ADD SAVE HANDLER FUNCTION TO HANDLE THE USER CHOICE WHEN HE SAVE THE TOPSCORER
+		currentChoice: bets.dbWinnerTeam,
+		// When change the winner team, it will update the redux(to ba able to compare the db with the current)
+		onClick: (team) => dispatch(betsActions.updateChoice({ type: "curWinnerTeamChoice", data: team })),
 	};
 
 	// Data to dropdown compenent for the top scorer players list
 	const playersData = {
 		dropdownHeader: "מלך השערים",
 		list: candidatesTopScorerPlayers,
-		currentChoice: user.dbTopScorer,
-		// TODO: ADD SAVE HANDLER FUNCTION TO HANDLE THE USER CHOICE WHEN HE SAVE THE WINNER TEAM
+		currentChoice: bets.dbTopScorer,
+		// When change the top scorer player, it will update the redux(to ba able to compare the db with the current)
+		onClick: (player) => dispatch(betsActions.updateChoice({ type: "curTopScorerChoice", data: player })),
 	};
 
 	// Filter only the matches that didn't start yet(to give the user the option to bet on them  ,
 	const notStartedMatchesData = matches.filter((match) => match.kickoffTime > new Date().toISOString());
+	// Create an object from each element that contains the flag that the match didn't started yet for matchListItem component
+	const notStartedMatches = notStartedMatchesData.map((match, i) => {
+		if (!refs.current[i]) {
+			// Create a new ref for each match: home and away teams
+			refs.current[i] = { homeRef: createRef(), awayRef: createRef() };
+		}
+		return { ...match, isStarted: false, refs: refs.current[i] };
+	});
 
 	return (
 		<>
@@ -137,7 +160,7 @@ const MyBets = () => {
 									{/* Show the winner team when the tournament started */}
 									{istournamentStarted && (
 										<h3 className="p-2 text-md text-black-400 text-center bg-yellow-100 font-bold rounded-lg">
-											{user.dbWinnerTeam}
+											{bets.dbWinnerTeam}
 										</h3>
 									)}
 								</div>
@@ -151,7 +174,7 @@ const MyBets = () => {
 									{/* Show the winner team when the tournament started */}
 									{currentTourmanent.topScorerBet && istournamentStarted && (
 										<h3 className="p-2 text-md text-black-400 text-center bg-yellow-100 font-bold rounded-lg">
-											{user.dbTopScorer}
+											{bets.dbTopScorer}
 										</h3>
 									)}
 								</div>
@@ -160,9 +183,12 @@ const MyBets = () => {
 					)}
 
 					{/* Not started matches list - for betting */}
-					<MatchesList matches={notStartedMatchesData} />
+					<MatchesList matches={notStartedMatches} />
 
-					<footer className="w-full text-center sm:w-1/4 fixed bottom-0 p-6 hover:py-8 active:py-8 hover:cursor-pointer active:cursor-pointer text-xl text-black font-bold bg-yellow-300 rounded-tl-3xl rounded-tr-3xl">
+					<footer
+						className="w-full text-center sm:w-1/4 fixed bottom-0 p-6 hover:py-8 active:py-8 hover:cursor-pointer active:cursor-pointer text-xl text-black font-bold bg-yellow-300 rounded-tl-3xl rounded-tr-3xl"
+						onClick={saveBetHandler}
+					>
 						שמור שינויים
 					</footer>
 

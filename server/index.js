@@ -10,11 +10,10 @@ import userRouter from "./routes/userRoute.js";
 import groupRouter from "./routes/groupRoute.js";
 import playerRouter from "./routes/playerRoute.js";
 import tounamentRouter from "./routes/tournamentsRoute.js";
-import predictionsRouter from "./routes/predictionsRoute.js";
+import betsRouter from "./routes/betsRoute.js";
 import winnerTeamRouter from "./routes/winnerTeamPredictRoute.js";
 import topScorerPredictionRouter from "./routes/topScorerPredictRoute.js";
 import matchRouter from "./routes/matchRoute.js";
-// import betRouter from "./routes/betRouter.js";
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -37,11 +36,11 @@ app.use("/auth", authRouter);
 app.use(authentication)
 
 app.use("/user", userRouter);
+app.use("/bets", betsRouter);
 app.use("/group", groupRouter);
 app.use("/match", matchRouter);
 app.use("/player", playerRouter);
 app.use("/tournament", tounamentRouter);
-app.use("/predictions", predictionsRouter);
 app.use("/winnerTeamBet", winnerTeamRouter);
 app.use("/topScorerBet", topScorerPredictionRouter);
 

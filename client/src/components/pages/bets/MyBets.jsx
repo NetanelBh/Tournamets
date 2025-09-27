@@ -62,13 +62,19 @@ const MyBets = () => {
 			setIsLoading(true);
 			try {
 				// Get the topScorer and winnerTeam predictions from the DB
-				const predictions = await API.post("/bets", { tournamentId, groupId });
+				const predictions = await API.post("/bets/get", { tournamentId, groupId });
 				if (!predictions.data.status) {
 					setModalText("אירעה שגיאה בטעינת הנתונים, אנא נסה שנית");
 					return;
 				}
-				dispatch(betsActions.load({ type: "dbTopScorer", data: predictions.data.data.topScorer }));
-				dispatch(betsActions.load({ type: "dbWinnerTeam", data: predictions.data.data.winnerTeam }));
+
+				const allPredictions = [
+					{type: "dbTopScorer", data: predictions.data.data.topScorer},
+					{type: "dbWinnerTeam", data: predictions.data.data.winnerTeam},
+					{type: "dbScore", data: predictions.data.data.userBets,}
+				];
+
+				dispatch(betsActions.load(allPredictions));
 			} catch (error) {
 				setModalText("אירעה שגיאה בטעינת הנתונים, אנא נסה שנית");
 			} finally {
@@ -109,7 +115,7 @@ const MyBets = () => {
 		notStartedMatches.forEach((match) => {
 			console.log(`${match.homeTeam}: `, match.refs.homeRef.current.value);
 			console.log(`${match.awayTeam}: `, match.refs.awayRef.current.value);
-			console.log(bets);
+			// console.log(bets);
 			// TODO: NOW IT GOT THE DATA PERFECT. COMPARE THE DATA BETWEEN THE DB AND THE CURRENT CHOICE TO KNOW IF NEED TO SEDT AN UPDATE REQUEST
 		});
 	};
@@ -123,7 +129,7 @@ const MyBets = () => {
 		list: currentTourmanent.teams,
 		currentChoice: bets.dbWinnerTeam,
 		// When change the winner team, it will update the redux(to ba able to compare the db with the current)
-		onClick: (team) => dispatch(betsActions.updateChoice({ type: "curWinnerTeamChoice", data: team })),
+		onClick: (team) => dispatch(betsActions.updateWinnerOrTopScorer({ type: "curWinnerTeamChoice", data: team })),
 	};
 
 	// Data to dropdown compenent for the top scorer players list
@@ -132,10 +138,11 @@ const MyBets = () => {
 		list: candidatesTopScorerPlayers,
 		currentChoice: bets.dbTopScorer,
 		// When change the top scorer player, it will update the redux(to ba able to compare the db with the current)
-		onClick: (player) => dispatch(betsActions.updateChoice({ type: "curTopScorerChoice", data: player })),
+		onClick: (player) =>
+			dispatch(betsActions.updateWinnerOrTopScorer({ type: "curTopScorerChoice", data: player })),
 	};
 
-	// Filter only the matches that didn't start yet(to give the user the option to bet on them  ,
+	// Filter only the matches that didn't start yet(to give the user the option to bet on them
 	const notStartedMatchesData = matches.filter((match) => match.kickoffTime > new Date().toISOString());
 	// Create an object from each element that contains the flag that the match didn't started yet for matchListItem component
 	const notStartedMatches = notStartedMatchesData.map((match, i) => {
@@ -143,7 +150,12 @@ const MyBets = () => {
 			// Create a new ref for each match: home and away teams
 			refs.current[i] = { homeRef: createRef(), awayRef: createRef() };
 		}
-		return { ...match, isStarted: false, refs: refs.current[i] };
+
+		const matchScoreBet = bets.dbScore.find((score) => score.matchId === match._id);
+		// For each match, will add an extra property of the score bet from DB(if the user already bet, to show his bet)
+		const newMatch = {...match, matchScoreBet}
+		
+		return { ...newMatch, isStarted: false, refs: refs.current[i] };
 	});
 
 	return (

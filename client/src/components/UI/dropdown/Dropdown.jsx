@@ -4,7 +4,6 @@ import { useState } from "react";
 
 const Dropdown = ({ data }) => {
 	const [dropText, setDropText] = useState(data.currentChoice ? data.currentChoice : data.dropdownHeader);
-	// TODO: WHEN SAVE THE CHOICE, CALL TO THE SAVE FUNCTION FROM THE PARENT COMPONENT WITH THE PLAYER/TEAM NAME
 
 	return (
 		<Menu as="div" className="relative inline-block">

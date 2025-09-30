@@ -85,6 +85,7 @@ const MyBets = () => {
 		fetchPredictions();
 	}, []);
 
+	// Get the matches for the tournament
 	useEffect(() => {
 		const fetchMatches = async () => {
 			setIsLoading(true);
@@ -113,10 +114,13 @@ const MyBets = () => {
 
 	const saveBetHandler = () => {
 		notStartedMatches.forEach((match) => {
-			console.log(`${match.homeTeam}: `, match.refs.homeRef.current.value);
-			console.log(`${match.awayTeam}: `, match.refs.awayRef.current.value);
-			// console.log(bets);
-			// TODO: NOW IT GOT THE DATA PERFECT. COMPARE THE DATA BETWEEN THE DB AND THE CURRENT CHOICE TO KNOW IF NEED TO SEDT AN UPDATE REQUEST
+			// TODO: CREATE NEW LIST WITH NEW BETS(THOSE THAT THE USER DIDN'T BET BEFORE (create new bet))
+			// TODO: CREATE A LIST WITH BETS THAT THEIR STATUS IS IN DB AND CHANGED (update)
+			// const newBets = bets.dbScore.filter((bet) => bet.matchId !==)
+			console.log(match);
+			
+			console.log(bets);
+		
 		});
 	};
 
@@ -201,7 +205,7 @@ const MyBets = () => {
 						className="w-full text-center sm:w-1/4 fixed bottom-0 p-6 hover:py-8 active:py-8 hover:cursor-pointer active:cursor-pointer text-xl text-black font-bold bg-yellow-300 rounded-tl-3xl rounded-tr-3xl"
 						onClick={saveBetHandler}
 					>
-						שמור שינויים
+						שמור תוצאות
 					</footer>
 
 					{openModal && <Modal text={modalText} onClose={closeModalHandler} />}

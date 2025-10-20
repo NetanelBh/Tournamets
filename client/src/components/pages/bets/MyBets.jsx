@@ -69,9 +69,9 @@ const MyBets = () => {
 				}
 
 				const allPredictions = [
-					{type: "dbTopScorer", data: predictions.data.data.topScorer},
-					{type: "dbWinnerTeam", data: predictions.data.data.winnerTeam},
-					{type: "dbScore", data: predictions.data.data.userBets,}
+					{ type: "dbTopScorer", data: predictions.data.data.topScorer },
+					{ type: "dbWinnerTeam", data: predictions.data.data.winnerTeam },
+					{ type: "dbScore", data: predictions.data.data.userBets },
 				];
 
 				dispatch(betsActions.load(allPredictions));
@@ -118,9 +118,8 @@ const MyBets = () => {
 			// TODO: CREATE A LIST WITH BETS THAT THEIR STATUS IS IN DB AND CHANGED (update)
 			// const newBets = bets.dbScore.filter((bet) => bet.matchId !==)
 			console.log(match);
-			
+
 			console.log(bets);
-		
 		});
 	};
 
@@ -157,8 +156,8 @@ const MyBets = () => {
 
 		const matchScoreBet = bets.dbScore.find((score) => score.matchId === match._id);
 		// For each match, will add an extra property of the score bet from DB(if the user already bet, to show his bet)
-		const newMatch = {...match, matchScoreBet}
-		
+		const newMatch = { ...match, matchScoreBet };
+
 		return { ...newMatch, isStarted: false, refs: refs.current[i] };
 	});
 
@@ -202,10 +201,10 @@ const MyBets = () => {
 					<MatchesList matches={notStartedMatches} />
 
 					<footer
-						className="w-full text-center sm:w-1/4 fixed bottom-0 p-6 hover:py-8 active:py-8 hover:cursor-pointer active:cursor-pointer text-xl text-black font-bold bg-yellow-300 rounded-tl-3xl rounded-tr-3xl"
+						className="border-t-4 border-r-4 border-l-4 border-red-600 shadow-inner shadow-gray-600 w-full text-center sm:w-3/9 fixed bottom-0 p-8 hover:py-10 active:py-10 hover:cursor-pointer active:cursor-pointer text-xl text-black font-bold bg-gray-700 rounded-tl-3xl rounded-tr-3xl"
 						onClick={saveBetHandler}
 					>
-						שמור תוצאות
+						<span className="bg-yellow-300 px-4 py-2 rounded-lg border-3 border-red-600">שמור תוצאות</span>
 					</footer>
 
 					{openModal && <Modal text={modalText} onClose={closeModalHandler} />}

@@ -10,7 +10,7 @@ import { userActions } from "../../store/slices/userSlice";
 
 const MyGroups = () => {
 	const userGroups = useSelector((state) => state.user.user.groups);
-	
+
 	const tournamentId = localStorage.getItem("tournamentId");
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
@@ -21,15 +21,15 @@ const MyGroups = () => {
 
 	const filtereGroups = userGroups.filter((group) => group.tournament === tournamentId);
 
-  // When enter to some group in my groups list(specific for each tournament)
+	// When enter to some group in my groups list(specific for each tournament)
 	const enterGroupHandler = (groupId) => {
-    // Store the groupId in localStorage to use it in the bets pages
-    localStorage.setItem("groupId", groupId);
-    navigate("/layout/bets-layout/my-bets")
-  };
+		// Store the groupId in localStorage to use it in the bets pages
+		localStorage.setItem("groupId", groupId);
+		navigate("/layout/bets-layout/my-bets");
+	};
 
 	// This function is called when we enter to myTournaments/myGroups, and I didn't join to any group yet.
-  const joinGroup = () => {
+	const joinGroup = () => {
 		navigate("/layout/groups-layout/join-group");
 	};
 

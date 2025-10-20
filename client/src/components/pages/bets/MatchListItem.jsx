@@ -1,7 +1,7 @@
 const MatchListItem = ({ match }) => {
 	return (
-		<li className="grid grid-cols-11 gap-2 p-4 bg-yellow-200/90 font-bold border border-teal-900 rounded-lg shadow-[0_0_4px_2px_theme(colors.gray.100)] mb-4">
-			<div className="col-span-4 p-2 text-center">{match.homeTeam}</div>
+		<li className="grid grid-cols-11 gap-2 p-4 bg-gray-100/80 font-bold rounded-lg shadow-[0_0_5px_3px_theme(colors.yellow.400)] mb-4">
+			<div className="sm:text-xl col-span-4 p-2 text-center flex items-center justify-center">{match.homeTeam}</div>
 
 			{/* If the match is not started yet, let the user place his bet */}
 			{!match.isStarted && (
@@ -31,7 +31,7 @@ const MatchListItem = ({ match }) => {
 						}
 					/>
 					</div>
-					<button className="w-full mt-3 border border-black rounded-lg shadow-md shadow-gray-700 active:shadow-sm active:shadow-gray-400 active:scale-95 p-0.5">עדכן תוצאה</button>
+					<button className="bg-gray-200 w-full mt-3 border border-black rounded-lg shadow-md shadow-gray-700 hover:cursor-pointer active:shadow-sm active:shadow-gray-400 active:scale-95 p-0.5 active:cursor-pointer">עדכן תוצאה</button>
 				</div>
 			)}
 
@@ -47,7 +47,7 @@ const MatchListItem = ({ match }) => {
 				</>
 			)}
 
-			<div className="col-span-4 p-2 text-center">{match.awayTeam}</div>
+			<div className="sm:text-xl col-span-4 p-2 text-center flex items-center justify-center">{match.awayTeam}</div>
 		</li>
 	);
 };

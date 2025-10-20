@@ -18,7 +18,7 @@ const betSlice = createSlice({
 		load(state, action) {
 			action.payload.forEach((bet) => {
 				state[bet.type] = bet.data;
-                // Means that the bet already placed in DB, when save new bet, will check if there is 
+                // Means that the bet already placed in DB, when save new bet, will check if exist in db
                 state.betStatus = "exist in db";
 			});
 		},

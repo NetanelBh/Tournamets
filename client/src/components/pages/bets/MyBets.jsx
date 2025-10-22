@@ -14,7 +14,7 @@ const MyBets = () => {
 	const dispatch = useDispatch();
 	const [modalText, setModalText] = useState("בסוף כל השינויים, חובה ללחוץ על כפתור 'שמור תוצאות' בתחתית הדף");
 	const [isLoading, setIsLoading] = useState(false);
-	const [openModal, setOpenModal] = useState(false);
+	const [openModal, setOpenModal] = useState(true);
 
 	// Ref list for the matches <input> when I want to create a request to send the bets
 	const refs = useRef([]);

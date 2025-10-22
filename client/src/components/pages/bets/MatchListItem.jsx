@@ -1,5 +1,6 @@
 import { useSelector, useDispatch } from "react-redux";
 import { betsActions } from "../../store/slices/betSlice";
+import { matchesActions } from "../../store/slices/matchesSlice";
 
 const MatchListItem = ({ match }) => {	
 	const dispatch = useDispatch();
@@ -7,6 +8,12 @@ const MatchListItem = ({ match }) => {
 	const userId = useSelector((state) => state.user.user._id);
 	
 	const updateScoreHandler = (match) => {
+		// Before update, check if the match started(in case the browser was open for long time and the match started)
+		if (match.kickoffTime > new Date().toISOString()) {
+			// If started, change the flag of isStarted to true in redux
+			dispatch(matchesActions.updateStartTime());
+		}
+
 		// Get the bet data from the inputs
 		const bet = {
 			tournamentId: match.tournament,

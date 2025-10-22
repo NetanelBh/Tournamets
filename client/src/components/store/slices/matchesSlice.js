@@ -10,6 +10,9 @@ const matchessSlice = createSlice({
     reducers: {
         load(state, action) {    
             state.matches = action.payload;
+        },
+        updateStartTime(state) {
+            state.isStarted = true;
         }
     },
 });

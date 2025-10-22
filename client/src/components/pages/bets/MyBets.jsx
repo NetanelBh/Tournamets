@@ -12,7 +12,7 @@ import { playersActions } from "../../store/slices/playersSlice";
 
 const MyBets = () => {
 	const dispatch = useDispatch();
-	const [modalText, setModalText] = useState("בסוף כל השינויים, חובה ללחוץ על כפתור 'שמור תוצאות' בתחתית הדף");
+	const [modalText, setModalText] = useState("לאחר בחירת תוצאה, יש ללחוץ על כפתור 'עדכן תוצאה'. לאחר כל העדכונים, חובה ללחוץ על כפתור 'שמור תוצאות' בתחתית הדף");
 	const [isLoading, setIsLoading] = useState(false);
 	const [openModal, setOpenModal] = useState(true);
 
@@ -116,16 +116,29 @@ const MyBets = () => {
 	};
 
 	const saveBetHandler = () => {
-		// TODO: BEFORE SEND TO SERVER, COMPARE BETWEEN THE DATA IN REDUX(DB WITH CURRENT) TO DETERMINE IF BETS ARE CHANGED OR THERE ARE A NEW BETS
+		// Check if the user changed his topScorer prediction		
+		if (bets.dbTopScorer !== bets.curTopScorerChoice) {
+			// TODO: Send the request to update the db - THE CHECK IS WORKING, JUST SEND REQUEST
+		}
+		
+		// Check if the user changed his winnerTeam prediction
+		if (bets.dbWinnerTeam !== bets.curWinnerTeamChoice) {
+			// TODO: Send the request to update the db - THE CHECK IS WORKING, JUST SEND REQUEST
+		}
+
+		// TODO: Get only the matches that are new or the result is changed from the db
+		// console.log(bets.dbScore);
+		// console.log(bets.currentScore);
 	};
 
 	// Check if the tournament started to display the top player and winner team bets
 	const istournamentStarted = currentTourmanent.startTime > new Date().toISOString();
-
+	
 	// Data to dropdown compenent for the winner team
 	const winnerTeamData = {
 		dropdownHeader: "הקבוצה הזוכה",
-		list: currentTourmanent.teams,
+		// Don't show the team that already chose by the user(appear in DB)
+		list: currentTourmanent.teams.filter((team) => team !== bets.curWinnerTeamChoice),
 		currentChoice: bets.dbWinnerTeam,
 		// When change the winner team, it will update the redux(to ba able to compare the db with the current)
 		onClick: (team) => dispatch(betsActions.updateWinnerOrTopScorer({ type: "curWinnerTeamChoice", data: team })),
@@ -134,7 +147,8 @@ const MyBets = () => {
 	// Data to dropdown compenent for the top scorer players list
 	const playersData = {
 		dropdownHeader: "מלך השערים",
-		list: candidatesTopScorerPlayers,
+		// Don't show the player that already chose by the user(appear in DB)
+		list: candidatesTopScorerPlayers.filter((player) => player !== bets.curTopScorerChoice),
 		currentChoice: bets.dbTopScorer,
 		// When change the top scorer player, it will update the redux(to ba able to compare the db with the current)
 		onClick: (player) =>
@@ -197,13 +211,13 @@ const MyBets = () => {
 					<MatchesList matches={notStartedMatches} />
 
 					<footer
-						className="border-t-4 border-r-4 border-l-4 border-red-600 shadow-inner shadow-gray-600 w-full text-center sm:w-3/9 fixed bottom-0 p-8 hover:py-10 active:py-10 hover:cursor-pointer active:cursor-pointer text-xl text-black font-bold bg-gray-700 rounded-tl-3xl rounded-tr-3xl"
+						className="border-t-4 border-r-4 border-l-4 border-red-600 shadow-inner shadow-gray-600 w-full text-center sm:w-3/9 fixed bottom-0 p-8 hover:py-10 active:py-10 active:cursor-pointer text-xl text-black font-bold bg-gray-700 rounded-tl-3xl rounded-tr-3xl"
 						onClick={saveBetHandler}
 					>
-						<span className="bg-yellow-300 px-4 py-2 rounded-lg border-3 border-red-600">שמור תוצאות</span>
+						<span className="hover:cursor-pointer active:bg-gray-800 active:text-yellow-300 bg-yellow-300 px-4 py-2 rounded-lg border-3 border-red-600">שמור תוצאות</span>
 					</footer>
 
-					{openModal && <Modal title="ההימורים שלי" text={modalText} onClick={closeModalHandler} />}
+					{openModal && <Modal title="שמירת הימורים" text={modalText} onClick={closeModalHandler} />}
 				</>
 			)}
 

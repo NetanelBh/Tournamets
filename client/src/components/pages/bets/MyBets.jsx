@@ -116,13 +116,7 @@ const MyBets = () => {
 	};
 
 	const saveBetHandler = () => {
-		notStartedMatches.forEach((match) => {
-			// TODO: CREATE NEW LIST WITH NEW BETS(THOSE THAT THE USER DIDN'T BET BEFORE (create new bet))
-			// const newBets = bets.dbScore.filter((bet) => bet.matchId !==)
-			console.log(match);
-
-			console.log(bets);
-		});
+		// TODO: BEFORE SEND TO SERVER, COMPARE BETWEEN THE DATA IN REDUX(DB WITH CURRENT) TO DETERMINE IF BETS ARE CHANGED OR THERE ARE A NEW BETS
 	};
 
 	// Check if the tournament started to display the top player and winner team bets
@@ -162,11 +156,7 @@ const MyBets = () => {
 
 		return { ...newMatch, isStarted: false, refs: refs.current[i] };
 	});
-
-	console.log(bets.currentScore);
-	console.log(bets.dbScore);
 	
-
 	return (
 		<>
 			{!isLoading && (

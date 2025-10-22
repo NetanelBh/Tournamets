@@ -12,8 +12,7 @@ router.post("/get", async (req, res) => {
 	try {
 		const topScorerPrediction = await getTopScorerPredict(req.user.id, tournamentId, groupId).populate("topScorer");
 		const teamPrediction = await getTeamPredict(req.user.id, tournamentId, groupId).populate("winnerTeam");
-		const userBets = await betServices.getBetsByUser(req.user.id, tournamentId, groupId).select("betScore matchId -_id");
-		
+		const userBets = await betServices.getBetsByUser(req.user.id, tournamentId, groupId).select("-_id");		
 		res.send({
 			status: true,
 			data: { topScorer: topScorerPrediction.topScorer.name, winnerTeam: teamPrediction.winnerTeam, userBets },

@@ -1,9 +1,16 @@
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
 import { ChevronDownIcon } from "@heroicons/react/20/solid";
+import { useEffect } from "react";
 import { useState } from "react";
 
-const Dropdown = ({ data }) => {
+const Dropdown = ({ data }) => {		
 	const [dropText, setDropText] = useState(data.currentChoice ? data.currentChoice : data.dropdownHeader);
+
+	useEffect(() => {
+		if (data.currentChoice) {
+			setDropText(data.currentChoice);
+		}
+	}, [data?.currentChoice]);
 
 	return (
 		<Menu as="div" className="relative inline-block">

@@ -12,7 +12,7 @@ import { playersActions } from "../../store/slices/playersSlice";
 
 const MyBets = () => {
 	const dispatch = useDispatch();
-	const [modalText, setModalText] = useState("");
+	const [modalText, setModalText] = useState("בסוף כל השינויים, חובה ללחוץ על כפתור 'שמור תוצאות' בתחתית הדף");
 	const [isLoading, setIsLoading] = useState(false);
 	const [openModal, setOpenModal] = useState(false);
 
@@ -58,6 +58,9 @@ const MyBets = () => {
 
 	// Get the user predictions(for tournament winner team and top scorer) to update the relevant dropdown
 	useEffect(() => {
+		// Fetch data only for app start and not when refresh the page(to avoid lose placed bet before sent to server)
+		if (bets.dbScore.length > 0) return;
+
 		const fetchPredictions = async () => {
 			setIsLoading(true);
 			try {
@@ -115,7 +118,6 @@ const MyBets = () => {
 	const saveBetHandler = () => {
 		notStartedMatches.forEach((match) => {
 			// TODO: CREATE NEW LIST WITH NEW BETS(THOSE THAT THE USER DIDN'T BET BEFORE (create new bet))
-			// TODO: CREATE A LIST WITH BETS THAT THEIR STATUS IS IN DB AND CHANGED (update)
 			// const newBets = bets.dbScore.filter((bet) => bet.matchId !==)
 			console.log(match);
 
@@ -153,13 +155,17 @@ const MyBets = () => {
 			// Create a new ref for each match: home and away teams
 			refs.current[i] = { homeRef: createRef(), awayRef: createRef() };
 		}
-
-		const matchScoreBet = bets.dbScore.find((score) => score.matchId === match._id);
+		
+		const matchScoreBet = bets.currentScore.find((score) => score.matchId === match._id);
 		// For each match, will add an extra property of the score bet from DB(if the user already bet, to show his bet)
 		const newMatch = { ...match, matchScoreBet };
 
 		return { ...newMatch, isStarted: false, refs: refs.current[i] };
 	});
+
+	console.log(bets.currentScore);
+	console.log(bets.dbScore);
+	
 
 	return (
 		<>
@@ -207,7 +213,7 @@ const MyBets = () => {
 						<span className="bg-yellow-300 px-4 py-2 rounded-lg border-3 border-red-600">שמור תוצאות</span>
 					</footer>
 
-					{openModal && <Modal text={modalText} onClose={closeModalHandler} />}
+					{openModal && <Modal title="ההימורים שלי" text={modalText} onClick={closeModalHandler} />}
 				</>
 			)}
 

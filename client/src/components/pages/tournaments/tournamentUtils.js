@@ -3,31 +3,31 @@ export const createTournamentData = [
 		htmlFor: "name",
 		label: "שם הטורניר",
 		type: "text",
-		clue: "name after /wiki/ (from wikipedia)",
+		clue: "name after /wiki/ (from wikipedia)"
 	},
 	{
 		htmlFor: "startDate",
 		label: "תאריך תחילת הטורניר",
 		type: "text",
-		clue: "yyyy-mm-dd",
+		clue: "yyyy-mm-dd"
 	},
 	{
 		htmlFor: "endDate",
 		label: "תאריך סיום הטורניר",
 		type: "text",
-		clue: "yyyy-mm-dd",
+		clue: "yyyy-mm-dd"
 	},
 	{
 		htmlFor: "startTime",
 		label: "שעת פתיחת הטורניר",
 		type: "text",
-		clue: "שעון ישראל לדוגמא: 20:00",
+		clue: "שעון ישראל לדוגמא: 20:00"
 	},
 	{
 		htmlFor: "symbol",
 		label: "תמונה",
 		type: "text",
-		clue: "Image URL",
+		clue: "Image URL"
 	},
 ];
 

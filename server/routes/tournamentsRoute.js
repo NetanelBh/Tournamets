@@ -63,6 +63,9 @@ router.post("/create", async (req, res) => {
 			}
 		}
 
+		teamsArray[8] = "TBD";
+		
+
 		// Create the tournament
 		const tournament = await tournamentServices.create(
 			dbName,
@@ -73,6 +76,7 @@ router.post("/create", async (req, res) => {
 			teamsArray,
 			players
 		);
+		
 		if (!tournament) {
 			res.send({ status: false, data: "טורניר לא נוצר, אנא נסה שנית" });
 			return;
@@ -83,6 +87,8 @@ router.post("/create", async (req, res) => {
 
 		res.send({ status: true, data: tournament });
 	} catch (error) {
+		console.log(error);
+		
 		res.send({ status: false, data: "אירעה בעיה ביצירת הטורניר, אנא נסה שנית" });
 	}
 });

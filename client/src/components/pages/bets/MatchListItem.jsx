@@ -29,6 +29,9 @@ const MatchListItem = ({ match }) => {
 		dispatch(betsActions.placeBet(bet));
 	};
 
+	// TODOD: WHEN ISSTARTEDMATCH, UNDER MY RESULT, ADD ANOTHER SECTION OF FINAL RESULT AND BUTTON TO FRIENDS RESULTS
+	// TODO: WHEN MY RESULT MATCH THE FINAL RESULT, PAINT THE BG IN GREEN, DIRECTION IN YELLOW, FAIL IN RED.
+
 	return (
 		<li className="grid grid-cols-11 gap-2 pr-4 pl-4 pb-4 bg-gray-100/80 hover:bg-gray-100/90 font-bold rounded-lg shadow-[0_2px_5px_2px_theme(colors.yellow.400)] mb-4">
 			<div className="sm:text-xl col-span-4 p-2 text-center flex items-center justify-center">

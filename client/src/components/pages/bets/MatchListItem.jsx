@@ -2,11 +2,11 @@ import { useSelector, useDispatch } from "react-redux";
 import { betsActions } from "../../store/slices/betSlice";
 import { matchesActions } from "../../store/slices/matchesSlice";
 
-const MatchListItem = ({ match }) => {	
+const MatchListItem = ({ match }) => {
 	const dispatch = useDispatch();
 
 	const userId = useSelector((state) => state.user.user._id);
-	
+
 	const updateScoreHandler = (match) => {
 		// Before update, check if the match started(in case the browser was open for long time and the match started)
 		if (match.kickoffTime > new Date().toISOString()) {
@@ -39,7 +39,7 @@ const MatchListItem = ({ match }) => {
 			{!match.isStarted && (
 				<div className="col-span-3">
 					<h3 className="text-center text-white bg-gray-800 mb-3 rounded-b-xl pb-1">{match.round}</h3>
-					
+
 					<div className="grid grid-cols-4 gap-1 mt-4">
 						<input
 							type="text"
@@ -52,7 +52,7 @@ const MatchListItem = ({ match }) => {
 									: ""
 							}
 						/>
-						
+
 						<input
 							type="text"
 							className="col-span-2 bg-yellow-400/80 p-2 text-center border border-black"
@@ -77,14 +77,18 @@ const MatchListItem = ({ match }) => {
 
 			{/* If the match is started, show the user's result */}
 			{match.isStarted && (
-				<>
-					<div className="bg-yellow-400/80 col-span-1 p-2 text-center border border-black">
-						{match.matchScoreBet.betScore.homeScore}
+				<div className="col-span-3">
+					<h3 className="text-center text-white bg-gray-800 mb-3 rounded-b-xl pb-1">התוצאה שלי</h3>
+
+					<div className="grid grid-cols-4 gap-1 mt-4">
+						<div className="bg-yellow-400/80 col-span-2 p-2 text-center border border-black">
+							{match.matchScoreBet.betScore.homeScore}
+						</div>
+						<div className="bg-yellow-400/80 col-span-2 p-2 text-center border border-black">
+							{match.matchScoreBet.betScore.awayScore}
+						</div>
 					</div>
-					<div className="bg-yellow-400/80 col-span-1 p-2 text-center border border-black">
-						{match.matchScoreBet.betScore.awayScore}
-					</div>
-				</>
+				</div>
 			)}
 
 			<div className="sm:text-xl col-span-4 p-2 text-center flex items-center justify-center">

@@ -1,9 +1,24 @@
+import MatchesList from "./MatchesList"
+import { useSelector } from "react-redux"
+
 const ClosedMatches = () => {
-    // TODO: WHEN CREATE THE MATCH OBJECT(SEND TO MATCHLIST COMPONENT), NEED TO ADD THE FOLLOWOING PROPERTIES: ISSTARTED=TRUE AND THE LIST OF DB_SCORE_BETS FROM THE BET_SLICE(TO SHOW ONLY THE SCORES) - SEE THE PROPERTIES NAMES IN MY_BETS COMPONENT
+  const matches = useSelector((state) => state.matches.matches);
+  const bets = useSelector((state) => state.bets);
+
+  const startedMatches = matches.filter((match) => match.kickoffTime <= new Date().toISOString());
+
+  // Run over the matches that started(the user can't bet on these matches)
+  const startedMathesWithBets = startedMatches.map(match => {
+    // Find the user's bet for this match from DB bets
+    const matchScoreBet = bets.currentScore.find((score) => score.matchId === match._id); 
+    
+    return {...match, matchScoreBet, isStarted: true};
+  });  
+  
     // TODO: CREATE A LIST WITH THE MATCHES THAT STARTED, FOR EACH MATCH, GIVE THE OPTION TO SEE ALL FRIEENDS BETS
     // TODO: WHEN CLICK ON SPECIFIC MATCH TO SHOW THE FRIENDS BETS, STORE THE MATCH ID TO RETRIEVE THE MATCH DATA
   return (
-    <div>ClosedMatches</div>
+    <MatchesList matches={startedMathesWithBets} />
   )
 }
 

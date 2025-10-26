@@ -12,7 +12,9 @@ import { playersActions } from "../../store/slices/playersSlice";
 
 const MyBets = () => {
 	const dispatch = useDispatch();
-	const [modalText, setModalText] = useState("לאחר בחירת תוצאה, יש ללחוץ על כפתור 'עדכן תוצאה'. לאחר כל העדכונים, חובה ללחוץ על כפתור 'שמור תוצאות' בתחתית הדף");
+	const [modalText, setModalText] = useState(
+		"לאחר בחירת תוצאה, יש ללחוץ על כפתור 'עדכן תוצאה'. לאחר כל העדכונים, חובה ללחוץ על כפתור 'שמור תוצאות' בתחתית הדף"
+	);
 	const [isLoading, setIsLoading] = useState(false);
 	const [openModal, setOpenModal] = useState(true);
 
@@ -20,7 +22,7 @@ const MyBets = () => {
 	const refs = useRef([]);
 
 	const allTournaments = useSelector((state) => state.tournaments.tournaments);
-	const candidatesTopScorerPlayers = useSelector((state) => state.players.players);
+	const topScorersList = useSelector((state) => state.players.players);
 	const bets = useSelector((state) => state.bets);
 	const matches = useSelector((state) => state.matches.matches);
 
@@ -41,8 +43,7 @@ const MyBets = () => {
 					return;
 				}
 
-				const playersNames = players.data.data.map((player) => player.name);
-				dispatch(playersActions.load(playersNames));
+				dispatch(playersActions.load(players.data.data));
 			} catch (error) {
 				setModalText("אירעה שגיאה בעת טעינת רשימת השחקנים, אנא נסה שנית");
 			} finally {
@@ -95,7 +96,7 @@ const MyBets = () => {
 			try {
 				const matches = await API.post("match/getAll", { tournamentId });
 				if (!matches.data.status) {
-					setModalText("אירעה שגיאה בטעינת השחקנים, אנא נסה שנית");
+					setModalText("אירעה שגיאה בטעינת המשחקים, אנא נסה שנית");
 					return;
 				}
 
@@ -115,41 +116,166 @@ const MyBets = () => {
 		setModalText("");
 	};
 
-	const saveBetHandler = () => {
-		// Check if the user changed his topScorer prediction		
+	const saveBetHandler = async () => {
+		// Check if the user changed his topScorer predict or it's a new bet(if db data is null, he never bet before)
 		if (bets.dbTopScorer !== bets.curTopScorerChoice) {
-			// TODO: Send the request to update the db - THE CHECK IS WORKING, JUST SEND REQUEST
-		}
-		
-		// Check if the user changed his winnerTeam prediction
-		if (bets.dbWinnerTeam !== bets.curWinnerTeamChoice) {
-			// TODO: Send the request to update the db - THE CHECK IS WORKING, JUST SEND REQUEST
+			setIsLoading(true);
+
+			const chosenPlayer = topScorersList.find((player) => player.name === bets.curTopScorerChoice);
+			// Need to update because there is an existing bet in DB
+			if (bets.dbTopScorer !== null) {
+				try {
+					const response = await API.patch("/topScorerBet/updatePredict", {
+						tournamentId,
+						groupId,
+						topScorerId: chosenPlayer._id,
+					});
+
+					if (!response.data.status) {
+						setOpenModal(true);
+						setModalText("אירעה שגיאה בשמירת מלך השערים, אנא נסה שנית");
+					}
+
+					// When update the topScorer, will change the dbTopScorer to the new DB data(instead fetch) in redux
+					dispatch(
+						betsActions.updateWinnerOrTopScorer({ type: "dbTopScorer", data: bets.curTopScorerChoice })
+					);
+				} catch (error) {
+					setOpenModal(true);
+					setModalText("אירעה שגיאה מלך השערים, אנא נסה שנית");
+				} finally {
+					setIsLoading(false);
+				}
+			} else {
+				// It's a new bet because the data in DB is null
+				try {
+					const response = await API.post("/topScorerBet/createPredict", {
+						tournamentId,
+						groupId,
+						topScorerId: chosenPlayer._id,
+					});
+
+					if (!response.data.status) {
+						setOpenModal(true);
+						setModalText("אירעה שגיאה בשמירת מלך השערים, אנא נסה שנית");
+					}
+				} catch (error) {
+					setOpenModal(true);
+					setModalText("אירעה שגיאה בשמירת הנתונים , אנא נסה שנית");
+				} finally {
+					setIsLoading(false);
+				}
+			}
 		}
 
-		// TODO: Get only the matches that are new or the result is changed from the db
-		// console.log(bets.dbScore);
-		// console.log(bets.currentScore);
+		// Check if the user changed his winnerTeam predict or it's a new bet(if db data is null, he never bet before)
+		if (bets.dbWinnerTeam !== bets.curWinnerTeamChoice) {
+			setIsLoading(true);
+
+			// Need to update because there is an existing bet in DB
+			if (bets.dbWinnerTeam !== null) {
+				try {
+					const response = await API.patch("/winnerTeamBet/updatePredict", {
+						tournamentId,
+						groupId,
+						winnerTeamName: bets.curWinnerTeamChoice,
+					});
+
+					if (!response.data.status) {
+						setOpenModal(true);
+						setModalText("אירעה שגיאה בשמירת הקבוצה הזוכה, אנא נסה שנית");
+					}
+
+					// When update the winnerTeam, will change the dbWinTeam to the new DB data(instead fetch) in redux
+					dispatch(
+						betsActions.updateWinnerOrTopScorer({ type: "dbWinnerTeam", data: bets.curWinnerTeamChoice })
+					);
+				} catch (error) {
+					setOpenModal(true);
+					setModalText("אירעה שגיאה בשמירת הקבוצה הזוכה, אנא נסה שנית");
+				} finally {
+					setIsLoading(false);
+				}
+			} else {
+				// It's a new bet because the data in DB is null
+				try {
+					const response = await API.post("/winnerTeamBet/createPredict", {
+						tournamentId,
+						groupId,
+						winnerTeamName: bets.curWinnerTeamChoice,
+					});
+
+					if (!response.data.status) {
+						setOpenModal(true);
+						setModalText("אירעה שגיאה בשמירת הקבוצה הזוכה, אנא נסה שנית");
+					}
+				} catch (error) {
+					setOpenModal(true);
+					setModalText("אירעה שגיאה בשמירת הקבוצה הזוכה, אנא נסה שנית");
+				} finally {
+					setIsLoading(false);
+				}
+			}
+		}
+
+		// Get only the matches that are new or the result is changed from the db
+		// Create a map of the db bets(scores bets)
+		const dbBets = new Map(bets.dbScore.map((bet) => [bet.matchId, bet.betScore]));
+		// Collect only either the new or updated bets
+		const updatedOrNewBets = bets.currentScore.filter((bet) => {
+			const dbBet = dbBets.get(bet.matchId);
+			// new bet
+			if (!dbBet) return true;
+
+			// changed bet
+			return dbBet.homeScore !== bet.betScore.homeScore || dbBet.awayScore !== bet.betScore.awayScore;
+		});
+
+		// Send to server only if we have bets in array. If the array is empty, there are no new bets or bets changes
+		if (updatedOrNewBets.length > 0) {
+			setIsLoading(true);
+			try {
+				setOpenModal(true);
+				const response = await API.put("bets/placeBets", { bets: updatedOrNewBets });
+				if (!response.data.status) {
+					setModalText("אירעה שגיאה בשמירת ההימורים, אנא נסה שנית");
+				} else {
+					setModalText(`${response.data.data} הימורים נשמרו בהצלחה`);
+				}
+			} catch (error) {
+				setOpenModal(true);
+				setModalText("אירעה שגיאה בשמירת ההימורים , אנא נסה שנית");
+			} finally {
+				setIsLoading(false);
+			}
+
+			// After sent the results to server, will update the redux(dbScore) because no there are new results there
+			dispatch(betsActions.updateDbScore(bets.currentScore));
+		}
 	};
 
 	// Check if the tournament started to display the top player and winner team bets
 	const istournamentStarted = currentTourmanent.startTime > new Date().toISOString();
-	
+
 	// Data to dropdown compenent for the winner team
 	const winnerTeamData = {
 		dropdownHeader: "הקבוצה הזוכה",
 		// Don't show the team that already chose by the user(appear in DB)
 		list: currentTourmanent.teams.filter((team) => team !== bets.curWinnerTeamChoice),
-		currentChoice: bets.dbWinnerTeam,
+		currentChoice: bets.curWinnerTeamChoice,
 		// When change the winner team, it will update the redux(to ba able to compare the db with the current)
 		onClick: (team) => dispatch(betsActions.updateWinnerOrTopScorer({ type: "curWinnerTeamChoice", data: team })),
 	};
 
 	// Data to dropdown compenent for the top scorer players list
+	const filteredList = topScorersList.filter((player) => player.name !== bets.curTopScorerChoice);
+	// Extract only the name from the player object
+	const candidatesForTopScorer = filteredList.map((player) => player.name);
 	const playersData = {
 		dropdownHeader: "מלך השערים",
 		// Don't show the player that already chose by the user(appear in DB)
-		list: candidatesTopScorerPlayers.filter((player) => player !== bets.curTopScorerChoice),
-		currentChoice: bets.dbTopScorer,
+		list: candidatesForTopScorer,
+		currentChoice: bets.curTopScorerChoice,
 		// When change the top scorer player, it will update the redux(to ba able to compare the db with the current)
 		onClick: (player) =>
 			dispatch(betsActions.updateWinnerOrTopScorer({ type: "curTopScorerChoice", data: player })),
@@ -163,14 +289,14 @@ const MyBets = () => {
 			// Create a new ref for each match: home and away teams
 			refs.current[i] = { homeRef: createRef(), awayRef: createRef() };
 		}
-		
+
 		const matchScoreBet = bets.currentScore.find((score) => score.matchId === match._id);
 		// For each match, will add an extra property of the score bet from DB(if the user already bet, to show his bet)
 		const newMatch = { ...match, matchScoreBet };
 
 		return { ...newMatch, isStarted: false, refs: refs.current[i] };
 	});
-	
+
 	return (
 		<>
 			{!isLoading && (
@@ -214,7 +340,9 @@ const MyBets = () => {
 						className="border-t-4 border-r-4 border-l-4 border-red-600 shadow-inner shadow-gray-600 w-full text-center sm:w-3/9 fixed bottom-0 p-8 hover:py-10 active:py-10 active:cursor-pointer text-xl text-black font-bold bg-gray-700 rounded-tl-3xl rounded-tr-3xl"
 						onClick={saveBetHandler}
 					>
-						<span className="hover:cursor-pointer active:bg-gray-800 active:text-yellow-300 bg-yellow-300 px-4 py-2 rounded-lg border-3 border-red-600">שמור תוצאות</span>
+						<span className="hover:cursor-pointer active:bg-gray-800 active:text-yellow-300 bg-yellow-300 px-4 py-2 rounded-lg border-3 border-red-600">
+							שמור תוצאות
+						</span>
 					</footer>
 
 					{openModal && <Modal title="שמירת הימורים" text={modalText} onClick={closeModalHandler} />}

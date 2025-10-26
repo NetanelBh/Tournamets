@@ -31,7 +31,7 @@ const betSlice = createSlice({
 		},
 		updateWinnerOrTopScorer(state, action) {
 			// Get the type from the components(curWinnerTeamChoice, curTopScorerChoice).
-			const { type, data } = action.payload;
+			const { type, data } = action.payload;			
 			state[type] = data;
 		},
 		placeBet(state, action) {
@@ -43,6 +43,10 @@ const betSlice = createSlice({
 				state.currentScore.push(action.payload);
 			}
 		},
+		// Update the dbScore only when save matches results bets(to make it equal to DB new data)
+		updateDbScore(state, action) {
+			state.dbScore = action.payload;
+		}
 	},
 });
 

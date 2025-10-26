@@ -12,18 +12,28 @@ router.post("/get", async (req, res) => {
 	try {
 		const topScorerPrediction = await getTopScorerPredict(req.user.id, tournamentId, groupId).populate("topScorer");
 		const teamPrediction = await getTeamPredict(req.user.id, tournamentId, groupId).populate("winnerTeam");
-		const userBets = await betServices.getBetsByUser(req.user.id, tournamentId, groupId).select("-_id");		
+		const userBets = await betServices.getBetsByUser(req.user.id, tournamentId, groupId).select("-_id");	
+			
 		res.send({
 			status: true,
-			data: { topScorer: topScorerPrediction.topScorer.name, winnerTeam: teamPrediction.winnerTeam, userBets },
+			data: { topScorer: topScorerPrediction ? topScorerPrediction.topScorer.name : null, winnerTeam: teamPrediction ? teamPrediction.winnerTeam : null, userBets },
 		});
 	} catch (error) {
+		console.log(error);
+		
 		res.send({ status: false, data: "אירעה בעיה בקבלת הימורי המשתמש" });
 	}
 });
 
-router.post("/save", async (req, res) => {
-	const { tournamentId, groupId } = req.body;
+router.put("/placeBets", async (req, res) => {
+	const { bets } = req.body;
+
+	try {
+		const resp = await betServices.placeBets(bets);
+		res.send({status: true, data: resp.modifiedCount + resp.upsertedCount});
+	} catch (error) {
+		
+	}
 });
 
 export default router;

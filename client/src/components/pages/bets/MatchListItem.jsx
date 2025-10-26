@@ -30,7 +30,7 @@ const MatchListItem = ({ match }) => {
 	};
 
 	return (
-		<li className="grid grid-cols-11 gap-2 p-4 bg-gray-100/80 hover:bg-gray-100/90 font-bold rounded-lg shadow-[0_0_5px_3px_theme(colors.yellow.400)] mb-4">
+		<li className="grid grid-cols-11 gap-2 pr-4 pl-4 pb-4 bg-gray-100/80 hover:bg-gray-100/90 font-bold rounded-lg shadow-[0_2px_5px_2px_theme(colors.yellow.400)] mb-4">
 			<div className="sm:text-xl col-span-4 p-2 text-center flex items-center justify-center">
 				{match.homeTeam}
 			</div>
@@ -38,9 +38,9 @@ const MatchListItem = ({ match }) => {
 			{/* If the match is not started yet, let the user place his bet */}
 			{!match.isStarted && (
 				<div className="col-span-3">
-					<h3 className="text-center text-white bg-gray-800 mb-2 rounded-md pb-1">{match.round}</h3>
-
-					<div className="grid grid-cols-4 gap-1">
+					<h3 className="text-center text-white bg-gray-800 mb-3 rounded-b-xl pb-1">{match.round}</h3>
+					
+					<div className="grid grid-cols-4 gap-1 mt-4">
 						<input
 							type="text"
 							className="col-span-2 bg-yellow-400/80 p-2 text-center border border-black"
@@ -59,7 +59,7 @@ const MatchListItem = ({ match }) => {
 							ref={match.refs.awayRef}
 							id={match.awayTeam}
 							defaultValue={
-								match.matchScoreBet && match.matchScoreBet.betScore.homeScore !== -1
+								match.matchScoreBet && match.matchScoreBet.betScore.awayScore !== -1
 									? match.matchScoreBet.betScore.awayScore
 									: ""
 							}

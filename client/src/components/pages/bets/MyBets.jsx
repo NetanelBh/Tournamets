@@ -13,7 +13,7 @@ import { playersActions } from "../../store/slices/playersSlice";
 const MyBets = () => {
 	const dispatch = useDispatch();
 	const [modalText, setModalText] = useState(
-		"לאחר בחירת תוצאה, יש ללחוץ על כפתור 'עדכן תוצאה'. לאחר כל העדכונים, חובה ללחוץ על כפתור 'שמור תוצאות' בתחתית הדף"
+		"לאחר בחירת תוצאה, יש ללחוץ על כפתור 'עדכן'. לאחר כל העדכונים, חובה ללחוץ על כפתור 'שמור תוצאות' בתחתית הדף"
 	);
 	const [isLoading, setIsLoading] = useState(false);
 	const [openModal, setOpenModal] = useState(true);
@@ -295,7 +295,7 @@ const MyBets = () => {
 		const newMatch = { ...match, matchScoreBet };
 
 		return { ...newMatch, isStarted: false, refs: refs.current[i] };
-	});
+	}).sort((match1, match2) => new Date(match1.kickoffTime) - new Date(match2.kickoffTime));
 
 	return (
 		<>

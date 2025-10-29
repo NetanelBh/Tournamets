@@ -13,7 +13,7 @@ const ClosedMatches = () => {
     const matchScoreBet = bets.currentScore.find((score) => score.matchId === match._id); 
     
     return {...match, matchScoreBet, isStarted: true};
-  });  
+  }).sort((match1, match2) => new Date(match1.kickoffTime) - new Date(match2.kickoffTime));  
   
     // TODO: CREATE A LIST WITH THE MATCHES THAT STARTED, FOR EACH MATCH, GIVE THE OPTION TO SEE ALL FRIEENDS BETS
     // TODO: WHEN CLICK ON SPECIFIC MATCH TO SHOW THE FRIENDS BETS, STORE THE MATCH ID TO RETRIEVE THE MATCH DATA

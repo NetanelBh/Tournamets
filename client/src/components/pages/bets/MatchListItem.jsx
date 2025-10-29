@@ -42,7 +42,7 @@ const MatchListItem = ({ match }) => {
 
 	return (
 		<li className="grid grid-cols-13 gap-2 pr-4 pl-4 pb-2 bg-gray-300/80 hover:bg-gray-300 font-bold rounded-lg shadow-[0_2px_5px_2px_theme(colors.teal.300)] mb-4">
-			<div className="sm:text-xl col-span-4 p-2 pt-8 text-center flex items-center justify-center">
+			<div className={`sm:text-xl col-span-4 p-2 ${!match.isStarted ? 'pt-8' : ""} text-center flex items-center justify-center`}>
 				{match.homeTeam}
 			</div>
 
@@ -119,7 +119,7 @@ const MatchListItem = ({ match }) => {
 				</div>
 			)}
 
-			<div className="sm:text-xl col-span-4 p-2 pt-8 text-center flex items-center justify-center">
+			<div className={`sm:text-xl col-span-4 p-2 ${!match.isStarted ? 'pt-8' : ""} text-center flex items-center justify-center`}>
 				{match.awayTeam}
 			</div>
 		</li>

@@ -1,7 +1,7 @@
 import { useSelector, useDispatch } from "react-redux";
 import { betsActions } from "../../store/slices/betSlice";
 import { matchesActions } from "../../store/slices/matchesSlice";
-import { finalScoreBackground, colorMap } from "./betsUtils";
+import { finalScoreBackground, colorMap, textColorMap } from "./betsUtils";
 
 const MatchListItem = ({ match }) => {
 	const dispatch = useDispatch();
@@ -34,12 +34,12 @@ const MatchListItem = ({ match }) => {
 	// TODO: WHEN MY RESULT MATCH THE FINAL RESULT, PAINT THE BG IN GREEN, DIRECTION IN YELLOW, FAIL IN RED.
 	// TODO: GET THE FINAL SCORE FROM THE DB(WHEN I UPDATE THE DB, HE WILL UPDATE AUTOMATICALLY THE UI)
 
-	const scoreFromDbTest = {home: 5, away: 0}
+	const scoreFromDbTest = {home: 2, away: 1}
 	// Determine the color of the final result(green for exact bet, red for wrong bet and blue for direction bet)
 	const scoreColor = finalScoreBackground(match.matchScoreBet.betScore, scoreFromDbTest)
 
 	return (
-		<li className="grid grid-cols-11 gap-2 pr-4 pl-4 pb-2 bg-gray-100/80 hover:bg-gray-100/90 font-bold rounded-lg shadow-[0_2px_5px_2px_theme(colors.yellow.400)] mb-4">
+		<li className="grid grid-cols-11 gap-2 pr-4 pl-4 pb-2 bg-gray-300/80 hover:bg-gray-300 font-bold rounded-lg shadow-[0_2px_5px_2px_theme(colors.teal.300)] mb-4">
 			<div className="sm:text-xl col-span-4 p-2 text-center flex items-center justify-center">
 				{match.homeTeam}
 			</div>
@@ -87,31 +87,32 @@ const MatchListItem = ({ match }) => {
 			{/* If the match is started, show the user's result */}
 			{match.isStarted && (
 				<div className="col-span-3">
-					<h3 className="text-center text-white bg-gray-800 mb-1 rounded-b-xl pb-1">הימור</h3>
+					<h3 className="text-center text-white bg-gray-800 mb-1 rounded-b-xl pb-1 text-sm">ההימור שלי</h3>
 
 					<div className="grid grid-cols-4 gap-1">
-						<div className={`${colorMap[scoreColor]} col-span-2 text-center border border-black h-6`}>
+						<div className={`${scoreColor !== "" ? colorMap[scoreColor] : "bg-yellow-400/80"} col-span-2 text-center border border-black h-6`}>
 							{match.matchScoreBet.betScore.homeScore}
 						</div>
-						<div className={`${colorMap[scoreColor]} col-span-2 text-center border border-black h-6`}>
+						<div className={`${scoreColor !== "" ? colorMap[scoreColor] : "bg-yellow-400/80"} col-span-2 text-center border border-black h-6`}>
 							{match.matchScoreBet.betScore.awayScore}
 						</div>
 					</div>
 
-					<p className="text-center text-white bg-gray-800 mb-1 mt-4 pb-1">סופי</p>
+					{/* Show the bet prediction: מדויק/כיוון/נפילה */}
+					{scoreColor === "green" && <p className={`text-center mt-1 fontt-bold ${textColorMap[scoreColor]}`}>מדויק</p>}
+					{scoreColor === "red" && <p className={`text-center mt-1 fontt-bold ${textColorMap[scoreColor]}`}>נפילה</p>}
+					{scoreColor === "blue" && <p className={`text-center mt-1 fontt-bold ${textColorMap[scoreColor]}`}>כיוון</p>}
+
+					<p className="text-center text-white bg-gray-800 mb-1 mt-4 pb-1 pl-1 pr-1 text-xs">תוצאה סופית</p>
 
 					<div className="grid grid-cols-4 gap-1">
 						<div className="bg-yellow-400/80 col-span-2 text-center border border-black h-6">
-							{scoreFromDbTest.home}
+							{scoreFromDbTest.home !== -1 && scoreFromDbTest.away !== -1 ? scoreFromDbTest.home : ""}
 						</div>
 						<div className="bg-yellow-400/80 col-span-2 text-center border border-black h-6">
-							{scoreFromDbTest.away}
+							{scoreFromDbTest.away !== -1 && scoreFromDbTest.home !== -1 ? scoreFromDbTest.away : ""}
 						</div>
 					</div>
-
-					{scoreColor === "green" && <p className="text-center mt-1 fontt-bold">מדויק</p>}
-					{scoreColor === "red" && <p className="text-center mt-1 fontt-bold">נפילה</p>}
-					{scoreColor === "blue" && <p className="text-center mt-1 fontt-bold">כיוון</p>}
 				</div>
 			)}
 

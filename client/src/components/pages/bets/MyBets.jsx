@@ -13,7 +13,7 @@ import { playersActions } from "../../store/slices/playersSlice";
 const MyBets = () => {
 	const dispatch = useDispatch();
 	const [modalText, setModalText] = useState(
-		"לאחר בחירת תוצאה, יש ללחוץ על כפתור 'עדכן'. לאחר כל העדכונים, חובה ללחוץ על כפתור 'שמור תוצאות' בתחתית הדף"
+		"לאחר בחירת תוצאה, יש ללחוץ על כפתור 'עדכן'. לאחר כל העדכונים, חובה ללחוץ על כפתור 'שמור הימורים' בתחתית הדף"
 	);
 	const [isLoading, setIsLoading] = useState(false);
 	const [openModal, setOpenModal] = useState(true);
@@ -305,7 +305,7 @@ const MyBets = () => {
 						<div className="flex flex-col">
 							<div className="flex gap-8">
 								<div className="flex flex-col gap-2">
-									<h3 className="text-md text-yellow-400 text-center">האלופה :</h3>
+									<h3 className="text-md text-yellow-100 text-center">האלופה :</h3>
 									{/* Show the dropdown option only if the tournament didn't start */}
 									{!istournamentStarted && <Dropdown data={winnerTeamData} />}
 									{/* Show the winner team when the tournament started */}
@@ -317,7 +317,7 @@ const MyBets = () => {
 								</div>
 
 								<div className="flex flex-col gap-2">
-									<h3 className="text-md text-yellow-400 text-center">מלך השערים :</h3>
+									<h3 className="text-md text-yellow-100 text-center">מלך השערים :</h3>
 									{/* Show the topScorer dropdown only if the tournament defined to be with top scorer bet */}
 									{currentTourmanent.topScorerBet && !istournamentStarted && (
 										<Dropdown data={playersData} />
@@ -341,7 +341,7 @@ const MyBets = () => {
 						onClick={saveBetHandler}
 					>
 						<span className="hover:cursor-pointer active:bg-gray-800 active:text-yellow-300 bg-yellow-300 px-4 py-2 rounded-lg border-3 border-red-600">
-							שמור תוצאות
+							שמור הימורים
 						</span>
 					</footer>
 

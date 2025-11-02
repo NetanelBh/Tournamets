@@ -6,7 +6,7 @@ export const colorMap = {
 };
 
 export const textColorMap = {
-    green: "text-green-900",
+    green: "text-teal-700",
     red: "text-red-700",
     blue: "text-blue-600",
 };

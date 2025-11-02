@@ -2,9 +2,11 @@ import { useSelector, useDispatch } from "react-redux";
 import { betsActions } from "../../store/slices/betSlice";
 import { matchesActions } from "../../store/slices/matchesSlice";
 import { finalScoreBackground, colorMap, textColorMap } from "./betsUtils";
+import { useNavigate } from "react-router-dom";
 
 const MatchListItem = ({ match }) => {
 	const dispatch = useDispatch();
+	const navigate = useNavigate();
 
 	const userId = useSelector((state) => state.user.user._id);
 
@@ -29,20 +31,32 @@ const MatchListItem = ({ match }) => {
 
 		dispatch(betsActions.placeBet(bet));
 	};
-	
+
+	const friendsBetsHandler = () => {
+		// Store the matchId in localStorage to use it in the friends bets page
+		localStorage.setItem("matchId", match._id);
+		console.log(match._id);
+		
+		navigate("/layout/bets-layout/frients-bets");
+	};
+
 	// TODOD: ADD BUTTON TO FRIENDS RESULTS
 	// TODO: GET THE FINAL SCORE FROM THE DB(WHEN I UPDATE THE DB, HE WILL UPDATE AUTOMATICALLY THE UI)
 
-	const scoreFromDbTest = {home: 2, away: 1}
+	const scoreFromDbTest = { home: 2, away: 1 };
 	// Determine the color of the final result(green for exact bet, red for wrong bet and blue for direction bet)
-	const scoreColor = finalScoreBackground(match.matchScoreBet.betScore, scoreFromDbTest)
+	const scoreColor = finalScoreBackground(match.matchScoreBet.betScore, scoreFromDbTest);
 
 	// Get the match's kickoff time and display it on the screen in the list item
-	const kickoffTime = (new Date(match.kickoffTime).toLocaleString()).replace(","," |").slice(0, -3);
+	const kickoffTime = new Date(match.kickoffTime).toLocaleString().replace(",", " |").slice(0, -3);
 
 	return (
-		<li className="grid grid-cols-13 gap-2 pr-4 pl-4 pb-2 bg-gray-300/80 hover:bg-gray-300 font-bold rounded-lg shadow-[0_2px_5px_2px_theme(colors.teal.300)] mb-4">
-			<div className={`sm:text-xl col-span-4 p-2 ${!match.isStarted ? 'pt-8' : ""} text-center flex items-center justify-center`}>
+		<li className="grid grid-cols-13 gap-2 pr-4 pl-4 pb-2 bg-gray-300/80 hover:bg-gray-300/90 font-bold rounded-lg shadow-[0_2px_5px_2px_theme(colors.yellow.300)] mb-6">
+			<div
+				className={`sm:text-xl col-span-4 p-2 ${
+					!match.isStarted ? "pt-8" : ""
+				} text-center flex items-center justify-center`}
+			>
 				{match.homeTeam}
 			</div>
 
@@ -93,33 +107,57 @@ const MatchListItem = ({ match }) => {
 					<h3 className="text-center text-white bg-gray-800 mb-1 rounded-b-xl pb-1 text-sm">ההימור שלי</h3>
 
 					<div className="grid grid-cols-4 gap-1">
-						<div className={`${scoreColor !== "" ? colorMap[scoreColor] : "bg-yellow-400/80"} col-span-2 text-center border border-black h-6`}>
+						<div
+							className={`${
+								scoreColor !== "" ? colorMap[scoreColor] : "bg-yellow-400/80"
+							} col-span-2 text-center border border-black h-6`}
+						>
 							{match.matchScoreBet.betScore.homeScore}
 						</div>
-						<div className={`${scoreColor !== "" ? colorMap[scoreColor] : "bg-yellow-400/80"} col-span-2 text-center border border-black h-6`}>
+						<div
+							className={`${
+								scoreColor !== "" ? colorMap[scoreColor] : "bg-yellow-400/80"
+							} col-span-2 text-center border border-black h-6`}
+						>
 							{match.matchScoreBet.betScore.awayScore}
 						</div>
 					</div>
 
 					{/* Show the bet prediction: מדויק/כיוון/נפילה */}
-					{scoreColor === "green" && <p className={`text-center mt-1 fontt-bold ${textColorMap[scoreColor]}`}>מדויק</p>}
-					{scoreColor === "red" && <p className={`text-center mt-1 fontt-bold ${textColorMap[scoreColor]}`}>נפילה</p>}
-					{scoreColor === "blue" && <p className={`text-center mt-1 fontt-bold ${textColorMap[scoreColor]}`}>כיוון</p>}
+					{scoreColor === "green" && (
+						<p className={`text-center fontt-bold ${textColorMap[scoreColor]}`}>מדויק</p>
+					)}
+					{scoreColor === "red" && (
+						<p className={`text-center fontt-bold ${textColorMap[scoreColor]}`}>נפילה</p>
+					)}
+					{scoreColor === "blue" && (
+						<p className={`text-center fontt-bold ${textColorMap[scoreColor]}`}>כיוון</p>
+					)}
 
-					<p className="text-center text-white bg-gray-800 mb-1 mt-4 pb-1 pl-1 pr-1 text-xs">תוצאה סופית</p>
+					<p className="text-center text-white bg-gray-800 mt-2 pb-1 pl-1 pr-1 text-xs">תוצאה סופית</p>
 
 					<div className="grid grid-cols-4 gap-1">
-						<div className="bg-yellow-400/80 col-span-2 text-center border border-black h-6">
+						<div className="bg-gray-300 col-span-2 text-center border border-black h-6">
 							{scoreFromDbTest.home !== -1 && scoreFromDbTest.away !== -1 ? scoreFromDbTest.home : ""}
 						</div>
-						<div className="bg-yellow-400/80 col-span-2 text-center border border-black h-6">
+						<div className="bg-gray-300 col-span-2 text-center border border-black h-6">
 							{scoreFromDbTest.away !== -1 && scoreFromDbTest.home !== -1 ? scoreFromDbTest.away : ""}
 						</div>
+					</div>
+
+					<div className="flex justify-center mt-3 border border-teal-800 hover:cursor-pointer hover:scale-95 active:cursor-pointer active:scale-95 rounded-xl bg-teal-800 text-yellow-300 text-lg">
+						<button className="hover:cursor-pointer active:cursor-pointer" onClick={friendsBetsHandler}>
+							הימורי החבר'ה
+						</button>
 					</div>
 				</div>
 			)}
 
-			<div className={`sm:text-xl col-span-4 p-2 ${!match.isStarted ? 'pt-8' : ""} text-center flex items-center justify-center`}>
+			<div
+				className={`sm:text-xl col-span-4 p-2 ${
+					!match.isStarted ? "pt-8" : ""
+				} text-center flex items-center justify-center`}
+			>
 				{match.awayTeam}
 			</div>
 		</li>

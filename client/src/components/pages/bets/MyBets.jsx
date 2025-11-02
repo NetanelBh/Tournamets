@@ -10,6 +10,8 @@ import { betsActions } from "../../store/slices/betSlice";
 import { matchesActions } from "../../store/slices/matchesSlice";
 import { playersActions } from "../../store/slices/playersSlice";
 
+// TODO: WHEN THE MATCHES LIST IS EMPTY(NO MATCHES TO BET-IF STARTED), SHOW A MESSAGE(NO OPEN MATCHES FOR BET)
+
 const MyBets = () => {
 	const dispatch = useDispatch();
 	const [modalText, setModalText] = useState(

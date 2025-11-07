@@ -51,9 +51,9 @@ const MatchListItem = ({ match }) => {
 	const kickoffTime = new Date(match.kickoffTime).toLocaleString().replace(",", " |").slice(0, -3);
 
 	return (
-		<li className="grid grid-cols-13 gap-2 pr-4 pl-4 pb-2 bg-gray-300/80 hover:bg-gray-300/90 font-bold rounded-lg shadow-[0_2px_5px_2px_theme(colors.yellow.300)] mb-6">
+		<li className="grid grid-cols-13 gap-2 pr-4 pl-4 pb-2 bg-gray-700 hover:bg-gray-700/80 font-bold rounded-lg shadow-[0_2px_5px_2px_theme(colors.yellow.300)] mb-6">
 			<div
-				className={`sm:text-xl col-span-4 p-2 ${
+				className={`sm:text-xl col-span-4 p-2 text-white ${
 					!match.isStarted ? "pt-8" : ""
 				} text-center flex items-center justify-center`}
 			>
@@ -103,10 +103,10 @@ const MatchListItem = ({ match }) => {
 
 			{/* If the match is started, show the user's result */}
 			{match.isStarted && (
-				<div className="col-span-5">
-					<h3 className="text-center text-white bg-gray-800 mb-1 rounded-b-xl pb-1 text-sm">ההימור שלי</h3>
+				<div className="col-span-5 w-full">
+					<h3 className="justify-self-center w-full lg:w-3/4 text-center text-white bg-gray-800 mb-1 rounded-b-xl pb-1 text-sm">התוצאה שלי</h3>
 
-					<div className="grid grid-cols-4 gap-1">
+					<div className="justify-self-center w-full lg:w-3/4 grid grid-cols-4 gap-1">
 						<div
 							className={`${
 								scoreColor !== "" ? colorMap[scoreColor] : "bg-yellow-400/80"
@@ -125,18 +125,25 @@ const MatchListItem = ({ match }) => {
 
 					{/* Show the bet prediction: מדויק/כיוון/נפילה */}
 					{scoreColor === "green" && (
-						<p className={`text-center fontt-bold ${textColorMap[scoreColor]}`}>מדויק</p>
+						<p className={`justify-self-center lg:w-3/4 text-center fontt-bold ${textColorMap[scoreColor]}`}>בול</p>
 					)}
 					{scoreColor === "red" && (
-						<p className={`text-center fontt-bold ${textColorMap[scoreColor]}`}>נפילה</p>
+						<p className={`justify-self-center lg:w-3/4 text-center fontt-bold ${textColorMap[scoreColor]}`}>נפילה</p>
 					)}
 					{scoreColor === "blue" && (
-						<p className={`text-center fontt-bold ${textColorMap[scoreColor]}`}>כיוון</p>
+						<p className={`justify-self-center lg:w-3/4 text-center fontt-bold ${textColorMap[scoreColor]}`}>כיוון</p>
 					)}
 
-					<p className="text-center text-white bg-gray-800 mt-2 pb-1 pl-1 pr-1 text-xs">תוצאה סופית</p>
+					{/* Friends bets button */}
+					<div className="flex justify-center mt-4 mb-4 border border-white hover:cursor-pointer hover:scale-95 active:cursor-pointer active:scale-95 rounded-2xl bg-teal-700 text-yellow-300 text-lg">
+						<button className="hover:cursor-pointer active:cursor-pointer" onClick={friendsBetsHandler}>
+							הימורי החברים
+						</button>
+					</div>
 
-					<div className="grid grid-cols-4 gap-1">
+					<p className="justify-self-center w-full lg:w-3/4 text-center text-white bg-gray-800 mt-2 pb-1 pl-1 pr-1 text-xs">תוצאה סופית</p>
+
+					<div className="w-full lg:w-3/4 grid grid-cols-4 gap-1 justify-self-center">
 						<div className="bg-gray-300 col-span-2 text-center border border-black h-6">
 							{scoreFromDbTest.home !== -1 && scoreFromDbTest.away !== -1 ? scoreFromDbTest.home : ""}
 						</div>
@@ -144,17 +151,11 @@ const MatchListItem = ({ match }) => {
 							{scoreFromDbTest.away !== -1 && scoreFromDbTest.home !== -1 ? scoreFromDbTest.away : ""}
 						</div>
 					</div>
-
-					<div className="flex justify-center mt-3 border border-teal-800 hover:cursor-pointer hover:scale-95 active:cursor-pointer active:scale-95 rounded-xl bg-teal-800 text-yellow-300 text-lg">
-						<button className="hover:cursor-pointer active:cursor-pointer" onClick={friendsBetsHandler}>
-							הימורי החבר'ה
-						</button>
-					</div>
 				</div>
 			)}
 
 			<div
-				className={`sm:text-xl col-span-4 p-2 ${
+				className={`sm:text-xl col-span-4 p-2 text-white ${
 					!match.isStarted ? "pt-8" : ""
 				} text-center flex items-center justify-center`}
 			>

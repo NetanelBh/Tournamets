@@ -13,6 +13,9 @@ import { playersActions } from "../../store/slices/playersSlice";
 // TODO: WHEN THE MATCHES LIST IS EMPTY(NO MATCHES TO BET-IF STARTED), SHOW A MESSAGE(NO OPEN MATCHES FOR BET)
 
 const MyBets = () => {
+	// Clear the stored matchId(if stored)
+	localStorage.removeItem("matchId");
+
 	const dispatch = useDispatch();
 	const [modalText, setModalText] = useState(
 		"לאחר בחירת תוצאה, יש ללחוץ על כפתור 'עדכן'. לאחר כל העדכונים, חובה ללחוץ על כפתור 'שמור הימורים' בתחתית הדף"
@@ -61,8 +64,8 @@ const MyBets = () => {
 
 	// Get the user predictions(for tournament winner team and top scorer) to update the relevant dropdown
 	useEffect(() => {
-		// Fetch data only for app start and not when refresh the page(to avoid lose placed bet before sent to server)
-		if (bets.dbScore.length > 0) return;
+		// Fetch data only for app start and not when refresh the page(to avoid lose the bets before sent to server)
+		if (bets.userDbScore.length > 0) return;				
 
 		const fetchPredictions = async () => {
 			setIsLoading(true);
@@ -77,7 +80,7 @@ const MyBets = () => {
 				const allPredictions = [
 					{ type: "dbTopScorer", data: predictions.data.data.topScorer },
 					{ type: "dbWinnerTeam", data: predictions.data.data.winnerTeam },
-					{ type: "dbScore", data: predictions.data.data.userBets },
+					{ type: "userDbScore", data: predictions.data.data.userBets },
 				];
 
 				dispatch(betsActions.load(allPredictions));
@@ -222,9 +225,9 @@ const MyBets = () => {
 
 		// Get only the matches that are new or the result is changed from the db
 		// Create a map of the db bets(scores bets)
-		const dbBets = new Map(bets.dbScore.map((bet) => [bet.matchId, bet.betScore]));
+		const dbBets = new Map(bets.userDbScore.map((bet) => [bet.matchId, bet.betScore]));
 		// Collect only either the new or updated bets
-		const updatedOrNewBets = bets.currentScore.filter((bet) => {
+		const updatedOrNewBets = bets.usercurrentScore.filter((bet) => {
 			const dbBet = dbBets.get(bet.matchId);
 			// new bet
 			if (!dbBet) return true;
@@ -251,13 +254,13 @@ const MyBets = () => {
 				setIsLoading(false);
 			}
 
-			// After sent the results to server, will update the redux(dbScore) because no there are new results there
-			dispatch(betsActions.updateDbScore(bets.currentScore));
+			// After sent the results to server, will update the redux(userDbScore) because no there are new results there
+			dispatch(betsActions.updateUserDbScore(bets.usercurrentScore));
 		}
 	};
-
+	
 	// Check if the tournament started to display the top player and winner team bets
-	const istournamentStarted = currentTourmanent.startTime > new Date().toISOString();
+	const istournamentStarted = currentTourmanent.startTime < new Date().toISOString();
 
 	// Data to dropdown compenent for the winner team
 	const winnerTeamData = {
@@ -286,18 +289,20 @@ const MyBets = () => {
 	// Filter only the matches that didn't start yet(to give the user the option to bet on them
 	const notStartedMatchesData = matches.filter((match) => match.kickoffTime > new Date().toISOString());
 	// Create an object from each element that contains the flag that the match didn't started yet for matchListItem component
-	const notStartedMatches = notStartedMatchesData.map((match, i) => {
-		if (!refs.current[i]) {
-			// Create a new ref for each match: home and away teams
-			refs.current[i] = { homeRef: createRef(), awayRef: createRef() };
-		}
+	const notStartedMatches = notStartedMatchesData
+		.map((match, i) => {
+			if (!refs.current[i]) {
+				// Create a new ref for each match: home and away teams
+				refs.current[i] = { homeRef: createRef(), awayRef: createRef() };
+			}
 
-		const matchScoreBet = bets.currentScore.find((score) => score.matchId === match._id);
-		// For each match, will add an extra property of the score bet from DB(if the user already bet, to show his bet)
-		const newMatch = { ...match, matchScoreBet };
+			const matchScoreBet = bets.usercurrentScore.find((score) => score.matchId === match._id);
+			// For each match, will add an extra property of the score bet from DB(if the user already bet, to show his bet)
+			const newMatch = { ...match, matchScoreBet };
 
-		return { ...newMatch, isStarted: false, refs: refs.current[i] };
-	}).sort((match1, match2) => new Date(match1.kickoffTime) - new Date(match2.kickoffTime));
+			return { ...newMatch, isStarted: false, refs: refs.current[i] };
+		})
+		.sort((match1, match2) => new Date(match1.kickoffTime) - new Date(match2.kickoffTime));
 
 	return (
 		<>

@@ -22,6 +22,7 @@ const MyTournaments = () => {
 	// When enter to some tournament, it keep the id in localStorage in case we will create group.
 	localStorage.removeItem("tournamentId");
 	localStorage.removeItem("groupId");
+	localStorage.removeItem("matchId");
 
 	const enterGroupHandler = () => {
 		navigate("/layout/groups-layout/my-groups");

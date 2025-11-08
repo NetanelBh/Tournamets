@@ -6,26 +6,38 @@ const initialState = {
 	curTopScorerChoice: null,
 	dbWinnerTeam: null,
 	curWinnerTeamChoice: null,
-	dbScore: [],
-	currentScore: [],
+	// Store the bets of specific user for the specific tournament
+	userDbScore: [],
+	usercurrentScore: [],
+	// store all users bets for the specific tournament
+	allUsersBets: {},
 };
 
 const betSlice = createSlice({
 	initialState,
 	name: "bets",
 	reducers: {
-		load(state, action) {
+		load(state, action) {									
 			action.payload.forEach((bet) => {
 				// Create copy of the original db bets, make changes only on the copy
-				if (bet.type === "dbScore") {
-					state.dbScore = bet.data;
-					state.currentScore = bet.data;
+				if (bet.type === "userDbScore") {
+					state.userDbScore = bet.data;
+					state.usercurrentScore = bet.data;
 				} else if (bet.type === "dbTopScorer") {
 					state.dbTopScorer = bet.data;
 					state.curTopScorerChoice = bet.data;
-				} else {
+				} else if (bet.type === "dbWinnerTeam") {
 					state.dbWinnerTeam = bet.data;
 					state.curWinnerTeamChoice = bet.data;
+				} else {
+					bet.data.forEach((user) => {
+						if (!state.allUsersBets[user.matchId]) {
+							state.allUsersBets[user.matchId] = [{userId: user.userId, betScore: user.betScore}];	
+						} else {
+							state.allUsersBets[user.matchId].push({userId: user.userId, betScore: user.betScore});
+						}
+					});
+					
 				}
 			});
 		},
@@ -36,17 +48,30 @@ const betSlice = createSlice({
 		},
 		placeBet(state, action) {
 			// Find if the bet already exists by matchId, if so, change only the score. If not exist, is a new bet
-			const matchIndex = state.currentScore.findIndex((match) => match.matchId === action.payload.matchId);			
+			const matchIndex = state.usercurrentScore.findIndex((match) => match.matchId === action.payload.matchId);			
 			if (matchIndex !== -1) {
-				state.currentScore[matchIndex].betScore = action.payload.betScore;
+				state.usercurrentScore[matchIndex].betScore = action.payload.betScore;
 			} else {
-				state.currentScore.push(action.payload);
+				state.usercurrentScore.push(action.payload);
 			}
 		},
-		// Update the dbScore only when save matches results bets(to make it equal to DB new data)
-		updateDbScore(state, action) {
-			state.dbScore = action.payload;
-		}
+		// Update the userDbScore only when save matches results bets(to make it equal to DB new data)
+		updateUserDbScore(state, action) {
+			state.userDbScore = action.payload;
+		},
+		clear(state) {
+			state.dbTopScorer = null;
+			state.curTopScorerChoice = null;
+			state.dbWinnerTeam = null;
+			state.curWinnerTeamChoice = null;
+			state.userDbScore = [];
+			state.usercurrentScore = [];
+		},
+		addUsersBet(state, action) {
+			usersMatchBets = action.payload;
+			// Add to list the new bets of the users(if the match just started and we want to display the users results)
+			state.allUsersBets[usersMatchBets.matchId] = usersMatchBets.bets;
+		},
 	},
 });
 

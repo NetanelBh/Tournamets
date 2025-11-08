@@ -1,3 +1,5 @@
+import styles from "./MatchListItem.module.css";
+
 import { useSelector, useDispatch } from "react-redux";
 import { betsActions } from "../../store/slices/betSlice";
 import { matchesActions } from "../../store/slices/matchesSlice";
@@ -35,12 +37,10 @@ const MatchListItem = ({ match }) => {
 	const friendsBetsHandler = () => {
 		// Store the matchId in localStorage to use it in the friends bets page
 		localStorage.setItem("matchId", match._id);
-		console.log(match._id);
-		
+
 		navigate("/layout/bets-layout/frients-bets");
 	};
 
-	// TODOD: ADD BUTTON TO FRIENDS RESULTS
 	// TODO: GET THE FINAL SCORE FROM THE DB(WHEN I UPDATE THE DB, HE WILL UPDATE AUTOMATICALLY THE UI)
 
 	const scoreFromDbTest = { home: 2, away: 1 };
@@ -104,7 +104,9 @@ const MatchListItem = ({ match }) => {
 			{/* If the match is started, show the user's result */}
 			{match.isStarted && (
 				<div className="col-span-5 w-full">
-					<h3 className="justify-self-center w-full lg:w-3/4 text-center text-white bg-gray-800 mb-1 rounded-b-xl pb-1 text-sm">התוצאה שלי</h3>
+					<h3 className="justify-self-center w-full lg:w-3/4 text-center text-white bg-gray-800 mb-1 rounded-b-xl pb-1 text-sm">
+						התוצאה שלי
+					</h3>
 
 					<div className="justify-self-center w-full lg:w-3/4 grid grid-cols-4 gap-1">
 						<div
@@ -125,23 +127,30 @@ const MatchListItem = ({ match }) => {
 
 					{/* Show the bet prediction: מדויק/כיוון/נפילה */}
 					{scoreColor === "green" && (
-						<p className={`justify-self-center lg:w-3/4 text-center fontt-bold ${textColorMap[scoreColor]}`}>בול</p>
+						<p
+							className={`mt-1 justify-self-center lg:w-3/4 text-center fontt-bold ${textColorMap[scoreColor]}`}
+						>
+							בול
+						</p>
 					)}
 					{scoreColor === "red" && (
-						<p className={`justify-self-center lg:w-3/4 text-center fontt-bold ${textColorMap[scoreColor]}`}>נפילה</p>
+						<p
+							className={`mt-1 justify-self-center lg:w-3/4 text-center fontt-bold ${textColorMap[scoreColor]}`}
+						>
+							נפילה
+						</p>
 					)}
 					{scoreColor === "blue" && (
-						<p className={`justify-self-center lg:w-3/4 text-center fontt-bold ${textColorMap[scoreColor]}`}>כיוון</p>
+						<p
+							className={`mt-1 justify-self-center lg:w-3/4 text-center fontt-bold ${textColorMap[scoreColor]}`}
+						>
+							כיוון
+						</p>
 					)}
 
-					{/* Friends bets button */}
-					<div className="flex justify-center mt-4 mb-4 border border-white hover:cursor-pointer hover:scale-95 active:cursor-pointer active:scale-95 rounded-2xl bg-teal-700 text-yellow-300 text-lg">
-						<button className="hover:cursor-pointer active:cursor-pointer" onClick={friendsBetsHandler}>
-							הימורי החברים
-						</button>
-					</div>
-
-					<p className="justify-self-center w-full lg:w-3/4 text-center text-white bg-gray-800 mt-2 pb-1 pl-1 pr-1 text-xs">תוצאה סופית</p>
+					<p className="justify-self-center w-full lg:w-3/4 text-center text-white bg-gray-800 mt-4 pb-1 pl-1 pr-1 text-xs">
+						תוצאה סופית
+					</p>
 
 					<div className="w-full lg:w-3/4 grid grid-cols-4 gap-1 justify-self-center">
 						<div className="bg-gray-300 col-span-2 text-center border border-black h-6">
@@ -160,6 +169,17 @@ const MatchListItem = ({ match }) => {
 				} text-center flex items-center justify-center`}
 			>
 				{match.awayTeam}
+			</div>
+
+			{/* Friends bets button */}
+			<div className="lg:w-col-span-5 lg:col-start-4 col-span-7 col-start-4 flex justify-center mt-4 mb-1 border border-white border-2 hover:cursor-pointer hover:scale-95 active:cursor-pointer active:scale-95 rounded-2xl bg-teal-700 text-yellow-300 text-lg">
+				<button className="hover:cursor-pointer active:cursor-pointer" onClick={friendsBetsHandler}>
+					הימורי החברים{" "}
+					<span className="mr-2">
+						<span className={styles.blink_1}>{">"}</span>
+						<span className={styles.blink_2}>{">"}</span>
+					</span>
+				</button>
 			</div>
 		</li>
 	);

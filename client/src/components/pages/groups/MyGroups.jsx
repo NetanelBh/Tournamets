@@ -6,14 +6,19 @@ import API from "../../utils/Api";
 import Modal from "../../modal/Modal";
 import Loading from "../../UI/loading/Loading";
 import GenericList from "../../UI/list/GenericList";
+import { betsActions } from "../../store/slices/betSlice";
 import { userActions } from "../../store/slices/userSlice";
 
 const MyGroups = () => {
+	const dispatch = useDispatch();
+	const navigate = useNavigate();
+	
+	// Clear the bets in redux storage(in bets slice, the imformation stored per specific tournament and group)
+	dispatch(betsActions.clear());
+
 	const userGroups = useSelector((state) => state.user.user.groups);
 
 	const tournamentId = localStorage.getItem("tournamentId");
-	const dispatch = useDispatch();
-	const navigate = useNavigate();
 
 	const [isLoading, setIsLoading] = useState(false);
 	const [openModal, setOpenModal] = useState(false);

@@ -18,9 +18,7 @@ router.post("/get", async (req, res) => {
 			status: true,
 			data: { topScorer: topScorerPrediction ? topScorerPrediction.topScorer.name : null, winnerTeam: teamPrediction ? teamPrediction.winnerTeam : null, userBets },
 		});
-	} catch (error) {
-		console.log(error);
-		
+	} catch (error) {	
 		res.send({ status: false, data: "אירעה בעיה בקבלת הימורי המשתמש" });
 	}
 });
@@ -32,8 +30,19 @@ router.put("/placeBets", async (req, res) => {
 		const resp = await betServices.placeBets(bets);
 		res.send({status: true, data: resp.modifiedCount + resp.upsertedCount});
 	} catch (error) {
-		
+		res.send({status: false, data: "אירעה שגיאה בקבלת תוצאות המשתמשים"})
 	}
 });
+
+router.post("/allUsersBets", async (req, res) => {
+	const { tournamentId, groupId } = req.body;
+
+	try {
+		const usersBets = await betServices.getUsersBetsByGroup(tournamentId, groupId).select("-_id -tournamentId -groupId");
+		res.send({status: true, data: usersBets});
+	} catch (error) {
+		res.send({status: false, data: "אירעה שגיאה בקבלת תוצאות המשתמשים"})
+	}
+})
 
 export default router;

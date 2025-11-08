@@ -1,0 +1,13 @@
+@keyframes blink {
+  0%, 100% { opacity: 0; }
+  50% { opacity: 1; }
+}
+
+.blink_1 {
+  animation: blink 0.9s infinite;
+}
+
+.blink_2 {
+  animation: blink 0.9s infinite;
+  animation-delay: 0.2s;
+}

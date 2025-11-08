@@ -13,3 +13,5 @@ export const placeBets = (bets) => {
     
     return betRepo.placeBets(bulkOps);
 }
+
+export const getUsersBetsByGroup = (tournamentId, groupId) => betRepo.getUsersBetsByGroup(tournamentId, groupId);

@@ -44,8 +44,8 @@ const MatchListItem = ({ match }) => {
 	// TODO: GET THE FINAL SCORE FROM THE DB(WHEN I UPDATE THE DB, HE WILL UPDATE AUTOMATICALLY THE UI)
 
 	const scoreFromDbTest = { home: 2, away: 1 };
-	// Determine the color of the final result(green for exact bet, red for wrong bet and blue for direction bet)
-	const scoreColor = finalScoreBackground(match.matchScoreBet.betScore, scoreFromDbTest);
+	// Determine the color of the final result(green for exact bet, red for wrong bet and blue for direction bet) only if the user bet on this match
+	const scoreColor = finalScoreBackground(match.matchScoreBet ? match.matchScoreBet.betScore : null, scoreFromDbTest);
 
 	// Get the match's kickoff time and display it on the screen in the list item
 	const kickoffTime = new Date(match.kickoffTime).toLocaleString().replace(",", " |").slice(0, -3);
@@ -64,7 +64,7 @@ const MatchListItem = ({ match }) => {
 			{!match.isStarted && (
 				<div className="col-span-5">
 					<h3 className="text-center text-white bg-gray-800 mb-3 rounded-b-xl pb-1">{match.round}</h3>
-					<p className="text-xs text-center text-black font-bold">{kickoffTime}</p>
+					<p className="text-xs text-center text-white font-bold">{kickoffTime}</p>
 
 					<div className="grid grid-cols-4 gap-1 mt-4">
 						<input
@@ -93,7 +93,7 @@ const MatchListItem = ({ match }) => {
 					</div>
 
 					<button
-						className="bg-gray-200 w-full mt-3 border border-black rounded-lg shadow-md shadow-gray-700 hover:cursor-pointer active:shadow-sm active:shadow-gray-400 active:scale-95 p-0.5 active:cursor-pointer"
+						className="bg-gray-200 w-full mt-3 border border-black rounded-lg shadow-sm shadow-yellow-400 hover:cursor-pointer active:shadow-sm active:shadow-gray-400 active:scale-95 p-0.5 active:cursor-pointer"
 						onClick={() => updateScoreHandler(match)}
 					>
 						עדכן
@@ -171,16 +171,18 @@ const MatchListItem = ({ match }) => {
 				{match.awayTeam}
 			</div>
 
-			{/* Friends bets button */}
-			<div className="lg:w-col-span-5 lg:col-start-4 col-span-7 col-start-4 flex justify-center mt-4 mb-1 border border-white border-2 hover:cursor-pointer hover:scale-95 active:cursor-pointer active:scale-95 rounded-2xl bg-teal-700 text-yellow-300 text-lg">
-				<button className="hover:cursor-pointer active:cursor-pointer" onClick={friendsBetsHandler}>
-					הימורי החברים{" "}
-					<span className="mr-2">
-						<span className={styles.blink_1}>{">"}</span>
-						<span className={styles.blink_2}>{">"}</span>
-					</span>
-				</button>
-			</div>
+			{/* Friends bets button - show only if the match is started*/}
+			{match.isStarted && (
+				<div className="lg:w-col-span-5 lg:col-start-4 col-span-7 col-start-4 flex justify-center mt-4 mb-1 border border-white border-2 hover:cursor-pointer hover:scale-95 active:cursor-pointer active:scale-95 rounded-2xl bg-teal-700 text-yellow-300 text-lg">
+					<button className="hover:cursor-pointer active:cursor-pointer" onClick={friendsBetsHandler}>
+						הימורי החברים{" "}
+						<span className="mr-2">
+							<span className={styles.blink_1}>{">"}</span>
+							<span className={styles.blink_2}>{">"}</span>
+						</span>
+					</button>
+				</div>
+			)}
 		</li>
 	);
 };

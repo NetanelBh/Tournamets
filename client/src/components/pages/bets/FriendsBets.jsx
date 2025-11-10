@@ -71,25 +71,22 @@ const FriendsBets = () => {
 
 	const allUsersBetsData = { headers: ["שם", "תוצאה"], rows: [] };
 
-	// Create all users bets array [{name, score}]
-	betsOfThisMatch.forEach((bet) => {
-		// By default I assume that the bet is for my user
+	allUsers.forEach((user) => {
+		const row = [];
 		let name = "אני";
-		let score = "-1 : -1";
+		let score = "-";
 
-		// Check if found because in first time we are here, it happens before the useEffect running and allUsers empty
-		if (allUsers.length > 0) {
-			// Check if the current bet is really belong to me or I need other name
-			if (bet.userId !== currentUser._id) {
-				const foundUser = allUsers.find((user) => user._id === bet.userId);
-				name = foundUser.username;
-			}
-
-			// Get the score for both cases: if the bet is of me or of other user
-			score = `${bet.betScore.homeScore} : ${bet.betScore.awayScore}`;
+		// If the iteration user isn't me, get the name from the user of the current iteration
+		if (user._id !== currentUser._id) {
+			name = user.username;
 		}
 
-		const row = [];
+		// If the current iteration user is in the users bets list, get the score(sometimes user doesn't bet on match)
+		const currentIterationUserBet = betsOfThisMatch.find((bet) => bet.userId === user._id);    
+		if (currentIterationUserBet) {
+			score = `${currentIterationUserBet.betScore.homeScore} : ${currentIterationUserBet.betScore.awayScore}`;
+		}
+
 		row.push(name);
 		row.push(score);
 

@@ -227,7 +227,7 @@ const MyBets = () => {
 		// Create a map of the db bets(scores bets)
 		const dbBets = new Map(bets.userDbScore.map((bet) => [bet.matchId, bet.betScore]));
 		// Collect only either the new or updated bets
-		const updatedOrNewBets = bets.usercurrentScore.filter((bet) => {
+		const updatedOrNewBets = bets.userCurrentScore.filter((bet) => {
 			const dbBet = dbBets.get(bet.matchId);
 			// new bet
 			if (!dbBet) return true;
@@ -255,7 +255,7 @@ const MyBets = () => {
 			}
 
 			// After sent the results to server, will update the redux(userDbScore) because no there are new results there
-			dispatch(betsActions.updateUserDbScore(bets.usercurrentScore));
+			dispatch(betsActions.updateUserDbScore(bets.userCurrentScore));
 		}
 	};
 	
@@ -295,8 +295,8 @@ const MyBets = () => {
 				// Create a new ref for each match: home and away teams
 				refs.current[i] = { homeRef: createRef(), awayRef: createRef() };
 			}
-
-			const matchScoreBet = bets.usercurrentScore.find((score) => score.matchId === match._id);
+			
+			const matchScoreBet = bets.userCurrentScore.find((score) => score.matchId === match._id);
 			// For each match, will add an extra property of the score bet from DB(if the user already bet, to show his bet)
 			const newMatch = { ...match, matchScoreBet };
 
@@ -309,7 +309,7 @@ const MyBets = () => {
 			{!isLoading && (
 				<>
 					{!openModal && (
-						<div className="flex flex-col">
+						<div className="flex flex-col mb-6">
 							<div className="flex gap-8">
 								<div className="flex flex-col gap-2">
 									<h3 className="text-md text-yellow-100 text-center">האלופה :</h3>

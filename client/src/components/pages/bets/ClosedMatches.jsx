@@ -13,7 +13,7 @@ const ClosedMatches = () => {
   // Run over the matches that started(the user can't bet on these matches)
   const startedMathesWithBets = startedMatches.map(match => {
     // Find the user's bet for this match from DB bets
-    const matchScoreBet = bets.usercurrentScore.find((score) => score.matchId === match._id); 
+    const matchScoreBet = bets.userCurrentScore.find((score) => score.matchId === match._id); 
     
     return {...match, matchScoreBet, isStarted: true};
   }).sort((match1, match2) => new Date(match1.kickoffTime) - new Date(match2.kickoffTime));  

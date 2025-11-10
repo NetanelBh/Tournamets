@@ -7,6 +7,8 @@ import Loading from "../../UI/loading/Loading";
 import { betsActions } from "../../store/slices/betSlice";
 import { userActions } from "../../store/slices/userSlice";
 
+// TODO: CHECK AFRICA CHAMPIONSHIP TOURNAMENT IN GOOGLE(FETCH THE MATCHES DATA FROM GOOGLE)
+
 const FriendsBets = () => {
 	const dispatch = useDispatch();
 	const matchId = localStorage.getItem("matchId");

@@ -1,5 +1,7 @@
 import Users from "../models/user.js";
 
+export const getAllUsers = (tournamentId, groupId) => Users.find({tournaments: tournamentId, groups: groupId});
+
 export const getUserbyId = (userId) => Users.findOne({ _id: userId });
 
 export const getUserbyUsername = (username) => Users.findOne({ username });

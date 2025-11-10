@@ -7,6 +7,16 @@ const router = express.Router();
 
 // Entry point: localhost:3000/user
 
+router.post("/allUsers", async (req, res) => {
+	const {tournamentId, groupId} = req.body;
+	try {
+		const users = await userServices.getAllUsers(tournamentId, groupId);
+		
+		res.send({ status: true, data: users });
+	} catch (error) {
+		res.send({ status: false, data: "אירעה בעיה בקבלת המשתמשים, אנא נסה שנית" });
+	}
+})
 // Get the user's list of tournaments he is in
 router.get("/myTournaments", async (req, res) => {
 	try {

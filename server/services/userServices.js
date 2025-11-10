@@ -1,6 +1,8 @@
 import * as userRepo from "../repos/userRepo.js";
 import bcrypt from "bcrypt";
 
+export const getAllUsers = (tournamentId, groupId) => userRepo.getAllUsers(tournamentId, groupId);
+
 export const getUserbyId = (userId) => userRepo.getUserbyId(userId);
 
 export const getUserbyUsername = (username) => userRepo.getUserbyUsername(username);

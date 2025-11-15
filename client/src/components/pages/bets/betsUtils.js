@@ -15,6 +15,8 @@ export const textColorMap = {
 export const finalScoreBackground = (userBet, realFinalScore) => {    
     if(realFinalScore.home === -1 || realFinalScore.away === -1) {
         return "";
+    } else if (!userBet) {
+        return "red";
     }
     else if (userBet.homeScore === realFinalScore.home && userBet.awayScore === realFinalScore.away) {
         return "green";

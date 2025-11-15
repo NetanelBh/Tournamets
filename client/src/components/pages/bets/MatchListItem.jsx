@@ -42,7 +42,6 @@ const MatchListItem = ({ match }) => {
 	};
 
 	// TODO: GET THE FINAL SCORE FROM THE DB(WHEN I UPDATE THE DB, HE WILL UPDATE AUTOMATICALLY THE UI)
-
 	const scoreFromDbTest = { home: 2, away: 1 };
 	// Determine the color of the final result(green for exact bet, red for wrong bet and blue for direction bet) only if the user bet on this match
 	const scoreColor = finalScoreBackground(match.matchScoreBet ? match.matchScoreBet.betScore : null, scoreFromDbTest);
@@ -114,14 +113,14 @@ const MatchListItem = ({ match }) => {
 								scoreColor !== "" ? colorMap[scoreColor] : "bg-yellow-400/80"
 							} col-span-2 text-center border border-black h-6`}
 						>
-							{match.matchScoreBet.betScore.homeScore}
+							{match.matchScoreBet ? match.matchScoreBet.betScore.homeScore : "-"}
 						</div>
 						<div
 							className={`${
 								scoreColor !== "" ? colorMap[scoreColor] : "bg-yellow-400/80"
 							} col-span-2 text-center border border-black h-6`}
 						>
-							{match.matchScoreBet.betScore.awayScore}
+							{match.matchScoreBet ? match.matchScoreBet.betScore.awayScore : "-"}
 						</div>
 					</div>
 

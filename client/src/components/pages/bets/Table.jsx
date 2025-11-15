@@ -1,5 +1,18 @@
+import { useSelector } from "react-redux";
+
 const Table = () => {
-	// TODO: SHOW POINTS TABLE, RELATES TO THE SCORE METHOD(IF IS DIFFERENT OR SAME IN THE CURRENT GROUP)
+	const tournamentId = localStorage.getItem("tournamentId");
+	const groupId = localStorage.getItem("groupId");
+
+	// Get the current tournament
+	const tournament = useSelector((state) => state.tournaments.tournaments.find((t) => t._id === tournamentId));
+  // Get the current group points rules(calculate the points for the each user in the table and exact/directions bets)
+	const groupPointsRules = useSelector((state) => state.user.user.groups.find((g) => g._id === groupId)).points;
+	// Get all users bets for the current tournament - it's an object {matchId: [bets]}
+	const allUsersBets = useSelector((state) => state.bets.allUsersBets);
+
+
+	// TODO: WRITE A FUNCTION TO CALCULATE THE POINTS/EXACT/DIRECTIONS FOR EACH USER BY THE GROUP_POINTS_RULES AND HIS BETS
 	return (
 		<div className="flex flex-col">
 			<div className="overflow-x-auto sm:-mx-6 lg:-mx-8">
@@ -15,10 +28,19 @@ const Table = () => {
 										שם
 									</th>
 									<th scope="col" className="px-4 py-2 dark:border-neutral-500">
-										Last
+										מדויק
 									</th>
 									<th scope="col" className="px-4 py-2 dark:border-neutral-500">
-										Handle
+										כיוון
+									</th>
+									<th scope="col" className="px-4 py-2 dark:border-neutral-500">
+										בונוס אלופה
+									</th>
+									<th scope="col" className="px-4 py-2 dark:border-neutral-500">
+										בונוס מלך שערים
+									</th>
+									<th scope="col" className="px-4 py-2 dark:border-neutral-500">
+										סה"כ
 									</th>
 								</tr>
 							</thead>
@@ -27,24 +49,16 @@ const Table = () => {
 									<td className="whitespace-nowrap  px-4 py-4 font-medium dark:border-neutral-500">
 										1
 									</td>
-									<td className="whitespace-nowrap  px-4 py-4 dark:border-neutral-500">
-										Mark
-									</td>
-									<td className="whitespace-nowrap  px-4 py-4 dark:border-neutral-500">
-										Otto
-									</td>
+									<td className="whitespace-nowrap  px-4 py-4 dark:border-neutral-500">Mark</td>
+									<td className="whitespace-nowrap  px-4 py-4 dark:border-neutral-500">Otto</td>
 									<td className=" px-4 py-4 dark:border-neutral-500">@mdo</td>
 								</tr>
 								<tr className="border-b dark:border-neutral-500">
 									<td className="whitespace-nowrap  px-4 py-4 font-medium dark:border-neutral-500">
 										2
 									</td>
-									<td className="whitespace-nowrap  px-4 py-4 dark:border-neutral-500">
-										Jacob
-									</td>
-									<td className="whitespace-nowrap  px-4 py-4 dark:border-neutral-500">
-										Thornton
-									</td>
+									<td className="whitespace-nowrap  px-4 py-4 dark:border-neutral-500">Jacob</td>
+									<td className="whitespace-nowrap  px-4 py-4 dark:border-neutral-500">Thornton</td>
 									<td className=" px-4 py-4 dark:border-neutral-500">@fat</td>
 								</tr>
 								<tr className="border-b dark:border-neutral-500">

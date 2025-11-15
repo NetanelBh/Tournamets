@@ -11,8 +11,9 @@ const Table = () => {
 	// Get all users bets for the current tournament - it's an object {matchId: [bets]}
 	const allUsersBets = useSelector((state) => state.bets.allUsersBets);
 
-
 	// TODO: WRITE A FUNCTION TO CALCULATE THE POINTS/EXACT/DIRECTIONS FOR EACH USER BY THE GROUP_POINTS_RULES AND HIS BETS
+  // TODO: CREATE THE FUNCTION IN DIFFERENT FILE AND RETURN AN OBJECT WITH ALL DATA, THEN MAP THE <TR> FOR EACH USER
+
 	return (
 		<div className="flex flex-col">
 			<div className="overflow-x-auto sm:-mx-6 lg:-mx-8">

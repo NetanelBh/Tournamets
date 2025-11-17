@@ -45,4 +45,15 @@ router.post("/allUsersBets", async (req, res) => {
 	}
 })
 
+router.post("/specificMatchUsersBets", async (req, res) => {
+	const { tournamentId, groupId, matchId } = req.body;
+
+	try {
+		const usersBets = await betServices.getUsersBetsByMatch(tournamentId, groupId, matchId).select("-_id -tournamentId -groupId");
+		res.send({status: true, data: usersBets});
+	} catch (error) {
+		res.send({status: false, data: "אירעה שגיאה בקבלת תוצאות המשתמשים"})
+	}
+})
+
 export default router;

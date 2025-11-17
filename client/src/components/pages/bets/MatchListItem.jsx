@@ -41,10 +41,9 @@ const MatchListItem = ({ match }) => {
 		navigate("/layout/bets-layout/frients-bets");
 	};
 
-	// TODO: GET THE FINAL SCORE FROM THE DB(WHEN I UPDATE THE DB, HE WILL UPDATE AUTOMATICALLY THE UI)
-	const scoreFromDbTest = { home: 2, away: 1 };
+	const scoreFromDb = { home: match.finalScore.homeScore, away: match.finalScore.awayScore };
 	// Determine the color of the final result(green for exact bet, red for wrong bet and blue for direction bet) only if the user bet on this match
-	const scoreColor = finalScoreBackground(match.matchScoreBet ? match.matchScoreBet.betScore : null, scoreFromDbTest);
+	const scoreColor = finalScoreBackground(match.matchScoreBet ? match.matchScoreBet.betScore : null, scoreFromDb);
 
 	// Get the match's kickoff time and display it on the screen in the list item
 	const kickoffTime = new Date(match.kickoffTime).toLocaleString().replace(",", " |").slice(0, -3);
@@ -153,10 +152,10 @@ const MatchListItem = ({ match }) => {
 
 					<div className="w-full lg:w-3/4 grid grid-cols-4 gap-1 justify-self-center">
 						<div className="bg-gray-300 col-span-2 text-center border border-black h-6">
-							{scoreFromDbTest.home !== -1 && scoreFromDbTest.away !== -1 ? scoreFromDbTest.home : ""}
+							{scoreFromDb.home !== -1 && scoreFromDb.away !== -1 ? scoreFromDb.home : ""}
 						</div>
 						<div className="bg-gray-300 col-span-2 text-center border border-black h-6">
-							{scoreFromDbTest.away !== -1 && scoreFromDbTest.home !== -1 ? scoreFromDbTest.away : ""}
+							{scoreFromDb.away !== -1 && scoreFromDb.home !== -1 ? scoreFromDb.away : ""}
 						</div>
 					</div>
 				</div>

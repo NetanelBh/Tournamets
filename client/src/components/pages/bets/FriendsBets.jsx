@@ -5,9 +5,8 @@ import { useSelector, useDispatch } from "react-redux";
 import Table from "../../UI/table/Table";
 import Loading from "../../UI/loading/Loading";
 import { betsActions } from "../../store/slices/betSlice";
-import { userActions } from "../../store/slices/userSlice";
 
-// TODO: CHECK AFRICA CHAMPIONSHIP TOURNAMENT IN GOOGLE(FETCH THE MATCHES DATA FROM GOOGLE)
+// TODO: CREATE IS LOADING AND !ISLOADING IN RETURN
 
 const FriendsBets = () => {
 	const dispatch = useDispatch();
@@ -19,10 +18,8 @@ const FriendsBets = () => {
 	const allUsers = useSelector((state) => state.user.allUsers);
 	const matches = useSelector((state) => state.matches.matches);
 
-	useEffect(() => {
-		// Fetch data only once per match that started already. Match that not stored in redux, will br fetchrf from the DB
-		if (bets.allUsersBets[matchId]) return;
-
+	// Fetch data only once per match that started already. Match that not stored in redux, will be fetched from the DB
+	useEffect(() => {		
 		const fetchAllUsersBets = async () => {
 			setIsLoading(true);
 			try {
@@ -30,9 +27,10 @@ const FriendsBets = () => {
 				const usersBets = await API.post("/bets/allUsersBets", {
 					tournamentId: localStorage.getItem("tournamentId"),
 					groupId: localStorage.getItem("groupId"),
+					matchId
 				});
-
-				dispatch(betsActions.load([{ type: "allUsersBets", data: usersBets.data.data }]));
+				
+				dispatch(betsActions.load([{ type: "usersBetsForMatch", data: usersBets.data.data }]));
 			} catch (error) {
 				console.log(error);
 			} finally {
@@ -42,28 +40,6 @@ const FriendsBets = () => {
 
 		fetchAllUsersBets();
 	}, [matchId]);
-
-	// Fetch the users from the DB only once. When stored in redux, we can use them everywhere in the application
-	useEffect(() => {
-		if (allUsers.length > 0) return;
-
-		const fetchUsers = async () => {
-			setIsLoading(true);
-			try {
-				const tournamentId = localStorage.getItem("tournamentId");
-				const groupId = localStorage.getItem("groupId");
-				const users = await API.post("/user/allUsers", { tournamentId, groupId });
-
-				dispatch(userActions.load({ type: "allUsers", data: users.data.data }));
-			} catch (error) {
-				console.log(error);
-			} finally {
-				setIsLoading(false);
-			}
-		};
-
-		fetchUsers();
-	}, []);
 
 	const bets = useSelector((state) => state.bets);
 	// If is the first time we entered here, the all users bets list will not exist yet(useEffect run only at the end)

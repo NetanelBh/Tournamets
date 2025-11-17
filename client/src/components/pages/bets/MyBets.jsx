@@ -7,6 +7,7 @@ import MatchesList from "./MatchesList";
 import Loading from "../../UI/loading/Loading";
 import Dropdown from "../../UI/dropdown/Dropdown";
 import { betsActions } from "../../store/slices/betSlice";
+import { userActions } from "../../store/slices/userSlice";
 import { matchesActions } from "../../store/slices/matchesSlice";
 import { playersActions } from "../../store/slices/playersSlice";
 
@@ -26,15 +27,38 @@ const MyBets = () => {
 	// Ref list for the matches <input> when I want to create a request to send the bets
 	const refs = useRef([]);
 
-	const allTournaments = useSelector((state) => state.tournaments.tournaments);
-	const topScorersList = useSelector((state) => state.players.players);
 	const bets = useSelector((state) => state.bets);
+	const allUsers = useSelector((state) => state.user.allUsers);
 	const matches = useSelector((state) => state.matches.matches);
+	const topScorersList = useSelector((state) => state.players.players);
+	const allTournaments = useSelector((state) => state.tournaments.tournaments);
 
 	const groupId = localStorage.getItem("groupId");
 	const tournamentId = localStorage.getItem("tournamentId");
 	// Get the current tournament to use the teams for the winner team prediction of the user
 	const currentTourmanent = allTournaments.find((t) => t._id === tournamentId);
+
+	// Fetch the users from the DB only once. When stored in redux, we can use them everywhere in the application
+	useEffect(() => {
+		if (allUsers.length > 0) return;
+
+		const fetchUsers = async () => {
+			setIsLoading(true);
+			try {
+				const tournamentId = localStorage.getItem("tournamentId");
+				const groupId = localStorage.getItem("groupId");
+				const users = await API.post("/user/allUsers", { tournamentId, groupId });
+
+				dispatch(userActions.load({ type: "allUsers", data: users.data.data }));
+			} catch (error) {
+				console.log(error);
+			} finally {
+				setIsLoading(false);
+			}
+		};
+
+		fetchUsers();
+	}, []);
 
 	// Get the candidate players for the top scorer
 	useEffect(() => {
@@ -65,7 +89,7 @@ const MyBets = () => {
 	// Get the user predictions(for tournament winner team and top scorer) to update the relevant dropdown
 	useEffect(() => {
 		// Fetch data only for app start and not when refresh the page(to avoid lose the bets before sent to server)
-		if (bets.userDbScore.length > 0) return;				
+		if (bets.userDbScore.length > 0) return;
 
 		const fetchPredictions = async () => {
 			setIsLoading(true);
@@ -115,6 +139,31 @@ const MyBets = () => {
 
 		fetchMatches();
 	}, [modalText]);
+
+	// Get all users bets for the tournament and group only once(only what have in DB - not means that all users bets)
+	useEffect(() => {
+		// Fetch only once. Need this condition because when refresh, redux is persist but the useEffect run again
+		if (bets.allUsersBets.length > 0) return;
+
+		const fetchAllUsersBets = async () => {
+			setIsLoading(true);
+			try {
+				// Fetch all users bet for the specific match(only if not fetched before)
+				const usersBets = await API.post("/bets/allUsersBets", {
+					tournamentId: localStorage.getItem("tournamentId"),
+					groupId: localStorage.getItem("groupId"),
+				});
+
+				dispatch(betsActions.load([{ type: "allUsersBets", data: usersBets.data.data }]));
+			} catch (error) {
+				console.log(error);
+			} finally {
+				setIsLoading(false);
+			}
+		};
+
+		fetchAllUsersBets();
+	}, []);
 
 	const closeModalHandler = () => {
 		setOpenModal(false);
@@ -258,7 +307,7 @@ const MyBets = () => {
 			dispatch(betsActions.updateUserDbScore(bets.userCurrentScore));
 		}
 	};
-	
+
 	// Check if the tournament started to display the top player and winner team bets
 	const istournamentStarted = currentTourmanent.startTime < new Date().toISOString();
 
@@ -295,7 +344,7 @@ const MyBets = () => {
 				// Create a new ref for each match: home and away teams
 				refs.current[i] = { homeRef: createRef(), awayRef: createRef() };
 			}
-			
+
 			const matchScoreBet = bets.userCurrentScore.find((score) => score.matchId === match._id);
 			// For each match, will add an extra property of the score bet from DB(if the user already bet, to show his bet)
 			const newMatch = { ...match, matchScoreBet };

@@ -37,3 +37,11 @@ export const finalScoreBackground = (userBet, realFinalScore) => {
         return "red";
     }
 };
+
+export const calculatePoints = (round, finalScore, userBet, pointsRules) => {
+    // TODO: CALCULATE THE POINTS ACCORDING TO THE POINTS RULES AND THE MATCH ROUND
+    const points = {matchesPoints: 5, resultType: "exacts"};
+    // TODO: IF THE USERBET IS EXACT OR DIRECTION, CHANGE THE PROPERTY RESULT_TYPE TO "exacts" OR "directions"
+
+    return points;
+};

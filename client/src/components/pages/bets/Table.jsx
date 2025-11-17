@@ -1,18 +1,67 @@
 import { useSelector } from "react-redux";
+import { calculatePoints } from "./betsUtils";
 
 const Table = () => {
 	const tournamentId = localStorage.getItem("tournamentId");
 	const groupId = localStorage.getItem("groupId");
 
-	// Get the current tournament
-	const tournament = useSelector((state) => state.tournaments.tournaments.find((t) => t._id === tournamentId));
-  // Get the current group points rules(calculate the points for the each user in the table and exact/directions bets)
-	const groupPointsRules = useSelector((state) => state.user.user.groups.find((g) => g._id === groupId)).points;
+	// Get all users to calculate the points in the table
+	const allUsers = useSelector((state) => state.user.allUsers);
+	// Get all matches for the current tournament
+	const matches = useSelector((state) => state.matches.matches);
 	// Get all users bets for the current tournament - it's an object {matchId: [bets]}
 	const allUsersBets = useSelector((state) => state.bets.allUsersBets);
+	// Get the current group points rules(calculate the points for the each user in the table and exact/directions bets)
+	const groupPointsRules = useSelector((state) => state.user.user.groups.find((g) => g._id === groupId)).points;
+	// Get the current tournament
+	const tournament = useSelector((state) => state.tournaments.tournaments.find((t) => t._id === tournamentId));
 
-	// TODO: WRITE A FUNCTION TO CALCULATE THE POINTS/EXACT/DIRECTIONS FOR EACH USER BY THE GROUP_POINTS_RULES AND HIS BETS
-  // TODO: CREATE THE FUNCTION IN DIFFERENT FILE AND RETURN AN OBJECT WITH ALL DATA, THEN MAP THE <TR> FOR EACH USER
+	// List of objects that contains the users bets data for all matches that finished
+	const usersTableData = allUsers.map((user) => {
+		const finalUserPoints = {
+			username: user.username,
+			exacts: 0,
+			directions: 0,
+			winnerTeamBonus: 0,
+			topScorerBonus: 0,
+			totalMatchesPoints: 0
+		};
+
+		matches.forEach((match) => {
+			// Each match iteration, will take the corresponding match in the allUsersBets matches(the key is matchId)
+			const matchBets = allUsersBets[match._id];
+			// If all users didn't bet on this match it will be undefined, and we want to avoid from errors
+			if (matchBets) {
+				// Check if the user has a bet for the current match
+				const userBet = matchBets.find((bet) => bet.userId === user._id);
+				if (userBet) {
+					// console.log(match);
+					// console.log(groupPointsRules);
+					// console.log(tournament);
+					// console.log(userBet);
+
+					const userPoints = calculatePoints(
+						match.round,
+						match.finalScore,
+						userBet,
+						groupPointsRules,
+					);
+					
+					// Only if exact or direction, add 1 to the statistics
+					if (finalUserPoints[userPoints.resultType] !== undefined) finalUserPoints[userPoints.resultType] += 1;
+
+					finalUserPoints.totalMatchesPoints += userPoints.matchesPoints;
+				}
+			}
+		});
+
+
+		console.log(finalUserPoints);
+		// TODO: ADD CHECK FOR WINNER TEAM BONUS AND TOP SCORER BONUS
+
+		return finalUserPoints;
+	});
+
 
 	return (
 		<div className="flex flex-col">

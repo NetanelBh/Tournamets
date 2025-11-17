@@ -10,7 +10,7 @@ const router = express.Router();
 router.post("/allUsers", async (req, res) => {
 	const {tournamentId, groupId} = req.body;
 	try {
-		const users = await userServices.getAllUsers(tournamentId, groupId);
+		const users = await userServices.getAllUsers(tournamentId, groupId).select("-password");
 		
 		res.send({ status: true, data: users });
 	} catch (error) {

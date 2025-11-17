@@ -41,6 +41,7 @@ const Table = () => {
 					// console.log(userBet);
 
 					const userPoints = calculatePoints(
+						match.stage,
 						match.round,
 						match.finalScore,
 						userBet,
@@ -50,7 +51,7 @@ const Table = () => {
 					// Only if exact or direction, add 1 to the statistics
 					if (finalUserPoints[userPoints.resultType] !== undefined) finalUserPoints[userPoints.resultType] += 1;
 
-					finalUserPoints.totalMatchesPoints += userPoints.matchesPoints;
+					finalUserPoints.totalMatchesPoints += userPoints.matchPoints;
 				}
 			}
 		});
@@ -61,6 +62,7 @@ const Table = () => {
 
 		return finalUserPoints;
 	});
+	// TODO: SORT THE LIST BY TOTAL POINTS. IF THERE IS MORE THAN 1 USER WITH THE SAME POINTS, SORT BY EXACTS, THEN BY DIRECTIONS
 
 
 	return (

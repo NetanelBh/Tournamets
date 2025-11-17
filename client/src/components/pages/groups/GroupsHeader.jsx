@@ -15,7 +15,7 @@ const GroupsHeader = () => {
 
 	return (
 		<>
-			<h1 className="text-center text-2xl font-bold text-white mt-10 underline">{tournamentName}</h1>
+			<h1 className="text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-red-600 text-center text-2xl font-bold mt-10 underline">{tournamentName}</h1>
 			
 			<header className="text-white mt-6">
 				<div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5 sm:mt-4">

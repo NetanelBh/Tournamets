@@ -24,7 +24,7 @@ const Table = () => {
 			directions: 0,
 			winnerTeamBonus: 0,
 			topScorerBonus: 0,
-			totalMatchesPoints: 0
+			totalMatchesPoints: 0,
 		};
 
 		matches.forEach((match) => {
@@ -45,17 +45,17 @@ const Table = () => {
 						match.round,
 						match.finalScore,
 						userBet,
-						groupPointsRules,
+						groupPointsRules
 					);
-					
+
 					// Only if exact or direction, add 1 to the statistics
-					if (finalUserPoints[userPoints.resultType] !== undefined) finalUserPoints[userPoints.resultType] += 1;
+					if (finalUserPoints[userPoints.resultType] !== undefined)
+						finalUserPoints[userPoints.resultType] += 1;
 
 					finalUserPoints.totalMatchesPoints += userPoints.matchPoints;
 				}
 			}
 		});
-
 
 		console.log(finalUserPoints);
 		// TODO: ADD CHECK FOR WINNER TEAM BONUS AND TOP SCORER BONUS
@@ -64,7 +64,6 @@ const Table = () => {
 	});
 	// TODO: SORT THE LIST BY TOTAL POINTS. IF THERE IS MORE THAN 1 USER WITH THE SAME POINTS, SORT BY EXACTS, THEN BY DIRECTIONS
 
-
 	return (
 		<div className="flex flex-col">
 			<div className="overflow-x-auto sm:-mx-6 lg:-mx-8">
@@ -72,6 +71,7 @@ const Table = () => {
 					<div className="overflow-hidden">
 						<table className="min-w-full border text-center text-xs font-light text-white dark:border-neutral-500">
 							<thead className="border-b font-medium dark:border-neutral-500">
+								// TODO: CREATE TABLE ROW COMPONENT THAT RETURN ALL THE <TH></TH> AND HERE JUST CALL IT
 								<tr>
 									<th scope="col" className="px-4 py-2 dark:border-neutral-500">
 										#
@@ -97,30 +97,30 @@ const Table = () => {
 								</tr>
 							</thead>
 							<tbody>
-								<tr className="border-b dark:border-neutral-500">
-									<td className="whitespace-nowrap  px-4 py-4 font-medium dark:border-neutral-500">
-										1
-									</td>
-									<td className="whitespace-nowrap  px-4 py-4 dark:border-neutral-500">Mark</td>
-									<td className="whitespace-nowrap  px-4 py-4 dark:border-neutral-500">Otto</td>
-									<td className=" px-4 py-4 dark:border-neutral-500">@mdo</td>
-								</tr>
-								<tr className="border-b dark:border-neutral-500">
-									<td className="whitespace-nowrap  px-4 py-4 font-medium dark:border-neutral-500">
-										2
-									</td>
-									<td className="whitespace-nowrap  px-4 py-4 dark:border-neutral-500">Jacob</td>
-									<td className="whitespace-nowrap  px-4 py-4 dark:border-neutral-500">Thornton</td>
-									<td className=" px-4 py-4 dark:border-neutral-500">@fat</td>
-								</tr>
-								<tr className="border-b dark:border-neutral-500">
-									<td className="whitespace-nowrap  px-4 py-4 font-medium dark:border-neutral-500">
-										3
-									</td>
-									<td className=" px-4 py-4 dark:border-neutral-500">Larry the Bird</td>
-									<td className=" px-4 py-4 dark:border-neutral-500">@twitter</td>
-									<td className=" px-4 py-4 dark:border-neutral-500">@twitter</td>
-								</tr>
+								{usersTableData.map((user, index) => (
+									// TODO: CREATE TABLE ROW COMPONENT THAT RETURN ALL THE <TD></TD> AND HERE JUST CALL IT
+									<tr key={index} className="border-b dark:border-neutral-500">
+										<td className="whitespace-nowrap  px-4 py-4 font-medium dark:border-neutral-500">
+											{index + 1}
+										</td>
+										<td className="whitespace-nowrap  px-4 py-4 dark:border-neutral-500 font-bold">
+											{user.username}
+										</td>
+										<td className="whitespace-nowrap  px-4 py-4 dark:border-neutral-500">
+											{user.exacts}
+										</td>
+										<td className=" px-4 py-4 dark:border-neutral-500">{user.directions}</td>
+										<td className="whitespace-nowrap  px-4 py-4 dark:border-neutral-500">
+											{user.winnerTeamBonus}
+										</td>
+										<td className="whitespace-nowrap  px-4 py-4 dark:border-neutral-500">
+											{user.topScorerBonus}
+										</td>
+										<td className=" px-4 py-4 dark:border-neutral-500">
+											{user.totalMatchesPoints}
+										</td>
+									</tr>
+								))}
 							</tbody>
 						</table>
 					</div>

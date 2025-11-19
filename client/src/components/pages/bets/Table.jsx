@@ -57,7 +57,7 @@ const Table = () => {
 			}
 		});
 
-		console.log(finalUserPoints);
+		// console.log(finalUserPoints);
 		// TODO: ADD CHECK FOR WINNER TEAM BONUS AND TOP SCORER BONUS
 
 		return finalUserPoints;
@@ -69,9 +69,9 @@ const Table = () => {
 			<div className="overflow-x-auto sm:-mx-6 lg:-mx-8">
 				<div className="inline-block min-w-full py-2 sm:px-6 lg:px-8">
 					<div className="overflow-hidden">
+						// TODO: CREATE TABLE ROW COMPONENT THAT RETURN ALL THE th TAG AND HERE JUST CALL IT
 						<table className="min-w-full border text-center text-xs font-light text-white dark:border-neutral-500">
 							<thead className="border-b font-medium dark:border-neutral-500">
-								// TODO: CREATE TABLE ROW COMPONENT THAT RETURN ALL THE <TH></TH> AND HERE JUST CALL IT
 								<tr>
 									<th scope="col" className="px-4 py-2 dark:border-neutral-500">
 										#

@@ -1,5 +1,10 @@
 import { useSelector } from "react-redux";
+
+import { tableColumns } from "./betsUtils";
 import { calculatePoints } from "./betsUtils";
+
+import TableRow from "./TableRow";
+import TableHeader from "./TableHeader";
 
 const Table = () => {
 	const tournamentId = localStorage.getItem("tournamentId");
@@ -35,11 +40,6 @@ const Table = () => {
 				// Check if the user has a bet for the current match
 				const userBet = matchBets.find((bet) => bet.userId === user._id);
 				if (userBet) {
-					// console.log(match);
-					// console.log(groupPointsRules);
-					// console.log(tournament);
-					// console.log(userBet);
-
 					const userPoints = calculatePoints(
 						match.stage,
 						match.round,
@@ -62,64 +62,18 @@ const Table = () => {
 
 		return finalUserPoints;
 	});
-	// TODO: SORT THE LIST BY TOTAL POINTS. IF THERE IS MORE THAN 1 USER WITH THE SAME POINTS, SORT BY EXACTS, THEN BY DIRECTIONS
 
 	return (
 		<div className="flex flex-col">
 			<div className="overflow-x-auto sm:-mx-6 lg:-mx-8">
 				<div className="inline-block min-w-full py-2 sm:px-6 lg:px-8">
 					<div className="overflow-hidden">
-						// TODO: CREATE TABLE ROW COMPONENT THAT RETURN ALL THE th TAG AND HERE JUST CALL IT
 						<table className="min-w-full border text-center text-xs font-light text-white dark:border-neutral-500">
-							<thead className="border-b font-medium dark:border-neutral-500">
-								<tr>
-									<th scope="col" className="px-4 py-2 dark:border-neutral-500">
-										#
-									</th>
-									<th scope="col" className="px-4 py-2 dark:border-neutral-500">
-										שם
-									</th>
-									<th scope="col" className="px-4 py-2 dark:border-neutral-500">
-										מדויק
-									</th>
-									<th scope="col" className="px-4 py-2 dark:border-neutral-500">
-										כיוון
-									</th>
-									<th scope="col" className="px-4 py-2 dark:border-neutral-500">
-										בונוס אלופה
-									</th>
-									<th scope="col" className="px-4 py-2 dark:border-neutral-500">
-										בונוס מלך שערים
-									</th>
-									<th scope="col" className="px-4 py-2 dark:border-neutral-500">
-										סה"כ
-									</th>
-								</tr>
-							</thead>
+							<TableHeader columns={tableColumns} />
+
 							<tbody>
 								{usersTableData.map((user, index) => (
-									// TODO: CREATE TABLE ROW COMPONENT THAT RETURN ALL THE <TD></TD> AND HERE JUST CALL IT
-									<tr key={index} className="border-b dark:border-neutral-500">
-										<td className="whitespace-nowrap  px-4 py-4 font-medium dark:border-neutral-500">
-											{index + 1}
-										</td>
-										<td className="whitespace-nowrap  px-4 py-4 dark:border-neutral-500 font-bold">
-											{user.username}
-										</td>
-										<td className="whitespace-nowrap  px-4 py-4 dark:border-neutral-500">
-											{user.exacts}
-										</td>
-										<td className=" px-4 py-4 dark:border-neutral-500">{user.directions}</td>
-										<td className="whitespace-nowrap  px-4 py-4 dark:border-neutral-500">
-											{user.winnerTeamBonus}
-										</td>
-										<td className="whitespace-nowrap  px-4 py-4 dark:border-neutral-500">
-											{user.topScorerBonus}
-										</td>
-										<td className=" px-4 py-4 dark:border-neutral-500">
-											{user.totalMatchesPoints}
-										</td>
-									</tr>
+									<TableRow key={index} user={user} index={index} columns={tableColumns} />
 								))}
 							</tbody>
 						</table>

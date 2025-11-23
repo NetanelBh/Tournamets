@@ -20,6 +20,16 @@ router.get("/getTeamPredict", async (req, res) => {
     }
 });
 
+router.post("/getAllByGroup", async (req, res) => {
+    const { tournamentId, groupId } = req.body;
+    try {
+        const teamPredicts = await winnerTeamPredictServices.getAllByGroup(tournamentId, groupId);
+        res.send({ status: true, data: teamPredicts });
+    } catch (error) {
+        res.send({ status: false, data: "אירעה בעיה בקבלת ניחוש הקבוצות הזוכות, אנא נסה שנית" });
+    }
+});
+
 router.post("/createPredict", async (req, res) => {
     const { tournamentId, groupId, winnerTeamName } = req.body;
 

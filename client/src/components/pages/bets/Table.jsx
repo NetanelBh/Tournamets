@@ -1,67 +1,57 @@
+import API from "../../utils/Api";
 import { useSelector } from "react-redux";
+import { use, useEffect, useState } from "react";
 
+import { usersPoints } from "./betsUtils";
 import { tableColumns } from "./betsUtils";
-import { calculatePoints } from "./betsUtils";
 
 import TableRow from "./TableRow";
 import TableHeader from "./TableHeader";
 
 const Table = () => {
+	const [usersTopScorer, setUsersTopScorer] = useState([]);
+	const [usersWinnerTeam, setUsersWinnerTeam] = useState([]);
 	const tournamentId = localStorage.getItem("tournamentId");
 	const groupId = localStorage.getItem("groupId");
 
-	// Get all users to calculate the points in the table
-	const allUsers = useSelector((state) => state.user.allUsers);
-	// Get all matches for the current tournament
-	const matches = useSelector((state) => state.matches.matches);
-	// Get all users bets for the current tournament - it's an object {matchId: [bets]}
-	const allUsersBets = useSelector((state) => state.bets.allUsersBets);
-	// Get the current group points rules(calculate the points for the each user in the table and exact/directions bets)
-	const groupPointsRules = useSelector((state) => state.user.user.groups.find((g) => g._id === groupId)).points;
-	// Get the current tournament
-	const tournament = useSelector((state) => state.tournaments.tournaments.find((t) => t._id === tournamentId));
+	// Fetch all users top scorer and winner team bets(only once)
+	useEffect(() => {
+		const fetchData = async () => {
+			try {
+				const [allUsersTopScorers, allUsersWinnerTeams] = await Promise.all([
+					API.post("/topScorerBet/getAllByGroup", { tournamentId, groupId }),
+					API.post("/winnerTeamBet/getAllByGroup", { tournamentId, groupId }),
+				])
 
-	// List of objects that contains the users bets data for all matches that finished
-	const usersTableData = allUsers.map((user) => {
-		const finalUserPoints = {
-			username: user.username,
-			exacts: 0,
-			directions: 0,
-			winnerTeamBonus: 0,
-			topScorerBonus: 0,
-			totalMatchesPoints: 0,
-		};
-
-		matches.forEach((match) => {
-			// Each match iteration, will take the corresponding match in the allUsersBets matches(the key is matchId)
-			const matchBets = allUsersBets[match._id];
-			// If all users didn't bet on this match it will be undefined, and we want to avoid from errors
-			if (matchBets) {
-				// Check if the user has a bet for the current match
-				const userBet = matchBets.find((bet) => bet.userId === user._id);
-				if (userBet) {
-					const userPoints = calculatePoints(
-						match.stage,
-						match.round,
-						match.finalScore,
-						userBet,
-						groupPointsRules
-					);
-
-					// Only if exact or direction, add 1 to the statistics
-					if (finalUserPoints[userPoints.resultType] !== undefined)
-						finalUserPoints[userPoints.resultType] += 1;
-
-					finalUserPoints.totalMatchesPoints += userPoints.matchPoints;
-				}
+				setUsersTopScorer(allUsersTopScorers.data.data);
+				setUsersWinnerTeam(allUsersWinnerTeams.data.data);
+			} catch (error) {
+				console.log(error);
+				// TODO: CREATE A MODAL FOR THIS PAGE(BECAUSE USING PROMISE.ALL)
 			}
-		});
+		}
 
-		// console.log(finalUserPoints);
-		// TODO: ADD CHECK FOR WINNER TEAM BONUS AND TOP SCORER BONUS
+		fetchData();
+	}, []);
 
-		return finalUserPoints;
-	});
+	// Create an object with all required data to calculate the points from external function
+	const data = {
+		// Get all users to calculate the points in the table
+		allUsers: useSelector((state) => state.user.allUsers),
+		// Get all matches for the current tournament
+		matches: useSelector((state) => state.matches.matches),
+		// Get all users bets for the current tournament - it's an object {matchId: [bets]}
+		usersBets: useSelector((state) => state.bets),
+		// Get the current group points rules(calculate the points for the each user in the table and exact/directions bets)
+		groupPointsRules: useSelector((state) => state.user.user.groups.find((g) => g._id === groupId)).points,
+		// Get the current tournament to get the top scorer bonus and the winner team bonus
+		tournamentTopScorerId: useSelector((state) => state.tournaments.tournaments.find((t) => t._id === tournamentId).topScorer),
+		usersTopScorers: usersTopScorer,
+		usersWinnerTeams: usersWinnerTeam,
+	}
+
+	// Sorted users points list to display in table
+	const usersTableData = usersPoints(data);	
 
 	return (
 		<div className="flex flex-col">

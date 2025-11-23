@@ -22,6 +22,17 @@ router.get("/getTopScorerPredict", async (req, res) => {
 	}
 });
 
+// Get all users top scorer predictions by tournament and group
+router.post("/getAllByGroup", async (req, res) => {
+	const { tournamentId, groupId } = req.body;
+	try {
+		const topScorerPredicts = await topScorerPredictServices.getAllByGroup(tournamentId, groupId);
+		res.send({ status: true, data: topScorerPredicts });
+	} catch (error) {
+		res.send({ status: false, data: "אירעה שגיאה בקבלת ניחוש מלכי השערים, אנא נסה שנית" });
+	}
+});
+
 router.post("/createPredict", async (req, res) => {
 	const { tournamentId, groupId, topScorerId } = req.body;
 

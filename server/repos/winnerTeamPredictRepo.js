@@ -7,3 +7,5 @@ export const createPredict = (data) => winnerTeamPredictionModel(data).save();
 export const updatePredict = (filterObj, data) => {
 	return winnerTeamPredictionModel.findOneAndUpdate(filterObj, { $set: data }, { new: true });
 };
+
+export const getAllByGroup = (filterObj) => winnerTeamPredictionModel.find(filterObj);

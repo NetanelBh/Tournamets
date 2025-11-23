@@ -12,13 +12,16 @@ router.post("/get", async (req, res) => {
 	try {
 		const topScorerPrediction = await getTopScorerPredict(req.user.id, tournamentId, groupId).populate("topScorer");
 		const teamPrediction = await getTeamPredict(req.user.id, tournamentId, groupId).populate("winnerTeam");
-		const userBets = await betServices.getBetsByUser(req.user.id, tournamentId, groupId).select("-_id");	
-			
+		const userBets = await betServices.getBetsByUser(req.user.id, tournamentId, groupId).select("-_id");
 		res.send({
 			status: true,
-			data: { topScorer: topScorerPrediction ? topScorerPrediction.topScorer.name : null, winnerTeam: teamPrediction ? teamPrediction.winnerTeam : null, userBets },
+			data: {
+				topScorer: topScorerPrediction ? topScorerPrediction.topScorer.name : null,
+				winnerTeam: teamPrediction ? teamPrediction.winnerTeam : null,
+				userBets,
+			},
 		});
-	} catch (error) {	
+	} catch (error) {
 		res.send({ status: false, data: "אירעה בעיה בקבלת הימורי המשתמש" });
 	}
 });
@@ -28,9 +31,9 @@ router.put("/placeBets", async (req, res) => {
 
 	try {
 		const resp = await betServices.placeBets(bets);
-		res.send({status: true, data: resp.modifiedCount + resp.upsertedCount});
+		res.send({ status: true, data: resp.modifiedCount + resp.upsertedCount });
 	} catch (error) {
-		res.send({status: false, data: "אירעה שגיאה בקבלת תוצאות המשתמשים"})
+		res.send({ status: false, data: "אירעה שגיאה בקבלת תוצאות המשתמשים" });
 	}
 });
 
@@ -38,22 +41,26 @@ router.post("/allUsersBets", async (req, res) => {
 	const { tournamentId, groupId } = req.body;
 
 	try {
-		const usersBets = await betServices.getUsersBetsByGroup(tournamentId, groupId).select("-_id -tournamentId -groupId");
-		res.send({status: true, data: usersBets});
+		const usersBets = await betServices
+			.getUsersBetsByGroup(tournamentId, groupId)
+			.select("-_id -tournamentId -groupId");		
+		res.send({ status: true, data: usersBets });
 	} catch (error) {
-		res.send({status: false, data: "אירעה שגיאה בקבלת תוצאות המשתמשים"})
+		res.send({ status: false, data: "אירעה שגיאה בקבלת תוצאות המשתמשים" });
 	}
-})
+});
 
 router.post("/specificMatchUsersBets", async (req, res) => {
 	const { tournamentId, groupId, matchId } = req.body;
 
 	try {
-		const usersBets = await betServices.getUsersBetsByMatch(tournamentId, groupId, matchId).select("-_id -tournamentId -groupId");
-		res.send({status: true, data: usersBets});
+		const usersBets = await betServices
+			.getUsersBetsByMatch(tournamentId, groupId, matchId)
+			.select("-_id -tournamentId -groupId");
+		res.send({ status: true, data: usersBets });
 	} catch (error) {
-		res.send({status: false, data: "אירעה שגיאה בקבלת תוצאות המשתמשים"})
+		res.send({ status: false, data: "אירעה שגיאה בקבלת תוצאות המשתמשים" });
 	}
-})
+});
 
 export default router;

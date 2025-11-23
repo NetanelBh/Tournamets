@@ -89,7 +89,7 @@ const MyBets = () => {
 	// Get the user predictions(for tournament winner team and top scorer) to update the relevant dropdown
 	useEffect(() => {
 		// Fetch data only for app start and not when refresh the page(to avoid lose the bets before sent to server)
-		if (bets.userDbScore.length > 0) return;
+		if (bets.userDbScore.length > 0) return;		
 
 		const fetchPredictions = async () => {
 			setIsLoading(true);

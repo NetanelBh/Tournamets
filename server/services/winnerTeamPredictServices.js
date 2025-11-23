@@ -15,3 +15,8 @@ export const updatePredict = (userId, tournamentId, groupId, winnerTeam) => {
     const data = {winnerTeam};
     return winnerTeamPredictRepo.updatePredict(filterObj, data);
 };
+
+export const getAllByGroup = (tournamentId, groupId) => {
+    const filterObj = {group: groupId, tournament: tournamentId};
+    return winnerTeamPredictRepo.getAllByGroup(filterObj);
+};

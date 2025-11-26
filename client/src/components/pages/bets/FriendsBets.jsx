@@ -7,6 +7,7 @@ import Loading from "../../UI/loading/Loading";
 import { betsActions } from "../../store/slices/betSlice";
 
 // TODO: CREATE GENERIC FETCH COMPONENT TO GET (ISlOADING, ERROR, DATA, FETCH FUNCTION)
+// TODO: THE CUSTOM HOOK WILL GET AN FETCH API FUNCTION AS ARGUMENT TO USE IT INSIDE THE FETCH FUNCTION
 
 const FriendsBets = () => {
 	const dispatch = useDispatch();

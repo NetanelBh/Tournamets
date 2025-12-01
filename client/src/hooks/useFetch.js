@@ -1,5 +1,4 @@
-import { useState } from "react";
-import API from "../utils/Api";
+import { useState, useCallback } from "react";
 
 const useFetch = (fetchFunction) => {
 	const [isLoading, setIsLoading] = useState(false);
@@ -14,6 +13,10 @@ const useFetch = (fetchFunction) => {
 
 		try {
 			const response = await fetchFunction();
+			if(!response.data.status) {
+				setError(response.data.data);
+				return;
+			}
 			setData(response.data.data);
 		} catch (error) {
 			setError(error);

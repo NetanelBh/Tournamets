@@ -193,14 +193,3 @@ export const usersPoints = (data) => {
 
 	return sortedUsers;
 };
-
-export const fetchUserBets = async (matchId) => {
-	// Fetch all users bet for the specific match(only if not fetched before)
-	const usersBets = await API.post("/bets/allUsersBets", {
-		tournamentId: localStorage.getItem("tournamentId"),
-		groupId: localStorage.getItem("groupId"),
-		matchId,
-	});
- 
-	return usersBets;
-};

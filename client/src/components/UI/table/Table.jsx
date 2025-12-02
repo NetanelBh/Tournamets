@@ -1,5 +1,6 @@
 const Table = ({ data }) => {
 	// data prop is an object {headers: [], rows: []}
+	
 	return (
 		<div className="relative overflow-x-auto shadow-md rounded-lg mb-4">
 			<table className="text-center min-w-65 table-auto text-sm font-bold dark:text-blue-100">

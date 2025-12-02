@@ -1,6 +1,6 @@
 import API from "../../utils/Api";
 import { useSelector } from "react-redux";
-import { use, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 import { usersPoints } from "./betsUtils";
 import { tableColumns } from "./betsUtils";

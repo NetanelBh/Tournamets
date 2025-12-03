@@ -6,7 +6,7 @@ import Table from "../../UI/table/Table";
 import Loading from "../../UI/loading/Loading";
 import { betsActions } from "../../store/slices/betSlice";
 
-// TODO: CREATE GENERIC FETCH COMPONENT TO GET (ISlOADING, ERROR, DATA, FETCH FUNCTION)
+// TODO: CREATE THE ISLOADING CHEMISTERY AND THE MODAL
 
 const FriendsBets = () => {
 	const dispatch = useDispatch();

@@ -17,7 +17,6 @@ const BetsHeader = () => {
 	const user = useSelector((state) => state.user.user);
 
 	const currentGroup = user.groups.find((g) => g._id === localStorage.getItem("groupId"));
-	console.log(currentGroup);
 
 	// const groupName = user.groups.find((g) => g._id === localStorage.getItem("groupId"))?.name || "";
 	// Find if the current user is the group's owner(to determine if display the group code on his screen)

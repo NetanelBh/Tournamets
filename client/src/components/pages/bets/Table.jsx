@@ -23,6 +23,8 @@ const Table = () => {
 	const tournamentId = localStorage.getItem("tournamentId");
 	const groupId = localStorage.getItem("groupId");
 
+	// TODO: ADD NEW STYLE TO TEH TABLE
+
 	// Fetch all users top scorer and winner team bets(only once)
 	useEffect(() => {
 		const fetchData = async () => {

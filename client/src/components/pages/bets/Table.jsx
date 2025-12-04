@@ -38,7 +38,7 @@ const Table = () => {
 			} catch (error) {
 				setOpenModal(true);
 				setModalText({ title: "טבלה", text: "אירעה שגיאה בטעינת הטבלה אנא נסה שנית" });
-				navigateTo("/layout/bets-layout/bets-table");
+				setNavigateTo("/layout/bets-layout/bets-table");
 			} finally {
 				setIsLoading(false);
 			}

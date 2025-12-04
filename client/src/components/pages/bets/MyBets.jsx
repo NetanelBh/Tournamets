@@ -11,8 +11,6 @@ import { userActions } from "../../store/slices/userSlice";
 import { matchesActions } from "../../store/slices/matchesSlice";
 import { playersActions } from "../../store/slices/playersSlice";
 
-// TODO: WHEN THE MATCHES LIST IS EMPTY(NO MATCHES TO BET-IF STARTED), SHOW A MESSAGE(NO OPEN MATCHES FOR BET)
-
 const MyBets = () => {
 	// Clear the stored matchId(if stored)
 	localStorage.removeItem("matchId");
@@ -89,7 +87,7 @@ const MyBets = () => {
 	// Get the user predictions(for tournament winner team and top scorer) to update the relevant dropdown
 	useEffect(() => {
 		// Fetch data only for app start and not when refresh the page(to avoid lose the bets before sent to server)
-		if (bets.userDbScore.length > 0) return;		
+		if (bets.userDbScore.length > 0) return;
 
 		const fetchPredictions = async () => {
 			setIsLoading(true);
@@ -389,17 +387,27 @@ const MyBets = () => {
 						</div>
 					)}
 
-					{/* Not started matches list - for betting */}
-					<MatchesList matches={notStartedMatches} />
+					{/* If there is at least one match to bet, render the matches list */}
+					{notStartedMatches.length > 0 && (
+						<>
+							{/* Not started matches list - for betting */}
+							<MatchesList matches={notStartedMatches} />
 
-					<footer
-						className="border-t-4 border-r-4 border-l-4 border-red-600 shadow-inner shadow-gray-600 w-full text-center sm:w-3/9 fixed bottom-0 p-8 hover:py-10 active:py-10 active:cursor-pointer text-xl text-black font-bold bg-gray-700 rounded-tl-3xl rounded-tr-3xl"
-						onClick={saveBetHandler}
-					>
-						<span className="hover:cursor-pointer active:bg-gray-800 active:text-yellow-300 bg-yellow-300 px-4 py-2 rounded-lg border-3 border-red-600">
-							שמור הימורים
-						</span>
-					</footer>
+							<footer
+								className="border-t-4 border-r-4 border-l-4 border-red-600 shadow-inner shadow-gray-600 w-full text-center sm:w-3/9 fixed bottom-0 p-8 hover:py-10 active:py-10 active:cursor-pointer text-xl text-black font-bold bg-gray-700 rounded-tl-3xl rounded-tr-3xl"
+								onClick={saveBetHandler}
+							>
+								<span className="hover:cursor-pointer active:bg-gray-800 active:text-yellow-300 bg-yellow-300 px-4 py-2 rounded-lg border-3 border-red-600">
+									שמור הימורים
+								</span>
+							</footer>
+						</>
+					)}
+
+					{/* If no matches open to bet, render a message */}
+					{notStartedMatches.length === 0 && (
+						<div className="text-white text-xl mt-4">אין משחקים פתוחים להימור</div>
+					)}
 
 					{openModal && <Modal title="שמירת הימורים" text={modalText} onClick={closeModalHandler} />}
 				</>

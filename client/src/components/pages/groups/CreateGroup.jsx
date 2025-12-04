@@ -12,8 +12,6 @@ import Loading from "../../UI/loading/Loading";
 import RadioButtonsArea from "./points/RadioButtonsArea";
 import { userActions } from "../../store/slices/userSlice";
 
-// TODO: CHECK WHEN GROUP IS CREATED, WHY I CAN'T SEE IT IM MY GROUPS(MAYBE NEED TO UPDATE REDUX WITH GROUP IN THE USER GROUPS LIST)
-
 const CreateGroup = () => {
 	// "samePoints" or "differentPoints" for knockout matches
 	const [pointsMethod, setPointsMethod] = useState("samePoints");

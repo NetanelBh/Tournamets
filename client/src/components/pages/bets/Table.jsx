@@ -6,33 +6,51 @@ import { usersPoints } from "./betsUtils";
 import { tableColumns } from "./betsUtils";
 
 import TableRow from "./TableRow";
+import Modal from "../../modal/Modal";
 import TableHeader from "./TableHeader";
+import Loading from "../../UI/loading/Loading";
+import { useNavigate } from "react-router-dom";
 
 const Table = () => {
 	const [usersTopScorer, setUsersTopScorer] = useState([]);
 	const [usersWinnerTeam, setUsersWinnerTeam] = useState([]);
+	const [isLoading, setIsLoading] = useState(false);
+	const [modalText, setModalText] = useState({});
+	const [openModal, setOpenModal] = useState(false);
+	const [navigateTo, setNavigateTo] = useState("");
+	const navigate = useNavigate();
+
 	const tournamentId = localStorage.getItem("tournamentId");
 	const groupId = localStorage.getItem("groupId");
 
 	// Fetch all users top scorer and winner team bets(only once)
 	useEffect(() => {
 		const fetchData = async () => {
+			setIsLoading(true);
 			try {
 				const [allUsersTopScorers, allUsersWinnerTeams] = await Promise.all([
 					API.post("/topScorerBet/getAllByGroup", { tournamentId, groupId }),
 					API.post("/winnerTeamBet/getAllByGroup", { tournamentId, groupId }),
-				])
+				]);
 
 				setUsersTopScorer(allUsersTopScorers.data.data);
 				setUsersWinnerTeam(allUsersWinnerTeams.data.data);
 			} catch (error) {
-				console.log(error);
-				// TODO: CREATE A MODAL FOR THIS PAGE(BECAUSE USING PROMISE.ALL)
+				setOpenModal(true);
+				setModalText({ title: "טבלה", text: "אירעה שגיאה בטעינת הטבלה אנא נסה שנית" });
+				navigateTo("/layout/bets-layout/bets-table");
+			} finally {
+				setIsLoading(false);
 			}
-		}
+		};
 
 		fetchData();
 	}, []);
+
+	const closeModalHandler = () => {
+		setOpenModal(false);
+		navigate(navigateTo);
+	};
 
 	// Create an object with all required data to calculate the points from external function
 	const data = {
@@ -45,32 +63,53 @@ const Table = () => {
 		// Get the current group points rules(calculate the points for the each user in the table and exact/directions bets)
 		groupPointsRules: useSelector((state) => state.user.user.groups.find((g) => g._id === groupId)).points,
 		// Get the current tournament to get the top scorer bonus and the winner team bonus
-		tournamentTopScorerId: useSelector((state) => state.tournaments.tournaments.find((t) => t._id === tournamentId).topScorer),
+		tournamentTopScorerId: useSelector(
+			(state) => state.tournaments.tournaments.find((t) => t._id === tournamentId).topScorer
+		),
 		usersTopScorers: usersTopScorer,
 		usersWinnerTeams: usersWinnerTeam,
-	}
+	};
 
 	// Sorted users points list to display in table
-	const usersTableData = usersPoints(data);	
+	const usersTableData = usersPoints(data);
 
 	return (
-		<div className="flex flex-col">
-			<div className="overflow-x-auto sm:-mx-6 lg:-mx-8">
-				<div className="inline-block min-w-full py-2 sm:px-6 lg:px-8">
-					<div className="overflow-hidden">
-						<table className="min-w-full border text-center text-xs font-light text-white dark:border-neutral-500">
-							<TableHeader columns={tableColumns} />
+		<>
+			{isLoading && <Loading />}
 
-							<tbody>
-								{usersTableData.map((user, index) => (
-									<TableRow key={index} user={user} index={index} columns={tableColumns} />
-								))}
-							</tbody>
-						</table>
-					</div>
-				</div>
-			</div>
-		</div>
+			{!isLoading && (
+				<>
+					{!openModal && (
+						<div className="flex flex-col">
+							<div className="overflow-x-auto sm:-mx-6 lg:-mx-8">
+								<div className="inline-block min-w-full py-2 sm:px-6 lg:px-8">
+									<div className="overflow-hidden">
+										<table className="min-w-full border text-center text-xs font-light text-white dark:border-neutral-500">
+											<TableHeader columns={tableColumns} />
+
+											<tbody>
+												{usersTableData.map((user, index) => (
+													<TableRow
+														key={index}
+														user={user}
+														index={index}
+														columns={tableColumns}
+													/>
+												))}
+											</tbody>
+										</table>
+									</div>
+								</div>
+							</div>
+						</div>
+					)}
+
+					{openModal && (
+						<Modal title={modalText.title} text={modalText.text} closeModal={closeModalHandler} />
+					)}
+				</>
+			)}
+		</>
 	);
 };
 

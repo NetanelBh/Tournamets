@@ -3,23 +3,27 @@ import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 
 import Table from "../../UI/table/Table";
+import Modal from "../../modal/Modal";
 import Loading from "../../UI/loading/Loading";
 import { betsActions } from "../../store/slices/betSlice";
-
-// TODO: CREATE THE ISLOADING CHEMISTERY AND THE MODAL
+import { useNavigate } from "react-router-dom";
 
 const FriendsBets = () => {
 	const dispatch = useDispatch();
-	const matchId = localStorage.getItem("matchId");
+	const navigate = useNavigate();
 	const [isLoading, setIsLoading] = useState(false);
+	const [modalText, setModalText] = useState({});
+	const [openModal, setOpenModal] = useState(false);
+	const [navigateTo, setNavigateTo] = useState("");
 
+	const matchId = localStorage.getItem("matchId");
 	// Get the user to know who is the current user between all the friends bet(want to write it in the table as "me")
 	const currentUser = useSelector((state) => state.user.user);
 	const allUsers = useSelector((state) => state.user.allUsers);
 	const matches = useSelector((state) => state.matches.matches);
 
 	// Fetch data only once per match that started already. Match that not stored in redux, will be fetched from the DB
-	useEffect(() => {		
+	useEffect(() => {
 		const fetchAllUsersBets = async () => {
 			setIsLoading(true);
 			try {
@@ -27,12 +31,14 @@ const FriendsBets = () => {
 				const usersBets = await API.post("/bets/allUsersBets", {
 					tournamentId: localStorage.getItem("tournamentId"),
 					groupId: localStorage.getItem("groupId"),
-					matchId
+					matchId,
 				});
-				
+
 				dispatch(betsActions.load([{ type: "usersBetsForMatch", data: usersBets.data.data }]));
 			} catch (error) {
-				console.log(error);
+				setOpenModal(true);
+				setModalText({ title: "תוצאות החברים", text: "שגיאה בטעינת התוצאות, אנא נסה שנית" });
+				setNavigateTo("/layout/bets-layout/closed-bets");
 			} finally {
 				setIsLoading(false);
 			}
@@ -40,6 +46,11 @@ const FriendsBets = () => {
 
 		fetchAllUsersBets();
 	}, [matchId]);
+
+	const closeModalHandler = () => {
+		setOpenModal(false);
+		navigate(navigateTo);
+	};
 
 	const bets = useSelector((state) => state.bets);
 	// If is the first time we entered here, the all users bets list will not exist yet(useEffect run only at the end)
@@ -58,7 +69,7 @@ const FriendsBets = () => {
 		}
 
 		// If the current iteration user is in the users bets list, get the score(sometimes user doesn't bet on match)
-		const currentIterationUserBet = betsOfThisMatch.find((bet) => bet.userId === user._id);    
+		const currentIterationUserBet = betsOfThisMatch.find((bet) => bet.userId === user._id);
 		if (currentIterationUserBet) {
 			score = `${currentIterationUserBet.betScore.homeScore} : ${currentIterationUserBet.betScore.awayScore}`;
 		}
@@ -75,8 +86,20 @@ const FriendsBets = () => {
 
 	return (
 		<>
-			<h1 className="mb-4 mt-4 text-lg text-yellow-400">{matchName}</h1>
-			<Table data={allUsersBetsData} />
+			{isLoading && <Loading />}
+			
+			{!isLoading && (
+				<>
+					{openModal && <Modal title={modalText.title} text={modalText.text} closeModal={closeModalHandler} />}
+
+					{!openModal && (
+						<>
+							<h1 className="mb-4 mt-4 text-lg text-yellow-400">{matchName}</h1>
+							<Table data={allUsersBetsData} />
+						</>
+					)}
+				</>
+			)}
 		</>
 	);
 };

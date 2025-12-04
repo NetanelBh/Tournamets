@@ -32,6 +32,8 @@ const AllTournaments = () => {
 				dispatch(tournamentsActions.load(fetchedTournaments.data.data));
 			} catch (error) {
 				setOpenModal(true);
+				setModalText({ title: "שגיאה בשרת", text: "אירעה בעיה בשרת, אנא נסה שנית" });
+				setNavigateTo("/layout/all-tournaments");
 			} finally {
 				setIsLoading(false);
 			}

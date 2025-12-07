@@ -21,6 +21,8 @@ import BetsLayout from "../pages/layouts/BetsLayout";
 import MyBets from "../pages/bets/MyBets";
 import ClosedMatches from "../pages/bets/ClosedMatches";
 import FriendsBets from "../pages/bets/FriendsBets";
+import PointsExplain from "../pages/bets/PointsExplain";
+import TableRankExplain from "../pages/bets/TableRankExplain";
 import Table from "../pages/bets/Table";
 
 const CreateRouter = () => {
@@ -54,6 +56,8 @@ const CreateRouter = () => {
 						{ path: "/layout/bets-layout/bets-table", element: <Table /> },
 						{ path: "/layout/bets-layout/frients-bets", element: <FriendsBets /> },
 						{ path: "/layout/bets-layout/closed-bets", element: <ClosedMatches /> },
+						{ path: "/layout/bets-layout/points-explain", element: <PointsExplain /> },
+						{ path: "/layout/bets-layout/table-rank-explain", element: <TableRankExplain /> },
 					],
 				},
 			],

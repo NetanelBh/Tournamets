@@ -152,10 +152,10 @@ const MatchListItem = ({ match }) => {
 
 					<div className="w-full lg:w-3/4 grid grid-cols-4 gap-1 justify-self-center">
 						<div className="bg-gray-300 col-span-2 text-center border border-black h-6">
-							{scoreFromDb.home !== -1 && scoreFromDb.away !== -1 ? scoreFromDb.home : ""}
+							{scoreFromDb.home !== -1 && scoreFromDb.away !== -1 ? scoreFromDb.home : "טרם"}
 						</div>
 						<div className="bg-gray-300 col-span-2 text-center border border-black h-6">
-							{scoreFromDb.away !== -1 && scoreFromDb.home !== -1 ? scoreFromDb.away : ""}
+							{scoreFromDb.away !== -1 && scoreFromDb.home !== -1 ? scoreFromDb.away : "טרם"}
 						</div>
 					</div>
 				</div>

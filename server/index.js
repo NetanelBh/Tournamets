@@ -1,7 +1,9 @@
 import "dotenv/config";
 import cors from "cors";
+import http from "http";
 import express from "express";
 
+import initSocket from "./socket.js";
 import dbConnection from "./config/mongo.js";
 
 import authentication from "./middleware/authentication.js";
@@ -26,8 +28,14 @@ app.use(cors({
   credentials: true
 }));
 
+// HTTP server wrapper (required for socket.io)
+const server = http.createServer(app);
+
 // Connect to DB
 await dbConnection();
+
+// Initialize Socket.IO in a separate file
+initSocket(server);
 
 // First, let the user login or create a new account 
 app.use("/auth", authRouter);
@@ -44,4 +52,4 @@ app.use("/tournament", tounamentRouter);
 app.use("/winnerTeamBet", winnerTeamRouter);
 app.use("/topScorerBet", topScorerPredictionRouter);
 
-app.listen(PORT, () => console.log(`Server is running on port ${PORT}`));
+server.listen(PORT, () => console.log(`Server is running on port ${PORT}`));

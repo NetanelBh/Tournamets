@@ -90,6 +90,15 @@ const BetsHeader = () => {
 								טבלה
 							</NavLink>
 						</nav>
+
+						<div className="relative group inline-block mr-8">
+							<button className="bg-teal-500 text-white px-3 py-1 rounded-full hover:bg-teal-600 transition duration-300 ease-in-out transform hover:scale-105">
+								?
+							</button>
+							<div className="opacity-0 invisible group-hover:opacity-100 group-hover:visible absolute w-48 mt-2 bg-white text-gray-800 border border-gray-300 rounded-lg shadow-lg py-2 z-10">
+								<p className="px-4 py-2">לחץ להסבר על שיטת הניקוד של המשחקים</p>
+							</div>
+						</div>
 					</div>
 				</div>
 			</header>

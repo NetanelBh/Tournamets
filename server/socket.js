@@ -17,7 +17,7 @@ const initSocket = (server) => {
     });
   });
 
-  // WATCH the collection for real-time changes:
+  // WATCH the collections for real-time changes:
   const matchCollection = mongoose.connection.collection("matches");
 
   const changeStream = matchCollection.watch([], { fullDocument: "updateLookup" });

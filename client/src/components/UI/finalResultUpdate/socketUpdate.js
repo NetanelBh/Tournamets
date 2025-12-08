@@ -13,10 +13,6 @@ const initSocketListener = () => {
 			transports: ["websocket", "polling"],
 		});
 
-		socket.on("connect", () => {
-			console.log("Connected to socket server", socket.id);
-		});
-
 		// Listen for match updates
 		socket.on("matchUpdated", (updatedMatch) => {
 			// Dispatch update to Redux store

@@ -23,7 +23,7 @@ const TableRankExplain = () => {
 			<ExplainData data={data} />
 
 			{/* Show this show only if the tournament includes the top scorer bet */}
-			{currentTournament.topScorerBet && <p className="text-body">5. הימור נכון על מלך השערים</p>}
+			{currentTournament.topScorerBet && <p className="text-body">5) הימור נכון על מלך השערים</p>}
 		</div>
 	);
 };

@@ -1,5 +1,3 @@
-import API from "../../utils/Api";
-
 // Color Map to insert to tailwind
 export const colorMap = {
 	green: "bg-green-300",
@@ -193,3 +191,51 @@ export const usersPoints = (data) => {
 
 	return sortedUsers;
 };
+
+export const groupPointsExplain = (pointsRules) => {
+	const exactTemplate = "מדויק -  ";
+	const directionTemplate = "כיוון -  ";
+	const pointsTemplate = "נקודות";
+
+	// Uses to extract the data for the group stage
+	const groupExact = `${exactTemplate}${pointsRules.groupStage.exactScore} ${pointsTemplate}`;
+	const groupDirection = `${directionTemplate}${pointsRules.groupStage.directionScore} ${pointsTemplate}`;
+
+	const rules = { groupStage: [groupExact, groupDirection], knockoutStage: [] };
+
+	if (pointsRules.knockoutStage.pointsMethod === "samePoints") {
+		// Extract the points for the knockout stage
+		const samePoints = pointsRules.knockoutStage.samePoints;
+		rules.knockoutStage.push(`${exactTemplate}${samePoints.exactScore} ${pointsTemplate}`);
+		rules.knockoutStage.push(`${directionTemplate}${samePoints.directionScore} ${pointsTemplate}`);
+
+		return rules;
+	}
+
+	// This section, calculate the points if the points method is different between the stages(final/semi...)
+	const differentPoints = pointsRules.knockoutStage.differentPoints;
+	// Get all levels name from the points rules and store it for sort(ascending)
+	const tempArray = [];
+	for (const level in differentPoints) {
+		tempArray.push({level: level, points: differentPoints[level]});
+		// Sort the array to show the rules from the first stage to final(ascending)
+		tempArray.sort((a, b) => b.points.exactScore - a.points.exactScore);
+	}
+	
+	// After the array sort, create the points rules text for the knockout stage
+	for (const score of tempArray) {
+		rules.knockoutStage.push(`${levelsTranslation[score.level]} גמר: ${exactTemplate}${differentPoints[score.level].exactScore} ${pointsTemplate}`);
+		rules.knockoutStage.push(`${levelsTranslation[score.level]} גמר: ${directionTemplate}${differentPoints[score.level].directionScore} ${pointsTemplate}`);
+	}
+	
+
+	return rules;
+};
+
+const levelsTranslation = {
+	"roundOf32": "1/16",
+	"roundOf16": "שמינית",
+	"quarterFinal": "רבע",
+	"semiFinal": "חצי",
+	"final": "",
+}

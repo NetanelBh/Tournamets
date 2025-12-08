@@ -27,6 +27,12 @@ const initSocket = (server) => {
       io.emit("matchUpdated", change.fullDocument);
     }
   });
+
+  changeStream.on("error", (err) => {
+    console.error("ChangeStream error:", err);
+    console.log("Reconnecting change stream in 2 seconds...");
+    setTimeout(initSocket, 2000); // auto-reconnect
+  });
 }
 
 export default initSocket;

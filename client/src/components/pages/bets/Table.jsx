@@ -107,7 +107,7 @@ const Table = () => {
 					)}
 
 					{openModal && (
-						<Modal title={modalText.title} text={modalText.text} closeModal={closeModalHandler} />
+						<Modal title={modalText.title} text={modalText.text} onClick={closeModalHandler} />
 					)}
 				</>
 			)}

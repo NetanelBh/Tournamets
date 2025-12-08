@@ -26,8 +26,6 @@ const BetsHeader = () => {
 	const codeDisplay = () => {
 		setIsCodeDisplay((prev) => !prev);
 	};
-
-	console.log(pathname);
 	
 	const pointsExplainHandler = () => {
 		if (pathname.includes("bets-table")) {

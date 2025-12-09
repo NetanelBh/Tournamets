@@ -5,6 +5,7 @@ import * as tournamentServices from "../services/tournamentServices.js";
 
 import findUnpaidUsers from "../utils/findUnpaidUsers.js";
 import israelToUTC from "../utils/ConvertIsraelTimeToUtc.js";
+import teamNameTranslation from "../utils/teamNameTranslation.js";
 import { getUserbyId, addTournamentToUser } from "../services/userServices.js";
 
 const router = express.Router();
@@ -38,6 +39,14 @@ router.post("/create", async (req, res) => {
 		
 		// Get the fixtures from wikipedia (translated to hebrew)
 		const fixtures = await fetchFixtures(name);
+		for (const fixture of fixtures) {
+			const home = await teamNameTranslation(fixture.home);
+			const away = await teamNameTranslation(fixture.away);
+			fixture.home = home;
+			fixture.away = away;
+		}
+
+		// TODO: HERE AFTER THE FIXTURES TRANSLATION, CREATE THE MATCHES FOR THE TOURNAMENT
 
 		// From the fixtures, extract the teams(with set to avoid duplicates)
 		const teams = new Set();

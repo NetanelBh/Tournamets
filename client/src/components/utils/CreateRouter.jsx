@@ -13,6 +13,7 @@ import AllTournaments from "../pages/tournaments/AllTournaments";
 import CreateTournament from "../pages/tournaments/CreateTournament";
 
 import MyGroups from "../pages/groups/MyGroups";
+import AddMatch from "../pages/groups/AddMatch";
 import JoinGroup from "../pages/groups/JoinGroup";
 import CreateGroup from "../pages/groups/CreateGroup";
 import GroupsLayout from "../pages/layouts/GroupsLayout";
@@ -43,6 +44,7 @@ const CreateRouter = () => {
 					path: "/layout/groups-layout",
 					element: <GroupsLayout />,
 					children: [
+						{ path: "/layout/groups-layout/add-match", element: <AddMatch /> },
 						{ path: "/layout/groups-layout/my-groups", element: <MyGroups /> },
 						{ path: "/layout/groups-layout/join-group", element: <JoinGroup /> },
 						{ path: "/layout/groups-layout/create-group", element: <CreateGroup /> },

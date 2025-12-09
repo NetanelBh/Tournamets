@@ -1,5 +1,5 @@
 import * as matchRepo from "../repos/matchRepo.js";
 
-export const getAllMatches = async (tournamentId) => {
-    return await matchRepo.getAllMatches(tournamentId);
-}
+export const getAllMatches = (tournamentId) => matchRepo.getAllMatches(tournamentId);
+
+export const createMatch = (tournamentId, match) => matchRepo.createMatch(tournamentId, match);

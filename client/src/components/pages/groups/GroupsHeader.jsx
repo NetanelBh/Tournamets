@@ -57,6 +57,20 @@ const GroupsHeader = () => {
 									צור קבוצה
 								</NavLink>
 							)}
+
+							{/* Admin can create a new match(in case of knockout instead insert manually) */}
+							{sessionStorage.getItem("isAdmin") === "true" && (
+								<NavLink
+									to="/layout/groups-layout/add-match"
+									className={`hover:text-gray-300 transition-all ${
+										pathname.includes("add-match")
+											? "text-yellow-400 font-semibold hover:text-yellow-400"
+											: ""
+									}`}
+								>
+									הוסף משחק לטורניר
+								</NavLink>
+							)}
 						</nav>
 					</div>
 				</div>

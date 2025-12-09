@@ -17,4 +17,18 @@ router.post("/getAll", async (req, res) => {
     }
 });
 
+router.post("/create", async (req, res) => {
+    const { tournamentId, match } = req.body;
+    try {
+        const newMatch = await matchServices.createMatch(tournamentId, match);
+        if(!newMatch) {
+            res.send({ status: false, data: "אירעה בעיה ביצירת המשחק, אנא נסה שנית" });
+            return;
+        }
+        res.send({ status: true, data: newMatch });
+    } catch (error) {
+        res.send({ status: false, data: "אירעה שגיאה ביצירת המשחק, אנא נסה שנית" });
+    }
+});
+
 export default router;

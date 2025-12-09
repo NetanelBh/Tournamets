@@ -35,6 +35,7 @@ const BetsHeader = () => {
 		}
 	}
 
+
 	return (
 		<>
 			{/* Tournament name */}
@@ -73,9 +74,6 @@ const BetsHeader = () => {
 				>
 					{pathname.includes("bets-table") ? "הסבר שוברי שויון" : "הסבר חישוב הנקודות"}
 				</button>
-
-				{/* If the group code is displayed, let the owner the option to share it on whatsapp */}
-				{isCodeDisplay && <WhatsAppButton message={`הקוד לקבוצה: *${currentGroup.code}*`} />}
 			</div>}
 
 			<header className="text-white mt-6">

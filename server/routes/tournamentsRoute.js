@@ -85,38 +85,6 @@ router.post("/create", async (req, res) => {
 		// Create a job scheduler to find unpaid users in group that included payment and delete them from the group
 		findUnpaidUsers(tournament._id);
 
-
-		// TODO: TRY TO CREATE A NEW TOURNAMENT AND SEE IF IT ADD THE NEW MATCHES
-		// Matches array to add to Mongo
-		const matchesArray = [];
-		// Create the matches for the tournament
-		for (const fixture of fixtures) {
-			// Get only the template of yyyy-mm-dd
-			const date = fixture.date.match(/\d{4}-\d{2}-\d{2}/);
-			fixture.date = new Date(date + "T00:00:00Z");
-
-			const newMatch = {
-				tournament: tournament._id,
-				homeTeam: fixture.home,
-				awayTeam: fixture.away,
-				kickoffTime,
-				stage: "בתים",
-				round: "ראשון",
-				finalScore: {
-					homeScore: -1,
-					awayScore: -1,
-				},
-			};
-
-			matchesArray.push(newMatch);
-		}
-
-		const resp = await tournamentServices.createMatchesAtCreation(matchesArray);
-		if (!resp) {
-			res.send({ status: false, data: "אירעה בעיה ביצירת המשחקים, אנא נסה שנית" });
-			return;
-		}
-
 		res.send({ status: true, data: tournament });
 	} catch (error) {
 		console.log(error);

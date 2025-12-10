@@ -9,3 +9,5 @@ export const getTournamentById = (id) => TournamentModel.findById(id);
 export const create = (tournament) => TournamentModel(tournament).save();
 
 export const getAllTeams = (id) => TournamentModel.distinct("teams", { _id: id });
+
+export const createMatchesAtCreation = (matchesArray) => TournamentModel.insertMany(matchesArray);

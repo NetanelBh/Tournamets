@@ -3,7 +3,7 @@ const GroupListItem = ({ item, index, btnText, onClick, leave = undefined }) => 
 
 	return (
 		<li className={main_style} style={{ animationDelay: `${index * 0.15}s` }}>
-			<div className="absolute inset-0 bg-teal-600/60 group-hover:bg-cyan-900/10 transition duration-300 z-0"></div>
+			<div className="absolute inset-0 bg-teal-600/60 group-hover:bg-cyan-900/10 transition duration-100 z-0"></div>
 			<div className="px-4 py-4 sm:px-4 relative z-10">
 				<div className="flex items-center justify-between h-16">
 					<p className="mt-1 max-w-2xl text-xl text-white font-medium">

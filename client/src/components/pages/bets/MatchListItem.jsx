@@ -6,7 +6,7 @@ import { matchesActions } from "../../store/slices/matchesSlice";
 import { finalScoreBackground, colorMap, textColorMap } from "./betsUtils";
 import { useNavigate } from "react-router-dom";
 
-const MatchListItem = ({ match }) => {
+const MatchListItem = ({ match }) => {	
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
 

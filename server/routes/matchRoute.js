@@ -3,6 +3,8 @@ import * as matchServices from "../services/matchServices.js";
 
 const router = express.Router();
 
+// Entry point: localhost:3000/match
+
 router.post("/getAll", async (req, res) => {
     const { tournamentId } = req.body;
     try {
@@ -18,9 +20,10 @@ router.post("/getAll", async (req, res) => {
 });
 
 router.post("/create", async (req, res) => {
-    const { tournamentId, match } = req.body;
+    const { match } = req.body;
+    
     try {
-        const newMatch = await matchServices.createMatch(tournamentId, match);
+        const newMatch = await matchServices.createMatch(match);
         if(!newMatch) {
             res.send({ status: false, data: "אירעה בעיה ביצירת המשחק, אנא נסה שנית" });
             return;

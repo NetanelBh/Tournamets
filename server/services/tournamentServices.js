@@ -23,3 +23,6 @@ export const create = (name, endDate, startTime, tournamentImage, topScorerBet, 
 export const getAllTeams = (id) => tournamentRepo.getAllTeams(id);
 
 export const getTournamentById = (id) => tournamentRepo.getTournamentById(id);
+
+// When create the tournament, also create the matches
+export const createMatchesAtCreation = (matchesArray) => tournamentRepo.createMatchesAtCreation(matchesArray);

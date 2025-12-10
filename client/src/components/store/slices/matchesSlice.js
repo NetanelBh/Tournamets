@@ -1,10 +1,11 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { addMatch } from "../../pages/groups/groupUtils";
 
 const initialState = {
 	matches: [], isStarted: false
 };
 
-const matchessSlice = createSlice({
+const matchesSlice = createSlice({
 	initialState,
 	name: "matches",
 	reducers: {
@@ -14,6 +15,7 @@ const matchessSlice = createSlice({
 		updateStartTime(state) {
 			state.isStarted = true;
 		},
+		// When get the update from mongo, update the final result of the match
 		updateFinalResult(state, action) {
 			// Find the index of the match(in case we want to update the final score of existing match)
 			const index = state.matches.findIndex((match) => match._id === action.payload._id);
@@ -24,8 +26,11 @@ const matchessSlice = createSlice({
 				state.matches.push(action.payload);
 			}
 		},
+		addMatch(state, action) {
+			state.matches.push(action.payload);
+		}
 	},
 });
 
-export const matchesActions = matchessSlice.actions;
-export default matchessSlice.reducer;
+export const matchesActions = matchesSlice.actions;
+export default matchesSlice.reducer;

@@ -8,6 +8,8 @@ import israelToUTC from "../utils/ConvertIsraelTimeToUtc.js";
 import teamNameTranslation from "../utils/teamNameTranslation.js";
 import { getUserbyId, addTournamentToUser } from "../services/userServices.js";
 
+import axios from "axios";
+
 const router = express.Router();
 
 // Entry point: localhost:3000/tournament
@@ -36,17 +38,9 @@ router.post("/create", async (req, res) => {
 
 		// Should convert the date entered to DATE object as UTC
 		const utcDate = israelToUTC(startDate, startTime);
-		
+
 		// Get the fixtures from wikipedia (translated to hebrew)
 		const fixtures = await fetchFixtures(name);
-		for (const fixture of fixtures) {
-			const home = await teamNameTranslation(fixture.home);
-			const away = await teamNameTranslation(fixture.away);
-			fixture.home = home;
-			fixture.away = away;
-		}
-
-		// TODO: HERE AFTER THE FIXTURES TRANSLATION, CREATE THE MATCHES FOR THE TOURNAMENT
 
 		// From the fixtures, extract the teams(with set to avoid duplicates)
 		const teams = new Set();
@@ -82,7 +76,7 @@ router.post("/create", async (req, res) => {
 			teamsArray,
 			players
 		);
-		
+
 		if (!tournament) {
 			res.send({ status: false, data: "טורניר לא נוצר, אנא נסה שנית" });
 			return;
@@ -91,10 +85,42 @@ router.post("/create", async (req, res) => {
 		// Create a job scheduler to find unpaid users in group that included payment and delete them from the group
 		findUnpaidUsers(tournament._id);
 
+
+		// TODO: TRY TO CREATE A NEW TOURNAMENT AND SEE IF IT ADD THE NEW MATCHES
+		// Matches array to add to Mongo
+		const matchesArray = [];
+		// Create the matches for the tournament
+		for (const fixture of fixtures) {
+			// Get only the template of yyyy-mm-dd
+			const date = fixture.date.match(/\d{4}-\d{2}-\d{2}/);
+			fixture.date = new Date(date + "T00:00:00Z");
+
+			const newMatch = {
+				tournament: tournament._id,
+				homeTeam: fixture.home,
+				awayTeam: fixture.away,
+				kickoffTime,
+				stage: "בתים",
+				round: "ראשון",
+				finalScore: {
+					homeScore: -1,
+					awayScore: -1,
+				},
+			};
+
+			matchesArray.push(newMatch);
+		}
+
+		const resp = await tournamentServices.createMatchesAtCreation(matchesArray);
+		if (!resp) {
+			res.send({ status: false, data: "אירעה בעיה ביצירת המשחקים, אנא נסה שנית" });
+			return;
+		}
+
 		res.send({ status: true, data: tournament });
 	} catch (error) {
 		console.log(error);
-		
+
 		res.send({ status: false, data: "אירעה בעיה ביצירת הטורניר, אנא נסה שנית" });
 	}
 });

@@ -1,6 +1,6 @@
 import Users from "../models/user.js";
 
-export const getAllUsers = (tournamentId, groupId) => Users.find({tournaments: tournamentId, groups: groupId});
+export const getAllUsers = (tournamentId, groupId) => Users.find({ tournaments: tournamentId, groups: groupId });
 
 export const getUserbyId = (userId) => Users.findOne({ _id: userId });
 
@@ -21,12 +21,8 @@ export const addTournamentToUser = (username, tournamentId) => {
 };
 
 export const leaveTournament = (userId, tournamentId) => {
-	return Users.findByIdAndUpdate(
-      userId,
-      { $pull: { tournaments: tournamentId } },
-      { new: true }
-    );
-}
+	return Users.findByIdAndUpdate(userId, { $pull: { tournaments: tournamentId } }, { new: true });
+};
 
 export const addUserToGroup = (userId, groupId) => {
 	// Add to groups only if the group not exist in the array
@@ -35,4 +31,9 @@ export const addUserToGroup = (userId, groupId) => {
 
 export const leaveGroup = (userId, groupId) => {
 	return Users.findByIdAndUpdate(userId, { $pull: { groups: groupId } }, { new: true });
+};
+
+// When user leave some tournament, we want to remove also the groups that the user joined for this tournament
+export const removeGroupsFromUser = (userId, groupsIds) => {
+	return Users.updateOne({ _id: userId }, { $pull: { groups: { $in: groupsIds } } });
 };

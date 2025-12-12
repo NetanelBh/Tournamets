@@ -17,3 +17,8 @@ export const addGroupMember = (groupId, userId) => {
 export const leaveGroup = (userId, groupId) => {
     return GroupModel.findByIdAndUpdate(groupId, { $pull: { members: {id: userId} } }, { new: true });
 };
+
+// When user leave some tournament, we want to remove also the user from theg roups that the user joined
+export const removeUserFromSelectedGroups = (userId) => {
+    return GroupModel.updateMany({"members.id": userId}, {$pull: {members: {id: userId}}});
+}

@@ -23,7 +23,7 @@ const CreateTournament = () => {
 
 	// Modal states
 	const [openModal, setOpenModal] = useState(true);
-	const [modalText, setModalText] = useState("בעת יצירת הטורניר, יש לעדכן את המשחקים בצורה ידנית ל DB");
+	const [modalText, setModalText] = useState("בעת יצירת הטורניר, יש ליצור את המשחקים ל DB");
 	const [navigateTo, setNavigateTo] = useState("/layout/create-tournament");
 	// State for topScorer bet
 	const [topScorerBet, setTopScorerBet] = useState(false);

@@ -26,15 +26,17 @@ const BetsHeader = () => {
 	const codeDisplay = () => {
 		setIsCodeDisplay((prev) => !prev);
 	};
-	
+
 	const pointsExplainHandler = () => {
 		if (pathname.includes("bets-table")) {
 			navigate("/layout/bets-layout/table-rank-explain");
 		} else {
 			navigate("/layout/bets-layout/points-explain");
 		}
-	}
+	};
 
+	const whatsappMessage = `שם הקבוצה: *${currentGroup.name}*
+הקוד לקבוצה: *${currentGroup.code}*`;
 
 	return (
 		<>
@@ -60,21 +62,22 @@ const BetsHeader = () => {
 					</button>
 
 					{/* If the group code is displayed, let the owner the option to share it on whatsapp */}
-					{isCodeDisplay && <WhatsAppButton message={`הקוד לקבוצה: *${currentGroup.code}*`} />}
+					{isCodeDisplay && <WhatsAppButton message={whatsappMessage} />}
 				</div>
 			)}
 
 			{/* Explain the points calculation for the group and table rank */}
-			{ (!pathname.includes("points-explain") && !pathname.includes("table-rank-explain")) &&
+			{!pathname.includes("points-explain") && !pathname.includes("table-rank-explain") && (
 				<div className="flex gap-2 mt-4">
-				{/* Determine if need to display the group code - for group owner only */}
-				<button
-					className="bg-gray-500 text-yellow-300 px-4 py-2 rounded-full hover:cursor-pointer active:cursor-pointer"
-					onClick={pointsExplainHandler}
-				>
-					{pathname.includes("bets-table") ? "הסבר שוברי שויון" : "הסבר חישוב הנקודות"}
-				</button>
-			</div>}
+					{/* Determine if need to display the group code - for group owner only */}
+					<button
+						className="bg-gray-500 text-yellow-300 px-4 py-2 rounded-full hover:cursor-pointer active:cursor-pointer"
+						onClick={pointsExplainHandler}
+					>
+						{pathname.includes("bets-table") ? "הסבר שוברי שויון" : "הסבר חישוב הנקודות"}
+					</button>
+				</div>
+			)}
 
 			<header className="text-white mt-6">
 				<div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5 sm:mt-4">

@@ -4,7 +4,7 @@ import mongoose from "mongoose";
 const initSocket = (server) => {
   const io = new Server(server, {
     cors: {
-      origin: "onlyfriendsbet.vercel.app",
+      origin: "https://betsforfriends.vercel.app",
       methods: ["GET", "POST"]
     }
   });

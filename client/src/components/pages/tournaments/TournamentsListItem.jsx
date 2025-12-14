@@ -39,7 +39,7 @@ const TournamentsListItem = ({ item, index, btnText, onClick, leave = undefined 
 				</div>
 				<div className="mt-4 flex items-center justify-between">
 					{/* Show the status only in AllTournaments page(כפתור כניסה זה רק עבור הטורנירים שלי) */}
-					<p className={btnText !== "כניסה" ? "text-medium font-medium text-white" : "invisible"}>
+					<p className={btnText !== "כניסה" ? "text-sm text-white" : "invisible"}>
 						סטטוס :{" "}
 						<span className={statusColor}>
 							{isJoined && btnText !== "כניסה" ? "נמצא בטורנירים שלי" : tournamentStatus}

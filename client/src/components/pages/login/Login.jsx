@@ -92,6 +92,7 @@ const Login = () => {
 										placeholder="your@email.com"
 										id="email"
 										autoComplete="email"
+										value={email}
 										// ref={emailRef}
 										onChange={(e) => setEmail(e.target.value)}
 									/>
@@ -110,6 +111,7 @@ const Login = () => {
 										placeholder="••••••••"
 										id="password"
 										autoComplete="current-password"
+										value={password}
 										// ref={passwordRef}
 										onChange={(e) => setPassword(e.target.value)}
 									/>

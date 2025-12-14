@@ -23,8 +23,10 @@ const PORT = process.env.PORT || 3000;
 // body-parser is a built-in middleware function in Express after version 4.16.0
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+const allowedOrigins = [process.env.REACT_ADDRESS];
 app.use(cors({
-  origin: process.env.REACT_ADDRESS,
+  origin: allowedOrigins,
   credentials: true
 }));
 

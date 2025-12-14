@@ -1,4 +1,4 @@
-import MatchListItem from "./matchListItem";
+import MatchListItem from "./MatchListItem";
 
 const MatchesList = ({ matches }) => {	
 	return (

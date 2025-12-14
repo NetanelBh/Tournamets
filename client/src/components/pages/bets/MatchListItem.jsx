@@ -61,10 +61,10 @@ const MatchListItem = ({ match }) => {
 			{/* If the match is not started yet, let the user place his bet */}
 			{!match.isStarted && (
 				<div className="col-span-5">
-					<h3 className="text-center text-white bg-gray-800 mb-3 rounded-b-xl pb-1">{match.round}</h3>
+					<h3 className="text-center text-white bg-gray-800 mb-2 rounded-b-xl pb-1">{match.round}</h3>
 					<p className="text-xs text-center text-white font-bold">{kickoffTime}</p>
 
-					<div className="grid grid-cols-4 gap-1 mt-4">
+					<div className="grid grid-cols-4 gap-1 mt-2">
 						<input
 							type="text"
 							className="col-span-2 bg-yellow-400/80 p-2 text-center border border-black"
@@ -91,7 +91,7 @@ const MatchListItem = ({ match }) => {
 					</div>
 
 					<button
-						className="bg-gray-200 w-full mt-3 border border-black rounded-lg shadow-sm shadow-yellow-400 hover:cursor-pointer active:shadow-sm active:shadow-gray-400 active:scale-95 p-0.5 active:cursor-pointer"
+						className="bg-gray-200 w-full mt-2 border border-black rounded-lg shadow-sm shadow-yellow-400 hover:cursor-pointer active:shadow-sm active:shadow-gray-400 active:scale-95 p-0.5 active:cursor-pointer"
 						onClick={() => updateScoreHandler(match)}
 					>
 						עדכן

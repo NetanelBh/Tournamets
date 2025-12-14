@@ -3,8 +3,8 @@ const Table = ({ data }) => {
 	
 	return (
 		<div className="relative overflow-x-auto shadow-md rounded-lg mb-4">
-			<table className="text-center min-w-65 table-auto text-sm font-bold dark:text-blue-100">
-				<thead className="text-md text-center uppercase text-white bg-blue-600 dark:bg-gray-700 dark:text-white">
+			<table className="text-center min-w-65 table-auto text-sm font-bold">
+				<thead className="text-md text-center uppercase text-white bg-blue-600">
 					<tr>
 						{data.headers.map((header) => (
 							<th key={header} scope="col" className="px-6 py-3">
@@ -22,7 +22,7 @@ const Table = ({ data }) => {
 							} border-b border-blue-400`}
 						>
 							{row.map((cell, index) => (
-								<td key={index} className="font-medium whitespace-nowrap dark:text-blue-100 px-6 py-4">
+								<td key={index} className="font-medium whitespace-nowrap px-6 py-4">
 									{cell}
 								</td>
 							))}

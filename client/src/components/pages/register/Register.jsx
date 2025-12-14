@@ -64,7 +64,6 @@ const Register = () => {
 									id="f_name"
 									autoComplete="name"
 									ref={firstNameRef}
-									defaultValue="נתנאל"
 								/>
 							</>
 
@@ -78,7 +77,6 @@ const Register = () => {
 									id="l_name"
 									autoComplete="name"
 									ref={lastNameRef}
-									defaultValue="בן חמו"
 								/>
 							</>
 
@@ -93,7 +91,6 @@ const Register = () => {
 									id="username"
 									autoComplete="username"
 									ref={usernameRef}
-									defaultValue="אלוף"
 								/>
 							</>
 
@@ -108,7 +105,6 @@ const Register = () => {
 									id="email"
 									autoComplete="email"
 									ref={emailRef}
-									defaultValue="netanel77777@gmail.com"
 								/>
 							</>
 
@@ -123,7 +119,6 @@ const Register = () => {
 									id="password"
 									autoComplete="current-password"
 									ref={passwordRef}
-									defaultValue="12"
 								/>
 							</>
 

@@ -171,7 +171,7 @@ const MatchListItem = ({ match }) => {
 
 			{/* Friends bets button - show only if the match is started*/}
 			{match.isStarted && (
-				<div className="lg:w-col-span-5 lg:col-start-4 col-span-7 col-start-4 flex justify-center mt-4 mb-1 border border-white border-2 hover:cursor-pointer hover:scale-95 active:cursor-pointer active:scale-95 rounded-2xl bg-teal-700 text-yellow-300 text-lg">
+				<div className="lg:w-col-span-5 lg:col-start-4 col-span-7 col-start-4 flex justify-center mt-2 mb-1 border border-white border-2 hover:cursor-pointer hover:scale-95 active:cursor-pointer active:scale-95 rounded-2xl bg-teal-700 text-yellow-300 text-lg">
 					<button className="hover:cursor-pointer active:cursor-pointer" onClick={friendsBetsHandler}>
 						הימורי החברים{" "}
 						<span className="mr-2">

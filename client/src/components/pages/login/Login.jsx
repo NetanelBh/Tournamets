@@ -14,8 +14,10 @@ const Login = () => {
 	const [isPasswordVerified, setIsPasswordVerified] = useState(true);
 	const [isError, setIsError] = useState(false);
 	const [isLoading, setIsLoading] = useState(false);
-	const emailRef = useRef();
-	const passwordRef = useRef();
+	const [email, setEmail] = useState("");
+	const [password, setPassword] = useState("");
+	// const emailRef = useRef();
+	// const passwordRef = useRef();
 	const navigate = useNavigate();
 	const dispatch = useDispatch();
 
@@ -29,8 +31,8 @@ const Login = () => {
 		setIsEmailVerified(true);
 		setIsPasswordVerified(true);
 
-		const email = emailRef.current.value;
-		const password = passwordRef.current.value;
+		// const email = emailRef.current.value;
+		// const password = passwordRef.current.value;
 
 		setIsLoading(true);
 		try {
@@ -90,7 +92,8 @@ const Login = () => {
 										placeholder="your@email.com"
 										id="email"
 										autoComplete="email"
-										ref={emailRef}
+										// ref={emailRef}
+										onChange={(e) => setEmail(e.target.value)}
 									/>
 									{!isEmailVerified && (
 										<p className="font-bold text-red-500 text-sm mt-1">{"כתובת מייל שגויה"}</p>
@@ -107,7 +110,8 @@ const Login = () => {
 										placeholder="••••••••"
 										id="password"
 										autoComplete="current-password"
-										ref={passwordRef}
+										// ref={passwordRef}
+										onChange={(e) => setPassword(e.target.value)}
 									/>
 									{!isPasswordVerified && (
 										<p className="font-bold text-red-500 text-sm mt-1">{"סיסמה שגויה"}</p>

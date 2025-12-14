@@ -42,7 +42,7 @@ const TournamentsListItem = ({ item, index, btnText, onClick, leave = undefined 
 					<p className={btnText !== "כניסה" ? "text-sm text-white" : "invisible"}>
 						סטטוס :{" "}
 						<span className={statusColor}>
-							{isJoined && btnText !== "כניסה" ? "נמצא בטורנירים שלי" : tournamentStatus}
+							{isJoined && btnText !== "כניסה" ? "בטורנירים שלי" : tournamentStatus}
 						</span>
 					</p>
 

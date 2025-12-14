@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useSelector } from "react-redux";
 import { NavLink, useLocation, useNavigate } from "react-router-dom";
 
-import WhatsAppButton from "../../UI/whatsppButton/WhatsappButton";
+import WhatsAppButton from "../../UI/whatsppButton/WhatsAppButton";
 
 const BetsHeader = () => {
 	const [isCodeDisplay, setIsCodeDisplay] = useState(false);

@@ -5,18 +5,16 @@ import * as tournamentServices from "../services/tournamentServices.js";
 
 import findUnpaidUsers from "../utils/findUnpaidUsers.js";
 import israelToUTC from "../utils/ConvertIsraelTimeToUtc.js";
-import teamNameTranslation from "../utils/teamNameTranslation.js";
 import { getUserbyId, addTournamentToUser } from "../services/userServices.js";
-
-import axios from "axios";
 
 const router = express.Router();
 
 // Entry point: localhost:3000/tournament
 
-router.get("/getAll", async (req, res) => {
+router.get("/getAll", async (req, res) => {	
 	try {
 		const tournaments = await tournamentServices.getAllTournaments();
+		
 		res.send({ status: true, data: tournaments });
 	} catch (error) {
 		res.send({ status: false, data: "אירעה בעיה בקבלת המידע, אנא נסה שנית" });

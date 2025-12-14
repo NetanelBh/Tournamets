@@ -1,6 +1,6 @@
 import "../../../App.css";
 
-import { useRef, useState } from "react";
+import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate, NavLink } from "react-router-dom";
 
@@ -8,6 +8,7 @@ import API from "../../utils/Api";
 import Modal from "../../modal/Modal";
 import Loading from "../../UI/loading/Loading";
 import { userActions } from "../../store/slices/userSlice";
+import { useEffect } from "react";
 
 const Login = () => {
 	const [isEmailVerified, setIsEmailVerified] = useState(true);
@@ -16,23 +17,20 @@ const Login = () => {
 	const [isLoading, setIsLoading] = useState(false);
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
-	// const emailRef = useRef();
-	// const passwordRef = useRef();
 	const navigate = useNavigate();
 	const dispatch = useDispatch();
 
-	// Clear session storage when reach to login page
-	sessionStorage.clear();
-	localStorage.clear();
+	useEffect(() => {
+		// Clear session storage when reach to login page
+		sessionStorage.clear();
+		localStorage.clear();
+	}, []);
 
 	const loginHandler = async (e) => {
 		e.preventDefault();
 
 		setIsEmailVerified(true);
 		setIsPasswordVerified(true);
-
-		// const email = emailRef.current.value;
-		// const password = passwordRef.current.value;
 
 		setIsLoading(true);
 		try {
@@ -51,13 +49,14 @@ const Login = () => {
 				setIsEmailVerified(false);
 				return;
 			}
-
+			
 			// Session storage persists when refresh the page, clear only when close the tab in contrast to localStorage
 			sessionStorage.setItem("token", res.data.token);
-			sessionStorage.setItem("isAdmin", res.data.admin);
+			sessionStorage.setItem("isAdmin", res.data.admin);			
 
 			// Extract the data from the response to remove the token and the isAdmin from the response(store in redux)
 			const { token, admin, isVerified, ...data } = res.data;
+			
 			dispatch(userActions.load({ type: "user", data: data }));
 			navigate("/layout/all-tournaments");
 		} catch (error) {
@@ -93,7 +92,6 @@ const Login = () => {
 										id="email"
 										autoComplete="email"
 										value={email}
-										// ref={emailRef}
 										onChange={(e) => setEmail(e.target.value)}
 									/>
 									{!isEmailVerified && (
@@ -112,7 +110,6 @@ const Login = () => {
 										id="password"
 										autoComplete="current-password"
 										value={password}
-										// ref={passwordRef}
 										onChange={(e) => setPassword(e.target.value)}
 									/>
 									{!isPasswordVerified && (

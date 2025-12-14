@@ -29,6 +29,13 @@ const AllTournaments = () => {
 			setIsLoading(true);
 			try {
 				const fetchedTournaments = await API.get("/tournament/getAll");
+				if(!fetchedTournaments.data.status) {
+					setOpenModal(true);
+					setModalText({ title: "שגיאה בשרת", text: "אירעה בעיה בטעינת הנתונים, אנא נסה שנית" });
+					setNavigateTo("/");
+					return;
+				}
+				
 				dispatch(tournamentsActions.load(fetchedTournaments.data.data));
 			} catch (error) {
 				setOpenModal(true);

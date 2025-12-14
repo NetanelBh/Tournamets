@@ -8,8 +8,7 @@ import { getUserbyId, getUserbyUsername, createUser, getUserByEmail, updateUser 
 const router = express.Router();
 
 router.post("/login", async (req, res) => {
-	const { email, password } = req.body;
-
+	const { email, password } = req.body;	
 	try {
 		let user = await getUserByEmail(email);
 		if (!user) {
@@ -42,6 +41,7 @@ router.post("/login", async (req, res) => {
 		delete returnedUser.password;
 		// Add the token to the user
 		returnedUser.token = token;
+		
 		res.send({ status: true, data: returnedUser });
 	} catch (error) {
 		res.send({ status: false, data: error.message });

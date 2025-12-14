@@ -32,6 +32,7 @@ const Login = () => {
 		const email = emailRef.current.value;
 		const password = passwordRef.current.value;
 
+		setIsLoading(true);
 		try {
 			const res = (await API.post("/auth/login", { email, password })).data;
 			if (!res.status && res.data.includes("מייל")) {
@@ -59,6 +60,8 @@ const Login = () => {
 			navigate("/layout/all-tournaments");
 		} catch (error) {
 			setIsError(true);
+		} finally {
+			setIsLoading(false);
 		}
 	};
 

@@ -1,7 +1,7 @@
 const Modal = ({ title, text, onClick }) => {
 	return (
 		<div
-			className="fixed inset-0 z-50 grid place-content-center bg-black/85 p-4"
+			className="fixed inset-0 z-50 grid place-content-center bg-black/90 p-4"
 			role="dialog"
 			aria-modal="true"
 			aria-labelledby="modalTitle"

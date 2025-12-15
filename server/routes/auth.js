@@ -2,8 +2,6 @@ import express from "express";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import sendEmail from "../utils/nodemailerConfig.js";
-// TODO: AFTER TEST REMOVE IT
-import nodemailer from "nodemailer";
 
 import { getUserbyId, getUserbyUsername, createUser, getUserByEmail, updateUser } from "../services/userServices.js";
 
@@ -68,20 +66,11 @@ router.post("/register", async (req, res) => {
 			return;
 		}
 		
-		console.log("TEST");
-		
 		const createdUser = await createUser(userData);
 		if (!createdUser) {
 			res.send({ status: false, data: "אירעה בעיה ביצירת המשתמש" });
 			return;
-		}
-
-		// TODO: AFTER TEST REMOVE IT
-		console.log("pass length: ", process.env.GMAIL_APP_PASSWORD.length);
-		await transporter.verify();
-		console.log("SMPT OK");
-		
-		
+		}		
 
 		const token = jwt.sign({ id: createdUser._id }, process.env.JWT_SECRET, { expiresIn: "5m" });
 		const verificationLink = `${process.env.REACT_ADDRESS}/verify/${token}`;
@@ -104,7 +93,8 @@ router.post("/register", async (req, res) => {
 
 		res.send({ status: true, data: "נא לאמת את המשתמש באמצעות המייל שנשלח אליך" });
 	} catch (error) {
-		res.send({ status: false, data: "אירעה בעיה ביצירת המשתמש" });
+		res.send({ status: false, data: error.message });
+		// res.send({ status: false, data: "אירעה בעיה ביצירת המשתמש" });
 	}
 });
 

@@ -72,7 +72,7 @@ const JoinGroup = () => {
 					{!isLoading && (
 						<div className="flex flex-col items-center p-4">
 							<form
-								className="fade_up max-w-md w-fit sm:w-full bg-cyan-900/70 rounded-xl shadow-lg p-6 mt-2 space-y-4 shadow-md shadow-gray-400"
+								className="fade_up max-w-md w-fit sm:w-full bg-cyan-900/80 rounded-xl shadow-lg p-6 mt-2 space-y-4 shadow-md shadow-gray-400"
 								onSubmit={joinGroupHandler}
 							>
 								{joinGroupData.map((item) => {

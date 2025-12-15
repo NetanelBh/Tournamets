@@ -16,7 +16,6 @@ import tounamentRouter from "./routes/tournamentsRoute.js";
 import authentication from "./middleware/authentication.js";
 import winnerTeamRouter from "./routes/winnerTeamPredictRoute.js";
 import topScorerPredictionRouter from "./routes/topScorerPredictRoute.js";
-import testRouter from "./routes/testRouter.js";
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -39,8 +38,6 @@ await dbConnection();
 
 // Initialize Socket.IO in a separate file
 initSocket(server);
-
-app.use("/test", testRouter);
 
 // First, let the user login or create a new account 
 app.use("/auth", authRouter);

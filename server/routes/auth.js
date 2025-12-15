@@ -68,6 +68,8 @@ router.post("/register", async (req, res) => {
 			return;
 		}
 		
+		console.log("TEST");
+		
 		const createdUser = await createUser(userData);
 		if (!createdUser) {
 			res.send({ status: false, data: "אירעה בעיה ביצירת המשתמש" });

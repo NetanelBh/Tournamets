@@ -93,7 +93,8 @@ router.post("/register", async (req, res) => {
 
 		res.send({ status: true, data: "נא לאמת את המשתמש באמצעות המייל שנשלח אליך" });
 	} catch (error) {
-		res.send({ status: false, data: "אירעה בעיה ביצירת המשתמש" });
+		// res.send({ status: false, data: "אירעה בעיה ביצירת המשתמש" });
+		res.send({ status: false, data: error });
 	}
 });
 

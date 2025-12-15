@@ -65,8 +65,7 @@ router.post("/register", async (req, res) => {
 			res.send({ status: false, data: "דואר אלקטרוני קיים כבר במערכת" });
 			return;
 		}
-
-		// TODO: CHECK WHY THE USER CAN'T REGISTER 
+		
 		const createdUser = await createUser(userData);
 		if (!createdUser) {
 			res.send({ status: false, data: "אירעה בעיה ביצירת המשתמש" });

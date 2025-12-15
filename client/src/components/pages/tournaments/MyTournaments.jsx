@@ -71,6 +71,7 @@ const MyTournaments = () => {
 	return (
 		<>
 			{isLoading && <Loading />}
+			
 			{!isLoading && (
 				<>
 					{openModal && <Modal title="הטורנירים שלי" text={modalText} onClick={closeModalHandler} />}

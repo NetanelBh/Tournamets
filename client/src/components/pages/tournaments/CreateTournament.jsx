@@ -87,6 +87,7 @@ const CreateTournament = () => {
 	return (
 		<>
 			{isLoading && <Loading />}
+			
 			{!isLoading && (
 				<>
 					{!openModal && (

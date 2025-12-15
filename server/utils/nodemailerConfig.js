@@ -9,6 +9,9 @@ const transporter = nodemailer.createTransport({
 		user: process.env.MY_GMAIL,
 		pass: process.env.GMAIL_APP_PASSWORD,
 	},
+	connectionTimeout: 10000, // 10 seconds
+	greetingTimeout: 10000,
+	socketTimeout: 10000,
 });
 
 const sendEmail = (to, subject, html) => {

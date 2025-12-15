@@ -6,16 +6,17 @@ import express from "express";
 import initSocket from "./socket.js";
 import dbConnection from "./config/mongo.js";
 
-import authentication from "./middleware/authentication.js";
 import authRouter from "./routes/auth.js";
 import userRouter from "./routes/userRoute.js";
+import betsRouter from "./routes/betsRoute.js";
 import groupRouter from "./routes/groupRoute.js";
+import matchRouter from "./routes/matchRoute.js";
 import playerRouter from "./routes/playerRoute.js";
 import tounamentRouter from "./routes/tournamentsRoute.js";
-import betsRouter from "./routes/betsRoute.js";
+import authentication from "./middleware/authentication.js";
 import winnerTeamRouter from "./routes/winnerTeamPredictRoute.js";
 import topScorerPredictionRouter from "./routes/topScorerPredictRoute.js";
-import matchRouter from "./routes/matchRoute.js";
+import testRouter from "./routes/testRouter.js";
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -38,6 +39,8 @@ await dbConnection();
 
 // Initialize Socket.IO in a separate file
 initSocket(server);
+
+app.use("/test", testRouter);
 
 // First, let the user login or create a new account 
 app.use("/auth", authRouter);

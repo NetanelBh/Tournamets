@@ -8,7 +8,7 @@ import { getUserbyId, getUserbyUsername, createUser, getUserByEmail, updateUser 
 const router = express.Router();
 
 router.post("/login", async (req, res) => {
-	const { email, password } = req.body;	
+	const { email, password } = req.body;
 	try {
 		let user = await getUserByEmail(email);
 		if (!user) {
@@ -16,7 +16,7 @@ router.post("/login", async (req, res) => {
 			return;
 		}
 
-		if (user.email !== email) {	
+		if (user.email !== email) {
 			res.send({ status: false, data: "כתובת מייל שגויה, אנא נסה שנית" });
 			return;
 		}
@@ -31,17 +31,17 @@ router.post("/login", async (req, res) => {
 			res.send({ status: false, data: "סיסמא שגויה" });
 			return;
 		}
-		
+
 		const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET /*, { expiresIn: "12h" }*/);
 		// Get the full user's group to use it in frontend instead of send request each page browsing
-		
+
 		user = await user.populate("groups");
 		const returnedUser = user.toObject();
 		// Delete the password from the object
 		delete returnedUser.password;
 		// Add the token to the user
 		returnedUser.token = token;
-		
+
 		res.send({ status: true, data: returnedUser });
 	} catch (error) {
 		res.send({ status: false, data: error.message });
@@ -65,19 +65,30 @@ router.post("/register", async (req, res) => {
 			res.send({ status: false, data: "דואר אלקטרוני קיים כבר במערכת" });
 			return;
 		}
-		
+
 		const createdUser = await createUser(userData);
 		if (!createdUser) {
 			res.send({ status: false, data: "אירעה בעיה ביצירת המשתמש" });
 			return;
-		}		
+		}
 
 		const token = jwt.sign({ id: createdUser._id }, process.env.JWT_SECRET, { expiresIn: "5m" });
 		const verificationLink = `${process.env.REACT_ADDRESS}/verify/${token}`;
 		await sendEmail(
 			createdUser.email,
 			"אימות חשבון",
-			"לחץ על הקישור בכדי לאמת את החשבון שלך"
+			`
+			<p>כדי לאמת את החשבון שלך, לחץ על הקישור הבא:</p>
+			<a href="${verificationLink}" style="
+      			background-color: #28a745;
+      			color: white;
+      			padding: 12px 24px;
+      			text-decoration: none;
+      			border-radius: 6px;
+      			display: inline-block;
+      			font-size: 16px;
+    		">אימות חשבון</a>
+			`
 		);
 		res.send({ status: true, data: "נא לאמת את המשתמש באמצעות המייל שנשלח אליך" });
 	} catch (error) {
@@ -125,12 +136,23 @@ router.post("/forgot-password", async (req, res) => {
 			return;
 		}
 
-		const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET , { expiresIn: "5m" });
+		const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: "5m" });
 		const url = `${process.env.REACT_ADDRESS}/reset-password/${token}`;
 		await sendEmail(
 			email,
 			"איפוס סיסמא",
-			"לחץ על הקישור בכדי לאפס את הסיסמה שלך"
+			`
+			<p>כדי לאפס את הסיסמה שלך, לחץ על הקישור הבא:</p>
+			<a href="${url}" style="
+      			background-color: #28a745;
+      			color: white;
+      			padding: 12px 24px;
+      			text-decoration: none;
+      			border-radius: 6px;
+      			display: inline-block;
+      			font-size: 16px;
+    		">איפוס סיסמה</a>
+			`
 		);
 
 		res.send({ status: true, data: "מייל לאיפוס סיסמא נשלח בהצלחה" });

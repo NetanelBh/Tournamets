@@ -3,13 +3,13 @@ import sgmail from "@sendgrid/mail";
 
 sgmail.setApiKey(process.env.SENDGRID_API_KEY);
 
-const sendEmail = async(to, subject, text) => {
+const sendEmail = async(to, subject, html) => {
 	try {
 		await sgmail.send({
 			to,
 			from: process.env.MY_EMAIL,
 			subject,
-			text,	
+			html,	
 		})
 	} catch (error) {
 		console.error("Error sending email:", error);

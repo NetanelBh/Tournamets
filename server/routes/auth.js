@@ -78,8 +78,9 @@ router.post("/register", async (req, res) => {
 			createdUser.email,
 			"אימות חשבון",
 			`
-			<p>כדי לאמת את החשבון שלך, לחץ על הקישור הבא:</p>
-			<a href="${verificationLink}" style="
+			<p>כדי לאמת את החשבון שלך, לחץ על הקישור הבא</p>
+			<a href="${verificationLink}" 
+			style="
       			background-color: #28a745;
       			color: white;
       			padding: 12px 24px;
@@ -90,10 +91,9 @@ router.post("/register", async (req, res) => {
     		">אימות חשבון</a>
 			`
 		);
-		res.send({ status: true, data: "נא לאמת את המשתמש באמצעות המייל שנשלח אליך" });
+		res.send({ status: true, data: "נא לאמת את המשתמש באמצעות המייל שנשלח אליך (בדוק גם בתיבת הספאם)" });
 	} catch (error) {
 		res.send({ status: false, data: error.message });
-		// res.send({ status: false, data: "אירעה בעיה ביצירת המשתמש" });
 	}
 });
 
@@ -142,7 +142,7 @@ router.post("/forgot-password", async (req, res) => {
 			email,
 			"איפוס סיסמא",
 			`
-			<p>כדי לאפס את הסיסמה שלך, לחץ על הקישור הבא:</p>
+			<p>לחץ על הקישור הבא כדי לאפס את הסיסמא שלך</p>
 			<a href="${url}" style="
       			background-color: #28a745;
       			color: white;

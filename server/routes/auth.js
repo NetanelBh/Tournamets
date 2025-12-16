@@ -77,20 +77,8 @@ router.post("/register", async (req, res) => {
 		await sendEmail(
 			createdUser.email,
 			"אימות חשבון",
-			`
-			<p>כדי לאמת את החשבון שלך, לחץ על הקישור הבא:</p>
-			<a href="${verificationLink}" style="
-      			background-color: #28a745;
-      			color: white;
-      			padding: 12px 24px;
-      			text-decoration: none;
-      			border-radius: 6px;
-      			display: inline-block;
-      			font-size: 16px;
-    		">אימות חשבון</a>
-			`
+			"לחץ על הקישור בכדי לאמת את החשבון שלך"
 		);
-
 		res.send({ status: true, data: "נא לאמת את המשתמש באמצעות המייל שנשלח אליך" });
 	} catch (error) {
 		res.send({ status: false, data: error.message });
@@ -142,18 +130,7 @@ router.post("/forgot-password", async (req, res) => {
 		await sendEmail(
 			email,
 			"איפוס סיסמא",
-			`
-			<p>כדי לאפס את הסיסמה שלך, לחץ על הקישור הבא:</p>
-			<a href="${url}" style="
-      			background-color: #28a745;
-      			color: white;
-      			padding: 12px 24px;
-      			text-decoration: none;
-      			border-radius: 6px;
-      			display: inline-block;
-      			font-size: 16px;
-    		">איפוס סיסמה</a>
-			`
+			"לחץ על הקישור בכדי לאפס את הסיסמה שלך"
 		);
 
 		res.send({ status: true, data: "מייל לאיפוס סיסמא נשלח בהצלחה" });

@@ -12,6 +12,7 @@
   "license": "ISC",
   "description": "Gambling tournament",
   "dependencies": {
+    "@sendgrid/mail": "^8.1.6",
     "axios": "^1.10.0",
     "bcrypt": "^6.0.0",
     "cheerio": "^1.1.2",

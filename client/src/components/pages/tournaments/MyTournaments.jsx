@@ -1,21 +1,26 @@
-import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
-import GenericList from "../../UI/list/GenericList";
-import Modal from "../../modal/Modal";
-import API from "../../utils/Api";
-import Loading from "../../UI/loading/Loading";
-import { userActions } from "../../store/slices/userSlice";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+
+import API from "../../utils/Api";
+import Modal from "../../modal/Modal";
+import Loading from "../../UI/loading/Loading";
+import GenericList from "../../UI/list/GenericList";
+import { userActions } from "../../store/slices/userSlice";
 
 const MyTournaments = () => {
+	const navigate = useNavigate();
+	const dispatch = useDispatch();
+	const [modalText, setModalText] = useState("");
+	const [navigateTo, setNavigateTo] = useState("");
+	const [openModal, setOpenModal] = useState(false);
+	const [isLoading, setIsLoading] = useState(false);
+	const [tournamentId, setTournamentId] = useState("");
+	// This state determine if the modal ok button will be leave group or just close the modal
+	const [isOkButton, setIsOkButton] = useState(false);
+
 	const myTournaments = useSelector((state) => state.user.user.tournaments);
 	const allTournaments = useSelector((state) => state.tournaments.tournaments);
-	const navigate = useNavigate();
-	const [openModal, setOpenModal] = useState(false);
-	const [modalText, setModalText] = useState("");
-	const [isLoading, setIsLoading] = useState(false);
-	const [navigateTo, setNavigateTo] = useState("");
-	const dispatch = useDispatch();
 
 	const filteredTournamets = allTournaments.filter((t) => myTournaments.includes(t._id));
 
@@ -28,26 +33,35 @@ const MyTournaments = () => {
 		navigate("/layout/groups-layout/my-groups");
 	};
 
-	const leaveTournamentHandler = async (tournamentId) => {
-		// TODO: MAKE THIS FUCTION JUST LIKE THE LEAVE GROUP FUNCTION - WITH THE MODAL APPROVAL FOR LEAVING
+	const leaveTournamentHandler = (tournamentId) => {
+		setOpenModal(true);
+		setModalText("יציאה מהטורניר תגרום למחיקת כל ההימורים.\nהאם אתה בטוח? ");
+		setTournamentId(tournamentId);
+	};
+
+	const exitTournamentHandler = async () => {
 		setIsLoading(true);
 		try {
 			const resp = await API.delete(`/user/leaveTournament/${tournamentId}`);
-
+			console.log(resp.data);
+			
+			// If we reached here, the user approved the exit, we want to create only ok button in the modal
+			setIsOkButton(true);
 			// If the delete succeed, will remove it also from redux
-			if (resp.data.status) {
-				dispatch(userActions.leaveTournament(tournamentId));
+			if (!resp.data.status) {
+				setOpenModal(true);
+				setModalText(resp.data.data);
+				return;
 			}
 
-			setOpenModal(true);
+			dispatch(userActions.leaveTournament(tournamentId));
 			setModalText(resp.data.data);
-			setNavigateTo("/layout/my-tournaments");
 		} catch (error) {
-			setModalText("אירעה שגיאה ביציאה מהטורניר, אנא נסה שנית");
+			setModalText(error.message);
 			setOpenModal(true);
-			navigate("/layout/my-tournaments");
 		} finally {
 			setIsLoading(false);
+			setNavigateTo("/layout/my-tournaments");
 		}
 	};
 
@@ -63,19 +77,26 @@ const MyTournaments = () => {
 		navigate("/layout/all-tournaments");
 	};
 
-	const closeModalHandler = () => {
+	const onCancleHandler = () => {
 		setOpenModal(false);
 		setModalText("");
-		navigate(navigateTo);
 	};
 
 	return (
 		<>
 			{isLoading && <Loading />}
-			
+
 			{!isLoading && (
 				<>
-					{openModal && <Modal title="הטורנירים שלי" text={modalText} onClick={closeModalHandler} />}
+					{openModal && (
+						<Modal
+							title="הטורנירים שלי"
+							text={modalText}
+							onClick={!isOkButton ? exitTournamentHandler : onCancleHandler}
+							isExit={true}
+							onCancle={onCancleHandler}
+						/>
+					)}
 					{!openModal && (
 						<>
 							{filteredTournamets.length > 0 && <GenericList data={data} type="tournament" />}

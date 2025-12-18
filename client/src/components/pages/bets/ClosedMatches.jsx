@@ -29,7 +29,10 @@ const ClosedMatches = () => {
   }).sort((match1, match2) => new Date(match1.kickoffTime) - new Date(match2.kickoffTime));    
   
   return (
-    <MatchesList matches={startedMathesWithBets} />
+    <>
+    {startedMathesWithBets.length === 0 && <h1 className="text-red-400 text-center text-xl mt-2">עדיין לא החלו משחקים</h1>}
+    {startedMathesWithBets.length > 0 && <MatchesList matches={startedMathesWithBets} />}
+    </>
   )
 }
 

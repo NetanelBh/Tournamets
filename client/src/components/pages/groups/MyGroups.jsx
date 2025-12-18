@@ -47,7 +47,7 @@ const MyGroups = () => {
 
 	const leaveGroupHandler = (group) => {
 		setOpenModal(true);
-		setModalText("יציאה מהטורניר תגרום למחיקת כל ההימורים.\nהאם אתה בטוח? ");
+		setModalText("יציאה מהקבוצה תגרום למחיקת כל ההימורים.\nהאם אתה בטוח? ");
 		setGroupId(group);
 	};
 
@@ -58,10 +58,11 @@ const MyGroups = () => {
 	};
 
 	const exitgroupHandler = async () => {
+		setIsLoading(true);
 		try {
-			setIsLoading(true);
 			const user = await API.post("/user/leaveGroup", { tournamentId, groupId });
 
+			// If we reached here, the user approved the exit, we want to create only ok button in the modal
 			setIsOkButton(true);
 			if (!user.data.status) {
 				setOpenModal(true);

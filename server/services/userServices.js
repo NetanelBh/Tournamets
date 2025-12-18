@@ -37,13 +37,13 @@ export const leaveTournament = async (userId, tournamentId) => {
 	const filteredGroups = user.groups.filter(group => allGroups.some(g => g._id.toString() === group.toString()));
 	
 	// Remove the groups from the user
-	// await userRepo.removeGroupsFromUser(userId, filteredGroups);
+	await userRepo.removeGroupsFromUser(userId, filteredGroups);
 
 	// // Remove the user from the groups
-	// await removeUserFromSelectedGroups(userId);
+	await removeUserFromSelectedGroups(userId);
 
 	// // remove all user bets (matches)
-	// await removeUserTournamentBets(userId, tournamentId);
+	await removeUserTournamentBets(userId, tournamentId);
 
 	// remove the winner team bet by tournamentId
 	await removeUserWinnerTeamPredictionByTournament(userId, tournamentId);

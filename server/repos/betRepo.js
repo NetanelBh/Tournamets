@@ -9,4 +9,5 @@ export const getUsersBetsByGroup = (tournamentId, groupId) => BetModel.find({ to
 // remove the user bets by tournamentId and groupId
 export const removeBets = (userId, tournamentId, groupId) => BetModel.deleteMany({ userId, tournamentId, groupId });
 
+// Remove the user bets by tournamentId(if clicked leave tournament, remove all his bets that belongs to the tournament)
 export const removeUserTournamentBets = (userId, tournamentId) => BetModel.deleteMany({ userId, tournamentId });

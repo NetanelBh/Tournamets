@@ -8,7 +8,7 @@ const tournamentsSlice = createSlice({
     initialState,
     name: "tournaments",
     reducers: {
-        load(state, action) {    
+        load(state, action) {   
             state.tournaments = action.payload;
         },
         addTournament(state, action) {

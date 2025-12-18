@@ -3,11 +3,12 @@ import TournamentsListItem from "../../pages/tournaments/TournamentsListItem";
 
 const GenericList = ({ data, type }) => {
 	// data is an object which contains the properties list
-	// type determines which component to render	
+	// type determines which component to render
+	console.log(data);
 	
 	return (
 		<ul className="overflow-hidden sm:rounded-md max-w-md mx-auto mt-16">
-			{type === "tournament" && data.datalist &&
+			{type === "tournament" &&
 				data.dataList.map((item, index) => (
 					<TournamentsListItem
 						key={index}
@@ -19,7 +20,7 @@ const GenericList = ({ data, type }) => {
 					/>
 				))}
 
-			{type === "group" && data.datalist &&
+			{type === "group" &&
 				data.dataList.map((item, index) => (
 					<GroupListItem
 						key={item._id}

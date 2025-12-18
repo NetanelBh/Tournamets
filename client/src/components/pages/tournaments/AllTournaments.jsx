@@ -94,7 +94,7 @@ const AllTournaments = () => {
 		btnText: "הצטרף",
 		onClick: joinHandler,
 	};
-
+	
 	return (
 		<>
 			{!isLoading && (

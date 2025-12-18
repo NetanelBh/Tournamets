@@ -39,6 +39,11 @@ await dbConnection();
 // Initialize Socket.IO in a separate file
 initSocket(server);
 
+// There is automatic ping request to server each 5 min to prevent the render server sleep from (uptimerobot.com)
+app.get("/health", (req, res) => {
+  res.status(200).json({ status: "ok" });
+});
+
 // First, let the user login or create a new account 
 app.use("/auth", authRouter);
 

@@ -7,6 +7,7 @@ import Modal from "../../modal/Modal";
 import Loading from "../../UI/loading/Loading";
 import GenericList from "../../UI/list/GenericList";
 import { userActions } from "../../store/slices/userSlice";
+import { useEffect } from "react";
 
 const MyTournaments = () => {
 	const navigate = useNavigate();
@@ -18,6 +19,8 @@ const MyTournaments = () => {
 	const [tournamentId, setTournamentId] = useState("");
 	// This state determine if the modal ok button will be leave group or just close the modal
 	const [isOkButton, setIsOkButton] = useState(false);
+	// Wait <Loading/> finish before move to the other page(without it, the parent layout display before loading finish)
+	const [waitForLoadingFinish, setWaitForLoadingFinish] = useState(null);
 
 	const myTournaments = useSelector((state) => state.user.user.tournaments);
 	const allTournaments = useSelector((state) => state.tournaments.tournaments);
@@ -29,8 +32,15 @@ const MyTournaments = () => {
 	localStorage.removeItem("groupId");
 	localStorage.removeItem("matchId");
 
+	useEffect(() => {
+		if (!isLoading && waitForLoadingFinish) {
+			navigate(waitForLoadingFinish);
+			setWaitForLoadingFinish(null);
+		}
+	}, [isLoading, waitForLoadingFinish, navigate]);
+
 	const enterGroupHandler = () => {
-		navigate("/layout/groups-layout/my-groups");
+		setWaitForLoadingFinish("/layout/groups-layout/my-groups");
 	};
 
 	const leaveTournamentHandler = (tournamentId) => {

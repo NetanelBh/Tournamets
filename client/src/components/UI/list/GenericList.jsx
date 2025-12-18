@@ -4,8 +4,6 @@ import TournamentsListItem from "../../pages/tournaments/TournamentsListItem";
 const GenericList = ({ data, type }) => {
 	// data is an object which contains the properties list
 	// type determines which component to render
-	console.log(data);
-	
 	return (
 		<ul className="overflow-hidden sm:rounded-md max-w-md mx-auto mt-16">
 			{type === "tournament" &&

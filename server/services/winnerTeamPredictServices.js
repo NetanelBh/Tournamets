@@ -20,3 +20,12 @@ export const getAllByGroup = (tournamentId, groupId) => {
     const filterObj = {group: groupId, tournament: tournamentId};
     return winnerTeamPredictRepo.getAllByGroup(filterObj);
 };
+
+export const removeWinnerTeamPrediction = (user, tournament, group) => {
+    const filterObj = {user, group, tournament};
+    return winnerTeamPredictRepo.removeWinnerTeamPrediction(filterObj);
+};
+
+export const removeUserWinnerTeamPredictionByTournament = (userId, tournamentId) => {
+    return winnerTeamPredictRepo.removeUserWinnerTeamPredictionByTournament(userId, tournamentId);
+};

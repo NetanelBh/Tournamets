@@ -9,3 +9,8 @@ export const updatePredict = (filterObj, data) => {
 };
 
 export const getAllByGroup = (filterObj) => winnerTeamPredictionModel.find(filterObj);
+
+export const removeWinnerTeamPrediction = (filterObj) => winnerTeamPredictionModel.findOneAndDelete(filterObj);
+
+export const removeUserWinnerTeamPredictionByTournament = (user, tournament) =>
+	winnerTeamPredictionModel.deleteMany({ user, tournament });

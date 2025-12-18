@@ -1,5 +1,9 @@
 import * as userRepo from "../repos/userRepo.js";
 import {getGroupsByFilter, removeUserFromSelectedGroups} from "../repos/groupRepo.js";
+import {removeBets, removeUserTournamentBets} from "../repos/betRepo.js";
+import {getTournamentById} from "../services/tournamentServices.js";
+import {removeUserWinnerTeamPredictionByTournament} from "../services/winnerTeamPredictServices.js";
+import {removeTopScorerPredictionByTournament} from "../services/topScorerPredictServices.js";
 import bcrypt from "bcrypt";
 
 export const getAllUsers = (tournamentId, groupId) => userRepo.getAllUsers(tournamentId, groupId);
@@ -33,10 +37,22 @@ export const leaveTournament = async (userId, tournamentId) => {
 	const filteredGroups = user.groups.filter(group => allGroups.some(g => g._id.toString() === group.toString()));
 	
 	// Remove the groups from the user
-	const removedGroups = await userRepo.removeGroupsFromUser(userId, filteredGroups);
+	// await userRepo.removeGroupsFromUser(userId, filteredGroups);
 
-	// Remove the user from the groups
-	const removedUsers = await removeUserFromSelectedGroups(userId);
+	// // Remove the user from the groups
+	// await removeUserFromSelectedGroups(userId);
+
+	// // remove all user bets (matches)
+	// await removeUserTournamentBets(userId, tournamentId);
+
+	// remove the winner team bet by tournamentId
+	await removeUserWinnerTeamPredictionByTournament(userId, tournamentId);
+
+	// remove the top scorer bet if allowed in the tournament
+	const tournament = await getTournamentById(tournamentId);
+	if(tournament.topScorerBet) {
+		await removeTopScorerPredictionByTournament(userId, tournamentId);
+	}
 	
 	return userRepo.leaveTournament(userId, tournamentId)
 };
@@ -44,3 +60,5 @@ export const leaveTournament = async (userId, tournamentId) => {
 export const addGroupToUser = (userId, groupId) => userRepo.addUserToGroup(userId, groupId);
 
 export const leaveGroup = (userId, groupId) => userRepo.leaveGroup(userId, groupId);
+
+export const removeUserBets = (userId, tournamentId, groupId) => removeBets(userId, tournamentId, groupId);

@@ -29,6 +29,7 @@ const MyTournaments = () => {
 	};
 
 	const leaveTournamentHandler = async (tournamentId) => {
+		// TODO: MAKE THIS FUCTION JUST LIKE THE LEAVE GROUP FUNCTION - WITH THE MODAL APPROVAL FOR LEAVING
 		setIsLoading(true);
 		try {
 			const resp = await API.delete(`/user/leaveTournament/${tournamentId}`);

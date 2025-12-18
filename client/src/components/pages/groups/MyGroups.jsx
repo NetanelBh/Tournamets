@@ -8,28 +8,35 @@ import Loading from "../../UI/loading/Loading";
 import GenericList from "../../UI/list/GenericList";
 import { betsActions } from "../../store/slices/betSlice";
 import { userActions } from "../../store/slices/userSlice";
+import { useEffect } from "react";
 
 const MyGroups = () => {
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
-	
+
 	// Clear the bets in redux storage(in bets slice, the imformation stored per specific tournament and group)
-	dispatch(betsActions.clear());
+	useEffect(() => {
+		dispatch(betsActions.clear());
+	}, [dispatch])
 
 	const userGroups = useSelector((state) => state.user.user.groups);
 
 	const tournamentId = localStorage.getItem("tournamentId");
 
+	// State to store the groupId if the user will decide to approve the exit(We need to use it in exitGroupHandler)
+	const [groupId, setGroupId] = useState("");
+	// This state determine if the modal ok button will be leave group or just close the modal
+	const [isOkButton, setIsOkButton] = useState(false);
+	const [modalText, setModalText] = useState("");
 	const [isLoading, setIsLoading] = useState(false);
 	const [openModal, setOpenModal] = useState(false);
-	const [modalText, setModalText] = useState("");
 
 	const filtereGroups = userGroups.filter((group) => group.tournament === tournamentId);
 
 	// When enter to some group in my groups list(specific for each tournament)
-	const enterGroupHandler = (groupId) => {
+	const enterGroupHandler = (group) => {
 		// Store the groupId in localStorage to use it in the bets pages
-		localStorage.setItem("groupId", groupId);
+		localStorage.setItem("groupId", group);
 		navigate("/layout/bets-layout/my-bets");
 	};
 
@@ -38,32 +45,38 @@ const MyGroups = () => {
 		navigate("/layout/groups-layout/join-group");
 	};
 
-	const leaveGroupHandler = async (groupId) => {
-		setIsLoading(true);
+	const leaveGroupHandler = (group) => {
+		setOpenModal(true);
+		setModalText("יציאה מהטורניר תגרום למחיקת כל ההימורים.\nהאם אתה בטוח? ");
+		setGroupId(group);
+	};
+
+	// If the user click cancle after the leave group warning showed, just clear the modal
+	const onCancleHandler = () => {
+		setOpenModal(false);
+		setModalText("");
+	};
+
+	const exitgroupHandler = async () => {
 		try {
-			const user = await API.delete(`/user/leaveGroup/${groupId}`);
+			setIsLoading(true);
+			const user = await API.post("/user/leaveGroup", { tournamentId, groupId });
 
-			setOpenModal(true);
-
+			setIsOkButton(true);
 			if (!user.data.status) {
+				setOpenModal(true);
 				setModalText("אירעה שגיאה בעת היציאה מהקבוצה, אנא נסה שנית");
 				return;
 			}
 
 			// If the group removed from the user in DB, remove it also from redux
 			dispatch(userActions.leaveGroup(groupId));
-			setModalText("יצאת מהקבוצה בהצלחה");
+			setModalText("היציאה מהקבוצה בוצעה בהצלחה");
 		} catch (error) {
 			setModalText("אירעה שגיאה בעת היציאה מהקבוצה, אנא נסה שנית");
 		} finally {
 			setIsLoading(false);
 		}
-	};
-
-	const closeModalHandler = () => {
-		setOpenModal(false);
-		setModalText("");
-		navigate("/layout/groups-layout/my-groups");
 	};
 
 	// send props object to generic list component
@@ -77,9 +90,18 @@ const MyGroups = () => {
 	return (
 		<>
 			{isLoading && <Loading />}
+
 			{!isLoading && (
 				<>
-					{openModal && <Modal title="הקבוצות שלי" text={modalText} onClick={closeModalHandler} />}
+					{openModal && (
+						<Modal
+							title="הקבוצות שלי"
+							text={modalText}
+							onClick={!isOkButton ? exitgroupHandler : onCancleHandler}
+							isExit={true}
+							onCancle={onCancleHandler}
+						/>
+					)}
 					{!openModal && (
 						<>
 							{filtereGroups.length > 0 && <GenericList data={data} type="group" />}

@@ -1,5 +1,4 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { addMatch } from "../../pages/groups/groupUtils";
 
 const initialState = {
 	matches: [], isStarted: false

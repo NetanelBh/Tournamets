@@ -8,7 +8,7 @@ const GroupsHeader = () => {
 	// Get the entered tournamet
 	const currentTournament = tournaments.find((t) => t._id === localStorage.getItem("tournamentId"));
 	const tournamentName = currentTournament?.name || "";
-
+	
 	// check if the tournament is started, if started, we can't create a group
 	const now = new Date().toISOString();
 	const isStarted = currentTournament.startTime <= now;

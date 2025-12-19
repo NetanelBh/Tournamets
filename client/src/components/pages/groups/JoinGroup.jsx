@@ -8,12 +8,14 @@ import Input from "../../UI/input/Input";
 import { joinGroupData } from "./groupUtils";
 import Loading from "../../UI/loading/Loading";
 import { userActions } from "../../store/slices/userSlice";
+import { loadingActions } from "../../store/slices/loadingSlice";
+import { selectIsLoading } from "../../store/slices/loadingSlice";
 
 const JoinGroup = () => {
 	const [openModal, setOpenModal] = useState(false);
 	const [modalText, setModalText] = useState("");
-	const [isLoading, setIsLoading] = useState(false);
 	const [navigateTo, setNavigateTo] = useState("");
+	const isLoading = useSelector(selectIsLoading);
 	const navigate = useNavigate();
 	const dispatch = useDispatch();
 
@@ -33,7 +35,7 @@ const JoinGroup = () => {
 			tournamentId: tournamentIs,
 		};
 
-		setIsLoading(true);
+		dispatch(loadingActions.start());
 
 		try {
 			const resp = await API.post("/group/join", newGroup);
@@ -54,7 +56,7 @@ const JoinGroup = () => {
 			setModalText("אירעה שגיאה בעת הצטרפות לקבוצה, אנא נסה שנית");
 			setNavigateTo("/layout/groups-layout/join-group");
 		} finally {
-			setIsLoading(false);
+			dispatch(loadingActions.stop());
 		}
 	};
 

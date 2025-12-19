@@ -9,6 +9,8 @@ import Input from "../../UI/input/Input";
 import Loading from "../../UI/loading/Loading";
 import { matchesActions } from "../../store/slices/matchesSlice";
 import israelToUTC from "../../../../../server/utils/ConvertIsraelTimeToUtc";
+import { loadingActions } from "../../store/slices/loadingSlice";
+import { selectIsLoading } from "../../store/slices/loadingSlice";
 
 const AddMatch = () => {
 	const homeTeamRef = useRef();
@@ -18,12 +20,13 @@ const AddMatch = () => {
 	const stageRef = useRef();
 	const roundRef = useRef();
 
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
+	const dispatch = useDispatch();
+	const navigate = useNavigate();
 
-	const [isLoading, setIsLoading] = useState(false);
 	const [openModal, setOpenModal] = useState(false);
 	const [modalText, setModalText] = useState("");
+
+	const isLoading = useSelector(selectIsLoading);
 
 	addMatch[0].ref = homeTeamRef;
 	addMatch[1].ref = awayTeamRef;
@@ -32,7 +35,7 @@ const AddMatch = () => {
 	addMatch[4].ref = stageRef;
 	addMatch[5].ref = roundRef;
 
-	const createMatchHandler = async(event) => {
+	const createMatchHandler = async (event) => {
 		event.preventDefault();
 
 		const utcTime = israelToUTC(dateRef.current.value, timeRef.current.value);
@@ -40,32 +43,32 @@ const AddMatch = () => {
 		const match = {
 			homeTeam: homeTeamRef.current.value,
 			awayTeam: awayTeamRef.current.value,
-      tournament: localStorage.getItem("tournamentId"),
+			tournament: localStorage.getItem("tournamentId"),
 			kickoffTime: utcTime,
 			stage: stageRef.current.value,
 			round: roundRef.current.value,
 			finalScore: { homeScore: -1, awayScore: -1 },
 		};
 
-    setIsLoading(true);
-    try {
-      const resp = await API.post("/match/create", {match});
-      if (resp.data.status) {
-        setOpenModal(true);
-        setModalText("המשחק נוצר בהצלחה");
-        dispatch(matchesActions.addMatch(resp.data.data));
-      } else {
-        setOpenModal(true);
-        setModalText(resp.data.data);
-      }
-    } catch (error) {
-      setModalText("אירעה שגיאה ביצירת המשחק, אנא נסה שנית");
-    } finally {
-      setIsLoading(false); 
-    }
+		dispatch(loadingActions.start());
+		try {
+			const resp = await API.post("/match/create", { match });
+			if (resp.data.status) {
+				setOpenModal(true);
+				setModalText("המשחק נוצר בהצלחה");
+				dispatch(matchesActions.addMatch(resp.data.data));
+			} else {
+				setOpenModal(true);
+				setModalText(resp.data.data);
+			}
+		} catch (error) {
+			setModalText("אירעה שגיאה ביצירת המשחק, אנא נסה שנית");
+		} finally {
+			dispatch(loadingActions.stop());
+		}
 	};
 
-  const closeModalHandler = () => {
+	const closeModalHandler = () => {
 		setOpenModal(false);
 		setModalText("");
 		navigate("/layout/groups-layout/add-match");
@@ -97,7 +100,7 @@ const AddMatch = () => {
 						</div>
 					)}
 
-          {openModal && <Modal title="הוספת משחק" text={modalText} onClick={closeModalHandler} />}
+					{openModal && <Modal title="הוספת משחק" text={modalText} onClick={closeModalHandler} />}
 				</>
 			)}
 		</>

@@ -13,7 +13,7 @@ const GenericList = ({ data, type }) => {
 						item={item}
 						index={index}
 						btnText={data.btnText}
-						onClick={() => data.onClick(item)}
+						onClick={() => data.onClick(item._id)}
 						leave={data.leave}
 					/>
 				))}

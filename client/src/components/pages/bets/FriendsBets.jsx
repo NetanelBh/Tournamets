@@ -7,14 +7,16 @@ import Modal from "../../modal/Modal";
 import Loading from "../../UI/loading/Loading";
 import { betsActions } from "../../store/slices/betSlice";
 import { useNavigate } from "react-router-dom";
+import { loadingActions } from "../../store/slices/loadingSlice";
+import { selectIsLoading } from "../../store/slices/loadingSlice";
 
 const FriendsBets = () => {
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
-	const [isLoading, setIsLoading] = useState(false);
 	const [modalText, setModalText] = useState({});
 	const [openModal, setOpenModal] = useState(false);
 	const [navigateTo, setNavigateTo] = useState("");
+	const isLoading = useSelector(selectIsLoading);
 
 	const matchId = localStorage.getItem("matchId");
 	// Get the user to know who is the current user between all the friends bet(want to write it in the table as "me")
@@ -25,7 +27,7 @@ const FriendsBets = () => {
 	// Fetch data only once per match that started already. Match that not stored in redux, will be fetched from the DB
 	useEffect(() => {
 		const fetchAllUsersBets = async () => {
-			setIsLoading(true);
+			dispatch(loadingActions.start());
 			try {
 				// Fetch all users bet for the specific match(only if not fetched before)
 				const usersBets = await API.post("/bets/allUsersBets", {
@@ -40,7 +42,7 @@ const FriendsBets = () => {
 				setModalText({ title: "תוצאות החברים", text: "שגיאה בטעינת התוצאות, אנא נסה שנית" });
 				setNavigateTo("/layout/bets-layout/closed-bets");
 			} finally {
-				setIsLoading(false);
+				dispatch(loadingActions.stop());
 			}
 		};
 

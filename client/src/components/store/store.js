@@ -7,6 +7,7 @@ import betsReducer from "./slices/betSlice.js";
 import userReducer from "./slices/userSlice.js";
 import playersReducer from "./slices/playersSlice.js";
 import matchesReducer from "./slices/matchesSlice.js";
+import loadingReducer from "./slices/loadingSlice.js";
 import tournamentsReducer from "./slices/tournamentsSlice.js";
 
 const rootReducer = combineReducers({
@@ -15,11 +16,13 @@ const rootReducer = combineReducers({
 	players: playersReducer,
 	matches: matchesReducer,
 	tournaments: tournamentsReducer,
+	loading: loadingReducer,
 });
 
 const persistConfig = {
 	key: "root",
 	storage,
+	blacklist: ["loading"],
 };
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

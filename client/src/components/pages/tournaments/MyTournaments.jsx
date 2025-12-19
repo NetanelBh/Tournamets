@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -7,50 +7,47 @@ import Modal from "../../modal/Modal";
 import Loading from "../../UI/loading/Loading";
 import GenericList from "../../UI/list/GenericList";
 import { userActions } from "../../store/slices/userSlice";
-import { useEffect } from "react";
+import { loadingActions } from "../../store/slices/loadingSlice";
+import { selectIsLoading } from "../../store/slices/loadingSlice";
 
 const MyTournaments = () => {
 	const navigate = useNavigate();
 	const dispatch = useDispatch();
 	const [modalText, setModalText] = useState("");
-	const [navigateTo, setNavigateTo] = useState("");
 	const [openModal, setOpenModal] = useState(false);
-	const [isLoading, setIsLoading] = useState(false);
 	const [tournamentId, setTournamentId] = useState("");
 	// This state determine if the modal ok button will be leave group or just close the modal
 	const [isOkButton, setIsOkButton] = useState(false);
-	// Wait <Loading/> finish before move to the other page(without it, the parent layout display before loading finish)
-	const [waitForLoadingFinish, setWaitForLoadingFinish] = useState(null);
 
+	const isLoading = useSelector(selectIsLoading);
+
+	
 	const myTournaments = useSelector((state) => state.user.user.tournaments);
 	const allTournaments = useSelector((state) => state.tournaments.tournaments);
 
 	const filteredTournamets = allTournaments.filter((t) => myTournaments.includes(t._id));
 
-	// When enter to some tournament, it keep the id in localStorage in case we will create group.
-	localStorage.removeItem("tournamentId");
-	localStorage.removeItem("groupId");
-	localStorage.removeItem("matchId");
-
+	// Run these lines only when we are enter to this page
 	useEffect(() => {
-		if (!isLoading && waitForLoadingFinish) {
-			navigate(waitForLoadingFinish);
-			setWaitForLoadingFinish(null);
-		}
-	}, [isLoading, waitForLoadingFinish, navigate]);
+		// When enter to some tournament, it keep the id in localStorage in case we will create group.
+		localStorage.removeItem("tournamentId");
+		localStorage.removeItem("groupId");
+		localStorage.removeItem("matchId");
+	}, [])
 
-	const enterGroupHandler = () => {
-		setWaitForLoadingFinish("/layout/groups-layout/my-groups");
+	const enterTournamentHandler = (id) => {
+		setTournamentId(id);
+		navigate("/layout/groups-layout/my-groups");
 	};
 
-	const leaveTournamentHandler = (tournamentId) => {
+	const leaveTournamentHandler = (id) => {
 		setOpenModal(true);
 		setModalText("יציאה מהטורניר תגרום למחיקת כל ההימורים.\nהאם אתה בטוח? ");
-		setTournamentId(tournamentId);
+		setTournamentId(id);
 	};
 
 	const exitTournamentHandler = async () => {
-		setIsLoading(true);
+		dispatch(loadingActions.start());
 		try {
 			const resp = await API.delete(`/user/leaveTournament/${tournamentId}`);
 			console.log(resp.data);
@@ -70,17 +67,9 @@ const MyTournaments = () => {
 			setModalText(error.message);
 			setOpenModal(true);
 		} finally {
-			setIsLoading(false);
-			setNavigateTo("/layout/my-tournaments");
+			dispatch(loadingActions.stop());;
+			navigate("/layout/my-tournaments");
 		}
-	};
-
-	// send props object to generic list component
-	const data = {
-		dataList: filteredTournamets,
-		btnText: "כניסה",
-		onClick: enterGroupHandler,
-		leave: leaveTournamentHandler,
 	};
 
 	const joinTournamentHandler = () => {
@@ -90,6 +79,14 @@ const MyTournaments = () => {
 	const onCancleHandler = () => {
 		setOpenModal(false);
 		setModalText("");
+	};
+
+	// send props object to generic list component
+	const data = {
+		dataList: filteredTournamets,
+		btnText: "כניסה",
+		onClick: enterTournamentHandler,
+		leave: leaveTournamentHandler,
 	};
 
 	return (

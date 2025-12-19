@@ -8,9 +8,10 @@ import Loading from "../../UI/loading/Loading";
 import Modal from "../../modal/Modal";
 import GenericList from "../../UI/list/GenericList";
 import { useNavigate } from "react-router-dom";
+import { loadingActions } from "../../store/slices/loadingSlice";
+import { selectIsLoading } from "../../store/slices/loadingSlice";
 
 const AllTournaments = () => {
-	const [isLoading, setIsLoading] = useState(false);
 	const [modalText, setModalText] = useState({});
 	const [openModal, setOpenModal] = useState(false);
 	const [navigateTo, setNavigateTo] = useState("");
@@ -18,6 +19,7 @@ const AllTournaments = () => {
 
 	const dispatch = useDispatch();
 	const tournaments = useSelector((state) => state.tournaments.tournaments);
+	const isLoading = useSelector(selectIsLoading);
 
 	// When enter to some tournament, keep the id in localStorage to case we will create a group. in other case remove
 	localStorage.removeItem("tournamentId");
@@ -26,7 +28,7 @@ const AllTournaments = () => {
 
 	useEffect(() => {
 		const fetchData = async () => {
-			setIsLoading(true);
+			dispatch(loadingActions.start());
 			try {
 				const fetchedTournaments = await API.get("/tournament/getAll");
 				if(!fetchedTournaments.data.status) {
@@ -42,7 +44,7 @@ const AllTournaments = () => {
 				setModalText({ title: "שגיאה בשרת", text: "אירעה בעיה בשרת, אנא נסה שנית" });
 				setNavigateTo("/layout/all-tournaments");
 			} finally {
-				setIsLoading(false);
+				dispatch(loadingActions.stop());
 			}
 		};
 
@@ -60,7 +62,7 @@ const AllTournaments = () => {
 		}
 
 		setOpenModal(true);
-		setIsLoading(true);
+		dispatch(loadingActions.start());
 		try {
 			const resp = (await API.post("/tournament/join", { tournamentId: item._id })).data;
 
@@ -79,7 +81,7 @@ const AllTournaments = () => {
 			setModalText("אירעה שגיאה בהצטרפות לטורניר, אנא נסה שנית");
 			setNavigateTo("/layout/all-tournaments");
 		} finally {
-			setIsLoading(false);
+			dispatch(loadingActions.stop());
 		}
 	};
 

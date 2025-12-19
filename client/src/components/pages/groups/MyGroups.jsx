@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 
@@ -8,11 +8,21 @@ import Loading from "../../UI/loading/Loading";
 import GenericList from "../../UI/list/GenericList";
 import { betsActions } from "../../store/slices/betSlice";
 import { userActions } from "../../store/slices/userSlice";
-import { useEffect } from "react";
+import { loadingActions } from "../../store/slices/loadingSlice";
+import { selectIsLoading } from "../../store/slices/loadingSlice";
 
 const MyGroups = () => {
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
+
+	// State to store the groupId if the user will decide to approve the exit(We need to use it in exitGroupHandler)
+	const [groupId, setGroupId] = useState("");
+	// This state determine if the modal ok button will be leave group or just close the modal
+	const [isOkButton, setIsOkButton] = useState(false);
+	const [modalText, setModalText] = useState("");
+	const [openModal, setOpenModal] = useState(false);
+
+	const isLoading = useSelector(selectIsLoading);
 
 	// Clear the bets in redux storage(in bets slice, the imformation stored per specific tournament and group)
 	useEffect(() => {
@@ -20,22 +30,11 @@ const MyGroups = () => {
 	}, [dispatch])
 
 	const userGroups = useSelector((state) => state.user.user.groups);
-
 	const tournamentId = localStorage.getItem("tournamentId");
-
-	// State to store the groupId if the user will decide to approve the exit(We need to use it in exitGroupHandler)
-	const [groupId, setGroupId] = useState("");
-	// This state determine if the modal ok button will be leave group or just close the modal
-	const [isOkButton, setIsOkButton] = useState(false);
-	const [modalText, setModalText] = useState("");
-	const [isLoading, setIsLoading] = useState(false);
-	const [openModal, setOpenModal] = useState(false);
-
 	const filtereGroups = userGroups.filter((group) => group.tournament === tournamentId);
 
 	// When enter to some group in my groups list(specific for each tournament)
 	const enterGroupHandler = (group) => {
-		// Store the groupId in localStorage to use it in the bets pages
 		localStorage.setItem("groupId", group);
 		navigate("/layout/bets-layout/my-bets");
 	};
@@ -58,7 +57,7 @@ const MyGroups = () => {
 	};
 
 	const exitgroupHandler = async () => {
-		setIsLoading(true);
+		dispatch(loadingActions.start());
 		try {
 			const user = await API.post("/user/leaveGroup", { tournamentId, groupId });
 
@@ -76,7 +75,7 @@ const MyGroups = () => {
 		} catch (error) {
 			setModalText("אירעה שגיאה בעת היציאה מהקבוצה, אנא נסה שנית");
 		} finally {
-			setIsLoading(false);
+			dispatch(loadingActions.stop());
 		}
 	};
 

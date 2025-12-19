@@ -1,22 +1,23 @@
 import "../../../App.css";
 
-import { useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { useState, useEffect } from "react";
 import { useNavigate, NavLink } from "react-router-dom";
 
 import API from "../../utils/Api";
 import Modal from "../../modal/Modal";
 import Loading from "../../UI/loading/Loading";
 import { userActions } from "../../store/slices/userSlice";
-import { useEffect } from "react";
+import { loadingActions } from "../../store/slices/loadingSlice";
+import { selectIsLoading } from "../../store/slices/loadingSlice";
 
 const Login = () => {
 	const [isEmailVerified, setIsEmailVerified] = useState(true);
 	const [isPasswordVerified, setIsPasswordVerified] = useState(true);
 	const [isError, setIsError] = useState(false);
-	const [isLoading, setIsLoading] = useState(false);
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
+	const isLoading = useSelector(selectIsLoading);
 	const navigate = useNavigate();
 	const dispatch = useDispatch();
 
@@ -32,7 +33,7 @@ const Login = () => {
 		setIsEmailVerified(true);
 		setIsPasswordVerified(true);
 
-		setIsLoading(true);
+		dispatch(loadingActions.start());
 		try {
 			const res = (await API.post("/auth/login", { email, password })).data;
 			if (!res.status && res.data.includes("מייל")) {
@@ -62,7 +63,7 @@ const Login = () => {
 		} catch (error) {
 			setIsError(true);
 		} finally {
-			setIsLoading(false);
+			dispatch(loadingActions.stop());
 		}
 	};
 

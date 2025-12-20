@@ -82,7 +82,7 @@ const JoinGroup = () => {
 								})}
 
 								<div className="flex justify-end">
-									<button className="w-1/4 bg-gradient-to-r from-teal-500 to-teal-800 shadow-sm shadow-gray-400/80 hover:scale-95 active:bg-gradient-to-r from-teal-500 to-teal-800 text-yellow-300 font-bold py-2.5 rounded-lg hover:shadow-sm transition-colors me-2 mb-2 mt-2">
+									<button className="w-1/4 bg-gradient-to-r from-teal-500 to-teal-800 shadow-sm shadow-gray-400/80 hover:scale-95 active:scale-95 active:bg-gradient-to-r from-teal-500 to-teal-800 text-yellow-300 font-bold py-2.5 rounded-lg hover:shadow-sm transition-colors me-2 mb-2 mt-2">
 										כניסה
 									</button>
 								</div>

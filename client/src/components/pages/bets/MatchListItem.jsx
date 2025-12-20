@@ -91,7 +91,7 @@ const MatchListItem = ({ match }) => {
 					</div>
 
 					<button
-						className="bg-gray-200 w-full mt-2 border border-black rounded-lg shadow-sm shadow-yellow-400 hover:cursor-pointer active:shadow-sm active:shadow-gray-400 active:scale-95 p-0.5 active:cursor-pointer"
+						className="bg-gray-200 w-full mt-2 border border-black rounded-lg shadow-sm shadow-yellow-400 hover:cursor-pointer hover:scale-95 active:shadow-sm active:shadow-gray-400 active:scale-95 p-0.5 active:cursor-pointer"
 						onClick={() => updateScoreHandler(match)}
 					>
 						עדכן

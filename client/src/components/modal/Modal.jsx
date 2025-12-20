@@ -24,7 +24,7 @@ const Modal = ({ title, text, onClick, isExit = false, onCancle=undefined }) => 
 				<footer className="mt-6 flex justify-end gap-2 pb-4 pl-4">
 					<button
 						type="button"
-						className="hover:cursor-pointer rounded bg-teal-700 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-teal-600"
+						className="hover:cursor-pointer hover:scale-95 active:scale-95 rounded bg-teal-700 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-teal-600"
 						onClick={onClick}
 					>
 						אישור
@@ -34,7 +34,7 @@ const Modal = ({ title, text, onClick, isExit = false, onCancle=undefined }) => 
 					{isExit && (
 						<button
 							type="button"
-							className="hover:cursor-pointer rounded bg-teal-700 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-teal-600"
+							className="hover:cursor-pointer hover:scale-95 active:scale-95 rounded bg-teal-700 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-teal-600"
 							onClick={onCancle}
 						>
 							ביטול

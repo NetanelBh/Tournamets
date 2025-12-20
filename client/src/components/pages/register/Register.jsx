@@ -149,7 +149,7 @@ const Register = () => {
 											/>
 										</>
 
-										<button className="w-full bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-600 text-white font-medium py-2.5 rounded-lg transition-colors">
+										<button className="w-full bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-600 text-white font-medium py-2.5 rounded-lg transition-colors hover:scale-95 active:scale-95">
 											הרשמה
 										</button>
 									</form>

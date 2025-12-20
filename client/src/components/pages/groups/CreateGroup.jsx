@@ -11,19 +11,17 @@ import PointsRank from "./points/PointsRank";
 import Loading from "../../UI/loading/Loading";
 import RadioButtonsArea from "./points/RadioButtonsArea";
 import { userActions } from "../../store/slices/userSlice";
-import { loadingActions } from "../../store/slices/loadingSlice";
-import { selectIsLoading } from "../../store/slices/loadingSlice";
 
 const CreateGroup = () => {
 	// "samePoints" or "differentPoints" for knockout matches
-	const [pointsMethod, setPointsMethod] = useState("samePoints");
-	const [isPaymentIncluded, setIsPaymentIncluded] = useState(false);
-	const [openModal, setOpenModal] = useState(false);
-	const [modalText, setModalText] = useState("");
-	const [navigateTo, setNavigateTo] = useState("/layout/groups-layout/create-group");
-	const isLoading = useSelector(selectIsLoading);
 	const navigate = useNavigate();
 	const dispatch = useDispatch();
+	const [modalText, setModalText] = useState("");
+	const [isLoading, setIsLoading] = useState(false);
+	const [openModal, setOpenModal] = useState(false);
+	const [pointsMethod, setPointsMethod] = useState("samePoints");
+	const [isPaymentIncluded, setIsPaymentIncluded] = useState(false);
+	const [navigateTo, setNavigateTo] = useState("/layout/groups-layout/create-group");
 
 	const nameRef = useRef();
 	const codeRef = useRef();
@@ -117,7 +115,7 @@ const CreateGroup = () => {
 			};
 		}
 
-		dispatch(loadingActions.start());
+		setIsLoading(true);
 		try {
 			const resp = await API.post("/group/create", newGroup);
 
@@ -136,7 +134,7 @@ const CreateGroup = () => {
 			setModalText("אירעה שגיאה ביצירת הקבוצה, אנא נסה שנית");
 			setNavigateTo("/layout/groups-layout/create-group");
 		} finally {
-			dispatch(loadingActions.stop());
+			setIsLoading(false);
 		}
 	};
 

@@ -7,20 +7,16 @@ import Modal from "../../modal/Modal";
 import Loading from "../../UI/loading/Loading";
 import GenericList from "../../UI/list/GenericList";
 import { userActions } from "../../store/slices/userSlice";
-import { loadingActions } from "../../store/slices/loadingSlice";
-import { selectIsLoading } from "../../store/slices/loadingSlice";
 
 const MyTournaments = () => {
 	const navigate = useNavigate();
 	const dispatch = useDispatch();
 	const [modalText, setModalText] = useState("");
+	const [isLoading, setIsLoading] = useState(false);
 	const [openModal, setOpenModal] = useState(false);
 	const [tournamentId, setTournamentId] = useState("");
 	// This state determine if the modal ok button will be leave group or just close the modal
 	const [isOkButton, setIsOkButton] = useState(false);
-
-	const isLoading = useSelector(selectIsLoading);
-
 	
 	const myTournaments = useSelector((state) => state.user.user.tournaments);
 	const allTournaments = useSelector((state) => state.tournaments.tournaments);
@@ -47,11 +43,9 @@ const MyTournaments = () => {
 	};
 
 	const exitTournamentHandler = async () => {
-		dispatch(loadingActions.start());
+		setIsLoading(true);
 		try {
 			const resp = await API.delete(`/user/leaveTournament/${tournamentId}`);
-			console.log(resp.data);
-			
 			// If we reached here, the user approved the exit, we want to create only ok button in the modal
 			setIsOkButton(true);
 			// If the delete succeed, will remove it also from redux
@@ -67,7 +61,7 @@ const MyTournaments = () => {
 			setModalText(error.message);
 			setOpenModal(true);
 		} finally {
-			dispatch(loadingActions.stop());;
+			setIsLoading(false);
 			navigate("/layout/my-tournaments");
 		}
 	};

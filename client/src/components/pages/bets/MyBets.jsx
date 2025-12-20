@@ -10,8 +10,6 @@ import { betsActions } from "../../store/slices/betSlice";
 import { userActions } from "../../store/slices/userSlice";
 import { matchesActions } from "../../store/slices/matchesSlice";
 import { playersActions } from "../../store/slices/playersSlice";
-import { loadingActions } from "../../store/slices/loadingSlice";
-import { selectIsLoading } from "../../store/slices/loadingSlice";
 
 const MyBets = () => {
 	// Clear the stored matchId(if stored)
@@ -27,12 +25,11 @@ const MyBets = () => {
 	const refs = useRef([]);
 
 	const bets = useSelector((state) => state.bets);
+	const [isLoading, setIsLoading] = useState(false);
 	const allUsers = useSelector((state) => state.user.allUsers);
 	const matches = useSelector((state) => state.matches.matches);
 	const topScorersList = useSelector((state) => state.players.players);
 	const allTournaments = useSelector((state) => state.tournaments.tournaments);
-
-	const isLoading = useSelector(selectIsLoading);
 
 	const groupId = localStorage.getItem("groupId");
 	const tournamentId = localStorage.getItem("tournamentId");
@@ -42,9 +39,9 @@ const MyBets = () => {
 	// Fetch the users from the DB only once. When stored in redux, we can use them everywhere in the application
 	useEffect(() => {
 		if (allUsers.length > 0) return;
+		setIsLoading(true);
 
 		const fetchUsers = async () => {
-			dispatch(loadingActions.start());
 			try {
 				const tournamentId = localStorage.getItem("tournamentId");
 				const groupId = localStorage.getItem("groupId");
@@ -54,17 +51,21 @@ const MyBets = () => {
 			} catch (error) {
 				console.log(error);
 			} finally {
-				dispatch(loadingActions.stop());
+				setIsLoading(false);
 			}
 		};
 
 		fetchUsers();
-	}, []);
+	}, [allUsers.length, dispatch]);
 
+	const hasTopScorerBet = currentTourmanent?.topScorerBet;
 	// Get the candidate players for the top scorer
 	useEffect(() => {
+		// Fetch the candidate players only if the tournament defined to be with top scorer bet
+		if (!hasTopScorerBet) return;
+
 		const fetchPlayers = async () => {
-			dispatch(loadingActions.start());
+			setIsLoading(true);
 			try {
 				const players = await API.post("player/get", { tournamentId });
 
@@ -77,15 +78,12 @@ const MyBets = () => {
 			} catch (error) {
 				setModalText("אירעה שגיאה בעת טעינת רשימת השחקנים, אנא נסה שנית");
 			} finally {
-				dispatch(loadingActions.stop());
+				setIsLoading(false);
 			}
 		};
 
-		// Fetch the candidate players only if the tournament defined to be with top scorer bet
-		if (currentTourmanent.topScorerBet) {
-			fetchPlayers();
-		}
-	}, []);
+		fetchPlayers();
+	}, [hasTopScorerBet, dispatch, tournamentId]);
 
 	// Get the user predictions(for tournament winner team and top scorer) to update the relevant dropdown
 	useEffect(() => {
@@ -93,7 +91,7 @@ const MyBets = () => {
 		if (bets.userDbScore.length > 0) return;
 
 		const fetchPredictions = async () => {
-			dispatch(loadingActions.start());
+			setIsLoading(true);
 			try {
 				// Get the topScorer and winnerTeam predictions from the DB
 				const predictions = await API.post("/bets/get", { tournamentId, groupId });
@@ -112,17 +110,17 @@ const MyBets = () => {
 			} catch (error) {
 				setModalText("אירעה שגיאה בטעינת הנתונים, אנא נסה שנית");
 			} finally {
-				dispatch(loadingActions.stop());
+				setIsLoading(false);
 			}
 		};
 
 		fetchPredictions();
-	}, []);
+	}, [bets.userDbScore.length, dispatch, tournamentId, groupId]);
 
 	// Get the matches for the tournament
 	useEffect(() => {
 		const fetchMatches = async () => {
-			dispatch(loadingActions.start());
+			setIsLoading(true);
 			try {
 				const matches = await API.post("match/getAll", { tournamentId });
 				if (!matches.data.status) {
@@ -134,12 +132,12 @@ const MyBets = () => {
 			} catch (error) {
 				setModalText("אירעה שגיאה בטעינת המשחקים, אנא נסה שנית");
 			} finally {
-				dispatch(loadingActions.stop());
+				setIsLoading(false);
 			}
 		};
 
 		fetchMatches();
-	}, []);
+	}, [dispatch, tournamentId]);
 
 	// Get all users bets for the tournament and group only once(only what have in DB - not means that all users bets)
 	useEffect(() => {
@@ -147,7 +145,7 @@ const MyBets = () => {
 		if (bets.allUsersBets.length > 0) return;
 
 		const fetchAllUsersBets = async () => {
-			dispatch(loadingActions.start());
+			setIsLoading(true);
 			try {
 				// Fetch all users bet for the specific match(only if not fetched before)
 				const usersBets = await API.post("/bets/allUsersBets", {
@@ -159,12 +157,12 @@ const MyBets = () => {
 			} catch (error) {
 				console.log(error);
 			} finally {
-				dispatch(loadingActions.stop());
+				setIsLoading(false);
 			}
 		};
 
 		fetchAllUsersBets();
-	}, []);
+	}, [bets.allUsersBets.length, dispatch]);
 
 	const closeModalHandler = () => {
 		setOpenModal(false);
@@ -174,7 +172,7 @@ const MyBets = () => {
 	const saveBetHandler = async () => {
 		// Check if the user changed his topScorer predict or it's a new bet(if db data is null, he never bet before)
 		if (bets.dbTopScorer !== bets.curTopScorerChoice) {
-			dispatch(loadingActions.start());
+			setIsLoading(true);
 
 			const chosenPlayer = topScorersList.find((player) => player.name === bets.curTopScorerChoice);
 			// Need to update because there is an existing bet in DB
@@ -199,7 +197,7 @@ const MyBets = () => {
 					setOpenModal(true);
 					setModalText("אירעה שגיאה מלך השערים, אנא נסה שנית");
 				} finally {
-					dispatch(loadingActions.stop());
+					setIsLoading(false);
 				}
 			} else {
 				// It's a new bet because the data in DB is null
@@ -218,14 +216,14 @@ const MyBets = () => {
 					setOpenModal(true);
 					setModalText("אירעה שגיאה בשמירת הנתונים , אנא נסה שנית");
 				} finally {
-					dispatch(loadingActions.stop());
+					setIsLoading(false);
 				}
 			}
 		}
 
 		// Check if the user changed his winnerTeam predict or it's a new bet(if db data is null, he never bet before)
 		if (bets.dbWinnerTeam !== bets.curWinnerTeamChoice) {
-			dispatch(loadingActions.start());
+			setIsLoading(true);
 
 			// Need to update because there is an existing bet in DB
 			if (bets.dbWinnerTeam !== null) {
@@ -249,7 +247,7 @@ const MyBets = () => {
 					setOpenModal(true);
 					setModalText("אירעה שגיאה בשמירת הקבוצה הזוכה, אנא נסה שנית");
 				} finally {
-					dispatch(loadingActions.stop());
+					setIsLoading(false);
 				}
 			} else {
 				// It's a new bet because the data in DB is null
@@ -268,7 +266,7 @@ const MyBets = () => {
 					setOpenModal(true);
 					setModalText("אירעה שגיאה בשמירת הקבוצה הזוכה, אנא נסה שנית");
 				} finally {
-					dispatch(loadingActions.stop());
+					setIsLoading(false);
 				}
 			}
 		}
@@ -288,7 +286,7 @@ const MyBets = () => {
 
 		// Send to server only if we have bets in array. If the array is empty, there are no new bets or bets changes
 		if (updatedOrNewBets.length > 0) {
-			dispatch(loadingActions.start());
+			setIsLoading(true);
 			try {
 				setOpenModal(true);
 				const response = await API.put("bets/placeBets", { bets: updatedOrNewBets });
@@ -301,7 +299,7 @@ const MyBets = () => {
 				setOpenModal(true);
 				setModalText("אירעה שגיאה בשמירת ההימורים , אנא נסה שנית");
 			} finally {
-				dispatch(loadingActions.stop());
+				setIsLoading(false);
 			}
 
 			// After sent the results to server, will update the redux(userDbScore) because no there are new results there

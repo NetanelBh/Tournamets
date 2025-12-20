@@ -8,8 +8,6 @@ import Loading from "../../UI/loading/Loading";
 import GenericList from "../../UI/list/GenericList";
 import { betsActions } from "../../store/slices/betSlice";
 import { userActions } from "../../store/slices/userSlice";
-import { loadingActions } from "../../store/slices/loadingSlice";
-import { selectIsLoading } from "../../store/slices/loadingSlice";
 
 const MyGroups = () => {
 	const dispatch = useDispatch();
@@ -21,13 +19,12 @@ const MyGroups = () => {
 	const [isOkButton, setIsOkButton] = useState(false);
 	const [modalText, setModalText] = useState("");
 	const [openModal, setOpenModal] = useState(false);
-
-	const isLoading = useSelector(selectIsLoading);
+	const [isLoading, setIsLoading] = useState(false);
 
 	// Clear the bets in redux storage(in bets slice, the imformation stored per specific tournament and group)
 	useEffect(() => {
 		dispatch(betsActions.clear());
-	}, [dispatch])
+	}, [dispatch]);
 
 	const userGroups = useSelector((state) => state.user.user.groups);
 	const tournamentId = localStorage.getItem("tournamentId");
@@ -57,7 +54,7 @@ const MyGroups = () => {
 	};
 
 	const exitgroupHandler = async () => {
-		dispatch(loadingActions.start());
+		setIsLoading(true);
 		try {
 			const user = await API.post("/user/leaveGroup", { tournamentId, groupId });
 
@@ -75,7 +72,7 @@ const MyGroups = () => {
 		} catch (error) {
 			setModalText("אירעה שגיאה בעת היציאה מהקבוצה, אנא נסה שנית");
 		} finally {
-			dispatch(loadingActions.stop());
+			setIsLoading(false);
 		}
 	};
 

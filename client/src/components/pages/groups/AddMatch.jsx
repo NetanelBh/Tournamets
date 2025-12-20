@@ -9,8 +9,6 @@ import Input from "../../UI/input/Input";
 import Loading from "../../UI/loading/Loading";
 import { matchesActions } from "../../store/slices/matchesSlice";
 import israelToUTC from "../../../../../server/utils/ConvertIsraelTimeToUtc";
-import { loadingActions } from "../../store/slices/loadingSlice";
-import { selectIsLoading } from "../../store/slices/loadingSlice";
 
 const AddMatch = () => {
 	const homeTeamRef = useRef();
@@ -23,10 +21,9 @@ const AddMatch = () => {
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
 
-	const [openModal, setOpenModal] = useState(false);
 	const [modalText, setModalText] = useState("");
-
-	const isLoading = useSelector(selectIsLoading);
+	const [isLoading, setIsLoading] = useState(false);
+	const [openModal, setOpenModal] = useState(false);
 
 	addMatch[0].ref = homeTeamRef;
 	addMatch[1].ref = awayTeamRef;
@@ -50,7 +47,7 @@ const AddMatch = () => {
 			finalScore: { homeScore: -1, awayScore: -1 },
 		};
 
-		dispatch(loadingActions.start());
+		setIsLoading(true);
 		try {
 			const resp = await API.post("/match/create", { match });
 			if (resp.data.status) {
@@ -64,7 +61,7 @@ const AddMatch = () => {
 		} catch (error) {
 			setModalText("אירעה שגיאה ביצירת המשחק, אנא נסה שנית");
 		} finally {
-			dispatch(loadingActions.stop());
+			setIsLoading(false);
 		}
 	};
 

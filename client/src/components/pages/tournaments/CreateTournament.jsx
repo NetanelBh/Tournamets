@@ -10,8 +10,6 @@ import { topScorers } from "./tournamentUtils";
 import { isTopScorerIncluded } from "./tournamentUtils";
 import { createTournamentData } from "./tournamentUtils";
 import RadioButtonsArea from "../groups/points/RadioButtonsArea";
-import { loadingActions } from "../../store/slices/loadingSlice";
-import { selectIsLoading } from "../../store/slices/loadingSlice";
 import { tournamentsActions } from "../../store/slices/tournamentsSlice";
 
 const CreateTournament = () => {
@@ -24,11 +22,11 @@ const CreateTournament = () => {
 
 	// Modal states
 	const [openModal, setOpenModal] = useState(true);
+	const [isLoading, setIsLoading] = useState(false);
 	const [modalText, setModalText] = useState("בעת יצירת הטורניר, יש ליצור את המשחקים ל DB");
 	const [navigateTo, setNavigateTo] = useState("/layout/create-tournament");
 	// State for topScorer bet
 	const [topScorerBet, setTopScorerBet] = useState(false);
-	const isLoading = useSelector(selectIsLoading);
 	
 	// Navigation
 	const navigate = useNavigate();
@@ -57,7 +55,7 @@ const CreateTournament = () => {
 			topScorersList: topScorerBet ?topScorersRef.current.value.split(",") : "s"
 		};
 
-		dispatch(loadingActions.start());
+		setIsLoading(true);
 		try {
 			const resp = await API.post("/tournament/create", newTournamentData);
 
@@ -77,7 +75,7 @@ const CreateTournament = () => {
 			setOpenModal(true);
 			setModalText("אירעה שגיאה ביצירת הטורניר, אנא נסה שנית");
 		} finally {
-			dispatch(loadingActions.stop());
+			setIsLoading(false);
 		}
 	};
 

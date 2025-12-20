@@ -4,25 +4,23 @@ import { useRef, useState } from "react";
 import Modal from "../../modal/Modal";
 import Loading from "../../UI/loading/Loading";
 import { useNavigate } from "react-router-dom";
-import { loadingActions } from "../../store/slices/loadingSlice";
-import { selectIsLoading } from "../../store/slices/loadingSlice";
 
 const Register = () => {
-	const [openModal, setOpenModal] = useState(false);
 	const [modalText, setModalText] = useState("");
-	const isLoading = useSelector(selectIsLoading);
+	const [openModal, setOpenModal] = useState(false);
+	const [isLoading, setIsLoading] = useState(false);
+	
 	const firstNameRef = useRef();
 	const lastNameRef = useRef();
 	const usernameRef = useRef();
 	const emailRef = useRef();
 	const passwordRef = useRef();
-
 	const navigate = useNavigate();
 
 	const registerHandler = async (e) => {
 		e.preventDefault();
 
-		dispatch(loadingActions.start());
+		setIsLoading(true);
 		try {
 			const userData = {
 				firstname: firstNameRef.current.value,
@@ -39,7 +37,7 @@ const Register = () => {
 			setOpenModal(true);
 			setModalText("אירעה שגיאה בהרשמה, אנא נסה שנית");
 		} finally {
-			dispatch(loadingActions.stop());
+			setIsLoading(false);
 		}
 	};
 
@@ -52,7 +50,7 @@ const Register = () => {
 	return (
 		<>
 			{isLoading && <Loading />}
-			
+
 			<div className="min-h-screen bg-[url('/images/login.jpg')] bg-cover bg-center flex flex-col items-center p-4">
 				{!isLoading && (
 					<>

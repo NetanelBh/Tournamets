@@ -10,27 +10,25 @@ import Modal from "../../modal/Modal";
 import TableHeader from "./TableHeader";
 import Loading from "../../UI/loading/Loading";
 import { useNavigate } from "react-router-dom";
-import { loadingActions } from "../../store/slices/loadingSlice";
-import { selectIsLoading} from "../../store/slices/loadingSlice";
 
 const Table = () => {
-	const [usersTopScorer, setUsersTopScorer] = useState([]);
-	const [usersWinnerTeam, setUsersWinnerTeam] = useState([]);
-	const [modalText, setModalText] = useState({});
-	const [openModal, setOpenModal] = useState(false);
-	const [navigateTo, setNavigateTo] = useState("");
 	const navigate = useNavigate();
+	const [modalText, setModalText] = useState({});
+	const [navigateTo, setNavigateTo] = useState("");
+	const [isLoading, setIsLoading] = useState(false);
+	const [openModal, setOpenModal] = useState(false);
+	const [usersWinnerTeam, setUsersWinnerTeam] = useState([]);
+	const [usersTopScorer, setUsersTopScorer] = useState([]);
 
 	const tournamentId = localStorage.getItem("tournamentId");
 	const groupId = localStorage.getItem("groupId");
-	const isLoading = useSelector(selectIsLoading);
 
 	// TODO: ADD NEW STYLE TO TEH TABLE
 
 	// Fetch all users top scorer and winner team bets(only once)
 	useEffect(() => {
 		const fetchData = async () => {
-			dispatch(loadingActions.start());
+			setIsLoading(true);
 			try {
 				const [allUsersTopScorers, allUsersWinnerTeams] = await Promise.all([
 					API.post("/topScorerBet/getAllByGroup", { tournamentId, groupId }),
@@ -44,7 +42,7 @@ const Table = () => {
 				setModalText({ title: "טבלה", text: "אירעה שגיאה בטעינת הטבלה אנא נסה שנית" });
 				setNavigateTo("/layout/bets-layout/bets-table");
 			} finally {
-				dispatch(loadingActions.stop());
+				setIsLoading(false);
 			}
 		};
 

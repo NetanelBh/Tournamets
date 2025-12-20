@@ -1,4 +1,4 @@
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -8,14 +8,12 @@ import Input from "../../UI/input/Input";
 import { joinGroupData } from "./groupUtils";
 import Loading from "../../UI/loading/Loading";
 import { userActions } from "../../store/slices/userSlice";
-import { loadingActions } from "../../store/slices/loadingSlice";
-import { selectIsLoading } from "../../store/slices/loadingSlice";
 
 const JoinGroup = () => {
 	const [openModal, setOpenModal] = useState(false);
 	const [modalText, setModalText] = useState("");
 	const [navigateTo, setNavigateTo] = useState("");
-	const isLoading = useSelector(selectIsLoading);
+	const [isLoading, setIsLoading] = useState(false);
 	const navigate = useNavigate();
 	const dispatch = useDispatch();
 
@@ -35,7 +33,7 @@ const JoinGroup = () => {
 			tournamentId: tournamentIs,
 		};
 
-		dispatch(loadingActions.start());
+		setIsLoading(true);
 
 		try {
 			const resp = await API.post("/group/join", newGroup);
@@ -56,7 +54,7 @@ const JoinGroup = () => {
 			setModalText("אירעה שגיאה בעת הצטרפות לקבוצה, אנא נסה שנית");
 			setNavigateTo("/layout/groups-layout/join-group");
 		} finally {
-			dispatch(loadingActions.stop());
+			setIsLoading(false);
 		}
 	};
 

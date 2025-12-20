@@ -1,6 +1,6 @@
 import "../../../App.css";
 
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { useState, useEffect } from "react";
 import { useNavigate, NavLink } from "react-router-dom";
 
@@ -8,18 +8,16 @@ import API from "../../utils/Api";
 import Modal from "../../modal/Modal";
 import Loading from "../../UI/loading/Loading";
 import { userActions } from "../../store/slices/userSlice";
-import { loadingActions } from "../../store/slices/loadingSlice";
-import { selectIsLoading } from "../../store/slices/loadingSlice";
 
 const Login = () => {
-	const [isEmailVerified, setIsEmailVerified] = useState(true);
-	const [isPasswordVerified, setIsPasswordVerified] = useState(true);
-	const [isError, setIsError] = useState(false);
-	const [email, setEmail] = useState("");
-	const [password, setPassword] = useState("");
-	const isLoading = useSelector(selectIsLoading);
 	const navigate = useNavigate();
 	const dispatch = useDispatch();
+	const [email, setEmail] = useState("");
+	const [password, setPassword] = useState("");
+	const [isError, setIsError] = useState(false);
+	const [isLoading, setIsLoading] = useState(false);
+	const [isEmailVerified, setIsEmailVerified] = useState(true);
+	const [isPasswordVerified, setIsPasswordVerified] = useState(true);
 
 	useEffect(() => {
 		// Clear session storage when reach to login page
@@ -33,7 +31,7 @@ const Login = () => {
 		setIsEmailVerified(true);
 		setIsPasswordVerified(true);
 
-		dispatch(loadingActions.start());
+		setIsLoading(true);
 		try {
 			const res = (await API.post("/auth/login", { email, password })).data;
 			if (!res.status && res.data.includes("מייל")) {
@@ -63,7 +61,7 @@ const Login = () => {
 		} catch (error) {
 			setIsError(true);
 		} finally {
-			dispatch(loadingActions.stop());
+			setIsLoading(false);
 		}
 	};
 

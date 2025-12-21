@@ -38,7 +38,7 @@ const MatchListItem = ({ match }) => {
 		// Store the matchId in localStorage to use it in the friends bets page
 		localStorage.setItem("matchId", match._id);
 
-		navigate("/layout/bets-layout/frients-bets");
+		navigate("/layout/friends-bets");
 	};
 
 	const scoreFromDb = { home: match.finalScore.homeScore, away: match.finalScore.awayScore };

@@ -1,6 +1,7 @@
 import { useSelector } from "react-redux";
 
 import ExplainData from "./ExplainData";
+import BetsLayout from "../layouts/BetsLayout";
 import ExplainDataHeader from "./ExplainDataHeader";
 
 import { groupPointsExplain } from "./betsUtils";
@@ -12,13 +13,17 @@ const PointsExplain = () => {
 
 	const pointsRules = groupPointsExplain(currentGroup.points);
 	return (
-		<div className="bg-gray-300 block max-w-sm p-6 border border-default rounded-lg shadow-[0_0_8px_3px_theme(colors.teal.200)] hover:bg-neutral-secondary-medium fade_up mb-4">
-			<ExplainDataHeader header="הסבר שיטת ניקוד המשחקים" />
-			<p className="text-body font-bold underline">שלב הבתים:</p>
-      <ExplainData data={pointsRules.groupStage} />
+		<div className="flex flex-col items-center">
+			<BetsLayout />
 
-      <p className="text-body font-bold underline">שלב הנוקאאוט:</p>
-      <ExplainData data={pointsRules.knockoutStage} />
+			<div className="bg-gray-300 block max-w-sm p-6 border border-default rounded-lg shadow-[0_0_8px_3px_theme(colors.teal.200)] hover:bg-neutral-secondary-medium fade_up mb-4">
+				<ExplainDataHeader header="הסבר שיטת ניקוד המשחקים" />
+				<p className="text-body font-bold underline">שלב הבתים:</p>
+				<ExplainData data={pointsRules.groupStage} />
+
+				<p className="text-body font-bold underline">שלב הנוקאאוט:</p>
+				<ExplainData data={pointsRules.knockoutStage} />
+			</div>
 		</div>
 	);
 };

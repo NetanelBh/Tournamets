@@ -6,6 +6,7 @@ import Modal from "../../modal/Modal";
 import MatchesList from "./MatchesList";
 import Loading from "../../UI/loading/Loading";
 import Dropdown from "../../UI/dropdown/Dropdown";
+import BetsLayout from "../layouts/BetsLayout";
 import { betsActions } from "../../store/slices/betSlice";
 import { userActions } from "../../store/slices/userSlice";
 import { matchesActions } from "../../store/slices/matchesSlice";
@@ -355,7 +356,9 @@ const MyBets = () => {
 	return (
 		<>
 			{!isLoading && (
-				<>
+				<div className="flex flex-col items-center">
+					<BetsLayout />
+
 					{!openModal && (
 						<div className="flex flex-col mb-6">
 							<div className="flex gap-8">
@@ -411,7 +414,7 @@ const MyBets = () => {
 					)}
 
 					{openModal && <Modal title="שמירת הימורים" text={modalText} onClick={closeModalHandler} />}
-				</>
+				</div>
 			)}
 
 			{isLoading && <Loading />}

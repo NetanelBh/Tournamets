@@ -29,9 +29,9 @@ const BetsHeader = () => {
 
 	const pointsExplainHandler = () => {
 		if (pathname.includes("bets-table")) {
-			navigate("/layout/bets-layout/table-rank-explain");
+			navigate("/layout/table-rank-explain");
 		} else {
-			navigate("/layout/bets-layout/points-explain");
+			navigate("/layout/points-explain");
 		}
 	};
 
@@ -85,7 +85,7 @@ const BetsHeader = () => {
 						{/* Navigation Menu */}
 						<nav className="flex flex-col sm:flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-10 text-lg items-center">
 							<NavLink
-								to="/layout/bets-layout/my-bets"
+								to="/layout/my-bets"
 								className={`hover:text-gray-300 transition-all ${
 									pathname.includes("my-bets")
 										? "text-yellow-400 font-semibold hover:text-yellow-400"
@@ -96,7 +96,7 @@ const BetsHeader = () => {
 							</NavLink>
 
 							<NavLink
-								to="/layout/bets-layout/closed-bets"
+								to="/layout/closed-bets"
 								className={`hover:text-gray-300 transition-all ${
 									pathname.includes("closed-bets")
 										? "text-yellow-400 font-semibold hover:text-yellow-400"
@@ -107,7 +107,7 @@ const BetsHeader = () => {
 							</NavLink>
 
 							<NavLink
-								to="/layout/bets-layout/bets-table"
+								to="/layout/bets-table"
 								className={`hover:text-gray-300 transition-all ${
 									pathname.includes("bets-table")
 										? "text-yellow-400 font-semibold hover:text-yellow-400"

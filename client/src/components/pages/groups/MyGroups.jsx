@@ -33,7 +33,7 @@ const MyGroups = () => {
 	// When enter to some group in my groups list(specific for each tournament)
 	const enterGroupHandler = (group) => {
 		localStorage.setItem("groupId", group);
-		navigate("/layout/bets-layout/my-bets");
+		navigate("/layout/my-bets");
 	};
 
 	// This function is called when we enter to myTournaments/myGroups, and I didn't join to any group yet.

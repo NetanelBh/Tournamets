@@ -5,6 +5,7 @@ import { useSelector, useDispatch } from "react-redux";
 import Table from "../../UI/table/Table";
 import Modal from "../../modal/Modal";
 import Loading from "../../UI/loading/Loading";
+import BetsLayout from "../layouts/BetsLayout";
 import { betsActions } from "../../store/slices/betSlice";
 import { useNavigate } from "react-router-dom";
 
@@ -38,7 +39,7 @@ const FriendsBets = () => {
 			} catch (error) {
 				setOpenModal(true);
 				setModalText({ title: "תוצאות החברים", text: "שגיאה בטעינת התוצאות, אנא נסה שנית" });
-				setNavigateTo("/layout/bets-layout/closed-bets");
+				setNavigateTo("/layout/closed-bets");
 			} finally {
 				setIsLoading(false);
 			}
@@ -93,10 +94,12 @@ const FriendsBets = () => {
 					{openModal && <Modal title={modalText.title} text={modalText.text} closeModal={closeModalHandler} />}
 
 					{!openModal && (
-						<>
+						<div className="flex flex-col items-center">
+							<BetsLayout />
+							
 							<h1 className="mb-4 mt-4 text-lg text-yellow-400">{matchName}</h1>
 							<Table data={allUsersBetsData} />
-						</>
+						</div>
 					)}
 				</>
 			)}

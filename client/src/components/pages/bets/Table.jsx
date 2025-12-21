@@ -8,6 +8,7 @@ import { tableColumns } from "./betsUtils";
 import TableRow from "./TableRow";
 import Modal from "../../modal/Modal";
 import TableHeader from "./TableHeader";
+import BetsLayout from "../layouts/BetsLayout";
 import Loading from "../../UI/loading/Loading";
 import { useNavigate } from "react-router-dom";
 
@@ -40,7 +41,7 @@ const Table = () => {
 			} catch (error) {
 				setOpenModal(true);
 				setModalText({ title: "טבלה", text: "אירעה שגיאה בטעינת הטבלה אנא נסה שנית" });
-				setNavigateTo("/layout/bets-layout/bets-table");
+				setNavigateTo("/layout/bets-table");
 			} finally {
 				setIsLoading(false);
 			}
@@ -80,7 +81,9 @@ const Table = () => {
 			{isLoading && <Loading />}
 
 			{!isLoading && (
-				<>
+				<div className="flex flex-col items-center">
+					<BetsLayout />
+
 					{!openModal && (
 						<div className="flex flex-col">
 							<div className="overflow-x-auto sm:-mx-6 lg:-mx-8">
@@ -109,7 +112,7 @@ const Table = () => {
 					{openModal && (
 						<Modal title={modalText.title} text={modalText.text} onClick={closeModalHandler} />
 					)}
-				</>
+				</div>
 			)}
 		</>
 	);

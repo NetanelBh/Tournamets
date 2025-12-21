@@ -37,7 +37,7 @@ const GroupsHeader = () => {
 								to="/layout/groups-layout/join-group"
 								className={`hover:text-gray-300 transition-all ${
 									pathname.includes("join-group")
-										? "text-yellow-400 font-semibold hover:text-yellow-400"
+										? "text-yellow-400 font-semibold hover:text-yellow-400 underline"
 										: ""
 								}`}
 							>
@@ -50,7 +50,7 @@ const GroupsHeader = () => {
 									to="/layout/groups-layout/create-group"
 									className={`hover:text-gray-300 transition-all ${
 										pathname.includes("create-group")
-											? "text-yellow-400 font-semibold hover:text-yellow-400"
+											? "text-yellow-400 font-semibold hover:text-yellow-400 underline"
 											: ""
 									}`}
 								>
@@ -64,7 +64,7 @@ const GroupsHeader = () => {
 									to="/layout/groups-layout/add-match"
 									className={`hover:text-gray-300 transition-all ${
 										pathname.includes("add-match")
-											? "text-yellow-400 font-semibold hover:text-yellow-400"
+											? "text-yellow-400 font-semibold hover:text-yellow-400 underline"
 											: ""
 									}`}
 								>

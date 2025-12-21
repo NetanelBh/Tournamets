@@ -151,8 +151,8 @@ const Login = () => {
 
 						{isError && <Modal title="שגיאה" text="שגיאה בהתחברות, אנא נסה שנית" onClick={closeModal} />}
 						
-						<footer className="mt-auto pb-4 text-center text-sm text-white font-semibold">
-							❤️ Developed by Netanel Ben Hamo — with ©
+						<footer className="mt-auto pb-8 text-center text-md text-white font-bold md:text-lg">
+							❤️ Developed by Netanel Ben Hamo ©
 						</footer>
 					</>
 				</div>

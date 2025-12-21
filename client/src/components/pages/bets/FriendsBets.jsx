@@ -91,7 +91,7 @@ const FriendsBets = () => {
 			
 			{!isLoading && (
 				<>
-					{openModal && <Modal title={modalText.title} text={modalText.text} closeModal={closeModalHandler} />}
+					{openModal && <Modal title={modalText.title} text={modalText.text} onClick={closeModalHandler} />}
 
 					{!openModal && (
 						<div className="flex flex-col items-center">

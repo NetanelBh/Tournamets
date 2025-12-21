@@ -1,4 +1,5 @@
 // isExit prop is indicates if the user want to exit from either tournament or group(to add more button to the modal)
+// OnCancle prop is indicates if the user click cancle after the leave group warning showed
 const Modal = ({ title, text, onClick, isExit = false, onCancle=undefined }) => {
 	return (
 		<div

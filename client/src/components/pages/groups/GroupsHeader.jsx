@@ -68,7 +68,7 @@ const GroupsHeader = () => {
 											: ""
 									}`}
 								>
-									הוסף משחק לטורניר
+									הוסף משחק
 								</NavLink>
 							)}
 						</nav>

@@ -88,7 +88,7 @@ const BetsHeader = () => {
 								to="/layout/my-bets"
 								className={`hover:text-gray-300 transition-all ${
 									pathname.includes("my-bets")
-										? "text-yellow-400 font-semibold hover:text-yellow-400"
+										? "text-yellow-400 font-semibold hover:text-yellow-400 underline"
 										: ""
 								}`}
 							>
@@ -99,7 +99,7 @@ const BetsHeader = () => {
 								to="/layout/closed-bets"
 								className={`hover:text-gray-300 transition-all ${
 									pathname.includes("closed-bets")
-										? "text-yellow-400 font-semibold hover:text-yellow-400"
+										? "text-yellow-400 font-semibold hover:text-yellow-400 underline"
 										: ""
 								}`}
 							>
@@ -110,7 +110,7 @@ const BetsHeader = () => {
 								to="/layout/bets-table"
 								className={`hover:text-gray-300 transition-all ${
 									pathname.includes("bets-table")
-										? "text-yellow-400 font-semibold hover:text-yellow-400"
+										? "text-yellow-400 font-semibold hover:text-yellow-400 underline"
 										: ""
 								}`}
 							>

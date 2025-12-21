@@ -79,11 +79,11 @@ const BetsHeader = () => {
 				</div>
 			)}
 
-			<header className="text-white mt-6">
+			<header className="w-full text-white mt-6">
 				<div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5 sm:mt-4">
-					<div className="flex justify-center mb-6">
+					<div className="flex justify-evenly mb-6">
 						{/* Navigation Menu */}
-						<nav className="flex space-y-4 md:space-y-0 md:space-x-10 text-md items-center">
+						<nav className="flex justify-evenly items-center w-full text-md">
 							<NavLink
 								to="/layout/my-bets"
 								className={`hover:text-gray-300 transition-all ${

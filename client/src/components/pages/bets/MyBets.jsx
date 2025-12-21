@@ -398,7 +398,7 @@ const MyBets = () => {
 							<MatchesList matches={notStartedMatches} />
 
 							<footer
-								className="border-t-4 border-r-4 border-l-4 border-red-600 shadow-inner shadow-gray-600 w-full text-center sm:w-3/9 fixed bottom-0 p-8 hover:py-10 active:py-10 active:cursor-pointer text-xl text-black font-bold bg-gray-700 rounded-tl-3xl rounded-tr-3xl"
+								className="border-t-4 border-r-4 border-l-4 border-red-600 shadow-inner shadow-gray-600 w-7/9 text-center sm:w-3/9 fixed bottom-0 p-8 hover:py-10 active:py-10 active:cursor-pointer text-xl text-black font-bold bg-gray-800 rounded-tl-3xl rounded-tr-3xl"
 								onClick={saveBetHandler}
 							>
 								<span className="hover:cursor-pointer active:bg-gray-800 active:text-yellow-300 bg-yellow-300 px-4 py-2 rounded-lg border-3 border-red-600">

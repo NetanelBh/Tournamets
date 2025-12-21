@@ -78,7 +78,7 @@ const Login = () => {
 				<div className="min-h-screen bg-[url('/images/login.jpg')] bg-cover bg-center flex flex-col items-center p-4">
 					<>
 						{!isError && (
-							<div className="fade_up max-w-md w-full bg-white/90 rounded-xl shadow-lg p-8 mt-8">
+							<main className="fade_up max-w-md w-full bg-white/90 rounded-xl shadow-lg p-8 mt-8">
 								<h2 className="text-2xl font-bold text-gray-900 mb-6 text-center">כניסה</h2>
 
 								<form className="space-y-4" onSubmit={loginHandler}>
@@ -146,10 +146,14 @@ const Login = () => {
 										הירשם
 									</NavLink>
 								</div>
-							</div>
+							</main>
 						)}
 
 						{isError && <Modal title="שגיאה" text="שגיאה בהתחברות, אנא נסה שנית" onClick={closeModal} />}
+						
+						<footer className="mt-auto pb-4 text-center text-sm text-white font-semibold">
+							❤️ Developed by Netanel Ben Hamo — with ©
+						</footer>
 					</>
 				</div>
 			)}

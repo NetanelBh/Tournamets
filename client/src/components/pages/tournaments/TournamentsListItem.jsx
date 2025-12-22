@@ -22,7 +22,7 @@ const TournamentsListItem = ({ item, index, btnText, onClick, leave = undefined 
 		tournamentStatus = item.startTime <= now ? "הטורניר התחיל" : "ניתן להצטרף";
 	}
 	let statusColor = "text-green-400 font-bold";
-	if ((tournamentStatus === "הטורניר התחיל" || tournamentStatus === "הסתיים") && !isJoined) {
+	if ((tournamentStatus === "התחיל, לא ניתן להצטרף" || tournamentStatus === "הסתיים") && !isJoined) {
 		statusColor = "text-red-500 font-bold";
 	} else if (isJoined) {
 		statusColor = "text-yellow-400 font-bold";

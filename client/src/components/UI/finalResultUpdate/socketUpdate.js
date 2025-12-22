@@ -3,8 +3,7 @@ import { io } from "socket.io-client";
 import {store} from "../../store/store";
 import { matchesActions } from "../../store/slices/matchesSlice";
 
-// Replace with your backend URL or environment variable
-const SOCKET_URL = "http://localhost:3000";
+const SOCKET_URL = import.meta.env.VITE_SERVER_URI;
 
 const initSocketListener = () => {
 	let socket;

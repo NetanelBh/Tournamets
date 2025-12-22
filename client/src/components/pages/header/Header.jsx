@@ -70,7 +70,9 @@ const Header = ({ name, logout }) => {
 						<button
 							id="menu-button"
 							className="text-white focus:outline-none"
-							onClick={() => setIsOpenMenu(!isOpenMenu)}
+							// TODO: IF WORKS, REMOVE THE COMMENT
+							// onClick={() => setIsOpenMenu(!isOpenMenu)}
+							onClick={() => setIsOpenMenu(true)}
 						>
 							<svg
 								className="h-6 w-6"
@@ -98,6 +100,7 @@ const Header = ({ name, logout }) => {
 							className={`${"block text-lg active:text-gray-300 transition-all"} ${
 								pathname.includes("all-tournaments") ? activeClass : ""
 							}`}
+							onClick={() => setIsOpenMenu(false)}
 						>
 							כל הטורנירים
 						</NavLink>
@@ -113,6 +116,7 @@ const Header = ({ name, logout }) => {
 									? activeClass
 									: ""
 							}`}
+							onClick={() => setIsOpenMenu(false)}
 						>
 							הטורנירים שלי
 						</NavLink>
@@ -123,6 +127,7 @@ const Header = ({ name, logout }) => {
 								className={`${"block text-lg active:text-gray-300 transition-all"} ${
 									pathname.includes("create-tournament") ? activeClass : ""
 								}`}
+								onClick={() => setIsOpenMenu(false)}
 							>
 								צור טורניר
 							</NavLink>

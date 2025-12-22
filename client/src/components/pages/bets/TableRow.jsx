@@ -2,9 +2,9 @@ const TableRow = ({ data, trClass, thClass, tdClass }) => {
 	// Determine the color of the 1st and 2nd places
 	let rowClass = trClass;
 	if (data.i === 0) {
-		rowClass = "bg-[#2626FF] hover:bg-[#0000B8] text-white font-bold";
+		rowClass = "bg-[#2626FF] hover:bg-[#0000B8] text-white font-bold text-xs";
 	} else if (data.i === 1) {
-		rowClass = "bg-[#FFCF69] hover:bg-[#FFB81F] text-black font-bold";
+		rowClass = "bg-[#FFCF69] hover:bg-[#FFB81F] text-black font-bold text-xs";
 	}
 
 	return (

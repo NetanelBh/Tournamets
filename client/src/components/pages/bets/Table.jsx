@@ -88,12 +88,12 @@ const Table = () => {
 								<table className="min-w-[800px] w-full text-sm text-left rtl:text-right">
 									<TableHeader
 										data={tableHeaders}
-										theadClass="bg-[#A3E5FF] text-black text-sm md:text-base font-bold border-b border-gray-200"
+										theadClass="bg-[#A3E5FF] text-black text-xs font-bold border-b border-gray-200"
 									/>
 
 									<tbody className="divide-y divide-gray-200">
 										{usersTableData.map((user, index) => (
-											<TableRow key={index} data={{user, i: index}} trClass="bg-white hover:bg-gray-50" thClass="px-6 py-4 whitespace-nowrap" tdClass="px-6 py-4" />
+											<TableRow key={index} data={{user, i: index}} trClass="bg-white hover:bg-gray-50 text-xs" thClass="px-6 py-4 whitespace-nowrap" tdClass="px-6 py-4" />
 										))}
 									</tbody>
 								</table>

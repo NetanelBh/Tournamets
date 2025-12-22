@@ -19,7 +19,7 @@ const TournamentsListItem = ({ item, index, btnText, onClick, leave = undefined 
 
 	let tournamentStatus = item.endDate < now ? "הסתיים" : false;
 	if (!tournamentStatus) {
-		tournamentStatus = item.startTime <= now ? "הטורניר התחיל" : "ניתן להצטרף";
+		tournamentStatus = item.startTime <= now ? "התחיל, לא ניתן להצטרף" : "ניתן להצטרף";
 	}
 	let statusColor = "text-green-400 font-bold";
 	if ((tournamentStatus === "התחיל, לא ניתן להצטרף" || tournamentStatus === "הסתיים") && !isJoined) {

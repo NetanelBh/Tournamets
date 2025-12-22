@@ -49,16 +49,18 @@ const AllTournaments = () => {
 		fetchData();
 	}, []);
 
+	const torunamentJoin = "הצטרפות לטורניר";
+
 	const joinHandler = async (item) => {
 		// Prevent a scenario that the user enter to tournament after he started(when he didn't refresh the browser)
 		const now = new Date().toISOString();
 		if (now >= item.startTime) {
 			setOpenModal(true);
-			setModalText({ title: "הצטרפת לטורניר", text: "הטורניר החל, לא ניתן להצטרף יותר" });
+			setModalText({ title: torunamentJoin, text: "הטורניר החל, לא ניתן להצטרף יותר" });
 			setNavigateTo("/layout/all-tournaments");
 			return;
 		}
-
+		
 		setOpenModal(true);
 		setIsLoading(true);
 		try {
@@ -67,11 +69,11 @@ const AllTournaments = () => {
 			if (resp.status) {
 				// Add the tournament to the user
 				dispatch(userActions.joinTournament(item._id));
-				const modalObj = { title: "הצטרפות לטורניר", text: "הצטרפת לטורניר בהצלחה" };
+				const modalObj = { title: torunamentJoin, text: "הצטרפת לטורניר בהצלחה" };
 				setModalText({ ...modalObj });
 				setNavigateTo("/layout/my-tournaments");
 			} else {
-				const modalObj = { title: "הצטרפת לטורניר", text: "אירעה שגיאה בהצטרפת לטורניר, אנא נסה שנית" };
+				const modalObj = { title: torunamentJoin, text: "אירעה שגיאה בהצטרפת לטורניר, אנא נסה שנית" };
 				setModalText({ ...modalObj });
 				setNavigateTo("/layout/all-tournaments");
 			}

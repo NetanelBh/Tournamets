@@ -70,9 +70,7 @@ const Header = ({ name, logout }) => {
 						<button
 							id="menu-button"
 							className="text-white focus:outline-none"
-							// TODO: IF WORKS, REMOVE THE COMMENT
-							// onClick={() => setIsOpenMenu(!isOpenMenu)}
-							onClick={() => setIsOpenMenu(true)}
+							onClick={() => setIsOpenMenu(!isOpenMenu)}
 						>
 							<svg
 								className="h-6 w-6"

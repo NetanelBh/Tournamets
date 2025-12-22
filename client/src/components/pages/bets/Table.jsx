@@ -3,7 +3,7 @@ import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 
 import { usersPoints } from "./betsUtils";
-import { tableColumns } from "./betsUtils";
+import { tableHeaders } from "./betsUtils";
 
 import TableRow from "./TableRow";
 import Modal from "../../modal/Modal";
@@ -23,8 +23,6 @@ const Table = () => {
 
 	const tournamentId = localStorage.getItem("tournamentId");
 	const groupId = localStorage.getItem("groupId");
-
-	// TODO: ADD NEW STYLE TO TEH TABLE
 
 	// Fetch all users top scorer and winner team bets(only once)
 	useEffect(() => {
@@ -85,33 +83,25 @@ const Table = () => {
 					<BetsLayout />
 
 					{!openModal && (
-						<div className="flex flex-col">
-							<div className="overflow-x-auto sm:-mx-6 lg:-mx-8">
-								<div className="inline-block min-w-full py-2 sm:px-6 lg:px-8">
-									<div className="overflow-hidden">
-										<table className="min-w-full border text-center text-xs font-light text-white dark:border-neutral-500">
-											<TableHeader columns={tableColumns} />
+						<div className="flex justify-center w-full px-4">
+							<div className="w-full max-w-[1200px] overflow-x-auto bg-white shadow rounded-lg border border-gray-200">
+								<table className="min-w-[800px] w-full text-sm text-left rtl:text-right">
+									<TableHeader
+										data={tableHeaders}
+										theadClass="bg-[#A3E5FF] text-black text-sm md:text-base font-bold border-b border-gray-200"
+									/>
 
-											<tbody>
-												{usersTableData.map((user, index) => (
-													<TableRow
-														key={index}
-														user={user}
-														index={index}
-														columns={tableColumns}
-													/>
-												))}
-											</tbody>
-										</table>
-									</div>
-								</div>
+									<tbody className="divide-y divide-gray-200">
+										{usersTableData.map((user, index) => (
+											<TableRow key={index} data={{user, i: index}} trClass="bg-white hover:bg-gray-50" thClass="px-6 py-4 whitespace-nowrap" tdClass="px-6 py-4" />
+										))}
+									</tbody>
+								</table>
 							</div>
 						</div>
 					)}
 
-					{openModal && (
-						<Modal title={modalText.title} text={modalText.text} onClick={closeModalHandler} />
-					)}
+					{openModal && <Modal title={modalText.title} text={modalText.text} onClick={closeModalHandler} />}
 				</div>
 			)}
 		</>

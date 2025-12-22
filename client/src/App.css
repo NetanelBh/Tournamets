@@ -23,3 +23,14 @@
       opacity: 1;
     }
   }
+
+    .points_table {
+    opacity: 0;
+    animation: showup 1.8s forwards;
+  }
+  
+  @keyframes showup {
+    to {
+      opacity: 1;
+    }
+  }

@@ -1,11 +1,9 @@
-const TableHeader = ({ columns }) => {
+const TableHeader = ({ data, theadClass }) => {
 	return (
-		<thead className="border-b font-medium dark:border-neutral-500">
+		<thead className={theadClass}>
 			<tr>
-				{columns.map((col) => (
-					<th key={col.key} scope="col" className="px-4 py-2 dark:border-neutral-500">
-						{col.label}
-					</th>
+				{data.map((item, i) => (
+					<th key={i} className={item.className}>{item.label}</th>
 				))}
 			</tr>
 		</thead>

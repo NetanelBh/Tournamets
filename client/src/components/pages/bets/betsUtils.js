@@ -106,18 +106,14 @@ export const calculatePoints = (stage, round, finalScore, userBet, pointsRules) 
 	return points;
 };
 
-export const tableColumns = [
-	{ key: "rank", label: "#", className: "whitespace-nowrap  px-4 py-4 font-medium dark:border-neutral-500" },
-	{ key: "username", label: "שם", className: "whitespace-nowrap  px-4 py-4 dark:border-neutral-500 font-bold" },
-	{ key: "exacts", label: "ניחוש מדויק", className: "whitespace-nowrap  px-4 py-4 dark:border-neutral-500" },
-	{ key: "directions", label: "כיוון", className: "px-4 py-4 dark:border-neutral-500" },
-	{ key: "winnerTeamBonus", label: "בונוס אלופה", className: "whitespace-nowrap  px-4 py-4 dark:border-neutral-500" },
-	{
-		key: "topScorerBonus",
-		label: "בונוס מלך השערים",
-		className: "whitespace-nowrap  px-4 py-4 dark:border-neutral-500",
-	},
-	{ key: "totalMatchesPoints", label: `סה"כ`, className: "px-4 py-4 dark:border-neutral-500" },
+export const tableHeaders = [
+	{ label: "#", className: "px-6 py-3 font-medium" },
+	{ label: "שם", className: "px-6 py-3 font-medium" },
+	{ label: "בולים", className: "px-6 py-3 font-medium" },
+	{ label: "כיוונים", className: "px-6 py-3 font-medium" },
+	{ label: "בונוס אלופה", className: "px-6 py-3 font-medium" },
+	{ label: "בונוס מלך השערים", className: "px-6 py-3 font-medium" },
+	{ label: `סה"כ`, className: "px-6 py-3 font-medium" },
 ];
 
 export const usersPoints = (data) => {
@@ -217,25 +213,32 @@ export const groupPointsExplain = (pointsRules) => {
 	// Get all levels name from the points rules and store it for sort(ascending)
 	const tempArray = [];
 	for (const level in differentPoints) {
-		tempArray.push({level: level, points: differentPoints[level]});
+		tempArray.push({ level: level, points: differentPoints[level] });
 		// Sort the array to show the rules from the first stage to final(ascending)
 		tempArray.sort((a, b) => b.points.exactScore - a.points.exactScore);
 	}
-	
+
 	// After the array sort, create the points rules text for the knockout stage
 	for (const score of tempArray) {
-		rules.knockoutStage.push(`${levelsTranslation[score.level]} גמר: ${exactTemplate}${differentPoints[score.level].exactScore} ${pointsTemplate}`);
-		rules.knockoutStage.push(`${levelsTranslation[score.level]} גמר: ${directionTemplate}${differentPoints[score.level].directionScore} ${pointsTemplate}`);
+		rules.knockoutStage.push(
+			`${levelsTranslation[score.level]} גמר: ${exactTemplate}${
+				differentPoints[score.level].exactScore
+			} ${pointsTemplate}`
+		);
+		rules.knockoutStage.push(
+			`${levelsTranslation[score.level]} גמר: ${directionTemplate}${
+				differentPoints[score.level].directionScore
+			} ${pointsTemplate}`
+		);
 	}
-	
 
 	return rules;
 };
 
 const levelsTranslation = {
-	"roundOf32": "1/16",
-	"roundOf16": "שמינית",
-	"quarterFinal": "רבע",
-	"semiFinal": "חצי",
-	"final": "",
-}
+	roundOf32: "1/16",
+	roundOf16: "שמינית",
+	quarterFinal: "רבע",
+	semiFinal: "חצי",
+	final: "",
+};

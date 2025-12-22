@@ -23,7 +23,7 @@ const GroupsHeader = () => {
 				<div className="max-w-7xl mx-auto sm:px-6 lg:px-8 py-5 sm:mt-4">
 					<div className="flex justify-center">
 						{/* Navigation Menu */}
-						<nav className="flex justify-evenly items-center w-full text-md md:w-4/6">
+						<nav className="flex justify-evenly items-center w-full text-md md:w-4/6 lg:w-1/2">
 							<NavLink
 								to="/layout/groups-layout/my-groups"
 								className={`hover:text-gray-300 transition-all ${

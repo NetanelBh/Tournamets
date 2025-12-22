@@ -63,7 +63,7 @@ const TournamentsListItem = ({ item, index, btnText, onClick, leave = undefined 
 
 						<button
 							className={`text-gray-900 bg-yellow-300 hover:scale-95 active:scale-95 font-medium rounded-lg shadow-md shadow-gray-700 hover:shadow-sm hover:shadow-gray-400 text-sm px-5 py-2.5 me-2 mb-2 dark:hover:scale-95 cursor-pointer ${
-								(tournamentStatus === "הטורניר התחיל" || tournamentStatus === "הסתיים" || isJoined) &&
+								(tournamentStatus === "התחיל, לא ניתן להצטרף" || tournamentStatus === "הסתיים" || isJoined) &&
 								btnText !== "כניסה"
 									? "invisible"
 									: ""

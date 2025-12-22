@@ -50,8 +50,9 @@ const TournamentsListItem = ({ item, index, btnText, onClick, leave = undefined 
 						<button
 							type="button"
 							className={`text-white bg-red-700 hover:scale-95 active:scale-95 font-medium rounded-lg shadow-md shadow-gray-700 hover:shadow-sm hover:shadow-gray-400 text-sm px-5 py-2.5 me-2 mb-2 dark:bg-red-600 dark:hover:scale-95 cursor-pointer ${
+								// Only here make it hidden to give more space for the status line
 								pathname.includes("all-tournaments")
-									? "invisible"
+									? "hidden"
 									: ""
 							}`}
 							onClick={() => {

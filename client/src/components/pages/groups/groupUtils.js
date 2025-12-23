@@ -3,12 +3,15 @@ export const groupInputs = [
 		htmlFor: "name",
 		label: "בחר שם לקבוצה",
 		type: "text",
+		placeholder: "",
+		autoComplete: "off",
 	},
 	{
 		htmlFor: "code",
 		label: "בחר קוד כניסה הקבוצה",
 		type: "text",
-		clue: "ישמש להצטרפות משתמשים לקבוצה",
+		placeholder: "ישמש להצטרפות משתמשים לקבוצה",
+		autoComplete: "off",
 	},
 ];
 

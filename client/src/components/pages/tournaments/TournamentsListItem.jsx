@@ -15,14 +15,21 @@ const TournamentsListItem = ({ item, index, btnText, onClick, leave = undefined 
 
 	// Check if the user joined the tournament already
 	const isJoined = userTournaments.includes(item._id);
+	
+	// Variables text to prevent hardcoded strings
+	const finished = "הסתיים";
+	const cannotJoin = "התחיל, לא ניתן להצטרף";
+	const inMyTournaments = "נמצא בטורנירים שלי";
+	const entrance = "כניסה";
+	const canJoin = "ניתן להצטרף";
+	
 	// Compate the dates to determine if the tournament is started
-
-	let tournamentStatus = item.endDate < now ? "הסתיים" : false;
+	let tournamentStatus = item.endDate < now ? finished : false;
 	if (!tournamentStatus) {
-		tournamentStatus = item.startTime <= now ? "התחיל, לא ניתן להצטרף" : "ניתן להצטרף";
+		tournamentStatus = item.startTime <= now ? cannotJoin : canJoin;
 	}
 	let statusColor = "text-green-400 font-bold";
-	if ((tournamentStatus === "התחיל, לא ניתן להצטרף" || tournamentStatus === "הסתיים") && !isJoined) {
+	if ((tournamentStatus === cannotJoin || tournamentStatus === finished) && !isJoined) {
 		statusColor = "text-red-500 font-bold";
 	} else if (isJoined) {
 		statusColor = "text-yellow-400 font-bold";
@@ -39,10 +46,10 @@ const TournamentsListItem = ({ item, index, btnText, onClick, leave = undefined 
 				</div>
 				<div className="mt-4 flex items-center justify-between">
 					{/* Show the status only in AllTournaments page(כפתור כניסה זה רק עבור הטורנירים שלי) */}
-					<p className={btnText !== "כניסה" ? "text-sm text-white" : "invisible"}>
+					<p className={btnText !== entrance ? "text-sm text-white" : "invisible"}>
 						סטטוס :{" "}
 						<span className={statusColor}>
-							{isJoined && btnText !== "כניסה" ? "בטורנירים שלי" : tournamentStatus}
+							{isJoined && btnText !== entrance ? inMyTournaments : tournamentStatus}
 						</span>
 					</p>
 
@@ -64,8 +71,8 @@ const TournamentsListItem = ({ item, index, btnText, onClick, leave = undefined 
 
 						<button
 							className={`text-gray-900 bg-yellow-300 hover:scale-95 active:scale-95 font-medium rounded-lg shadow-md shadow-gray-700 hover:shadow-sm hover:shadow-gray-400 text-sm px-5 py-2.5 me-2 mb-2 dark:hover:scale-95 cursor-pointer ${
-								(tournamentStatus === "התחיל, לא ניתן להצטרף" || tournamentStatus === "הסתיים" || isJoined) &&
-								btnText !== "כניסה"
+								(tournamentStatus === cannotJoin || tournamentStatus === finished || isJoined) &&
+								btnText !== entrance
 									? "invisible"
 									: ""
 							}`}

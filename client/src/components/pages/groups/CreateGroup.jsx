@@ -5,12 +5,12 @@ import { useNavigate } from "react-router-dom";
 import * as groupUtils from "./groupUtils";
 
 import API from "../../utils/Api";
-import GroupInfo from "./GroupInfo";
 import Modal from "../../modal/Modal";
 import PointsRank from "./points/PointsRank";
 import Loading from "../../UI/loading/Loading";
 import RadioButtonsArea from "./points/RadioButtonsArea";
 import { userActions } from "../../store/slices/userSlice";
+import Input from "../../UI/input/Input";
 
 const CreateGroup = () => {
 	// "samePoints" or "differentPoints" for knockout matches
@@ -146,17 +146,20 @@ const CreateGroup = () => {
 
 	return (
 		<>
-			{!openModal && (
+			{isLoading && <Loading />}
+
+			{!isLoading && (
 				<>
-					{isLoading && <Loading />}
-					{!isLoading && (
+					{!openModal && (
 						<div className="flex flex-col items-center">
 							<form
-								className="show_up max-w-md w-fit sm:w-full bg-cyan-900/50 rounded-xl p-6 mt-2 mb-8 space-y-4 shadow-sm shadow-gray-400"
+								className="show_up max-w-md sm:w-full bg-cyan-900/50 rounded-xl p-6 mt-2 mb-8 space-y-4 shadow-sm shadow-gray-400"
 								onSubmit={createGroupHandler}
 							>
 								{/* Contains the name, code and paybox */}
-								<GroupInfo data={groupUtils.groupInputs} />
+								{groupUtils.groupInputs.map((input) => (
+									<Input key={input.htmlFor} data={input} />
+								))}
 
 								{/* Contains the payment decision (with/without payment) */}
 								<RadioButtonsArea
@@ -192,17 +195,15 @@ const CreateGroup = () => {
 										);
 									})}
 
-								<div className="flex justify-end">
-									<button className="w-1/4 bg-gradient-to-r from-teal-500 to-teal-800 shadow-md shadow-gray-400/80 hover:scale-95 active:scale-95 active:bg-gradient-to-r from-teal-500 to-teal-800 text-yellow-300 font-bold py-2.5 rounded-lg hover:shadow-sm transition-colors me-2 mb-2 mt-2">
-										צור קבוצה
-									</button>
-								</div>
+								<button className="mt-4 w-full bg-gradient-to-r from-teal-500 to-teal-800 shadow-md shadow-gray-400/80 hover:shadow-sm hover:scale-95 active:scale-95 active:bg-gradient-to-r from-teal-500 to-teal-800 text-yellow-300 font-bold py-2.5 rounded-lg transition-colors">
+									צור קבוצה
+								</button>
 							</form>
 						</div>
 					)}
+					{openModal && <Modal title="יצירת קבוצה" text={modalText} onClick={closeModalHandler} />}
 				</>
 			)}
-			{openModal && <Modal title="יצירת קבוצה" text={modalText} onClick={closeModalHandler} />}
 		</>
 	);
 };

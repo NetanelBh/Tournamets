@@ -1,5 +1,5 @@
 import { useRef, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
 import API from "../../utils/Api";
@@ -53,13 +53,25 @@ const AddMatch = () => {
 			if (resp.data.status) {
 				setOpenModal(true);
 				setModalText("המשחק נוצר בהצלחה");
+				
+				// Per each match create timeout to update the start time(for real-time update the started matches)
+				const delay = new Date(resp.data.data.kickoffTime).getTime() - Date.now();
+				// Set timeout per each match for the exact time he should start
+				if (delay > 0) {
+					setTimeout(() => {
+						dispatch(matchesActions.updateStartTime(resp.data.data._id));
+					}, delay);
+				}
+
 				dispatch(matchesActions.addMatch(resp.data.data));
 			} else {
 				setOpenModal(true);
 				setModalText(resp.data.data);
 			}
 		} catch (error) {
-			setModalText("אירעה שגיאה ביצירת המשחק, אנא נסה שנית");
+			// TODO: AFTER TESTING RETURN TO THE HEBREW MESSAGE
+			// setModalText("אירעה שגיאה ביצירת המשחק, אנא נסה שנית");
+			setModalText(error.message);
 		} finally {
 			setIsLoading(false);
 		}
@@ -80,12 +92,12 @@ const AddMatch = () => {
 					{!openModal && (
 						<div className="flex flex-col items-center">
 							<form
-								className="show_up max-w-md w-fit sm:w-full bg-cyan-900/50 rounded-xl p-6 mt-2 mb-8 space-y-4 shadow-sm shadow-gray-400"
+								className="show_up max-w-md sm:w-full bg-cyan-900/50 rounded-xl p-6 mt-2 mb-8 space-y-4 shadow-sm shadow-gray-400"
 								onSubmit={createMatchHandler}
 							>
-								{addMatch.map((input) => {
-									return <Input key={input.htmlFor} data={input} />;
-								})}
+								{addMatch.map((input) => (
+									<Input key={input.htmlFor} data={input} />
+								))}
 
 								<button
 									className="mt-4 w-full bg-gradient-to-r from-teal-500 to-teal-800 shadow-md shadow-gray-400/80 hover:shadow-sm hover:scale-95 active:scale-95 active:bg-gradient-to-r from-teal-500 to-teal-800 text-yellow-300 font-bold py-2.5 rounded-lg transition-colors"

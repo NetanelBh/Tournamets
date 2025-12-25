@@ -336,7 +336,7 @@ const MyBets = () => {
 		onClick: (player) =>
 			dispatch(betsActions.updateWinnerOrTopScorer({ type: "curTopScorerChoice", data: player })),
 	};
-	
+
 	// Filter only the matches that didn't start yet(to give the user the option to bet on them
 	const notStartedMatchesData = matches.filter((match) => match.kickoffTime > updatedClock);
 
@@ -369,6 +369,7 @@ const MyBets = () => {
 									<h3 className="text-md text-yellow-100 text-center">האלופה :</h3>
 									{/* Show the dropdown option only if the tournament didn't start */}
 									{!istournamentStarted && <Dropdown data={winnerTeamData} />}
+
 									{/* Show the winner team when the tournament started */}
 									{istournamentStarted && (
 										<h3 className="p-2 text-md text-black-400 text-center bg-yellow-100 font-bold rounded-lg">
@@ -378,13 +379,12 @@ const MyBets = () => {
 								</div>
 
 								<div className="flex flex-col gap-2">
+									<h3 className="text-md text-yellow-100 text-center">מלך השערים :</h3>
 									{/* Show the topScorer dropdown only if the tournament defined to be with top scorer bet */}
 									{currentTourmanent.topScorerBet && !istournamentStarted && (
-										<>
-											<h3 className="text-md text-yellow-100 text-center">מלך השערים :</h3>
-											<Dropdown data={playersData} />
-										</>
+										<Dropdown data={playersData} />
 									)}
+
 									{/* Show the winner team when the tournament started */}
 									{currentTourmanent.topScorerBet && istournamentStarted && (
 										<h3 className="p-2 text-md text-black-400 text-center bg-yellow-100 font-bold rounded-lg">

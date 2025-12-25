@@ -83,12 +83,12 @@ const FriendsBets = () => {
 
 	// Get the current match from the matches list to extract the match name
 	const currentMatch = matches.find((match) => match._id === matchId);
-	const matchName = `${currentMatch.homeTeam} - ${currentMatch.awayTeam}`;
+	const matchName = `${currentMatch.homeTeam} ${currentMatch.finalScore.homeScore} - ${currentMatch.finalScore.awayScore} ${currentMatch.awayTeam}`;
 
 	return (
 		<>
 			{isLoading && <Loading />}
-			
+
 			{!isLoading && (
 				<>
 					{openModal && <Modal title={modalText.title} text={modalText.text} onClick={closeModalHandler} />}
@@ -96,7 +96,7 @@ const FriendsBets = () => {
 					{!openModal && (
 						<div className="flex flex-col items-center">
 							<BetsLayout />
-							
+
 							<h1 className="mb-4 mt-4 text-lg text-yellow-400">{matchName}</h1>
 							<Table data={allUsersBetsData} />
 						</div>

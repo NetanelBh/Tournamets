@@ -1,6 +1,6 @@
 const Table = ({ data }) => {
-	// data prop is an object {headers: [], rows: []}
-	
+	// data prop is an object {headers: [], rows: [], colors: [] - according to the user bet direction/exact/fail}
+
 	return (
 		<div className="relative overflow-x-auto shadow-md rounded-lg mb-4">
 			<table className="text-center min-w-65 table-auto text-sm font-bold">
@@ -14,20 +14,20 @@ const Table = ({ data }) => {
 					</tr>
 				</thead>
 				<tbody>
-					{data.rows.map((row, index) => (
-						<tr
-							key={index}
-							className={`${row.includes("אני") ? "text-red-600 font-bold" : ""} ${
-								index % 2 === 0 ? "bg-[#FFFDF0]" : "bg-[#FFF2C2]"
-							} border-b border-blue-400`}
-						>
-							{row.map((cell, index) => (
-								<td key={index} className="font-medium whitespace-nowrap px-6 py-4">
-									{cell}
-								</td>
-							))}
-						</tr>
-					))}
+					{data.rows.map((row, i) => {																		
+						return (
+							<tr
+								key={i}
+								className={`text-${data.colors[i]} font-bold bg-white border-b border-blue-400`}
+							>
+								{row.map((cell, i) => (
+									<td key={i} className="font-medium whitespace-nowrap px-6 py-4">
+										{cell}
+									</td>
+								))}
+							</tr>
+						);
+					})}
 				</tbody>
 			</table>
 		</div>

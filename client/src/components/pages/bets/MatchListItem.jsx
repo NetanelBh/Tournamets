@@ -36,7 +36,7 @@ const MatchListItem = ({ match }) => {
 		navigate("/layout/friends-bets");
 	};
 
-	const scoreFromDb = { home: match.finalScore.homeScore, away: match.finalScore.awayScore };
+	const scoreFromDb = { homeScore: match.finalScore.homeScore, awayScore: match.finalScore.awayScore };
 	// Determine the color of the final result(green for exact bet, red for wrong bet and blue for direction bet) only if the user bet on this match
 	const scoreColor = finalScoreBackground(match.matchScoreBet ? match.matchScoreBet.betScore : null, scoreFromDb);
 
@@ -147,10 +147,10 @@ const MatchListItem = ({ match }) => {
 
 					<div className="w-full lg:w-3/4 grid grid-cols-4 gap-1 justify-self-center">
 						<div className="bg-gray-300 col-span-2 text-center border border-black h-6">
-							{scoreFromDb.home !== -1 && scoreFromDb.away !== -1 ? scoreFromDb.home : "טרם"}
+							{scoreFromDb.homeScore !== -1 && scoreFromDb.awayScore !== -1 ? scoreFromDb.homeScore : "טרם"}
 						</div>
 						<div className="bg-gray-300 col-span-2 text-center border border-black h-6">
-							{scoreFromDb.away !== -1 && scoreFromDb.home !== -1 ? scoreFromDb.away : "טרם"}
+							{scoreFromDb.awayScore !== -1 && scoreFromDb.homeScore !== -1 ? scoreFromDb.awayScore : "טרם"}
 						</div>
 					</div>
 				</div>

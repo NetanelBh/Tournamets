@@ -8,7 +8,11 @@ const userSlice = createSlice({
 	reducers: {
 		load(state, action) {
 			const {type, data} = action.payload;
-			state[type] = data;
+			if (type === "user") {
+				state.user = data;
+			} else if(type === "allUsers") {				
+				state.allUsers = data;
+			}			
 		},
 		joinTournament(state, action) {
 			state.user.tournaments.push(action.payload);

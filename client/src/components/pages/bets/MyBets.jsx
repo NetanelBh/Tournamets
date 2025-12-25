@@ -40,8 +40,8 @@ const MyBets = () => {
 	const currentTourmanent = allTournaments.find((t) => t._id === tournamentId);
 
 	// Fetch the users from the DB only once. When stored in redux, we can use them everywhere in the application
-	useEffect(() => {
-		if (allUsers.length > 0) return;
+	useEffect(() => {	
+		// if (allUsers.length > 0) return;
 		setIsLoading(true);
 
 		const fetchUsers = async () => {
@@ -49,10 +49,11 @@ const MyBets = () => {
 				const tournamentId = localStorage.getItem("tournamentId");
 				const groupId = localStorage.getItem("groupId");
 				const users = await API.post("/user/allUsers", { tournamentId, groupId });
-
+				
 				dispatch(userActions.load({ type: "allUsers", data: users.data.data }));
 			} catch (error) {
-				console.log(error);
+				setOpenModal(true);
+				setModalText("אירעה שגיאה בעת טעינת רשימת המשתמשים, אנא נסה שנית");
 			} finally {
 				setIsLoading(false);
 			}

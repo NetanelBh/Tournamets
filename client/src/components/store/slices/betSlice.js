@@ -17,7 +17,9 @@ const betSlice = createSlice({
 	initialState,
 	name: "bets",
 	reducers: {
-		load(state, action) {									
+		load(state, action) {		
+			state.allUsersBets = {};
+							
 			action.payload.forEach((bet) => {
 				// Create copy of the original db bets, make changes only on the copy
 				if (bet.type === "userDbScore") {
@@ -29,26 +31,29 @@ const betSlice = createSlice({
 				} else if (bet.type === "dbWinnerTeam") {
 					state.dbWinnerTeam = bet.data;
 					state.curWinnerTeamChoice = bet.data;
-				} else {
+				} else if(bet.type === "usersBetsForMatch") {
 					bet.data.forEach((user) => {
 						if (!state.allUsersBets[user.matchId]) {
-							state.allUsersBets[user.matchId] = [{userId: user.userId, betScore: user.betScore}];	
-						} else {
-							state.allUsersBets[user.matchId].push({userId: user.userId, betScore: user.betScore});
+							state.allUsersBets[user.matchId] = [{ userId: user.userId, betScore: user.betScore }];
+							return;
+						}
+						// If the matchId exist, check if the bet is not inserted already
+						const isExist = state.allUsersBets[user.matchId].some((bet) => bet.userId === user.userId);
+						if (!isExist) {
+							state.allUsersBets[user.matchId].push({ userId: user.userId, betScore: user.betScore });
 						}
 					});
-					
 				}
 			});
 		},
 		updateWinnerOrTopScorer(state, action) {
 			// Get the type from the components(curWinnerTeamChoice, curTopScorerChoice).
-			const { type, data } = action.payload;			
+			const { type, data } = action.payload;
 			state[type] = data;
 		},
 		placeBet(state, action) {
 			// Find if the bet already exists by matchId, if so, change only the score. If not exist, is a new bet
-			const matchIndex = state.userCurrentScore.findIndex((match) => match.matchId === action.payload.matchId);			
+			const matchIndex = state.userCurrentScore.findIndex((match) => match.matchId === action.payload.matchId);
 			if (matchIndex !== -1) {
 				state.userCurrentScore[matchIndex].betScore = action.payload.betScore;
 			} else {

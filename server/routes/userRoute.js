@@ -13,8 +13,7 @@ const router = express.Router();
 router.post("/allUsers", async (req, res) => {
 	const {tournamentId, groupId} = req.body;
 	try {
-		const users = await userServices.getAllUsers(tournamentId, groupId).select("-password");
-		
+		const users = await userServices.getAllUsers(tournamentId, groupId).select("-password");	
 		res.send({ status: true, data: users });
 	} catch (error) {
 		res.send({ status: false, data: "אירעה בעיה בקבלת המשתמשים, אנא נסה שנית" });
@@ -28,7 +27,8 @@ router.get("/myTournaments", async (req, res) => {
 
 		res.send({ status: true, data: userTournaments.tournaments });
 	} catch (error) {
-		res.send({ status: false, data: "אירעה בעיה בקבלת המידע, אנא נסה שנית" });
+		// res.send({ status: false, data: "אירעה בעיה בקבלת המידע, אנא נסה שנית" });
+		res.send({ status: false, data: error.message });
 	}
 });
 

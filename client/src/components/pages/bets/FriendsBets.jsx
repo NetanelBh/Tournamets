@@ -1,13 +1,14 @@
-import API from "../../utils/Api";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 
-import Table from "../../UI/table/Table";
+import API from "../../utils/Api";
 import Modal from "../../modal/Modal";
+import Table from "../../UI/table/Table";
 import Loading from "../../UI/loading/Loading";
 import BetsLayout from "../layouts/BetsLayout";
+import { finalScoreBackground } from "./betsUtils";
 import { betsActions } from "../../store/slices/betSlice";
-import { useNavigate } from "react-router-dom";
 
 const FriendsBets = () => {
 	const dispatch = useDispatch();
@@ -22,7 +23,7 @@ const FriendsBets = () => {
 	const currentUser = useSelector((state) => state.user.user);
 	const allUsers = useSelector((state) => state.user.allUsers);
 	const matches = useSelector((state) => state.matches.matches);
-
+	
 	// Fetch data only once per match that started already. Match that not stored in redux, will be fetched from the DB
 	useEffect(() => {
 		const fetchAllUsersBets = async () => {
@@ -32,9 +33,8 @@ const FriendsBets = () => {
 				const usersBets = await API.post("/bets/allUsersBets", {
 					tournamentId: localStorage.getItem("tournamentId"),
 					groupId: localStorage.getItem("groupId"),
-					matchId,
 				});
-
+				
 				dispatch(betsActions.load([{ type: "usersBetsForMatch", data: usersBets.data.data }]));
 			} catch (error) {
 				setOpenModal(true);
@@ -54,12 +54,18 @@ const FriendsBets = () => {
 	};
 
 	const bets = useSelector((state) => state.bets);
+	
 	// If is the first time we entered here, the all users bets list will not exist yet(useEffect run only at the end)
-	const betsOfThisMatch = bets.allUsersBets[matchId] ? bets.allUsersBets[matchId] : [];
-
-	const allUsersBetsData = { headers: ["שם", "תוצאה"], rows: [] };
+	const betsOfThisMatch = bets.allUsersBets[matchId] ? bets.allUsersBets[matchId] : [];	
+	
+	// Get the current match from the matches list to extract the match name
+	const currentMatch = matches.find((match) => match._id === matchId);
+	
+	const allUsersBetsData = { headers: ["שם", "תוצאה", "ניחוש"], rows: [], colors: [] };
 
 	allUsers.forEach((user) => {
+		// Check if the user bet on this match
+		const isBet = ""
 		const row = [];
 		let name = "אני";
 		let score = "-";
@@ -75,15 +81,56 @@ const FriendsBets = () => {
 			score = `${currentIterationUserBet.betScore.homeScore} : ${currentIterationUserBet.betScore.awayScore}`;
 		}
 
+		// For each user, find if his score is exact/direction/fail
+		const userScore = {
+			homeScore: currentIterationUserBet ? currentIterationUserBet.betScore.homeScore : -1,
+			awayScore: currentIterationUserBet ? currentIterationUserBet.betScore.awayScore : -1,
+		};
+		const realScore = {
+			homeScore: currentMatch.finalScore.homeScore,
+			awayScore: currentMatch.finalScore.awayScore,
+		};
+		
+		const betStatus = finalScoreBackground(userScore, realScore) + "-600";
+
 		row.push(name);
 		row.push(score);
+		if(betStatus === "green-600") {
+			row.push("בול");
+		} else if (betStatus === "red-600") {
+			row.push("נפילה");
+		} else {
+			row.push("כיוון");
+		}
 
 		allUsersBetsData.rows.push(row);
+		
+		// The user color in the table according to his bet: exact/direction/fail 
+		allUsersBetsData.colors.push(betStatus);
 	});
 
-	// Get the current match from the matches list to extract the match name
-	const currentMatch = matches.find((match) => match._id === matchId);
-	const matchName = `${currentMatch.homeTeam} ${currentMatch.finalScore.homeScore} - ${currentMatch.finalScore.awayScore} ${currentMatch.awayTeam}`;
+	// Sort the colors and rows arrays
+	// Create a map of colors and their priority
+	const colorsPriority = {"green-600": 0, "blue-600": 1, "red-600": 2};	
+	// Combine the colors and rows arrays
+	const combinedArrays = allUsersBetsData.colors.map((color, i) => ({color, rows: allUsersBetsData.rows[i]}));
+	// Sort the combined arrays by the colors
+	const sortedArrays = combinedArrays.sort((a, b) => colorsPriority[a.color] - colorsPriority[b.color]);
+
+	// Update the rows and colors arrays
+	allUsersBetsData.colors = sortedArrays.map((item) => item.color);
+	allUsersBetsData.rows = sortedArrays.map((item) => item.rows);
+	
+	// Display the match name and the final score
+	const matchData = (
+		<h1 className="mb-4 mt-4 text-lg text-yellow-400">
+			{currentMatch.homeTeam}{" "}
+			<span className="text-white">
+				( {currentMatch.finalScore.homeScore} ) - ( {currentMatch.finalScore.awayScore} ){" "}
+			</span>
+			{currentMatch.awayTeam}
+		</h1>
+	);
 
 	return (
 		<>
@@ -97,7 +144,7 @@ const FriendsBets = () => {
 						<div className="flex flex-col items-center">
 							<BetsLayout />
 
-							<h1 className="mb-4 mt-4 text-lg text-yellow-400">{matchName}</h1>
+							{matchData}
 							<Table data={allUsersBetsData} />
 						</div>
 					)}

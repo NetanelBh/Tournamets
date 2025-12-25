@@ -38,6 +38,7 @@ const MyBets = () => {
 	const tournamentId = localStorage.getItem("tournamentId");
 	// Get the current tournament to use the teams for the winner team prediction of the user
 	const currentTourmanent = allTournaments.find((t) => t._id === tournamentId);
+	// TODO: WHEN THE TOURNAMENT START, CALCULATE HERE THE TOTAL MONEY IN THE BANK
 
 	// Fetch the users from the DB only once. When stored in redux, we can use them everywhere in the application
 	useEffect(() => {	

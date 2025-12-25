@@ -13,23 +13,23 @@ export const textColorMap = {
 
 // Check if the user result is exactly / direction / fail
 export const finalScoreBackground = (userBet, realFinalScore) => {
-	if (realFinalScore.home === -1 || realFinalScore.away === -1) {
+	if (realFinalScore.homeScore === -1 || realFinalScore.awayScore === -1) {
 		return "";
 	} else if (!userBet) {
 		return "red";
-	} else if (userBet.homeScore === realFinalScore.home && userBet.awayScore === realFinalScore.away) {
+	} else if (userBet.homeScore === realFinalScore.homeScore && userBet.awayScore === realFinalScore.awayScore) {
 		return "green";
 	}
 	// Case of draw and direction bet
-	else if (userBet.homeScore === userBet.awayScore && realFinalScore.home === realFinalScore.away) {
+	else if (userBet.homeScore === userBet.awayScore && realFinalScore.homeScore === realFinalScore.awayScore) {
 		return "blue";
 	}
 	// Case of direction bet (not draw)
-	else if (userBet.homeScore > userBet.awayScore && realFinalScore.home > realFinalScore.away) {
+	else if (userBet.homeScore > userBet.awayScore && realFinalScore.homeScore > realFinalScore.awayScore) {
 		return "blue";
 	}
 	// Case of direction bet (not draw)
-	else if (userBet.homeScore < userBet.awayScore && realFinalScore.home < realFinalScore.away) {
+	else if (userBet.homeScore < userBet.awayScore && realFinalScore.homeScore < realFinalScore.awayScore) {
 		return "blue";
 	} else {
 		return "red";
@@ -113,7 +113,7 @@ export const tableHeaders = [
 	{ label: "כיוונים", className: "px-6 py-3 font-medium" },
 	{ label: "בונוס אלופה", className: "px-6 py-3 font-medium" },
 	{ label: "בונוס מלך השערים", className: "px-6 py-3 font-medium" },
-	{ label: `סה"כ`, className: "px-6 py-3 font-medium" },
+	{ label:`סה"כ`, className: "px-6 py-3 font-medium" },
 ];
 
 export const usersPoints = (data) => {

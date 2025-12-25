@@ -5,6 +5,7 @@ import storage from "redux-persist/lib/storage";
 
 import betsReducer from "./slices/betSlice.js";
 import userReducer from "./slices/userSlice.js";
+import clockReducer from "./slices/clockSlice.js";
 import playersReducer from "./slices/playersSlice.js";
 import matchesReducer from "./slices/matchesSlice.js";
 import tournamentsReducer from "./slices/tournamentsSlice.js";
@@ -15,6 +16,7 @@ const rootReducer = combineReducers({
 	players: playersReducer,
 	matches: matchesReducer,
 	tournaments: tournamentsReducer,
+	clock: clockReducer,
 });
 
 const persistConfig = {

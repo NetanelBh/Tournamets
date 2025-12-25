@@ -2,23 +2,18 @@ import styles from "./MatchListItem.module.css";
 
 import { useSelector, useDispatch } from "react-redux";
 import { betsActions } from "../../store/slices/betSlice";
-import { matchesActions } from "../../store/slices/matchesSlice";
 import { finalScoreBackground, colorMap, textColorMap } from "./betsUtils";
 import { useNavigate } from "react-router-dom";
 
-const MatchListItem = ({ match }) => {	
+const MatchListItem = ({ match }) => {			
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
 
 	const userId = useSelector((state) => state.user.user._id);
+	// The clock from matchSlice(the clock update each second to make the components rerender for live matches bet list)
+	const updatedClock = useSelector((state) => state.clock.now);
 
 	const updateScoreHandler = (match) => {
-		// Before update, check if the match started(in case the browser was open for long time and the match started)
-		if (match.kickoffTime > new Date().toISOString()) {
-			// If started, change the flag of isStarted to true in redux
-			dispatch(matchesActions.updateStartTime());
-		}
-
 		// Get the bet data from the inputs
 		const bet = {
 			tournamentId: match.tournament,
@@ -47,19 +42,19 @@ const MatchListItem = ({ match }) => {
 
 	// Get the match's kickoff time and display it on the screen in the list item
 	const kickoffTime = new Date(match.kickoffTime).toLocaleString().replace(",", " |").slice(0, -3);
-
+	
 	return (
 		<li className="grid grid-cols-13 gap-2 pr-4 pl-4 pb-2 bg-gray-700 hover:bg-gray-700/80 font-bold rounded-lg shadow-[0_2px_5px_2px_theme(colors.yellow.300)] mb-6 mr-2 ml-2">
 			<div
 				className={`sm:text-xl col-span-4 p-2 text-white ${
-					!match.isStarted ? "pt-8" : ""
+					match.kickoffTime > updatedClock ? "pt-8" : ""
 				} text-center flex items-center justify-center`}
 			>
 				{match.homeTeam}
 			</div>
 
 			{/* If the match is not started yet, let the user place his bet */}
-			{!match.isStarted && (
+			{match.kickoffTime > updatedClock && (
 				<div className="col-span-5">
 					<h3 className="text-center text-white bg-gray-800 mb-2 rounded-b-xl pb-1">{match.round}</h3>
 					<p className="text-xs text-center text-white font-bold">{kickoffTime}</p>
@@ -100,7 +95,7 @@ const MatchListItem = ({ match }) => {
 			)}
 
 			{/* If the match is started, show the user's result */}
-			{match.isStarted && (
+			{match.kickoffTime < updatedClock && (
 				<div className="col-span-5 w-full">
 					<h3 className="justify-self-center w-full lg:w-3/4 text-center text-white bg-gray-800 mb-1 rounded-b-xl pb-1 text-sm">
 						התוצאה שלי
@@ -163,14 +158,14 @@ const MatchListItem = ({ match }) => {
 
 			<div
 				className={`sm:text-xl col-span-4 p-2 text-white ${
-					!match.isStarted ? "pt-8" : ""
+					match.kickoffTime > updatedClock ? "pt-8" : ""
 				} text-center flex items-center justify-center`}
 			>
 				{match.awayTeam}
 			</div>
 
 			{/* Friends bets button - show only if the match is started*/}
-			{match.isStarted && (
+			{match.kickoffTime < updatedClock && (
 				<div className="lg:w-col-span-5 lg:col-start-4 col-span-7 col-start-4 flex justify-center mt-2 mb-1 border border-white border-2 hover:cursor-pointer hover:scale-95 active:cursor-pointer active:scale-95 rounded-2xl bg-teal-700 text-yellow-300 text-lg">
 					<button className="hover:cursor-pointer active:cursor-pointer" onClick={friendsBetsHandler}>
 						הימורי החברים{" "}

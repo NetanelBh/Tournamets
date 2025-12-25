@@ -18,7 +18,7 @@ const MyBets = () => {
 
 	const dispatch = useDispatch();
 	const [modalText, setModalText] = useState(
-		"לאחר בחירת תוצאה, יש ללחוץ על כפתור 'עדכן'. לאחר כל העדכונים, חובה ללחוץ על כפתור 'שמור הימורים' בתחתית הדף"
+		"לאחר בחירת תוצאה, יש ללחוץ על כפתור 'עדכן'.\n לאחר כל העדכונים, חובה ללחוץ על כפתור 'שמור הימורים' בתחתית הדף.\nללא לחיצה על עדכן ולאחר מכן על שמירת הימורים, התוצאה לא תיקלט!!!"
 	);
 	const [openModal, setOpenModal] = useState(true);
 
@@ -29,6 +29,8 @@ const MyBets = () => {
 	const [isLoading, setIsLoading] = useState(false);
 	const allUsers = useSelector((state) => state.user.allUsers);
 	const matches = useSelector((state) => state.matches.matches);
+	// The clock from matchSlice(the clock update each second to make the components rerender for live matches bet list)
+	const updatedClock = useSelector((state) => state.clock.now);
 	const topScorersList = useSelector((state) => state.players.players);
 	const allTournaments = useSelector((state) => state.tournaments.tournaments);
 
@@ -309,7 +311,7 @@ const MyBets = () => {
 	};
 
 	// Check if the tournament started to display the top player and winner team bets
-	const istournamentStarted = currentTourmanent.startTime < new Date().toISOString();
+	const istournamentStarted = currentTourmanent.startTime < updatedClock;
 
 	// Data to dropdown compenent for the winner team
 	const winnerTeamData = {
@@ -334,9 +336,10 @@ const MyBets = () => {
 		onClick: (player) =>
 			dispatch(betsActions.updateWinnerOrTopScorer({ type: "curTopScorerChoice", data: player })),
 	};
-
+	
 	// Filter only the matches that didn't start yet(to give the user the option to bet on them
-	const notStartedMatchesData = matches.filter((match) => match.kickoffTime > new Date().toISOString());
+	const notStartedMatchesData = matches.filter((match) => match.kickoffTime > updatedClock);
+
 	// Create an object from each element that contains the flag that the match didn't started yet for matchListItem component
 	const notStartedMatches = notStartedMatchesData
 		.map((match, i) => {
@@ -349,7 +352,7 @@ const MyBets = () => {
 			// For each match, will add an extra property of the score bet from DB(if the user already bet, to show his bet)
 			const newMatch = { ...match, matchScoreBet };
 
-			return { ...newMatch, isStarted: false, refs: refs.current[i] };
+			return { ...newMatch, refs: refs.current[i] };
 		})
 		.sort((match1, match2) => new Date(match1.kickoffTime) - new Date(match2.kickoffTime));
 
@@ -369,21 +372,23 @@ const MyBets = () => {
 									{/* Show the winner team when the tournament started */}
 									{istournamentStarted && (
 										<h3 className="p-2 text-md text-black-400 text-center bg-yellow-100 font-bold rounded-lg">
-											{bets.dbWinnerTeam}
+											{bets.dbWinnerTeam ? bets.dbWinnerTeam : "-"}
 										</h3>
 									)}
 								</div>
 
 								<div className="flex flex-col gap-2">
-									<h3 className="text-md text-yellow-100 text-center">מלך השערים :</h3>
 									{/* Show the topScorer dropdown only if the tournament defined to be with top scorer bet */}
 									{currentTourmanent.topScorerBet && !istournamentStarted && (
-										<Dropdown data={playersData} />
+										<>
+											<h3 className="text-md text-yellow-100 text-center">מלך השערים :</h3>
+											<Dropdown data={playersData} />
+										</>
 									)}
 									{/* Show the winner team when the tournament started */}
 									{currentTourmanent.topScorerBet && istournamentStarted && (
 										<h3 className="p-2 text-md text-black-400 text-center bg-yellow-100 font-bold rounded-lg">
-											{bets.dbTopScorer}
+											{bets.dbTopScorer ? bets.dbTopScorer : "-"}
 										</h3>
 									)}
 								</div>
@@ -413,7 +418,9 @@ const MyBets = () => {
 						<div className="text-white text-xl mt-4">אין משחקים פתוחים להימור</div>
 					)}
 
-					{openModal && <Modal title="שמירת הימורים" text={modalText} onClick={closeModalHandler} />}
+					{openModal && (
+						<Modal title="שמירת הימורים - חשוב מאוד!" text={modalText} onClick={closeModalHandler} />
+					)}
 				</div>
 			)}
 

@@ -15,8 +15,9 @@ const AllTournaments = () => {
 	const [openModal, setOpenModal] = useState(false);
 	const [navigateTo, setNavigateTo] = useState("");
 	const navigate = useNavigate();
-
 	const dispatch = useDispatch();
+
+	const updatedTime = useSelector((state) => state.clock.now);
 	const tournaments = useSelector((state) => state.tournaments.tournaments);
 
 	// When enter to some tournament, keep the id in localStorage to case we will create a group. in other case remove
@@ -53,8 +54,7 @@ const AllTournaments = () => {
 
 	const joinHandler = async (item) => {
 		// Prevent a scenario that the user enter to tournament after he started(when he didn't refresh the browser)
-		const now = new Date().toISOString();
-		if (now >= item.startTime) {
+		if (updatedTime >= item.startTime) {
 			setOpenModal(true);
 			setModalText({ title: torunamentJoin, text: "הטורניר החל, לא ניתן להצטרף יותר" });
 			setNavigateTo("/layout/all-tournaments");

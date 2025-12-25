@@ -53,15 +53,6 @@ const AddMatch = () => {
 			if (resp.data.status) {
 				setOpenModal(true);
 				setModalText("המשחק נוצר בהצלחה");
-				
-				// Per each match create timeout to update the start time(for real-time update the started matches)
-				const delay = new Date(resp.data.data.kickoffTime).getTime() - Date.now();
-				// Set timeout per each match for the exact time he should start
-				if (delay > 0) {
-					setTimeout(() => {
-						dispatch(matchesActions.updateStartTime(resp.data.data._id));
-					}, delay);
-				}
 
 				dispatch(matchesActions.addMatch(resp.data.data));
 			} else {

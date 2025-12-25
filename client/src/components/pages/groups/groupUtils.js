@@ -75,6 +75,7 @@ export const joinGroupData = [
 	},
 ];
 
+// TODO: REMOVE THE DEFAULT VALUES
 export const addMatch = [
 	{
 		htmlFor: "home",
@@ -82,6 +83,7 @@ export const addMatch = [
 		type: "text",
 		autoComplete: "off",
 		placeholder: "שם קבוצת הבית",
+		defaultValue: "א",
 	},
 	{
 		htmlFor: "away",
@@ -89,6 +91,7 @@ export const addMatch = [
 		type: "text",
 		autoComplete: "off",
 		placeholder: "שם קבוצת החוץ",
+		defaultValue: "ב",
 	},
 	{
 		htmlFor: "date",
@@ -96,6 +99,7 @@ export const addMatch = [
 		type: "text",
 		autoComplete: "off",
 		placeholder: "yyyy-mm-dd",
+		defaultValue: "2025-12-25",
 	},
 	{
 		htmlFor: "time",
@@ -103,6 +107,7 @@ export const addMatch = [
 		type: "text",
 		autoComplete: "off",
 		placeholder: "שעון ישראל לדוגמא: 20:00",
+		defaultValue: "",
 	},
 	{
 		htmlFor: "stage",
@@ -110,6 +115,7 @@ export const addMatch = [
 		type: "text",
 		autoComplete: "off",
 		placeholder: "בתים/נוקאאוט",
+		defaultValue: "בתים",
 	},
 	{
 		htmlFor: "round",
@@ -117,5 +123,6 @@ export const addMatch = [
 		type: "text",
 		autoComplete: "off",
 		placeholder: "שמינית/רבע...",
+		defaultValue: "גמר",
 	}
 ]

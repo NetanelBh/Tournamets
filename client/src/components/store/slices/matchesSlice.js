@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-	matches: [], isStarted: false
+	matches: []
 };
 
 const matchesSlice = createSlice({
@@ -10,9 +10,6 @@ const matchesSlice = createSlice({
 	reducers: {
 		load(state, action) {
 			state.matches = action.payload;
-		},
-		updateStartTime(state) {
-			state.isStarted = true;
 		},
 		// When get the update from mongo, update the final result of the match
 		updateFinalResult(state, action) {
@@ -25,7 +22,7 @@ const matchesSlice = createSlice({
 				state.matches.push(action.payload);
 			}
 		},
-		addMatch(state, action) {
+		addMatch(state, action) {		
 			state.matches.push(action.payload);
 		}
 	},

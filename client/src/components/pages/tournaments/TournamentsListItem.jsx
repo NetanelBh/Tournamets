@@ -10,8 +10,8 @@ const TournamentsListItem = ({ item, index, btnText, onClick, leave = undefined 
 
 	const main_style = `relative overflow-hidden fade_up mb-3 group rounded-xl border-2 border-yellow-100/70`;
 
-	// Get the current date as UTC(as stored in mongoDB)
-	const now = new Date().toISOString();
+	// Get the updated time from redux
+	const updatedTime = useSelector((state) => state.clock.now);
 
 	// Check if the user joined the tournament already
 	const isJoined = userTournaments.includes(item._id);
@@ -24,9 +24,9 @@ const TournamentsListItem = ({ item, index, btnText, onClick, leave = undefined 
 	const canJoin = "ניתן להצטרף";
 	
 	// Compate the dates to determine if the tournament is started
-	let tournamentStatus = item.endDate < now ? finished : false;
+	let tournamentStatus = item.endDate < updatedTime ? finished : false;
 	if (!tournamentStatus) {
-		tournamentStatus = item.startTime <= now ? cannotJoin : canJoin;
+		tournamentStatus = item.startTime <= updatedTime ? cannotJoin : canJoin;
 	}
 	let statusColor = "text-green-400 font-bold";
 	if ((tournamentStatus === cannotJoin || tournamentStatus === finished) && !isJoined) {

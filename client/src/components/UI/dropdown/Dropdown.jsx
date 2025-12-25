@@ -21,7 +21,7 @@ const Dropdown = ({ data }) => {
 
 			<MenuItems
 				transition
-				className="max-h-60 w-full overflow-y-auto absolute right-0 z-10 mt-1 w-56 origin-top-right rounded-md bg-gray-800 outline-1 -outline-offset-1 outline-white/10 transition data-closed:scale-95 data-closed:transform data-closed:opacity-0 data-enter:duration-100 data-enter:ease-out data-leave:duration-75 data-leave:ease-in"
+				className="max-h-50 w-full overflow-y-auto absolute right-0 z-10 mt-1 w-56 origin-top-right rounded-md bg-gray-800 outline-1 -outline-offset-1 outline-white/10 transition data-closed:scale-95 data-closed:transform data-closed:opacity-0 data-enter:duration-100 data-enter:ease-out data-leave:duration-75 data-leave:ease-in"
 			>
 				<div className="py-1">
 					{data.list.map((item) => {

@@ -10,8 +10,8 @@ const GroupsHeader = () => {
 	const tournamentName = currentTournament?.name || "";
 
 	// check if the tournament is started, if started, we can't create a group
-	const now = new Date().toISOString();
-	const isStarted = currentTournament.startTime <= now;
+	const updatedTime = useSelector((state) => state.clock.now);
+	const isStarted = currentTournament.startTime <= updatedTime;
 
 	return (
 		<>

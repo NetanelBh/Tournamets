@@ -11,6 +11,7 @@ const Input = ({data}) => {
 				ref={data.ref}
 				autoComplete={data.autoComplete}
 				placeholder={data.placeholder}
+				defaultValue={data.defaultValue}
 			/>
 		</>
 	);

@@ -1,10 +1,10 @@
 import MatchListItem from "./MatchListItem";
 
-const MatchesList = ({ matches }) => {	
+const MatchesList = ({ matches }) => {
 	return (
 		<ul className="w-full sm:w-5/8 mt-4 pb-26">
-			{matches.map((match) => (
-				<MatchListItem key={match._id} match={match} />
+			{matches.map((m) => (
+				<MatchListItem key={m._id} match={m} />
 			))}
 		</ul>
 	);

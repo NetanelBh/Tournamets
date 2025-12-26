@@ -1,5 +1,10 @@
 const Table = ({ data }) => {
 	// data prop is an object {headers: [], rows: [], colors: [] - according to the user bet direction/exact/fail}
+	const colorsMap = { 
+		green: "text-green-600",
+		blue: "text-blue-600",
+		red: "text-red-600"
+	};
 
 	return (
 		<div className="relative overflow-x-auto shadow-md rounded-lg mb-4">
@@ -18,7 +23,7 @@ const Table = ({ data }) => {
 						return (
 							<tr
 								key={i}
-								className={`text-${data.colors[i]} font-bold bg-white border-b border-blue-400`}
+								className={`${colorsMap[data.colors[i]]} font-bold bg-white border-b border-blue-400`}
 							>
 								{row.map((cell, i) => (
 									<td key={i} className="font-medium whitespace-nowrap px-6 py-4">

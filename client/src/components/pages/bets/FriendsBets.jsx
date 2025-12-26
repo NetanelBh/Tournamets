@@ -91,13 +91,13 @@ const FriendsBets = () => {
 			awayScore: currentMatch.finalScore.awayScore,
 		};
 		
-		const betStatus = finalScoreBackground(userScore, realScore) + "-600";
+		const betStatus = finalScoreBackground(userScore, realScore);
 
 		row.push(name);
 		row.push(score);
-		if(betStatus === "green-600") {
+		if(betStatus === "green") {
 			row.push("בול");
-		} else if (betStatus === "red-600") {
+		} else if (betStatus === "red") {
 			row.push("נפילה");
 		} else {
 			row.push("כיוון");
@@ -111,7 +111,7 @@ const FriendsBets = () => {
 
 	// Sort the colors and rows arrays
 	// Create a map of colors and their priority
-	const colorsPriority = {"green-600": 0, "blue-600": 1, "red-600": 2};	
+	const colorsPriority = {"green": 0, "blue": 1, "red": 2};	
 	// Combine the colors and rows arrays
 	const combinedArrays = allUsersBetsData.colors.map((color, i) => ({color, rows: allUsersBetsData.rows[i]}));
 	// Sort the combined arrays by the colors

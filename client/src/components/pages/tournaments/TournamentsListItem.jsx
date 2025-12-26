@@ -19,7 +19,7 @@ const TournamentsListItem = ({ item, index, btnText, onClick, leave = undefined 
 	// Variables text to prevent hardcoded strings
 	const finished = "הסתיים";
 	const cannotJoin = "התחיל, לא ניתן להצטרף";
-	const inMyTournaments = "נמצא בטורנירים שלי";
+	const inMyTournaments = "נמצא בתפריט - הטורנירים שלי";
 	const entrance = "כניסה";
 	const canJoin = "ניתן להצטרף";
 	

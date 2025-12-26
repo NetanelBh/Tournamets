@@ -3,7 +3,7 @@ const TableHeader = ({ data, theadClass }) => {
 		<thead className={theadClass}>
 			<tr>
 				{data.map((item, i) => (
-					<th key={i} className={`${item.className} border border-l-black`}>{item.label}</th>
+					<th key={i} className={item.className}>{item.label}</th>
 				))}
 			</tr>
 		</thead>

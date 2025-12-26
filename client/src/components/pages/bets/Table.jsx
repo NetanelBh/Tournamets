@@ -98,7 +98,7 @@ const Table = () => {
 												data={{ user, i: index }}
 												trClass="bg-white hover:bg-gray-200 text-xs"
 												thClass="px-6 py-4 whitespace-nowrap"
-												tdClass="px-6 py-4"
+												tdClass="px-6 py-4 w-fit whitespace-nowrap"
 											/>
 										))}
 									</tbody>

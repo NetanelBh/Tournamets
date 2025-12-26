@@ -1,9 +1,9 @@
 const Table = ({ data }) => {
 	// data prop is an object {headers: [], rows: [], colors: [] - according to the user bet direction/exact/fail}
-	const colorsMap = { 
+	const colorsMap = {
 		green: "text-green-600",
 		blue: "text-blue-600",
-		red: "text-red-600"
+		red: "text-red-600",
 	};
 
 	return (
@@ -19,11 +19,13 @@ const Table = ({ data }) => {
 					</tr>
 				</thead>
 				<tbody>
-					{data.rows.map((row, i) => {																		
+					{data.rows.map((row, i) => {
 						return (
 							<tr
 								key={i}
-								className={`${colorsMap[data.colors[i]]} font-bold bg-white border-b border-blue-400`}
+								className={`${
+									colorsMap[data.colors[i]]
+								} font-bold bg-yellow-100 border-b border-blue-400`}
 							>
 								{row.map((cell, i) => (
 									<td key={i} className="font-medium whitespace-nowrap px-6 py-4">

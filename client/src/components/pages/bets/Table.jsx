@@ -84,8 +84,8 @@ const Table = () => {
 
 					{!openModal && (
 						<div className="flex justify-center w-full sm:px-4">
-							<div className="md:max-w-[1200px] md:w-full sm:w-full overflow-x-auto bg-white shadow sm:rounded-lg border border-gray-200">
-								<table className="min-w-[800px] w-full text-sm text-left rtl:text-right">
+							<div className="w-fit overflow-x-auto bg-white shadow sm:rounded-lg border border-gray-200">
+								<table className="w-fit text-sm text-left rtl:text-right">
 									<TableHeader
 										data={tableHeaders}
 										theadClass="bg-[#A3E5FF] text-black text-xs font-bold border-b border-gray-200"
@@ -93,7 +93,13 @@ const Table = () => {
 
 									<tbody className="divide-y divide-gray-200">
 										{usersTableData.map((user, index) => (
-											<TableRow key={index} data={{user, i: index}} trClass="bg-white hover:bg-gray-50 text-xs" thClass="px-6 py-4 whitespace-nowrap" tdClass="px-6 py-4" />
+											<TableRow
+												key={index}
+												data={{ user, i: index }}
+												trClass="bg-white hover:bg-gray-200 text-xs"
+												thClass="px-6 py-4 whitespace-nowrap border border-l-black"
+												tdClass="px-6 py-4 border border-l-black"
+											/>
 										))}
 									</tbody>
 								</table>

@@ -107,13 +107,13 @@ export const calculatePoints = (stage, round, finalScore, userBet, pointsRules) 
 };
 
 export const tableHeaders = [
-	{ label: "#", className: "px-6 py-3 font-medium" },
-	{ label: "שם", className: "px-6 py-3 font-medium" },
-	{ label: "בולים", className: "px-6 py-3 font-medium" },
-	{ label: "כיוונים", className: "px-6 py-3 font-medium" },
-	{ label: "בונוס אלופה", className: "px-6 py-3 font-medium" },
-	{ label: "בונוס מלך השערים", className: "px-6 py-3 font-medium" },
-	{ label:`סה"כ`, className: "px-6 py-3 font-medium" },
+	{ label: "#", className: "px-4 py-3 font-bold" },
+	{ label: "שם", className: "px-4 py-3 font-bold" },
+	{ label: "בולים", className: "px-4 py-3 font-bold" },
+	{ label: "כיוונים", className: "px-4 py-3 font-bold" },
+	{ label: "בונוס אלופה", className: "px-4 py-3 font-bold" },
+	{ label: "בונוס מלך השערים", className: "px-4 py-3 font-bold" },
+	{ label:`סה"כ`, className: "px-4 py-3 font-bold" },
 ];
 
 export const usersPoints = (data) => {

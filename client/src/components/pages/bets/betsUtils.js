@@ -12,10 +12,10 @@ export const textColorMap = {
 };
 
 // Check if the user result is exactly / direction / fail
-export const finalScoreBackground = (userBet, realFinalScore) => {
+export const finalScoreBackground = (userBet, realFinalScore) => {	
 	if (realFinalScore.homeScore === -1 || realFinalScore.awayScore === -1) {
 		return "";
-	} else if (!userBet) {
+	} else if (!userBet || userBet.homeScore === -1 || userBet.awayScore === -1) {
 		return "red";
 	} else if (userBet.homeScore === realFinalScore.homeScore && userBet.awayScore === realFinalScore.awayScore) {
 		return "green";

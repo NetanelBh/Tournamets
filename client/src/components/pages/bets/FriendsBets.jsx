@@ -99,8 +99,10 @@ const FriendsBets = () => {
 			row.push("בול");
 		} else if (betStatus === "red") {
 			row.push("נפילה");
-		} else {
+		} else if (betStatus === "blue") {
 			row.push("כיוון");
+		} else {
+			row.push("טרם");
 		}
 
 		allUsersBetsData.rows.push(row);

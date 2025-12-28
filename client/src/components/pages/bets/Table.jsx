@@ -88,7 +88,7 @@ const Table = () => {
 								<table className="w-fit text-sm text-left rtl:text-right">
 									<TableHeader
 										data={tableHeaders}
-										theadClass="bg-[#A3E5FF] text-black text-xs font-bold border-b border-gray-200"
+										theadClass="bg-gray-800/80 text-yellow-200 text-xs font-bold border-b border-gray-200 w-fit"
 									/>
 
 									<tbody className="divide-y divide-gray-200">

@@ -41,12 +41,12 @@ const BetsHeader = () => {
 	return (
 		<>
 			{/* Tournament name */}
-			<h1 className="text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-red-600 text-center text-2xl font-bold mt-10 underline">
+			<h1 className="text-transparent bg-clip-text bg-gradient-to-l from-yellow-400 to-red-600 text-center text-2xl font-bold mt-10 underline">
 				{tournamentName}
 			</h1>
 
 			{/* Group name */}
-			<h2 className="text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-yellow-400 text-center text-xl mt-2">
+			<h2 className="text-transparent bg-clip-text bg-gradient-to-l from-red-500 to-yellow-400 text-center text-xl mt-2">
 				{currentGroup.name}
 			</h2>
 
@@ -58,7 +58,7 @@ const BetsHeader = () => {
 						className="bg-gray-500 text-yellow-300 px-4 py-2 rounded-full hover:cursor-pointer active:cursor-pointer"
 						onClick={codeDisplay}
 					>
-						{isCodeDisplay ? currentGroup.code : "הצג את קוד הקבוצה"}
+						{isCodeDisplay ? currentGroup.code : "שתף את קוד הקבוצה"}
 					</button>
 
 					{/* If the group code is displayed, let the owner the option to share it on whatsapp */}

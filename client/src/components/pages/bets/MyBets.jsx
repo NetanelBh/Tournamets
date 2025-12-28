@@ -160,7 +160,8 @@ const MyBets = () => {
 
 				dispatch(betsActions.load([{ type: "allUsersBets", data: usersBets.data.data }]));
 			} catch (error) {
-				console.log(error);
+				setOpenModal(true);
+				setModalText("אירעה שגיאה בטעינת התוצאות, אנא נסה שנית");
 			} finally {
 				setIsLoading(false);
 			}

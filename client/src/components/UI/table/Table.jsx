@@ -25,7 +25,7 @@ const Table = ({ data }) => {
 								key={i}
 								className={`${
 									colorsMap[data.colors[i]]
-								} font-bold bg-[#F9F8F6] hover:bg-[#EFE9E3] border-b border-blue-400`}
+								} font-bold bg-[#F9F8F6] hover:bg-[#EFE9E3] border-b border-blue-400 points_table`}
 							>
 								{row.map((cell, i) => (
 									<td key={i} className="font-medium whitespace-nowrap px-6 py-4">

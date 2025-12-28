@@ -342,7 +342,7 @@ const MyBets = () => {
 	// Filter only the matches that didn't start yet(to give the user the option to bet on them
 	const notStartedMatchesData = matches.filter((match) => match.kickoffTime > updatedClock);
 
-	// Create an object from each element that contains the flag that the match didn't started yet for matchListItem component
+	// Create an object from each match
 	const notStartedMatches = notStartedMatchesData
 		.map((match, i) => {
 			if (!refs.current[i]) {

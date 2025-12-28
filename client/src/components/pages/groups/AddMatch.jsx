@@ -60,8 +60,6 @@ const AddMatch = () => {
 				setModalText(resp.data.data);
 			}
 		} catch (error) {
-			// TODO: AFTER TESTING RETURN TO THE HEBREW MESSAGE
-			// setModalText("אירעה שגיאה ביצירת המשחק, אנא נסה שנית");
 			setModalText(error.message);
 		} finally {
 			setIsLoading(false);

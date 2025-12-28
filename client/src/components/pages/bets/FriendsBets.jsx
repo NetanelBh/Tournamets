@@ -23,7 +23,7 @@ const FriendsBets = () => {
 	const currentUser = useSelector((state) => state.user.user);
 	const allUsers = useSelector((state) => state.user.allUsers);
 	const matches = useSelector((state) => state.matches.matches);
-	
+
 	// Fetch data only once per match that started already. Match that not stored in redux, will be fetched from the DB
 	useEffect(() => {
 		const fetchAllUsersBets = async () => {
@@ -34,7 +34,7 @@ const FriendsBets = () => {
 					tournamentId: localStorage.getItem("tournamentId"),
 					groupId: localStorage.getItem("groupId"),
 				});
-				
+
 				dispatch(betsActions.load([{ type: "usersBetsForMatch", data: usersBets.data.data }]));
 			} catch (error) {
 				setOpenModal(true);
@@ -54,18 +54,18 @@ const FriendsBets = () => {
 	};
 
 	const bets = useSelector((state) => state.bets);
-	
+
 	// If is the first time we entered here, the all users bets list will not exist yet(useEffect run only at the end)
-	const betsOfThisMatch = bets.allUsersBets[matchId] ? bets.allUsersBets[matchId] : [];	
-	
+	const betsOfThisMatch = bets.allUsersBets[matchId] ? bets.allUsersBets[matchId] : [];
+
 	// Get the current match from the matches list to extract the match name
 	const currentMatch = matches.find((match) => match._id === matchId);
-	
+
 	const allUsersBetsData = { headers: ["שם", "תוצאה", "ניחוש"], rows: [], colors: [] };
 
 	allUsers.forEach((user) => {
 		// Check if the user bet on this match
-		const isBet = ""
+		const isBet = "";
 		const row = [];
 		let name = "אני";
 		let score = "-";
@@ -90,12 +90,12 @@ const FriendsBets = () => {
 			homeScore: currentMatch.finalScore.homeScore,
 			awayScore: currentMatch.finalScore.awayScore,
 		};
-		
+
 		const betStatus = finalScoreBackground(userScore, realScore);
 
 		row.push(name);
 		row.push(score);
-		if(betStatus === "green") {
+		if (betStatus === "green") {
 			row.push("בול");
 		} else if (betStatus === "red") {
 			row.push("נפילה");
@@ -106,29 +106,31 @@ const FriendsBets = () => {
 		}
 
 		allUsersBetsData.rows.push(row);
-		
-		// The user color in the table according to his bet: exact/direction/fail 
+
+		// The user color in the table according to his bet: exact/direction/fail
 		allUsersBetsData.colors.push(betStatus);
 	});
 
 	// Sort the colors and rows arrays
 	// Create a map of colors and their priority
-	const colorsPriority = {"green": 0, "blue": 1, "red": 2};	
+	const colorsPriority = { green: 0, blue: 1, red: 2 };
 	// Combine the colors and rows arrays
-	const combinedArrays = allUsersBetsData.colors.map((color, i) => ({color, rows: allUsersBetsData.rows[i]}));
+	const combinedArrays = allUsersBetsData.colors.map((color, i) => ({ color, rows: allUsersBetsData.rows[i] }));
 	// Sort the combined arrays by the colors
 	const sortedArrays = combinedArrays.sort((a, b) => colorsPriority[a.color] - colorsPriority[b.color]);
 
 	// Update the rows and colors arrays
 	allUsersBetsData.colors = sortedArrays.map((item) => item.color);
 	allUsersBetsData.rows = sortedArrays.map((item) => item.rows);
-	
+
 	// Display the match name and the final score
 	const matchData = (
-		<h1 className="mb-4 mt-4 text-lg text-yellow-400">
+		<h1 className="mb-4 mt-4 text-lg text-white">
 			{currentMatch.homeTeam}{" "}
-			<span className="text-white">
-				( {currentMatch.finalScore.homeScore} ) - ( {currentMatch.finalScore.awayScore} ){" "}
+			<span className="text-yellow-400 font-normal">
+				(<span className="font-bold">{currentMatch.finalScore.homeScore !== -1 ? currentMatch.finalScore.homeScore : "טרם"}</span>){" "}
+				<span className="font-bold text-white">:</span> (
+				<span className="font-bold">{currentMatch.finalScore.awayScore !== -1 ? currentMatch.finalScore.awayScore : "טרם"}</span>){" "}
 			</span>
 			{currentMatch.awayTeam}
 		</h1>

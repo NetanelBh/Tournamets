@@ -34,4 +34,17 @@ router.post("/create", async (req, res) => {
     }
 });
 
+router.patch("/update/:id", async (req, res) => {    
+    try {        
+        const updatedMatch = await matchServices.updateMatch(req.params.id, req.body);        
+        if(!updatedMatch) {
+            res.send({ status: false, data: "אירעה בעיה בעדכון המשחק, אנא נסה שנית" });
+            return;
+        }
+        res.send({ status: true, data: updatedMatch });
+    } catch (error) {
+        res.send({ status: false, data: error.message });
+    }
+});
+
 export default router;

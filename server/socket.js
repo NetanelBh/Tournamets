@@ -23,8 +23,13 @@ const initSocket = (server) => {
   const changeStream = matchCollection.watch([], { fullDocument: "updateLookup" });
 
   changeStream.on("change", change => {
-    if (change.operationType === "update" || change.operationType === "replace") {
-      io.emit("matchUpdated", change.fullDocument);
+    switch(change.operationType) {
+      case "insert":
+        io.emit("matchAdded", change.fullDocument);
+        break;
+      case "update":        
+        io.emit("finalScoreUpdated", change.fullDocument);
+        break;
     }
   });
 

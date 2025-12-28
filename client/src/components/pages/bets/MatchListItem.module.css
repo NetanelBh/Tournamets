@@ -11,3 +11,8 @@
   animation: blink 0.9s infinite;
   animation-delay: 0.2s;
 }
+
+.blink_3 {
+  animation: blink 0.9s infinite;
+  animation-delay: 0.4s;
+}

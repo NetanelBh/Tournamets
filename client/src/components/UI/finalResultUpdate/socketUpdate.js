@@ -13,10 +13,16 @@ const initSocketListener = () => {
 		});
 
 		// Listen for match updates
-		socket.on("matchUpdated", (updatedMatch) => {
+		socket.on("matchAdded", (updatedMatch) => {
 			// Dispatch update to Redux store
-			store.dispatch(matchesActions.updateFinalResult(updatedMatch));
+			store.dispatch(matchesActions.addMatch(updatedMatch));
 		});
+
+		socket.on("finalScoreUpdated", (updatedMatch) => {
+			console.log(updatedMatch);
+			
+			store.dispatch(matchesActions.updateFinalResult(updatedMatch));
+		})
 
 		socket.on("disconnect", () => {
 			console.log("Socket disconnected");

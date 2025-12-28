@@ -1,19 +1,32 @@
 import styles from "./MatchListItem.module.css";
+import { CheckIcon } from "@heroicons/react/24/solid";
 
+import { useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
+
+import API from "../../utils/Api";
 import { betsActions } from "../../store/slices/betSlice";
 import { finalScoreBackground, colorMap, textColorMap } from "./betsUtils";
-import { useNavigate } from "react-router-dom";
 
-const MatchListItem = ({ match }) => {			
+const MatchListItem = ({ match }) => {
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
+	const [finalScoreUpdateStatus, setFinalScoreUpdateStatus] = useState("עדכן תוצאה סופית");
+
+	// Referenced for update the final score(only admin can update the final score, instead do it manually in MongoDB)
+	const homeRef = useRef(null);
+	const awayRef = useRef(null);
+	// To set timeout when saving the final score in DB to make it again save button
+	const timeoutRef = useRef(null);
 
 	const userId = useSelector((state) => state.user.user._id);
 	// The clock from matchSlice(the clock update each second to make the components rerender for live matches bet list)
 	const updatedClock = useSelector((state) => state.clock.now);
+	// Get the admin status to determine if the user can update the final score(instead do it manually in MongoDB)
+	const isAdmin = sessionStorage.getItem("isAdmin");
 
-	const updateScoreHandler = (match) => {
+	const updateScoreHandler = () => {
 		// Get the bet data from the inputs
 		const bet = {
 			tournamentId: match.tournament,
@@ -36,13 +49,40 @@ const MatchListItem = ({ match }) => {
 		navigate("/layout/friends-bets");
 	};
 
+	// Update the final score
+	const updateFinalScoreHandler = async (event) => {
+		event.preventDefault();
+
+		if (finalScoreUpdateStatus !== "עדכן תוצאה סופית") return;
+
+		setFinalScoreUpdateStatus("שומר");
+
+		const finalScore = {
+			homeScore: Number(homeRef.current.value),
+			awayScore: Number(awayRef.current.value),
+		};
+
+		try {
+			const resp = await API.patch(`/match/update/${match._id}`, { finalScore });
+			if (resp.data.status) {
+				setFinalScoreUpdateStatus("נשמר");
+			}
+
+			timeoutRef.current = setTimeout(() => {
+				setFinalScoreUpdateStatus("עדכן תוצאה סופית");
+			}, 3000);
+		} catch (error) {
+			setFinalScoreUpdateStatus("עדכן תוצאה סופית");
+		}
+	};
+
 	const scoreFromDb = { homeScore: match.finalScore.homeScore, awayScore: match.finalScore.awayScore };
 	// Determine the color of the final result(green for exact bet, red for wrong bet and blue for direction bet) only if the user bet on this match
 	const scoreColor = finalScoreBackground(match.matchScoreBet ? match.matchScoreBet.betScore : null, scoreFromDb);
 
 	// Get the match's kickoff time and display it on the screen in the list item
 	const kickoffTime = new Date(match.kickoffTime).toLocaleString().replace(",", " |").slice(0, -3);
-	
+
 	return (
 		<li className="grid grid-cols-13 gap-2 pr-4 pl-4 pb-2 bg-gray-700 hover:bg-gray-700/80 font-bold rounded-lg shadow-[0_2px_5px_2px_theme(colors.yellow.300)] mb-6 mr-2 ml-2">
 			<div
@@ -87,7 +127,7 @@ const MatchListItem = ({ match }) => {
 
 					<button
 						className="bg-gray-200 w-full mt-2 border border-black rounded-lg shadow-sm shadow-yellow-400 hover:cursor-pointer hover:scale-95 active:shadow-sm active:shadow-gray-400 active:scale-95 p-0.5 active:cursor-pointer"
-						onClick={() => updateScoreHandler(match)}
+						onClick={() => updateScoreHandler()}
 					>
 						עדכן
 					</button>
@@ -147,12 +187,65 @@ const MatchListItem = ({ match }) => {
 
 					<div className="w-full lg:w-3/4 grid grid-cols-4 gap-1 justify-self-center">
 						<div className="bg-gray-300 col-span-2 text-center border border-black h-6">
-							{scoreFromDb.homeScore !== -1 && scoreFromDb.awayScore !== -1 ? scoreFromDb.homeScore : "טרם"}
+							{scoreFromDb.homeScore !== -1 && scoreFromDb.awayScore !== -1
+								? scoreFromDb.homeScore
+								: "טרם"}
 						</div>
 						<div className="bg-gray-300 col-span-2 text-center border border-black h-6">
-							{scoreFromDb.awayScore !== -1 && scoreFromDb.homeScore !== -1 ? scoreFromDb.awayScore : "טרם"}
+							{scoreFromDb.awayScore !== -1 && scoreFromDb.homeScore !== -1
+								? scoreFromDb.awayScore
+								: "טרם"}
 						</div>
 					</div>
+
+					{/* Only admin can set the final score for matches the just finished */}
+					{isAdmin && scoreFromDb.homeScore === -1 && scoreFromDb.awayScore === -1 && (
+						<form
+							className="flex flex-col items-center mt-4 w-full lg:w-3/4 mx-auto"
+							onSubmit={updateFinalScoreHandler}
+						>
+							<div className="flex w-full gap-2 mt-2 h-6">
+								<input
+									type="number"
+									className="w-1/2 bg-yellow-400/80 p-2 text-center border border-black"
+									ref={homeRef}
+									id={match.homeTeam}
+									defaultValue=""
+								/>
+								<input
+									type="number"
+									className="w-1/2 bg-yellow-400/80 p-2 text-center border border-black"
+									ref={awayRef}
+									id={match.awayTeam}	
+									defaultValue=""
+								/>
+							</div>
+
+							<button
+								className={`${
+									finalScoreUpdateStatus === "נשמר" ? "bg-green-600" : "bg-red-600"
+								} text-white rounded-lg p-1 cursor-pointer mt-2 w-full hover:scale-95 active:scale-95`}
+								type="submit"
+							>
+								{/* Determine the button text */}
+								{finalScoreUpdateStatus === "עדכן תוצאה סופית" && "עדכן תוצאה סופית"}
+								{finalScoreUpdateStatus === "שומר" && (
+									<>
+										שומר
+										<span className={styles.blink_1}>{"."}</span>
+										<span className={styles.blink_2}>{"."}</span>
+										<span className={styles.blink_3}>{"."}</span>
+									</>
+								)}
+								{finalScoreUpdateStatus === "נשמר" && (
+									<div className="flex justify-center gap-4">
+										<CheckIcon className="w-5 h-5" />
+										{finalScoreUpdateStatus}
+									</div>
+								)}
+							</button>
+						</form>
+					)}
 				</div>
 			)}
 

@@ -16,10 +16,7 @@ const matchesSlice = createSlice({
 			// Find the index of the match(in case we want to update the final score of existing match)
 			const index = state.matches.findIndex((match) => match._id === action.payload._id);
 			if (index !== -1) {
-				state.matches[index] = action.payload;
-			} else {
-				// In case I add a new match, I want to add it to the matches list(add manually the knockout group)
-				state.matches.push(action.payload);
+				state.matches[index] = {...state.matches[index], finalScore: action.payload.finalScore};
 			}
 		},
 		addMatch(state, action) {		

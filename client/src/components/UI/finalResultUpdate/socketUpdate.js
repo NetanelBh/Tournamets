@@ -19,8 +19,6 @@ const initSocketListener = () => {
 		});
 
 		socket.on("finalScoreUpdated", (updatedMatch) => {
-			console.log(updatedMatch);
-			
 			store.dispatch(matchesActions.updateFinalResult(updatedMatch));
 		})
 

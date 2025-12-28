@@ -41,7 +41,7 @@ const MyBets = () => {
 	// TODO: WHEN THE TOURNAMENT START, CALCULATE HERE THE TOTAL MONEY IN THE BANK
 
 	// Fetch the users from the DB only once. When stored in redux, we can use them everywhere in the application
-	useEffect(() => {	
+	useEffect(() => {
 		// if (allUsers.length > 0) return;
 		setIsLoading(true);
 
@@ -50,7 +50,7 @@ const MyBets = () => {
 				const tournamentId = localStorage.getItem("tournamentId");
 				const groupId = localStorage.getItem("groupId");
 				const users = await API.post("/user/allUsers", { tournamentId, groupId });
-				
+
 				dispatch(userActions.load({ type: "allUsers", data: users.data.data }));
 			} catch (error) {
 				setOpenModal(true);
@@ -144,11 +144,8 @@ const MyBets = () => {
 		fetchMatches();
 	}, [dispatch, tournamentId]);
 
-	// Get all users bets for the tournament and group only once(only what have in DB - not means that all users bets)
+	// Fetch data only once per match that started already. Match that not stored in redux, will be fetched from the DB
 	useEffect(() => {
-		// Fetch only once. Need this condition because when refresh, redux is persist but the useEffect run again
-		if (bets.allUsersBets.length > 0) return;
-
 		const fetchAllUsersBets = async () => {
 			setIsLoading(true);
 			try {
@@ -157,18 +154,19 @@ const MyBets = () => {
 					tournamentId: localStorage.getItem("tournamentId"),
 					groupId: localStorage.getItem("groupId"),
 				});
-
-				dispatch(betsActions.load([{ type: "allUsersBets", data: usersBets.data.data }]));
+				
+				dispatch(betsActions.load([{ type: "usersBetsForMatch", data: usersBets.data.data }]));
 			} catch (error) {
 				setOpenModal(true);
-				setModalText("אירעה שגיאה בטעינת התוצאות, אנא נסה שנית");
+				setModalText({ title: "ההימורים שלי", text: "שגיאה בטעינת התוצאות, אנא נסה שנית" });
+				setNavigateTo("/layout/closed-bets");
 			} finally {
 				setIsLoading(false);
 			}
 		};
 
 		fetchAllUsersBets();
-	}, [bets.allUsersBets.length, dispatch]);
+	}, [dispatch]);
 
 	const closeModalHandler = () => {
 		setOpenModal(false);

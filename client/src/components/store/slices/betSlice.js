@@ -17,9 +17,7 @@ const betSlice = createSlice({
 	initialState,
 	name: "bets",
 	reducers: {
-		load(state, action) {		
-			state.allUsersBets = {};
-							
+		load(state, action) {									
 			action.payload.forEach((bet) => {
 				// Create copy of the original db bets, make changes only on the copy
 				if (bet.type === "userDbScore") {
@@ -52,7 +50,7 @@ const betSlice = createSlice({
 			state[type] = data;
 		},
 		placeBet(state, action) {
-			// Find if the bet already exists by matchId, if so, change only the score. If not exist, is a new bet
+			// Find if the bet already exists by matchId, if so, change only the score. If not exist, it's a new bet
 			const matchIndex = state.userCurrentScore.findIndex((match) => match.matchId === action.payload.matchId);
 			if (matchIndex !== -1) {
 				state.userCurrentScore[matchIndex].betScore = action.payload.betScore;

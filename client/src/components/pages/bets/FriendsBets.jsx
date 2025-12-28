@@ -24,30 +24,6 @@ const FriendsBets = () => {
 	const allUsers = useSelector((state) => state.user.allUsers);
 	const matches = useSelector((state) => state.matches.matches);
 
-	// Fetch data only once per match that started already. Match that not stored in redux, will be fetched from the DB
-	useEffect(() => {
-		const fetchAllUsersBets = async () => {
-			setIsLoading(true);
-			try {
-				// Fetch all users bet for the specific match(only if not fetched before)
-				const usersBets = await API.post("/bets/allUsersBets", {
-					tournamentId: localStorage.getItem("tournamentId"),
-					groupId: localStorage.getItem("groupId"),
-				});
-
-				dispatch(betsActions.load([{ type: "usersBetsForMatch", data: usersBets.data.data }]));
-			} catch (error) {
-				setOpenModal(true);
-				setModalText({ title: "תוצאות החברים", text: "שגיאה בטעינת התוצאות, אנא נסה שנית" });
-				setNavigateTo("/layout/closed-bets");
-			} finally {
-				setIsLoading(false);
-			}
-		};
-
-		fetchAllUsersBets();
-	}, [matchId]);
-
 	const closeModalHandler = () => {
 		setOpenModal(false);
 		navigate(navigateTo);
@@ -64,8 +40,6 @@ const FriendsBets = () => {
 	const allUsersBetsData = { headers: ["שם", "תוצאה", "ניחוש"], rows: [], colors: [] };
 
 	allUsers.forEach((user) => {
-		// Check if the user bet on this match
-		const isBet = "";
 		const row = [];
 		let name = "אני";
 		let score = "-";

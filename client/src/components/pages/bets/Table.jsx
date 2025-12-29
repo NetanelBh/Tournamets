@@ -84,11 +84,11 @@ const Table = () => {
 
 					{!openModal && (
 						<div className="flex justify-center w-full sm:px-4">
-							<div className="w-fit overflow-x-auto bg-white shadow sm:rounded-lg border-t border-r border-gray-200">
+							<div className="w-fit overflow-x-auto bg-white shadow sm:rounded-lg border-t border-r md:border-l border-red-300">
 								<table className="w-fit text-sm text-left rtl:text-right">
 									<TableHeader
 										data={tableHeaders}
-										theadClass="bg-gray-900/80 text-white text-xs font-bold border-b border-gray-200 w-fit"
+										theadClass="bg-gray-900/90 text-white text-xs font-bold border-b border-gray-200 w-fit"
 									/>
 
 									<tbody className="divide-y divide-gray-200">

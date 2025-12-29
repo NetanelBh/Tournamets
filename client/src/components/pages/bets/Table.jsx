@@ -83,12 +83,12 @@ const Table = () => {
 					<BetsLayout />
 
 					{!openModal && (
-						<div className="flex justify-center w-full sm:px-4">
-							<div className="w-fit overflow-x-auto bg-white shadow sm:rounded-lg border border-gray-200">
-								<table className="w-fit text-sm text-left rtl:text-right">
+						<div className="flex justify-center w-full sm:px-4 sm:w-9/10">
+							<div className="w-fit overflow-x-auto bg-white shadow sm:rounded-lg border border-gray-200 sm:w-9/10">
+								<table className="w-fit text-sm text-left rtl:text-right sm:w-9/10">
 									<TableHeader
 										data={tableHeaders}
-										theadClass="bg-gray-800/80 text-yellow-200 text-xs font-bold border-b border-gray-200 w-fit"
+										theadClass="bg-gray-900/80 text-white text-xs font-bold border-b border-gray-200 w-fit"
 									/>
 
 									<tbody className="divide-y divide-gray-200">
@@ -103,10 +103,6 @@ const Table = () => {
 										))}
 									</tbody>
 								</table>
-
-								<div className="pointer-events-none absolute inset-y-0 left-0 w-6 bg-gradient-to-r from-white to-transparent" />
-
-								<div className="pointer-events-none absolute inset-y-0 right-0 w-6 bg-gradient-to-l from-white to-transparent" />
 							</div>
 						</div>
 					)}

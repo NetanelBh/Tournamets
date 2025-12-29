@@ -83,9 +83,9 @@ const Table = () => {
 					<BetsLayout />
 
 					{!openModal && (
-						<div className="flex justify-center w-full sm:px-4 sm:w-9/10">
-							<div className="w-fit overflow-x-auto bg-white shadow sm:rounded-lg border border-gray-200 sm:w-9/10">
-								<table className="w-fit text-sm text-left rtl:text-right sm:w-9/10">
+						<div className="flex justify-center w-full sm:px-4">
+							<div className="w-fit overflow-x-auto bg-white shadow sm:rounded-lg border-t border-r border-gray-200">
+								<table className="w-fit text-sm text-left rtl:text-right">
 									<TableHeader
 										data={tableHeaders}
 										theadClass="bg-gray-900/80 text-white text-xs font-bold border-b border-gray-200 w-fit"

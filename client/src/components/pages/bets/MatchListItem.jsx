@@ -18,24 +18,42 @@ const MatchListItem = ({ match, onClick, buttonStatus, actionText, user }) => {
 	// Get the admin status to determine if the user can update the final score(instead do it manually in MongoDB)
 	const isAdmin = sessionStorage.getItem("isAdmin");
 
-	// This className for the admin when need to update the final score
-	let className = `${
+	// Sometimes when save the bets, there is a failure, we want to display the fail message on the button
+	let newActionText = actionText;
+	
+	// This buttonClass for the admin when need to update the final score
+	let buttonClass = `${
 		buttonStatus === "נשמר" ? "bg-green-600" : "bg-red-600"
 	} text-white rounded-lg p-1 cursor-pointer mt-2 w-full hover:scale-95 active:scale-95`;
 
 	if (user === "regular") {
-		className = `${
-			buttonStatus === "נשמר" ? "bg-green-400" : "bg-gray-200"
-		} w-full mt-2 border border-black rounded-lg shadow-sm shadow-yellow-400 hover:cursor-pointer hover:scale-95 active:shadow-sm active:shadow-gray-400 active:scale-95 p-0.5 active:cursor-pointer`;
+		if(buttonStatus === "נשמר") {
+			buttonClass = 
+				"bg-green-600 w-full mt-2 border border-black rounded-lg shadow-sm shadow-yellow-400 p-0.5"
+		} else if(buttonStatus === "נכשל") {
+			newActionText = "נכשל, נסה שנית"
+			buttonClass = 
+				"bg-red-400 w-full mt-2 border border-black rounded-lg shadow-sm shadow-yellow-400 p-0.5"
+		} else {
+			buttonClass = 
+				"bg-gray-200 w-full mt-2 border border-black rounded-lg shadow-sm shadow-yellow-400 hover:cursor-pointer hover:scale-95 active:shadow-sm active:shadow-gray-400 active:scale-95 p-0.5 active:cursor-pointer"
+		}
 	}
+
 
 	const saveClickedHandler = (e) => {
 		e.preventDefault();
 
+		const homeScore = Number(homeRef.current.value);
+		const awayScore = Number(awayRef.current.value);
+
+		// In case the user clicked save without insert scores
+		if (Number.isNaN(homeScore) || Number.isNaN(awayScore)) return;
+		
 		onClick({
 			match,
-			homeScore: Number(homeRef.current.value),
-			awayScore: Number(awayRef.current.value),
+			homeScore,
+			awayScore
 		});
 	};
 
@@ -71,7 +89,7 @@ const MatchListItem = ({ match, onClick, buttonStatus, actionText, user }) => {
 
 					<div className="grid grid-cols-4 gap-1 mt-2">
 						<input
-							type="text"
+							type="number"
 							className="col-span-2 bg-yellow-400/80 p-2 text-center border border-black"
 							ref={homeRef}
 							id={match.homeTeam}
@@ -83,7 +101,7 @@ const MatchListItem = ({ match, onClick, buttonStatus, actionText, user }) => {
 						/>
 
 						<input
-							type="text"
+							type="number"
 							className="col-span-2 bg-yellow-400/80 p-2 text-center border border-black"
 							ref={awayRef}
 							id={match.awayTeam}
@@ -95,9 +113,7 @@ const MatchListItem = ({ match, onClick, buttonStatus, actionText, user }) => {
 						/>
 					</div>
 
-					<SaveButton status={buttonStatus} buttonText={actionText} className={className}>
-						שמור
-					</SaveButton>
+					<SaveButton status={buttonStatus} buttonText={newActionText} className={buttonClass} />
 				</form>
 			)}
 
@@ -188,7 +204,7 @@ const MatchListItem = ({ match, onClick, buttonStatus, actionText, user }) => {
 								/>
 							</div>
 
-							<SaveButton status={buttonStatus} buttonText={actionText} className={className} />
+							<SaveButton status={buttonStatus} buttonText={actionText} className={buttonClass} />
 						</form>
 					)}
 				</div>

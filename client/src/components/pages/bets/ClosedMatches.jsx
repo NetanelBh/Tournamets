@@ -1,14 +1,14 @@
 import { useState, useRef } from "react";
 import { useSelector } from "react-redux";
 
+import API from "../../utils/Api";
 import MatchesList from "./MatchesList";
 import BetsLayout from "../layouts/BetsLayout";
-import Loading from "../../UI/loading/Loading";
 
 const ClosedMatches = () => {
 	const [isLoading, setIsLoading] = useState(false);
 	// State data for the SaveButton component
-	const [finalScoreUpdateStatus, setFinalScoreUpdateStatus] = useState("עדכן תוצאה סופית");
+	const [finalScoreUpdateStatus, setFinalScoreUpdateStatus] = useState({});
 	// To set timeout when saving the final score in DB to make it again save button
 	const timeoutRef = useRef(null);
 
@@ -43,57 +43,51 @@ const ClosedMatches = () => {
 		.sort((match1, match2) => new Date(match1.kickoffTime) - new Date(match2.kickoffTime));
 
 	// Update the final score
-	const updateFinalScoreHandler = async ({match, homeScore, awayScore}) => {
+	const updateFinalScoreHandler = async ({ match, homeScore, awayScore }) => {
 		if (finalScoreUpdateStatus[match._id] == "שומר") return;
-		
-		setFinalScoreUpdateStatus("שומר");
+
+		setFinalScoreUpdateStatus((prev) => ({
+			...prev,
+			[match._id]: "שומר",
+		}));
 
 		const finalScore = {
 			homeScore,
-			awayScore
+			awayScore,
 		};
 
-		setIsLoading(true);
-		try {			
-			const resp = await API.patch(`/match/update/${match._id}`, { finalScore });			
+		try {
+			const resp = await API.patch(`/match/update/${match._id}`, { finalScore });
 			if (resp.data.status) {
-				setFinalScoreUpdateStatus((prev) => ({...prev, [match._id]: "נשמר"}));
+				setFinalScoreUpdateStatus((prev) => ({ ...prev, [match._id]: "נשמר" }));
 			}
-
-			timeoutRef.current = setTimeout(() => {
-				setFinalScoreUpdateStatus((prev) => ({...prev, [match._id]: "עדכן תוצאה סופית"}));
-			}, 3000);
 		} catch (error) {
-			setFinalScoreUpdateStatus((prev) => ({...prev, [match._id]: "עדכן תוצאה סופית"}));
+			setFinalScoreUpdateStatus((prev) => ({ ...prev, [match._id]: "עדכן תוצאה סופית" }));
 		} finally {
-			setIsLoading(false);
+			timeoutRef.current = setTimeout(() => {
+				setFinalScoreUpdateStatus((prev) => ({ ...prev, [match._id]: "עדכן תוצאה סופית" }));
+			}, 3000);
 		}
-	};	
+	};
 
 	return (
-		<>
-			{isLoading && <Loading />}
+		<div className="flex flex-col items-center">
+			<BetsLayout />
 
-			{!isLoading && (
-				<div className="flex flex-col items-center">
-					<BetsLayout />
-
-					{startedMathesWithBets.length === 0 && (
-						<h1 className="text-red-400 text-center text-xl mt-2">עדיין לא החלו משחקים</h1>
-					)}
-
-					{startedMathesWithBets.length > 0 && (
-						<MatchesList
-							matches={startedMathesWithBets}
-							onClick={updateFinalScoreHandler}
-							buttonStatus={finalScoreUpdateStatus}
-							actionText="עדכן תוצאה סופית"
-							user="admin"
-						/>
-					)}
-				</div>
+			{startedMathesWithBets.length === 0 && (
+				<h1 className="text-red-400 text-center text-xl mt-2">עדיין לא החלו משחקים</h1>
 			)}
-		</>
+
+			{startedMathesWithBets.length > 0 && (
+				<MatchesList
+					matches={startedMathesWithBets}
+					onClick={updateFinalScoreHandler}
+					buttonStatus={finalScoreUpdateStatus}
+					actionText="עדכן תוצאה סופית"
+					user="admin"
+				/>
+			)}
+		</div>
 	);
 };
 

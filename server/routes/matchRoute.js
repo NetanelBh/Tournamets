@@ -34,7 +34,7 @@ router.post("/create", async (req, res) => {
     }
 });
 
-router.patch("/update/:id", async (req, res) => {    
+router.patch("/update/:id", async (req, res) => {        
     try {        
         const updatedMatch = await matchServices.updateMatch(req.params.id, req.body);        
         if(!updatedMatch) {

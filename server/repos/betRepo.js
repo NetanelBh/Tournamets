@@ -2,7 +2,7 @@ import BetModel from "../models/bet.js";
 
 export const getBetsByUser = (userId, tournamentId, groupId) => BetModel.find({ userId, tournamentId, groupId });
 
-export const placeBets = (filters, bet) => findOneAndUpdate(filters, bet, { upsert: true, new: true });
+export const placeBets = (filters, bet) => BetModel.findOneAndUpdate(filters, {betScore: bet}, { upsert: true, new: true });
 
 export const getUsersBetsByGroup = (tournamentId, groupId) => BetModel.find({ tournamentId, groupId });
 

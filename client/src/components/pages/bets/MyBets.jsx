@@ -20,7 +20,7 @@ const MyBets = () => {
 	const [openModal, setOpenModal] = useState(false);
 
 	// State data for the SaveButton component
-	const [saveStatus, setSaveStatuas] = useState("שמור");
+	const [saveStatus, setSaveStatus] = useState({});
 	// To set timeout when saving the final score in DB to make it again save button
 	const timeoutRef = useRef(null);
 
@@ -176,10 +176,13 @@ const MyBets = () => {
 		setModalText("");
 	};
 
-	const saveBetHandler = async ({match, homeScore, awayScore}) => {
-		if (saveStatus !== "שמור") return;
+	const saveBetHandler = async ({ match, homeScore, awayScore }) => {
+		if (saveStatus[match._id] === "שומר") return;
 
-		setSaveStatuas("שומר");
+		setSaveStatus((prev) => ({
+			...prev,
+			[match._id]: "שומר",
+		}));
 
 		// Create an object with the userBet template to store in db and redux
 		const userBetToSave = {
@@ -189,34 +192,43 @@ const MyBets = () => {
 			matchId: match._id,
 			betScore: {
 				homeScore,
-				awayScore
+				awayScore,
 			},
 		};
 
-		setIsLoading(true);
 		try {
-			const resp = API.post("/bets/placeBet", {
+			const resp = await API.put("/bets/placeBet", {
 				tournamentId,
 				groupId,
 				matchId: userBetToSave.matchId,
-				bet: betScore,
+				bet: userBetToSave.betScore,
 			});
+
 			if (!resp.data.status) {
-				setModalText(resp.data.data);
-				setOpenModal(true);
+				setSaveStatus((prev) => ({
+					...prev,
+					[match._id]: "נכשל",
+				}));
+
 				return;
 			} else {
-				setSaveStatuas("נשמר");
-				timeoutRef.current = setTimeout(() => {
-					setFinalScoreUpdateStatus("שמור");
-				}, 3000);
+				setSaveStatus((prev) => ({
+					...prev,
+					[match._id]: "נשמר",
+				}));
 			}
-		} catch (error) {
-			setModalText(error.message);
-			setOpenModal(true);
-			setSaveStatuas("שמור");
+		} catch (error) {			
+			setSaveStatus((prev) => ({
+				...prev,
+				[match._id]: "נשמר",
+			}));
 		} finally {
-			setIsLoading(false);
+			timeoutRef.current = setTimeout(() => {
+				setSaveStatus((prev) => ({
+					...prev,
+					[match._id]: "שמור",
+				}));
+			}, 3000);
 		}
 
 		// TODO: CREATE A NEW FUNCTION AND BUTTON FOR SAVING ALSO THE TOP SCORER BET AND THE WINNER TEAM AND TREAT THE CHECK SEPARATELY

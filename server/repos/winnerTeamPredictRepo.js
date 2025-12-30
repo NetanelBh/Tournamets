@@ -2,10 +2,8 @@ import winnerTeamPredictionModel from "../models/tournamentWinnerTeamBet.js";
 
 export const getTeamPredict = (filterObj) => winnerTeamPredictionModel.findOne(filterObj);
 
-export const createPredict = (data) => winnerTeamPredictionModel(data).save();
-
 export const updatePredict = (filterObj, data) => {
-	return winnerTeamPredictionModel.findOneAndUpdate(filterObj, { $set: data }, { new: true });
+	return winnerTeamPredictionModel.findOneAndUpdate(filterObj, { $set: data }, { upsert: true, new: true });
 };
 
 export const getAllByGroup = (filterObj) => winnerTeamPredictionModel.find(filterObj);

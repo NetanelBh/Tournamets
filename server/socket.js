@@ -1,43 +1,49 @@
 import { Server } from "socket.io";
-import mongoose from "mongoose";
+import watchCollections from "./watchCollectionsHelper.js";
 
 const initSocket = (server) => {
-  const io = new Server(server, {
-    cors: {
-      origin: "https://betsforfriends.vercel.app",
-      methods: ["GET", "POST"]
-    }
-  });
+	const io = new Server(server, {
+		cors: {
+			origin: "https://betsforfriends.vercel.app",
+			methods: ["GET", "POST"],
+		},
+	});
 
-  io.on("connection", socket => {
-    console.log("Client connected:", socket.id);
+	io.on("connection", (socket) => {
+		console.log("Client connected:", socket.id);
 
-    socket.on("disconnect", () => {
-      console.log("Client disconnected:", socket.id);
-    });
-  });
+		socket.on("disconnect", () => {
+			console.log("Client disconnected:", socket.id);
+		});
+	});
 
-  // WATCH the collections for real-time changes:
-  const matchCollection = mongoose.connection.collection("matches");
+	// Watch the matches collection for real-time changes:
+	watchCollections({
+		io,
+		collectionName: "matches",
+		events: {
+			insert: (change, io) => {
+				io.emit("matchAdded", change.fullDocument);
+			},
+			update: (change, io) => {
+				io.emit("finalScoreUpdated", change.fullDocument);
+			},
+		},
+	});
 
-  const changeStream = matchCollection.watch([], { fullDocument: "updateLookup" });
-
-  changeStream.on("change", change => {
-    switch(change.operationType) {
-      case "insert":
-        io.emit("matchAdded", change.fullDocument);
-        break;
-      case "update":        
-        io.emit("finalScoreUpdated", change.fullDocument);
-        break;
-    }
-  });
-
-  changeStream.on("error", (err) => {
-    console.error("ChangeStream error:", err);
-    console.log("Reconnecting change stream in 2 seconds...");
-    setTimeout(initSocket, 2000); // auto-reconnect
-  });
-}
+	// Watch the winnerTeam collection for real-time changes:
+	watchCollections({
+		io,
+		collectionName: "winnerteampredictions",
+		events: {
+			insert: (change, io) => {
+				io.emit("winnerTeamAdded", change.fullDocument);
+			},
+			update: (change, io) => {
+				io.emit("winnerTeamUpdated", change.fullDocument);
+			},
+		},
+	});
+};
 
 export default initSocket;

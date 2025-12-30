@@ -3,9 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
 	// The current and db properties are for comparing before sending redundant request to server
 	dbTopScorer: null,
-	curTopScorerChoice: null,
 	dbWinnerTeam: null,
-	curWinnerTeamChoice: null,
 	// Store the bets of specific user for the specific tournament
 	userDbScore: [],
 	// store all users bets for the specific tournament
@@ -22,10 +20,8 @@ const betSlice = createSlice({
 					state.userDbScore = bet.data;
 				} else if (bet.type === "dbTopScorer") {
 					state.dbTopScorer = bet.data;
-					state.curTopScorerChoice = bet.data;
 				} else if (bet.type === "dbWinnerTeam") {
 					state.dbWinnerTeam = bet.data;
-					state.curWinnerTeamChoice = bet.data;
 				} else if (bet.type === "usersBetsForMatch") {
 					bet.data.forEach((user) => {
 						if (!state.allUsersBets[user.matchId]) {
@@ -42,7 +38,7 @@ const betSlice = createSlice({
 			});
 		},
 		updateWinnerOrTopScorer(state, action) {
-			// Get the type from the components(curWinnerTeamChoice, curTopScorerChoice).
+			// Get the type from the components(WinnerTeamChoice, TopScorerChoice).
 			const { type, data } = action.payload;
 			state[type] = data;
 		},
@@ -57,9 +53,7 @@ const betSlice = createSlice({
 		},
 		clear(state) {
 			state.dbTopScorer = null;
-			state.curTopScorerChoice = null;
 			state.dbWinnerTeam = null;
-			state.curWinnerTeamChoice = null;
 			state.userDbScore = [];
 		},
 	},

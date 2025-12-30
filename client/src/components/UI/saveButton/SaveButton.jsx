@@ -10,7 +10,7 @@ const SaveButton = ({status, buttonText, className}) => {
 			disabled={status === "שומר" || status === "נשמר" || status === "נכשל"}
 		>
 			{/* Determine the button text */}
-			{(status === "שמור" || status === "נכשל") && buttonText}
+			{(status === "שמור" || status === "נכשל" || status === "עדכן תוצאה סופית") && buttonText}
 
 			{status === "שומר" && (
 				<>

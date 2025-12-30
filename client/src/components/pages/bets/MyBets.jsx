@@ -7,6 +7,7 @@ import MatchesList from "./MatchesList";
 import Loading from "../../UI/loading/Loading";
 import BetsLayout from "../layouts/BetsLayout";
 import Dropdown from "../../UI/dropdown/Dropdown";
+import SaveButton from "../../UI/saveButton/SaveButton";
 import { betsActions } from "../../store/slices/betSlice";
 import { userActions } from "../../store/slices/userSlice";
 import { matchesActions } from "../../store/slices/matchesSlice";
@@ -21,8 +22,8 @@ const MyBets = () => {
 
 	// State data for the SaveButton component
 	const [saveStatus, setSaveStatus] = useState({});
-	// To set timeout when saving the final score in DB to make it again save button
-	const timeoutRef = useRef(null);
+	// To set timeout when saving the final score/winnerTeam/topScorer in DB to make it again save button
+	const timeoutRef = useRef({});
 
 	// Ref list for the matches <input> when I want to create a request to send the bets
 	const refs = useRef([]);
@@ -235,22 +236,36 @@ const MyBets = () => {
 				[match._id]: "נשמר",
 			}));
 		} finally {
-			timeoutRef.current = setTimeout(() => {
+			timeoutRef.current[match._id] = setTimeout(() => {
 				setSaveStatus((prev) => ({
 					...prev,
 					[match._id]: "שמור",
 				}));
+				delete timeoutRef.current[match._id];
 			}, 3000);
+		}
+	};	
+	
+	const saveWinnerTeamBetHandler = async (team) => {
+		if (saveStatus["winnerTeam"] === "שומר") return;
+
+		// If the user saved the same team, don't send any request to server
+		if (team === bets.dbWinnerTeam) return;
+
+		// TODO: WHEN I WILL ADD THE BUTTONS, SET HERE THE SAVING... SAVE OR SAVED OPTIONS OF THE SAVE BUTTON
+		try {
+			const response = await API.patch("/winnerTeamBet/updatePredict", {
+				tournament: tournamentId,
+				group: groupId,
+				winnerTeamName: team,
+			});
+		} catch (error) {
+			console.log(error.data);
+			
+		} finally {
 		}
 
 		// TODO: CREATE A NEW FUNCTION AND BUTTON FOR SAVING ALSO THE TOP SCORER BET AND THE WINNER TEAM AND TREAT THE CHECK SEPARATELY
-		// // Check if the user changed his topScorer predict or it's a new bet(if db data is null, he never bet before)
-		// if (bets.dbTopScorer !== bets.curTopScorerChoice) {
-		// 	setIsLoading(true);
-
-		// 	const chosenPlayer = topScorersList.find((player) => player.name === bets.curTopScorerChoice);
-		// 	// Need to update because there is an existing bet in DB
-		// 	if (bets.dbTopScorer !== null) {
 		// 		try {
 		// 			const response = await API.patch("/topScorerBet/updatePredict", {
 		// 				tournamentId,
@@ -294,57 +309,9 @@ const MyBets = () => {
 		// 		}
 		// 	}
 		// }
-
-		// // Check if the user changed his winnerTeam predict or it's a new bet(if db data is null, he never bet before)
-		// if (bets.dbWinnerTeam !== bets.curWinnerTeamChoice) {
-		// 	setIsLoading(true);
-
-		// 	// Need to update because there is an existing bet in DB
-		// 	if (bets.dbWinnerTeam !== null) {
-		// 		try {
-		// 			const response = await API.patch("/winnerTeamBet/updatePredict", {
-		// 				tournamentId,
-		// 				groupId,
-		// 				winnerTeamName: bets.curWinnerTeamChoice,
-		// 			});
-
-		// 			if (!response.data.status) {
-		// 				setOpenModal(true);
-		// 				setModalText("אירעה שגיאה בשמירת הקבוצה הזוכה, אנא נסה שנית");
-		// 			}
-
-		// 			// When update the winnerTeam, will change the dbWinTeam to the new DB data(instead fetch) in redux
-		// 			dispatch(
-		// 				betsActions.updateWinnerOrTopScorer({ type: "dbWinnerTeam", data: bets.curWinnerTeamChoice })
-		// 			);
-		// 		} catch (error) {
-		// 			setOpenModal(true);
-		// 			setModalText("אירעה שגיאה בשמירת הקבוצה הזוכה, אנא נסה שנית");
-		// 		} finally {
-		// 			setIsLoading(false);
-		// 		}
-		// 	} else {
-		// 		// It's a new bet because the data in DB is null
-		// 		try {
-		// 			const response = await API.post("/winnerTeamBet/createPredict", {
-		// 				tournamentId,
-		// 				groupId,
-		// 				winnerTeamName: bets.curWinnerTeamChoice,
-		// 			});
-
-		// 			if (!response.data.status) {
-		// 				setOpenModal(true);
-		// 				setModalText("אירעה שגיאה בשמירת הקבוצה הזוכה, אנא נסה שנית");
-		// 			}
-		// 		} catch (error) {
-		// 			setOpenModal(true);
-		// 			setModalText("אירעה שגיאה בשמירת הקבוצה הזוכה, אנא נסה שנית");
-		// 		} finally {
-		// 			setIsLoading(false);
-		// 		}
-		// 	}
-		// }
 	};
+
+	const saveTopScorerBetHandler = () => {};
 
 	// Check if the tournament started to display the top player and winner team bets
 	const istournamentStarted = currentTourmanent.startTime < updatedClock;
@@ -353,24 +320,23 @@ const MyBets = () => {
 	const winnerTeamData = {
 		dropdownHeader: "הקבוצה הזוכה",
 		// Don't show the team that already chose by the user(appear in DB)
-		list: currentTourmanent.teams.filter((team) => team !== bets.curWinnerTeamChoice),
-		currentChoice: bets.curWinnerTeamChoice,
+		list: currentTourmanent.teams.filter((team) => team !== bets.dbWinnerTeam),
+		currentChoice: bets.dbWinnerTeam,
 		// When change the winner team, it will update the redux(to ba able to compare the db with the current)
-		onClick: (team) => dispatch(betsActions.updateWinnerOrTopScorer({ type: "curWinnerTeamChoice", data: team })),
+		onClick: (team) => saveWinnerTeamBetHandler(team),
 	};
 
 	// Data to dropdown compenent for the top scorer players list
-	const filteredList = topScorersList.filter((player) => player.name !== bets.curTopScorerChoice);
+	const filteredList = topScorersList.filter((player) => player.name !== bets.dbTopScorer);
 	// Extract only the name from the player object
 	const candidatesForTopScorer = filteredList.map((player) => player.name);
 	const playersData = {
 		dropdownHeader: "מלך השערים",
 		// Don't show the player that already chose by the user(appear in DB)
 		list: candidatesForTopScorer,
-		currentChoice: bets.curTopScorerChoice,
+		currentChoice: bets.dbTopScorer,
 		// When change the top scorer player, it will update the redux(to ba able to compare the db with the current)
-		onClick: (player) =>
-			dispatch(betsActions.updateWinnerOrTopScorer({ type: "curTopScorerChoice", data: player })),
+		onClick: (player) => dispatch(betsActions.updateWinnerOrTopScorer({ type: "dbTopScorer", data: player })),
 	};
 
 	// Filter only the matches that didn't start yet(to give the user the option to bet on them

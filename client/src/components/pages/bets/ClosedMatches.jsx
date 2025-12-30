@@ -6,11 +6,10 @@ import MatchesList from "./MatchesList";
 import BetsLayout from "../layouts/BetsLayout";
 
 const ClosedMatches = () => {
-	const [isLoading, setIsLoading] = useState(false);
 	// State data for the SaveButton component
 	const [finalScoreUpdateStatus, setFinalScoreUpdateStatus] = useState({});
 	// To set timeout when saving the final score in DB to make it again save button
-	const timeoutRef = useRef(null);
+	const timeoutRef = useRef({});
 
 	// Clear the stored matchId(if stored)
 	localStorage.removeItem("matchId");
@@ -64,8 +63,9 @@ const ClosedMatches = () => {
 		} catch (error) {
 			setFinalScoreUpdateStatus((prev) => ({ ...prev, [match._id]: "עדכן תוצאה סופית" }));
 		} finally {
-			timeoutRef.current = setTimeout(() => {
+			timeoutRef.current[match._id] = setTimeout(() => {
 				setFinalScoreUpdateStatus((prev) => ({ ...prev, [match._id]: "עדכן תוצאה סופית" }));
+				delete timeoutRef.current[match._id];
 			}, 3000);
 		}
 	};

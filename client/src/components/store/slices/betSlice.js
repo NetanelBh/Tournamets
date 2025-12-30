@@ -8,7 +8,6 @@ const initialState = {
 	curWinnerTeamChoice: null,
 	// Store the bets of specific user for the specific tournament
 	userDbScore: [],
-	userCurrentScore: [],
 	// store all users bets for the specific tournament
 	allUsersBets: {},
 };
@@ -17,19 +16,17 @@ const betSlice = createSlice({
 	initialState,
 	name: "bets",
 	reducers: {
-		load(state, action) {									
+		load(state, action) {
 			action.payload.forEach((bet) => {
-				// Create copy of the original db bets, make changes only on the copy
 				if (bet.type === "userDbScore") {
 					state.userDbScore = bet.data;
-					state.userCurrentScore = bet.data;
 				} else if (bet.type === "dbTopScorer") {
 					state.dbTopScorer = bet.data;
 					state.curTopScorerChoice = bet.data;
 				} else if (bet.type === "dbWinnerTeam") {
 					state.dbWinnerTeam = bet.data;
 					state.curWinnerTeamChoice = bet.data;
-				} else if(bet.type === "usersBetsForMatch") {
+				} else if (bet.type === "usersBetsForMatch") {
 					bet.data.forEach((user) => {
 						if (!state.allUsersBets[user.matchId]) {
 							state.allUsersBets[user.matchId] = [{ userId: user.userId, betScore: user.betScore }];
@@ -51,11 +48,11 @@ const betSlice = createSlice({
 		},
 		placeBet(state, action) {
 			// Find if the bet already exists by matchId, if found, change only the score. If not exist, it's a new bet
-			const matchIndex = state.userCurrentScore.findIndex((match) => match.matchId === action.payload.matchId);
+			const matchIndex = state.userDbScore.findIndex((match) => match.matchId === action.payload.matchId);
 			if (matchIndex !== -1) {
-				state.userCurrentScore[matchIndex].betScore = action.payload.betScore;
+				state.userDbScore[matchIndex].betScore = action.payload.betScore;
 			} else {
-				state.userCurrentScore.push(action.payload);
+				state.userDbScore.push(action.payload);
 			}
 		},
 		clear(state) {
@@ -64,12 +61,6 @@ const betSlice = createSlice({
 			state.dbWinnerTeam = null;
 			state.curWinnerTeamChoice = null;
 			state.userDbScore = [];
-			state.userCurrentScore = [];
-		},
-		addUsersBet(state, action) {
-			usersMatchBets = action.payload;
-			// Add to list the new bets of the users(if the match just started and we want to display the users results)
-			state.allUsersBets[usersMatchBets.matchId] = usersMatchBets.bets;
 		},
 	},
 });

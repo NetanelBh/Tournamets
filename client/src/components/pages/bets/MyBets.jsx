@@ -28,6 +28,8 @@ const MyBets = () => {
 	const refs = useRef([]);
 
 	const bets = useSelector((state) => state.bets);
+	console.log(bets);
+	
 	const [isLoading, setIsLoading] = useState(false);
 	const allUsers = useSelector((state) => state.user.allUsers);
 	const matches = useSelector((state) => state.matches.matches);
@@ -65,7 +67,7 @@ const MyBets = () => {
 
 		fetchUsers();
 	}, [allUsers.length, dispatch]);
-
+	// Variable to determine if the tournament has a top scorer bet
 	const hasTopScorerBet = currentTourmanent?.topScorerBet;
 	// Get the candidate players for the top scorer
 	useEffect(() => {
@@ -209,8 +211,6 @@ const MyBets = () => {
 					...prev,
 					[match._id]: "נכשל",
 				}));
-
-				return;
 			} else {
 				setSaveStatus((prev) => ({
 					...prev,
@@ -372,7 +372,7 @@ const MyBets = () => {
 				refs.current[i] = { homeRef: createRef(), awayRef: createRef() };
 			}
 
-			const matchScoreBet = bets.userCurrentScore.find((score) => score.matchId === match._id);
+			const matchScoreBet = bets.userDbScore.find((score) => score.matchId === match._id);
 			// For each match, will add an extra property of the score bet from DB(if the user already bet, to show his bet)
 			const newMatch = { ...match, matchScoreBet };
 

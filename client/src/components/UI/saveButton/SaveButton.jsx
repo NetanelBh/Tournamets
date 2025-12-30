@@ -10,11 +10,11 @@ const SaveButton = ({status, buttonText, className}) => {
 			disabled={status === "שומר" || status === "נשמר" || status === "נכשל"}
 		>
 			{/* Determine the button text */}
-			{(status !== "שומר" || status !== "נשמר") && buttonText}
+			{(status === "שמור" || status === "נכשל") && buttonText}
 
 			{status === "שומר" && (
 				<>
-					שומר
+					{buttonText}
 					<span className={styles.blink_1}>{"."}</span>
 					<span className={styles.blink_2}>{"."}</span>
 					<span className={styles.blink_3}>{"."}</span>

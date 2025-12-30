@@ -1,9 +1,17 @@
+import { useState, useRef } from "react";
 import { useSelector } from "react-redux";
 
 import MatchesList from "./MatchesList";
 import BetsLayout from "../layouts/BetsLayout";
+import Loading from "../../UI/loading/Loading";
 
 const ClosedMatches = () => {
+	const [isLoading, setIsLoading] = useState(false);
+	// State data for the SaveButton component
+	const [finalScoreUpdateStatus, setFinalScoreUpdateStatus] = useState("עדכן תוצאה סופית");
+	// To set timeout when saving the final score in DB to make it again save button
+	const timeoutRef = useRef(null);
+
 	// Clear the stored matchId(if stored)
 	localStorage.removeItem("matchId");
 
@@ -22,7 +30,7 @@ const ClosedMatches = () => {
 			// Find the user's bet for this match from DB bets
 			const matchScoreBet = bets.userDbScore.find((score) => score.matchId === match._id);
 			// The basic template is without the matchScoreBet(in this case we didn't find the bet in DB - the user didn't bet)
-			let matchwithBet = { ...match }; 
+			let matchwithBet = { ...match };
 			// Only if the user bet on this match, add the matchScoreBet property with the user's bet score
 			if (matchScoreBet) {
 				// Create a new object of the match with the user bet
@@ -34,15 +42,58 @@ const ClosedMatches = () => {
 		// Sort the matches by date(oldest to newest)
 		.sort((match1, match2) => new Date(match1.kickoffTime) - new Date(match2.kickoffTime));
 
-	return (
-		<div className="flex flex-col items-center">
-			<BetsLayout />
+	// Update the final score
+	const updateFinalScoreHandler = async ({match, homeScore, awayScore}) => {
+		if (finalScoreUpdateStatus[match._id] == "שומר") return;
+		
+		setFinalScoreUpdateStatus("שומר");
 
-			{startedMathesWithBets.length === 0 && (
-				<h1 className="text-red-400 text-center text-xl mt-2">עדיין לא החלו משחקים</h1>
+		const finalScore = {
+			homeScore,
+			awayScore
+		};
+
+		setIsLoading(true);
+		try {			
+			const resp = await API.patch(`/match/update/${match._id}`, { finalScore });			
+			if (resp.data.status) {
+				setFinalScoreUpdateStatus((prev) => ({...prev, [match._id]: "נשמר"}));
+			}
+
+			timeoutRef.current = setTimeout(() => {
+				setFinalScoreUpdateStatus((prev) => ({...prev, [match._id]: "עדכן תוצאה סופית"}));
+			}, 3000);
+		} catch (error) {
+			setFinalScoreUpdateStatus((prev) => ({...prev, [match._id]: "עדכן תוצאה סופית"}));
+		} finally {
+			setIsLoading(false);
+		}
+	};	
+
+	return (
+		<>
+			{isLoading && <Loading />}
+
+			{!isLoading && (
+				<div className="flex flex-col items-center">
+					<BetsLayout />
+
+					{startedMathesWithBets.length === 0 && (
+						<h1 className="text-red-400 text-center text-xl mt-2">עדיין לא החלו משחקים</h1>
+					)}
+
+					{startedMathesWithBets.length > 0 && (
+						<MatchesList
+							matches={startedMathesWithBets}
+							onClick={updateFinalScoreHandler}
+							buttonStatus={finalScoreUpdateStatus}
+							actionText="עדכן תוצאה סופית"
+							user="admin"
+						/>
+					)}
+				</div>
 			)}
-			{startedMathesWithBets.length > 0 && <MatchesList matches={startedMathesWithBets} />}
-		</div>
+		</>
 	);
 };
 

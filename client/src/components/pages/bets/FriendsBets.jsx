@@ -1,33 +1,15 @@
-import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 
-import API from "../../utils/Api";
-import Modal from "../../modal/Modal";
 import Table from "../../UI/table/Table";
-import Loading from "../../UI/loading/Loading";
 import BetsLayout from "../layouts/BetsLayout";
 import { finalScoreBackground } from "./betsUtils";
-import { betsActions } from "../../store/slices/betSlice";
 
 const FriendsBets = () => {
-	const dispatch = useDispatch();
-	const navigate = useNavigate();
-	const [modalText, setModalText] = useState({});
-	const [navigateTo, setNavigateTo] = useState("");
-	const [isLoading, setIsLoading] = useState(false);
-	const [openModal, setOpenModal] = useState(false);
-
 	const matchId = localStorage.getItem("matchId");
 	// Get the user to know who is the current user between all the friends bet(want to write it in the table as "me")
 	const currentUser = useSelector((state) => state.user.user);
 	const allUsers = useSelector((state) => state.user.allUsers);
 	const matches = useSelector((state) => state.matches.matches);
-
-	const closeModalHandler = () => {
-		setOpenModal(false);
-		navigate(navigateTo);
-	};
 
 	const bets = useSelector((state) => state.bets);
 
@@ -102,33 +84,27 @@ const FriendsBets = () => {
 		<h1 className="mb-4 mt-4 text-lg text-white">
 			{currentMatch.homeTeam}{" "}
 			<span className="text-yellow-400 font-normal">
-				(<span className="font-bold">{currentMatch.finalScore.homeScore !== -1 ? currentMatch.finalScore.homeScore : "טרם"}</span>){" "}
-				<span className="font-bold text-white">:</span> (
-				<span className="font-bold">{currentMatch.finalScore.awayScore !== -1 ? currentMatch.finalScore.awayScore : "טרם"}</span>){" "}
+				(
+				<span className="font-bold">
+					{currentMatch.finalScore.homeScore !== -1 ? currentMatch.finalScore.homeScore : "טרם"}
+				</span>
+				) <span className="font-bold text-white">:</span> (
+				<span className="font-bold">
+					{currentMatch.finalScore.awayScore !== -1 ? currentMatch.finalScore.awayScore : "טרם"}
+				</span>
+				){" "}
 			</span>
 			{currentMatch.awayTeam}
 		</h1>
 	);
 
 	return (
-		<>
-			{isLoading && <Loading />}
+		<div className="flex flex-col items-center">
+			<BetsLayout />
 
-			{!isLoading && (
-				<>
-					{openModal && <Modal title={modalText.title} text={modalText.text} onClick={closeModalHandler} />}
-
-					{!openModal && (
-						<div className="flex flex-col items-center">
-							<BetsLayout />
-
-							{matchData}
-							<Table data={allUsersBetsData} />
-						</div>
-					)}
-				</>
-			)}
-		</>
+			{matchData}
+			<Table data={allUsersBetsData} />
+		</div>
 	);
 };
 

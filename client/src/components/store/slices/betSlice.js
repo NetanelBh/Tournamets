@@ -50,17 +50,13 @@ const betSlice = createSlice({
 			state[type] = data;
 		},
 		placeBet(state, action) {
-			// Find if the bet already exists by matchId, if so, change only the score. If not exist, it's a new bet
+			// Find if the bet already exists by matchId, if found, change only the score. If not exist, it's a new bet
 			const matchIndex = state.userCurrentScore.findIndex((match) => match.matchId === action.payload.matchId);
 			if (matchIndex !== -1) {
 				state.userCurrentScore[matchIndex].betScore = action.payload.betScore;
 			} else {
 				state.userCurrentScore.push(action.payload);
 			}
-		},
-		// Update the userDbScore only when save matches results bets(to make it equal to DB new data)
-		updateUserDbScore(state, action) {
-			state.userDbScore = action.payload;
 		},
 		clear(state) {
 			state.dbTopScorer = null;

@@ -2,16 +2,10 @@ import * as betRepo from "../repos/betRepo.js";
 
 export const getBetsByUser = (userId, tournamentId, groupId) => betRepo.getBetsByUser(userId, tournamentId, groupId); 
 
-export const placeBets = (bets) => {
-    const bulkOps = bets.map((bet) => ({
-        updateOne: {
-            filter: { userId: bet.userId, tournamentId: bet.tournamentId, groupId: bet.groupId, matchId: bet.matchId },
-            update: { $set: { betScore: bet.betScore } },
-            upsert: true
-        }
-    }))
+export const placeBets = (tournamentId, groupId, userId, matchId, bet) => {
+    const filters = { tournamentId, groupId, userId, matchId }; 
     
-    return betRepo.placeBets(bulkOps);
-}
+    return betRepo.placeBets(filters, bet)
+};
 
 export const getUsersBetsByGroup = (tournamentId, groupId) => betRepo.getUsersBetsByGroup(tournamentId, groupId);

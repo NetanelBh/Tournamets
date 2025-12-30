@@ -5,8 +5,8 @@ import API from "../../utils/Api";
 import Modal from "../../modal/Modal";
 import MatchesList from "./MatchesList";
 import Loading from "../../UI/loading/Loading";
-import Dropdown from "../../UI/dropdown/Dropdown";
 import BetsLayout from "../layouts/BetsLayout";
+import Dropdown from "../../UI/dropdown/Dropdown";
 import { betsActions } from "../../store/slices/betSlice";
 import { userActions } from "../../store/slices/userSlice";
 import { matchesActions } from "../../store/slices/matchesSlice";
@@ -15,12 +15,14 @@ import { playersActions } from "../../store/slices/playersSlice";
 const MyBets = () => {
 	// Clear the stored matchId(if stored)
 	localStorage.removeItem("matchId");
-
 	const dispatch = useDispatch();
-	const [modalText, setModalText] = useState(
-		"לאחר בחירת תוצאה, יש ללחוץ על כפתור 'עדכן'.\n לאחר כל העדכונים, חובה ללחוץ על כפתור 'שמור הימורים' בתחתית הדף.\nללא לחיצה על עדכן ולאחר מכן על שמירת הימורים, התוצאה לא תיקלט!!!"
-	);
-	const [openModal, setOpenModal] = useState(true);
+	const [modalText, setModalText] = useState("");
+	const [openModal, setOpenModal] = useState(false);
+
+	// State data for the SaveButton component
+	const [saveStatus, setSaveStatuas] = useState("שמור");
+	// To set timeout when saving the final score in DB to make it again save button
+	const timeoutRef = useRef(null);
 
 	// Ref list for the matches <input> when I want to create a request to send the bets
 	const refs = useRef([]);
@@ -34,8 +36,9 @@ const MyBets = () => {
 	const topScorersList = useSelector((state) => state.players.players);
 	const allTournaments = useSelector((state) => state.tournaments.tournaments);
 
-	const groupId = localStorage.getItem("groupId");
+	const userId = useSelector((state) => state.user.user._id);
 	const tournamentId = localStorage.getItem("tournamentId");
+	const groupId = localStorage.getItem("groupId");
 	// Get the current tournament to use the teams for the winner team prediction of the user
 	const currentTourmanent = allTournaments.find((t) => t._id === tournamentId);
 	// TODO: WHEN THE TOURNAMENT START, CALCULATE HERE THE TOTAL MONEY IN THE BANK
@@ -154,7 +157,7 @@ const MyBets = () => {
 					tournamentId: localStorage.getItem("tournamentId"),
 					groupId: localStorage.getItem("groupId"),
 				});
-				
+
 				dispatch(betsActions.load([{ type: "usersBetsForMatch", data: usersBets.data.data }]));
 			} catch (error) {
 				setOpenModal(true);
@@ -173,142 +176,150 @@ const MyBets = () => {
 		setModalText("");
 	};
 
-	const saveBetHandler = async () => {
-		// Check if the user changed his topScorer predict or it's a new bet(if db data is null, he never bet before)
-		if (bets.dbTopScorer !== bets.curTopScorerChoice) {
-			setIsLoading(true);
+	const saveBetHandler = async ({match, homeScore, awayScore}) => {
+		if (saveStatus !== "שמור") return;
 
-			const chosenPlayer = topScorersList.find((player) => player.name === bets.curTopScorerChoice);
-			// Need to update because there is an existing bet in DB
-			if (bets.dbTopScorer !== null) {
-				try {
-					const response = await API.patch("/topScorerBet/updatePredict", {
-						tournamentId,
-						groupId,
-						topScorerId: chosenPlayer._id,
-					});
+		setSaveStatuas("שומר");
 
-					if (!response.data.status) {
-						setOpenModal(true);
-						setModalText("אירעה שגיאה בשמירת מלך השערים, אנא נסה שנית");
-					}
+		// Create an object with the userBet template to store in db and redux
+		const userBetToSave = {
+			tournamentId,
+			groupId,
+			userId,
+			matchId: match._id,
+			betScore: {
+				homeScore,
+				awayScore
+			},
+		};
 
-					// When update the topScorer, will change the dbTopScorer to the new DB data(instead fetch) in redux
-					dispatch(
-						betsActions.updateWinnerOrTopScorer({ type: "dbTopScorer", data: bets.curTopScorerChoice })
-					);
-				} catch (error) {
-					setOpenModal(true);
-					setModalText("אירעה שגיאה מלך השערים, אנא נסה שנית");
-				} finally {
-					setIsLoading(false);
-				}
-			} else {
-				// It's a new bet because the data in DB is null
-				try {
-					const response = await API.post("/topScorerBet/createPredict", {
-						tournamentId,
-						groupId,
-						topScorerId: chosenPlayer._id,
-					});
-
-					if (!response.data.status) {
-						setOpenModal(true);
-						setModalText("אירעה שגיאה בשמירת מלך השערים, אנא נסה שנית");
-					}
-				} catch (error) {
-					setOpenModal(true);
-					setModalText("אירעה שגיאה בשמירת הנתונים , אנא נסה שנית");
-				} finally {
-					setIsLoading(false);
-				}
-			}
-		}
-
-		// Check if the user changed his winnerTeam predict or it's a new bet(if db data is null, he never bet before)
-		if (bets.dbWinnerTeam !== bets.curWinnerTeamChoice) {
-			setIsLoading(true);
-
-			// Need to update because there is an existing bet in DB
-			if (bets.dbWinnerTeam !== null) {
-				try {
-					const response = await API.patch("/winnerTeamBet/updatePredict", {
-						tournamentId,
-						groupId,
-						winnerTeamName: bets.curWinnerTeamChoice,
-					});
-
-					if (!response.data.status) {
-						setOpenModal(true);
-						setModalText("אירעה שגיאה בשמירת הקבוצה הזוכה, אנא נסה שנית");
-					}
-
-					// When update the winnerTeam, will change the dbWinTeam to the new DB data(instead fetch) in redux
-					dispatch(
-						betsActions.updateWinnerOrTopScorer({ type: "dbWinnerTeam", data: bets.curWinnerTeamChoice })
-					);
-				} catch (error) {
-					setOpenModal(true);
-					setModalText("אירעה שגיאה בשמירת הקבוצה הזוכה, אנא נסה שנית");
-				} finally {
-					setIsLoading(false);
-				}
-			} else {
-				// It's a new bet because the data in DB is null
-				try {
-					const response = await API.post("/winnerTeamBet/createPredict", {
-						tournamentId,
-						groupId,
-						winnerTeamName: bets.curWinnerTeamChoice,
-					});
-
-					if (!response.data.status) {
-						setOpenModal(true);
-						setModalText("אירעה שגיאה בשמירת הקבוצה הזוכה, אנא נסה שנית");
-					}
-				} catch (error) {
-					setOpenModal(true);
-					setModalText("אירעה שגיאה בשמירת הקבוצה הזוכה, אנא נסה שנית");
-				} finally {
-					setIsLoading(false);
-				}
-			}
-		}
-
-		// Get only the matches that are new or the result is changed from the db
-		// Create a map of the db bets(scores bets)
-		const dbBets = new Map(bets.userDbScore.map((bet) => [bet.matchId, bet.betScore]));
-		// Collect only either the new or updated bets
-		const updatedOrNewBets = bets.userCurrentScore.filter((bet) => {
-			const dbBet = dbBets.get(bet.matchId);
-			// new bet
-			if (!dbBet) return true;
-
-			// changed bet
-			return dbBet.homeScore !== bet.betScore.homeScore || dbBet.awayScore !== bet.betScore.awayScore;
-		});
-
-		// Send to server only if we have bets in array. If the array is empty, there are no new bets or bets changes
-		if (updatedOrNewBets.length > 0) {
-			setIsLoading(true);
-			try {
+		setIsLoading(true);
+		try {
+			const resp = API.post("/bets/placeBet", {
+				tournamentId,
+				groupId,
+				matchId: userBetToSave.matchId,
+				bet: betScore,
+			});
+			if (!resp.data.status) {
+				setModalText(resp.data.data);
 				setOpenModal(true);
-				const response = await API.put("bets/placeBets", { bets: updatedOrNewBets });
-				if (!response.data.status) {
-					setModalText("אירעה שגיאה בשמירת ההימורים, אנא נסה שנית");
-				} else {
-					setModalText(`${response.data.data} הימורים נשמרו בהצלחה`);
-				}
-			} catch (error) {
-				setOpenModal(true);
-				setModalText("אירעה שגיאה בשמירת ההימורים , אנא נסה שנית");
-			} finally {
-				setIsLoading(false);
+				return;
+			} else {
+				setSaveStatuas("נשמר");
+				timeoutRef.current = setTimeout(() => {
+					setFinalScoreUpdateStatus("שמור");
+				}, 3000);
 			}
-
-			// After sent the results to server, will update the redux(userDbScore) because no there are new results there
-			dispatch(betsActions.updateUserDbScore(bets.userCurrentScore));
+		} catch (error) {
+			setModalText(error.message);
+			setOpenModal(true);
+			setSaveStatuas("שמור");
+		} finally {
+			setIsLoading(false);
 		}
+
+		// TODO: CREATE A NEW FUNCTION AND BUTTON FOR SAVING ALSO THE TOP SCORER BET AND THE WINNER TEAM AND TREAT THE CHECK SEPARATELY
+		// // Check if the user changed his topScorer predict or it's a new bet(if db data is null, he never bet before)
+		// if (bets.dbTopScorer !== bets.curTopScorerChoice) {
+		// 	setIsLoading(true);
+
+		// 	const chosenPlayer = topScorersList.find((player) => player.name === bets.curTopScorerChoice);
+		// 	// Need to update because there is an existing bet in DB
+		// 	if (bets.dbTopScorer !== null) {
+		// 		try {
+		// 			const response = await API.patch("/topScorerBet/updatePredict", {
+		// 				tournamentId,
+		// 				groupId,
+		// 				topScorerId: chosenPlayer._id,
+		// 			});
+
+		// 			if (!response.data.status) {
+		// 				setOpenModal(true);
+		// 				setModalText("אירעה שגיאה בשמירת מלך השערים, אנא נסה שנית");
+		// 			}
+
+		// 			// When update the topScorer, will change the dbTopScorer to the new DB data(instead fetch) in redux
+		// 			dispatch(
+		// 				betsActions.updateWinnerOrTopScorer({ type: "dbTopScorer", data: bets.curTopScorerChoice })
+		// 			);
+		// 		} catch (error) {
+		// 			setOpenModal(true);
+		// 			setModalText("אירעה שגיאה מלך השערים, אנא נסה שנית");
+		// 		} finally {
+		// 			setIsLoading(false);
+		// 		}
+		// 	} else {
+		// 		// It's a new bet because the data in DB is null
+		// 		try {
+		// 			const response = await API.post("/topScorerBet/createPredict", {
+		// 				tournamentId,
+		// 				groupId,
+		// 				topScorerId: chosenPlayer._id,
+		// 			});
+
+		// 			if (!response.data.status) {
+		// 				setOpenModal(true);
+		// 				setModalText("אירעה שגיאה בשמירת מלך השערים, אנא נסה שנית");
+		// 			}
+		// 		} catch (error) {
+		// 			setOpenModal(true);
+		// 			setModalText("אירעה שגיאה בשמירת הנתונים , אנא נסה שנית");
+		// 		} finally {
+		// 			setIsLoading(false);
+		// 		}
+		// 	}
+		// }
+
+		// // Check if the user changed his winnerTeam predict or it's a new bet(if db data is null, he never bet before)
+		// if (bets.dbWinnerTeam !== bets.curWinnerTeamChoice) {
+		// 	setIsLoading(true);
+
+		// 	// Need to update because there is an existing bet in DB
+		// 	if (bets.dbWinnerTeam !== null) {
+		// 		try {
+		// 			const response = await API.patch("/winnerTeamBet/updatePredict", {
+		// 				tournamentId,
+		// 				groupId,
+		// 				winnerTeamName: bets.curWinnerTeamChoice,
+		// 			});
+
+		// 			if (!response.data.status) {
+		// 				setOpenModal(true);
+		// 				setModalText("אירעה שגיאה בשמירת הקבוצה הזוכה, אנא נסה שנית");
+		// 			}
+
+		// 			// When update the winnerTeam, will change the dbWinTeam to the new DB data(instead fetch) in redux
+		// 			dispatch(
+		// 				betsActions.updateWinnerOrTopScorer({ type: "dbWinnerTeam", data: bets.curWinnerTeamChoice })
+		// 			);
+		// 		} catch (error) {
+		// 			setOpenModal(true);
+		// 			setModalText("אירעה שגיאה בשמירת הקבוצה הזוכה, אנא נסה שנית");
+		// 		} finally {
+		// 			setIsLoading(false);
+		// 		}
+		// 	} else {
+		// 		// It's a new bet because the data in DB is null
+		// 		try {
+		// 			const response = await API.post("/winnerTeamBet/createPredict", {
+		// 				tournamentId,
+		// 				groupId,
+		// 				winnerTeamName: bets.curWinnerTeamChoice,
+		// 			});
+
+		// 			if (!response.data.status) {
+		// 				setOpenModal(true);
+		// 				setModalText("אירעה שגיאה בשמירת הקבוצה הזוכה, אנא נסה שנית");
+		// 			}
+		// 		} catch (error) {
+		// 			setOpenModal(true);
+		// 			setModalText("אירעה שגיאה בשמירת הקבוצה הזוכה, אנא נסה שנית");
+		// 		} finally {
+		// 			setIsLoading(false);
+		// 		}
+		// 	}
+		// }
 	};
 
 	// Check if the tournament started to display the top player and winner team bets
@@ -399,19 +410,14 @@ const MyBets = () => {
 
 					{/* If there is at least one match to bet, render the matches list */}
 					{notStartedMatches.length > 0 && (
-						<>
-							{/* Not started matches list - for betting */}
-							<MatchesList matches={notStartedMatches} />
-
-							<footer
-								className="border-t-4 border-r-4 border-l-4 border-red-600 shadow-inner shadow-gray-600 w-7/9 text-center sm:w-3/9 fixed bottom-0 p-8 hover:py-10 active:py-10 active:cursor-pointer text-xl text-black font-bold bg-gray-800 rounded-tl-3xl rounded-tr-3xl"
-								onClick={saveBetHandler}
-							>
-								<span className="hover:cursor-pointer active:bg-gray-800 active:text-yellow-300 bg-yellow-300 px-4 py-2 rounded-lg border-3 border-red-600">
-									שמור הימורים
-								</span>
-							</footer>
-						</>
+						/* Not started matches list - for betting */
+						<MatchesList
+							matches={notStartedMatches}
+							onClick={saveBetHandler}
+							buttonStatus={saveStatus}
+							actionText="שמור"
+							user="regular"
+						/>
 					)}
 
 					{/* If no matches open to bet, render a message */}

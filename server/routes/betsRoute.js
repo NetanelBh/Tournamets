@@ -27,11 +27,11 @@ router.post("/get", async (req, res) => {
 });
 
 router.put("/placeBets", async (req, res) => {
-	const { bets } = req.body;
+	const { tournamentId, groupId, matchId, bet } = req.body;
 
 	try {
-		const resp = await betServices.placeBets(bets);
-		res.send({ status: true, data: resp.modifiedCount + resp.upsertedCount });
+		const resp = await betServices.placeBets(tournamentId, groupId, req.user.id, matchId, bet);
+		res.send({ status: true, data: resp.data.data });
 	} catch (error) {
 		res.send({ status: false, data: "אירעה שגיאה בקבלת תוצאות המשתמשים" });
 	}

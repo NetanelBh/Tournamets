@@ -28,8 +28,7 @@ const MyBets = () => {
 	const refs = useRef([]);
 
 	const bets = useSelector((state) => state.bets);
-	console.log(bets);
-	
+
 	const [isLoading, setIsLoading] = useState(false);
 	const allUsers = useSelector((state) => state.user.allUsers);
 	const matches = useSelector((state) => state.matches.matches);
@@ -95,7 +94,7 @@ const MyBets = () => {
 		fetchPlayers();
 	}, [hasTopScorerBet, dispatch, tournamentId]);
 
-	// Get the user predictions(for tournament winner team and top scorer) to update the relevant dropdown
+	// Get the specific user bets and predictions(winner team and top scorer) to update the relevant dropdown
 	useEffect(() => {
 		// Fetch data only for app start and not when refresh the page(to avoid lose the bets before sent to server)
 		if (bets.userDbScore.length > 0) return;
@@ -181,6 +180,17 @@ const MyBets = () => {
 	const saveBetHandler = async ({ match, homeScore, awayScore }) => {
 		if (saveStatus[match._id] === "שומר") return;
 
+		// Check if the user bet equal to the db bet, if so, don't send any request to the server
+		const isBetExist = bets.userDbScore.some((bet) => bet.matchId === match._id);
+		if (isBetExist) {
+			if (
+				match.matchScoreBet.betScore.homeScore === homeScore &&
+				match.matchScoreBet.betScore.awayScore === awayScore
+			) {
+				return;
+			}
+		}
+
 		setSaveStatus((prev) => ({
 			...prev,
 			[match._id]: "שומר",
@@ -216,8 +226,10 @@ const MyBets = () => {
 					...prev,
 					[match._id]: "נשמר",
 				}));
+
+				dispatch(betsActions.placeBet(userBetToSave));
 			}
-		} catch (error) {			
+		} catch (error) {
 			setSaveStatus((prev) => ({
 				...prev,
 				[match._id]: "נשמר",

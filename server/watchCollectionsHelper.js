@@ -1,28 +1,34 @@
 import mongoose from "mongoose";
 
-const watchCollection = ({ io, collectionName, events }) => {
-  const collection = mongoose.connection.collection(collectionName);
+const watchCollections = ({ io, collectionName, events }) => {
+	const collection = mongoose.connection.collection(collectionName);
 
-  const changeStream = collection.watch([], {
-    fullDocument: "updateLookup",
-  });
+	const changeStream = collection.watch([], {
+		fullDocument: "updateLookup",
+	});
 
-  console.log(`👀 Watching ${collectionName} collection`);
+	console.log(`👀 Watching ${collectionName} collection`);
 
-  changeStream.on("change", (change) => {
-    const handler = events[change.operationType];
-    if (handler) {
-      handler(change, io);
-    }
-  });
+	changeStream.on("change", (change) => {		
+		const handler = events[change.operationType];
 
-  changeStream.on("error", (err) => {
-    console.error("ChangeStream error:", err);
-    console.log("Reconnecting change stream in 2 seconds...");
-    setTimeout(initSocket, 2000); // auto-reconnect
-  });
+		if (handler) {
+			handler(change, io);
+		}
+	});
 
-  return changeStream;
+	changeStream.on("error", (error) => {
+		console.error(`🔥 ChangeStream error on ${collectionName}:`, error);
+
+		changeStream.close();
+
+		// Auto-reconnect after failure
+		setTimeout(() => {
+			watchCollections({ io, collectionName, events });
+		}, 2000);
+	});
+
+	return changeStream;
 };
 
-export default watchCollection;
+export default watchCollections;

@@ -14,8 +14,8 @@ const betSlice = createSlice({
 	initialState,
 	name: "bets",
 	reducers: {
-		load(state, action) {
-			action.payload.forEach((bet) => {
+		load(state, action) {			
+			action.payload.forEach((bet) => {				
 				if (bet.type === "userDbScore") {
 					state.userDbScore = bet.data;
 				} else if (bet.type === "dbTopScorer") {
@@ -23,14 +23,15 @@ const betSlice = createSlice({
 				} else if (bet.type === "dbWinnerTeam") {
 					state.dbWinnerTeam = bet.data;
 				} else if (bet.type === "usersBetsForMatch") {
-					bet.data.forEach((user) => {
-						if (!state.allUsersBets[user.matchId]) {
+					bet.data.forEach((user) => {												
+						if (!state.allUsersBets[user.matchId]) {							
 							state.allUsersBets[user.matchId] = [{ userId: user.userId, betScore: user.betScore }];
 							return;
 						}
+						
 						// If the matchId exist, check if the bet is not inserted already
-						const isExist = state.allUsersBets[user.matchId].some((bet) => bet.userId === user.userId);
-						if (!isExist) {
+						const isExist = state.allUsersBets[user.matchId].some((bet) => bet.userId === user.userId);						
+						if (!isExist) {							
 							state.allUsersBets[user.matchId].push({ userId: user.userId, betScore: user.betScore });
 						}
 					});

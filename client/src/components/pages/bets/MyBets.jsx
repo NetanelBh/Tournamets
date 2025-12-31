@@ -55,7 +55,7 @@ const MyBets = () => {
 				const tournamentId = localStorage.getItem("tournamentId");
 				const groupId = localStorage.getItem("groupId");
 				const users = await API.post("/user/allUsers", { tournamentId, groupId });
-
+				
 				dispatch(userActions.load({ type: "allUsers", data: users.data.data }));
 			} catch (error) {
 				setOpenModal(true);
@@ -67,6 +67,7 @@ const MyBets = () => {
 
 		fetchUsers();
 	}, [allUsers.length, dispatch]);
+
 	// Variable to determine if the tournament has a top scorer bet
 	const hasTopScorerBet = currentTourmanent?.topScorerBet;
 	// Get the candidate players for the top scorer
@@ -159,7 +160,7 @@ const MyBets = () => {
 					tournamentId: localStorage.getItem("tournamentId"),
 					groupId: localStorage.getItem("groupId"),
 				});
-
+				
 				dispatch(betsActions.load([{ type: "usersBetsForMatch", data: usersBets.data.data }]));
 			} catch (error) {
 				setOpenModal(true);

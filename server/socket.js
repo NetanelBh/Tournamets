@@ -10,14 +10,16 @@ const initSocket = (server) => {
 	});
 
 	io.on("connection", (socket) => {
-		console.log("Client connected:", socket.id);
+		console.log("✅ Client connected:", socket.id);
 
 		socket.on("disconnect", () => {
-			console.log("Client disconnected:", socket.id);
+			console.log("❌ Client disconnected:", socket.id);
 		});
 	});
 
-	// Watch the matches collection for real-time changes:
+	/* =========================
+     Watch: matches collection
+     ========================= */
 	watchCollections({
 		io,
 		collectionName: "matches",
@@ -25,20 +27,30 @@ const initSocket = (server) => {
 			insert: (change, io) => {
 				io.emit("matchAdded", change.fullDocument);
 			},
+
 			update: (change, io) => {
-				io.emit("finalScoreUpdated", change.fullDocument);
+				const updated = change.updateDescription.updatedFields;
+
+				if (updated.kickoffTime) {
+					io.emit("kickoffTimeUpdated", change.fullDocument);
+				} else {					
+					io.emit("finalScoreUpdated", change.fullDocument);
+				}
 			},
 		},
 	});
 
-	// Watch the winnerTeam collection for real-time changes:
+	/* ================================
+     Watch: winnerTeamPredictions
+     ================================ */
 	watchCollections({
 		io,
 		collectionName: "winnerteampredictions",
 		events: {
 			insert: (change, io) => {
-				io.emit("winnerTeamAdded", change.fullDocument);
+				io.emit("winnerTeamUpdated", change.fullDocument);
 			},
+
 			update: (change, io) => {
 				io.emit("winnerTeamUpdated", change.fullDocument);
 			},

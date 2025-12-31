@@ -11,7 +11,7 @@ const FriendsBets = () => {
 	const allUsers = useSelector((state) => state.user.allUsers);
 	const matches = useSelector((state) => state.matches.matches);
 
-	const bets = useSelector((state) => state.bets);
+	const bets = useSelector((state) => state.bets);	
 
 	// If is the first time we entered here, the all users bets list will not exist yet(useEffect run only at the end)
 	const betsOfThisMatch = bets.allUsersBets[matchId] ? bets.allUsersBets[matchId] : [];
@@ -33,20 +33,23 @@ const FriendsBets = () => {
 
 		// If the current iteration user is in the users bets list, get the score(sometimes user doesn't bet on match)
 		const currentIterationUserBet = betsOfThisMatch.find((bet) => bet.userId === user._id);
+		
+		const userScore = {
+			homeScore: -1,
+			awayScore: -1,
+		};
 		if (currentIterationUserBet) {
 			score = `${currentIterationUserBet.betScore.homeScore} : ${currentIterationUserBet.betScore.awayScore}`;
+			userScore.homeScore = currentIterationUserBet.betScore.homeScore;
+			userScore.awayScore = currentIterationUserBet.betScore.awayScore;
 		}
 
-		// For each user, find if his score is exact/direction/fail
-		const userScore = {
-			homeScore: currentIterationUserBet ? currentIterationUserBet.betScore.homeScore : -1,
-			awayScore: currentIterationUserBet ? currentIterationUserBet.betScore.awayScore : -1,
-		};
 		const realScore = {
 			homeScore: currentMatch.finalScore.homeScore,
 			awayScore: currentMatch.finalScore.awayScore,
 		};
 
+		// For each user, find if his score is exact/direction/fail
 		const betStatus = finalScoreBackground(userScore, realScore);
 
 		row.push(name);

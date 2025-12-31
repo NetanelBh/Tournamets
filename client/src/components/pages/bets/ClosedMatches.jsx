@@ -18,7 +18,7 @@ const ClosedMatches = () => {
 	// The clock from matchSlice(the clock update each second to make the components rerender for live matches bet list)
 	const updatedClock = useSelector((state) => state.clock.now);
 	// Get the bets for this tournament and group
-	const bets = useSelector((state) => state.bets);
+	const bets = useSelector((state) => state.bets);	
 
 	// Get only the matches that started
 	const startedMatches = matches.filter((match) => match.kickoffTime < updatedClock);

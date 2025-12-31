@@ -61,10 +61,10 @@ const ClosedMatches = () => {
 				setFinalScoreUpdateStatus((prev) => ({ ...prev, [match._id]: "נשמר" }));
 			}
 		} catch (error) {
-			setFinalScoreUpdateStatus((prev) => ({ ...prev, [match._id]: "עדכן תוצאה סופית" }));
+			setFinalScoreUpdateStatus((prev) => ({ ...prev, [match._id]: "עדכן תוצאה" }));
 		} finally {
 			timeoutRef.current[match._id] = setTimeout(() => {
-				setFinalScoreUpdateStatus((prev) => ({ ...prev, [match._id]: "עדכן תוצאה סופית" }));
+				setFinalScoreUpdateStatus((prev) => ({ ...prev, [match._id]: "עדכן תוצאה" }));
 				delete timeoutRef.current[match._id];
 			}, 3000);
 		}

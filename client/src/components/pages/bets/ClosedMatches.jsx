@@ -83,7 +83,7 @@ const ClosedMatches = () => {
 					matches={startedMathesWithBets}
 					onClick={updateFinalScoreHandler}
 					buttonStatus={finalScoreUpdateStatus}
-					actionText="עדכן תוצאה סופית"
+					actionText="עדכון תוצאה"
 					user="admin"
 				/>
 			)}

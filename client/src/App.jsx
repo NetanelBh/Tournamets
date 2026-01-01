@@ -4,7 +4,7 @@ import { RouterProvider } from "react-router-dom";
 import CreateRouter from "./components/utils/CreateRouter";
 
 import { tick } from "./components/store/slices/clockSlice";
-import initSocketListener from "./components/UI/finalResultUpdate/socketUpdate";
+import initSocketListener from "./components/UI/dbWatcherUpdate/socketUpdate";
 
 const App = () => {
 	const router = CreateRouter();

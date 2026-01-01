@@ -15,7 +15,6 @@ const FriendsBets = () => {
 
 	// If is the first time we entered here, the all users bets list will not exist yet(useEffect run only at the end)
 	const betsOfThisMatch = bets.allUsersBets[matchId] ? bets.allUsersBets[matchId] : [];
-	console.log(betsOfThisMatch);
 	
 	// Get the current match from the matches list to extract the match name
 	const currentMatch = matches.find((match) => match._id === matchId);

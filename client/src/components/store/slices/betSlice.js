@@ -22,7 +22,9 @@ const betSlice = createSlice({
 					state.dbTopScorer = bet.data;
 				} else if (bet.type === "dbWinnerTeam") {
 					state.dbWinnerTeam = bet.data;
-				} else if (bet.type === "usersBetsForMatch") {
+				} else if (bet.type === "usersBetsForMatch") {					
+					// Clear the redux state in first time before saving(prevent from persist redux use the old data)
+					state.allUsersBets = {};
 					bet.data.forEach((user) => {												
 						if (!state.allUsersBets[user.matchId]) {							
 							state.allUsersBets[user.matchId] = [{ userId: user.userId, betScore: user.betScore }];

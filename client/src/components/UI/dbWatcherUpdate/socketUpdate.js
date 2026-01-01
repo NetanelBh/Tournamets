@@ -34,6 +34,10 @@ const initSocketListener = () => {
 	socket.on("disconnect", () => {
 		console.log("Socket disconnected");
 	});
+
+	socket.on("matchDeleted", (matchId) => {
+		store.dispatch(matchesActions.deleteMatch(matchId));
+	});
 };
 
 export default initSocketListener;

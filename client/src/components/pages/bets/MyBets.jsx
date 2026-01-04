@@ -307,7 +307,6 @@ const MyBets = () => {
 		if (saveStatus["topScorer"] === "שומר") return;
 
 		console.log("topScorer out");
-		
 
 		// If the user saved the same topScorer, don't send any request to server
 		if (userTopScorerChoice === bets.dbTopScorer) return;
@@ -430,40 +429,46 @@ const MyBets = () => {
 
 									{/* Show the winner team when the tournament started */}
 									{istournamentStarted && (
-										<h3 className="p-2 text-md text-black-400 text-center bg-yellow-100 font-bold rounded-lg">
+										<h3 className="p-2 text-sm text-black-400 text-center bg-yellow-100 font-bold rounded-lg">
 											{bets.dbWinnerTeam ? bets.dbWinnerTeam : "-"}
 										</h3>
 									)}
 
-									<SaveButton
-										status={saveStatus["winnerTeam"] || "שמור"}
-										buttonText={winnerTeamSaveText}
-										className={winnerTeamSaveStyle}
-										onClick={saveWinnerTeamBetHandler}
-									/>
+									{!istournamentStarted && (
+										<SaveButton
+											status={saveStatus["winnerTeam"] || "שמור"}
+											buttonText={winnerTeamSaveText}
+											className={winnerTeamSaveStyle}
+											onClick={saveWinnerTeamBetHandler}
+										/>
+									)}
 								</div>
 
 								{/* Show the topScorer dropdown only if the tournament defined to be with top scorer bet */}
-								{currentTourmanent.topScorerBet && !istournamentStarted && (
+								{currentTourmanent.topScorerBet && (
 									<div className="flex flex-col gap-2 p-4 border border-yellow-100">
 										<h3 className="text-md text-yellow-100 text-center">מלך השערים :</h3>
-										<div className="w-33 sm:w-40 md:w-50">
-											<Dropdown data={playersData} />
-										</div>
+										{!istournamentStarted && (
+											<div className="w-33 sm:w-40 md:w-50">
+												<Dropdown data={playersData} />
+											</div>
+										)}
 
 										{/* Show the winner team when the tournament started */}
-										{currentTourmanent.topScorerBet && istournamentStarted && (
-											<h3 className="p-2 text-md text-black-400 text-center bg-yellow-100 font-bold rounded-lg">
+										{istournamentStarted && (
+											<h3 className="p-2 text-sm text-black-400 text-center bg-yellow-100 font-bold rounded-lg">
 												{bets.dbTopScorer ? bets.dbTopScorer : "-"}
 											</h3>
 										)}
 
-										<SaveButton
-											status={saveStatus["topScorer"] || "שמור"}
-											buttonText={topScorerSaveText}
-											className={topScorerSaveStyle}
-											onClick={saveTopScorerBetHandler}
-										/>
+										{!istournamentStarted && (
+											<SaveButton
+												status={saveStatus["topScorer"] || "שמור"}
+												buttonText={topScorerSaveText}
+												className={topScorerSaveStyle}
+												onClick={saveTopScorerBetHandler}
+											/>
+										)}
 									</div>
 								)}
 							</div>

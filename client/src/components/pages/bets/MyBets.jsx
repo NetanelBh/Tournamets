@@ -4,6 +4,7 @@ import { useEffect, useState, useRef, createRef } from "react";
 import API from "../../utils/Api";
 import Modal from "../../modal/Modal";
 import MatchesList from "./MatchesList";
+import { saveButtonStyle } from "./betsUtils";
 import Loading from "../../UI/loading/Loading";
 import BetsLayout from "../layouts/BetsLayout";
 import Dropdown from "../../UI/dropdown/Dropdown";
@@ -20,6 +21,10 @@ const MyBets = () => {
 	const [modalText, setModalText] = useState("");
 	const [openModal, setOpenModal] = useState(false);
 
+	// User choices from dropdowns
+	const [userWinnerTeamChoice, setUserWinnerTeamChoice] = useState("");
+	const [userTopScorerChoice, setUserTopScorerChoice] = useState("");
+
 	// State data for the SaveButton component
 	const [saveStatus, setSaveStatus] = useState({});
 	// To set timeout when saving the final score/winnerTeam/topScorer in DB to make it again save button
@@ -35,6 +40,7 @@ const MyBets = () => {
 	const matches = useSelector((state) => state.matches.matches);
 	// The clock from matchSlice(the clock update each second to make the components rerender for live matches bet list)
 	const updatedClock = useSelector((state) => state.clock.now);
+	// Get the topScorers with their id to send request to server when the user bet on the top socrer
 	const topScorersList = useSelector((state) => state.players.players);
 	const allTournaments = useSelector((state) => state.tournaments.tournaments);
 
@@ -55,7 +61,7 @@ const MyBets = () => {
 				const tournamentId = localStorage.getItem("tournamentId");
 				const groupId = localStorage.getItem("groupId");
 				const users = await API.post("/user/allUsers", { tournamentId, groupId });
-				
+
 				dispatch(userActions.load({ type: "allUsers", data: users.data.data }));
 			} catch (error) {
 				setOpenModal(true);
@@ -160,7 +166,7 @@ const MyBets = () => {
 					tournamentId: localStorage.getItem("tournamentId"),
 					groupId: localStorage.getItem("groupId"),
 				});
-				
+
 				dispatch(betsActions.load([{ type: "usersBetsForMatch", data: usersBets.data.data }]));
 			} catch (error) {
 				setOpenModal(true);
@@ -234,7 +240,7 @@ const MyBets = () => {
 		} catch (error) {
 			setSaveStatus((prev) => ({
 				...prev,
-				[match._id]: "נשמר",
+				[match._id]: "נכשל",
 			}));
 		} finally {
 			timeoutRef.current[match._id] = setTimeout(() => {
@@ -245,74 +251,110 @@ const MyBets = () => {
 				delete timeoutRef.current[match._id];
 			}, 3000);
 		}
-	};	
-	
-	const saveWinnerTeamBetHandler = async (team) => {
-		if (saveStatus["winnerTeam"] === "שומר") return;
-
-		// If the user saved the same team, don't send any request to server
-		if (team === bets.dbWinnerTeam) return;
-
-		// TODO: WHEN I WILL ADD THE BUTTONS, SET HERE THE SAVING... SAVE OR SAVED OPTIONS OF THE SAVE BUTTON
-		try {
-			const response = await API.patch("/winnerTeamBet/updatePredict", {
-				tournament: tournamentId,
-				group: groupId,
-				winnerTeamName: team,
-			});
-		} catch (error) {
-			console.log(error.data);
-			
-		} finally {
-		}
-
-		// TODO: CREATE A NEW FUNCTION AND BUTTON FOR SAVING ALSO THE TOP SCORER BET AND THE WINNER TEAM AND TREAT THE CHECK SEPARATELY
-		// 		try {
-		// 			const response = await API.patch("/topScorerBet/updatePredict", {
-		// 				tournamentId,
-		// 				groupId,
-		// 				topScorerId: chosenPlayer._id,
-		// 			});
-
-		// 			if (!response.data.status) {
-		// 				setOpenModal(true);
-		// 				setModalText("אירעה שגיאה בשמירת מלך השערים, אנא נסה שנית");
-		// 			}
-
-		// 			// When update the topScorer, will change the dbTopScorer to the new DB data(instead fetch) in redux
-		// 			dispatch(
-		// 				betsActions.updateWinnerOrTopScorer({ type: "dbTopScorer", data: bets.curTopScorerChoice })
-		// 			);
-		// 		} catch (error) {
-		// 			setOpenModal(true);
-		// 			setModalText("אירעה שגיאה מלך השערים, אנא נסה שנית");
-		// 		} finally {
-		// 			setIsLoading(false);
-		// 		}
-		// 	} else {
-		// 		// It's a new bet because the data in DB is null
-		// 		try {
-		// 			const response = await API.post("/topScorerBet/createPredict", {
-		// 				tournamentId,
-		// 				groupId,
-		// 				topScorerId: chosenPlayer._id,
-		// 			});
-
-		// 			if (!response.data.status) {
-		// 				setOpenModal(true);
-		// 				setModalText("אירעה שגיאה בשמירת מלך השערים, אנא נסה שנית");
-		// 			}
-		// 		} catch (error) {
-		// 			setOpenModal(true);
-		// 			setModalText("אירעה שגיאה בשמירת הנתונים , אנא נסה שנית");
-		// 		} finally {
-		// 			setIsLoading(false);
-		// 		}
-		// 	}
-		// }
 	};
 
-	const saveTopScorerBetHandler = () => {};
+	const saveWinnerTeamBetHandler = async () => {
+		if (saveStatus["winnerTeam"] === "שומר") return;
+
+		console.log("winnerTeam out");
+
+		// If the user saved the same team, don't send any request to server
+		if (userWinnerTeamChoice === bets.dbWinnerTeam) return;
+
+		console.log("winnerTeam in");
+
+		setSaveStatus((prev) => ({
+			...prev,
+			["winnerTeam"]: "שומר",
+		}));
+		try {
+			const resp = await API.patch("/winnerTeamBet/updatePredict", {
+				tournament: tournamentId,
+				group: groupId,
+				winnerTeamName: userWinnerTeamChoice,
+			});
+
+			if (!resp.data.status) {
+				setSaveStatus((prev) => ({
+					...prev,
+					["winnerTeam"]: "נכשל",
+				}));
+			} else {
+				setSaveStatus((prev) => ({
+					...prev,
+					["winnerTeam"]: "נשמר",
+				}));
+
+				dispatch(betsActions.updateWinnerOrTopScorer({ type: "dbWinnerTeam", data: userWinnerTeamChoice }));
+			}
+		} catch (error) {
+			setSaveStatus((prev) => ({
+				...prev,
+				["winnerTeam"]: "נכשל",
+			}));
+		} finally {
+			timeoutRef.current["winnerTeam"] = setTimeout(() => {
+				setSaveStatus((prev) => ({
+					...prev,
+					["winnerTeam"]: "שמור",
+				}));
+				delete timeoutRef.current["winnerTeam"];
+			}, 3000);
+		}
+	};
+
+	const saveTopScorerBetHandler = async () => {
+		if (saveStatus["topScorer"] === "שומר") return;
+
+		console.log("topScorer out");
+		
+
+		// If the user saved the same topScorer, don't send any request to server
+		if (userTopScorerChoice === bets.dbTopScorer) return;
+
+		console.log("topScorer in");
+
+		// Get the topScorer id to save in DB as topScorer bet
+		const playerId = topScorersList.find((player) => player.name === userTopScorerChoice)._id;
+
+		setSaveStatus((prev) => ({
+			...prev,
+			["topScorer"]: "שומר",
+		}));
+		try {
+			const resp = await API.patch("/topScorerBet/updatePredict", {
+				tournament: tournamentId,
+				group: groupId,
+				topScorer: playerId,
+			});
+			if (!resp.data.status) {
+				setSaveStatus((prev) => ({
+					...prev,
+					["topScorer"]: "נכשל",
+				}));
+			} else {
+				setSaveStatus((prev) => ({
+					...prev,
+					["topScorer"]: "נשמר",
+				}));
+
+				dispatch(betsActions.updateWinnerOrTopScorer({ type: "dbTopScorer", data: userTopScorerChoice }));
+			}
+		} catch (error) {
+			setSaveStatus((prev) => ({
+				...prev,
+				["topScorer"]: "נכשל",
+			}));
+		} finally {
+			timeoutRef.current["topScorer"] = setTimeout(() => {
+				setSaveStatus((prev) => ({
+					...prev,
+					["topScorer"]: "שמור",
+				}));
+				delete timeoutRef.current["topScorer"];
+			}, 3000);
+		}
+	};
 
 	// Check if the tournament started to display the top player and winner team bets
 	const istournamentStarted = currentTourmanent.startTime < updatedClock;
@@ -324,7 +366,7 @@ const MyBets = () => {
 		list: currentTourmanent.teams.filter((team) => team !== bets.dbWinnerTeam),
 		currentChoice: bets.dbWinnerTeam,
 		// When change the winner team, it will update the redux(to ba able to compare the db with the current)
-		onClick: (team) => saveWinnerTeamBetHandler(team),
+		onClick: (team) => setUserWinnerTeamChoice(team),
 	};
 
 	// Data to dropdown compenent for the top scorer players list
@@ -337,7 +379,7 @@ const MyBets = () => {
 		list: candidatesForTopScorer,
 		currentChoice: bets.dbTopScorer,
 		// When change the top scorer player, it will update the redux(to ba able to compare the db with the current)
-		onClick: (player) => dispatch(betsActions.updateWinnerOrTopScorer({ type: "dbTopScorer", data: player })),
+		onClick: (player) => setUserTopScorerChoice(player),
 	};
 
 	// Filter only the matches that didn't start yet(to give the user the option to bet on them
@@ -359,6 +401,15 @@ const MyBets = () => {
 		})
 		.sort((match1, match2) => new Date(match1.kickoffTime) - new Date(match2.kickoffTime));
 
+	// Create data for winner team save button
+	const { style: winnerTeamSaveStyle, actionText: winnerTeamSaveText } = saveButtonStyle(
+		saveStatus["winnerTeam"] || "שמור"
+	);
+	// Create data for top scorer save button
+	const { style: topScorerSaveStyle, actionText: topScorerSaveText } = saveButtonStyle(
+		saveStatus["topScorer"] || "שמור"
+	);
+
 	return (
 		<>
 			{!isLoading && (
@@ -368,10 +419,14 @@ const MyBets = () => {
 					{!openModal && (
 						<div className="flex flex-col mb-6">
 							<div className="flex gap-8">
-								<div className="flex flex-col gap-2">
+								<div className="flex flex-col gap-2 p-4 border border-yellow-100">
 									<h3 className="text-md text-yellow-100 text-center">האלופה :</h3>
 									{/* Show the dropdown option only if the tournament didn't start */}
-									{!istournamentStarted && <Dropdown data={winnerTeamData} />}
+									{!istournamentStarted && (
+										<div className="w-33 sm:w-40 md:w-50">
+											<Dropdown data={winnerTeamData} />
+										</div>
+									)}
 
 									{/* Show the winner team when the tournament started */}
 									{istournamentStarted && (
@@ -379,22 +434,38 @@ const MyBets = () => {
 											{bets.dbWinnerTeam ? bets.dbWinnerTeam : "-"}
 										</h3>
 									)}
+
+									<SaveButton
+										status={saveStatus["winnerTeam"] || "שמור"}
+										buttonText={winnerTeamSaveText}
+										className={winnerTeamSaveStyle}
+										onClick={saveWinnerTeamBetHandler}
+									/>
 								</div>
 
-								<div className="flex flex-col gap-2">
-									<h3 className="text-md text-yellow-100 text-center">מלך השערים :</h3>
-									{/* Show the topScorer dropdown only if the tournament defined to be with top scorer bet */}
-									{currentTourmanent.topScorerBet && !istournamentStarted && (
-										<Dropdown data={playersData} />
-									)}
+								{/* Show the topScorer dropdown only if the tournament defined to be with top scorer bet */}
+								{currentTourmanent.topScorerBet && !istournamentStarted && (
+									<div className="flex flex-col gap-2 p-4 border border-yellow-100">
+										<h3 className="text-md text-yellow-100 text-center">מלך השערים :</h3>
+										<div className="w-33 sm:w-40 md:w-50">
+											<Dropdown data={playersData} />
+										</div>
 
-									{/* Show the winner team when the tournament started */}
-									{currentTourmanent.topScorerBet && istournamentStarted && (
-										<h3 className="p-2 text-md text-black-400 text-center bg-yellow-100 font-bold rounded-lg">
-											{bets.dbTopScorer ? bets.dbTopScorer : "-"}
-										</h3>
-									)}
-								</div>
+										{/* Show the winner team when the tournament started */}
+										{currentTourmanent.topScorerBet && istournamentStarted && (
+											<h3 className="p-2 text-md text-black-400 text-center bg-yellow-100 font-bold rounded-lg">
+												{bets.dbTopScorer ? bets.dbTopScorer : "-"}
+											</h3>
+										)}
+
+										<SaveButton
+											status={saveStatus["topScorer"] || "שמור"}
+											buttonText={topScorerSaveText}
+											className={topScorerSaveStyle}
+											onClick={saveTopScorerBetHandler}
+										/>
+									</div>
+								)}
 							</div>
 						</div>
 					)}

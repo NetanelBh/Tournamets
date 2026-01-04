@@ -12,7 +12,7 @@ export const textColorMap = {
 };
 
 // Check if the user result is exactly / direction / fail
-export const finalScoreBackground = (userBet, realFinalScore) => {	
+export const finalScoreBackground = (userBet, realFinalScore) => {
 	if (realFinalScore.homeScore === -1 || realFinalScore.awayScore === -1) {
 		return "";
 	} else if (!userBet || userBet.homeScore === -1 || userBet.awayScore === -1) {
@@ -113,7 +113,7 @@ export const tableHeaders = [
 	{ label: "כיוונים", className: "px-4 py-3 font-bold" },
 	{ label: "בונוס אלופה", className: "px-4 py-3 font-bold" },
 	{ label: "בונוס מלך השערים", className: "px-4 py-3 font-bold" },
-	{ label:`סה"כ`, className: "px-4 py-3 font-bold" },
+	{ label: `סה"כ`, className: "px-4 py-3 font-bold" },
 ];
 
 export const usersPoints = (data) => {
@@ -241,4 +241,24 @@ const levelsTranslation = {
 	quarterFinal: "רבע",
 	semiFinal: "חצי",
 	final: "",
+};
+
+export const saveButtonStyle = (status) => {
+	const returnedData = {
+		style: "",
+		actionText: "שמור",
+	};
+
+	if (status === "נשמר") {
+		returnedData.actionText = "נשמר";
+		returnedData.style = "bg-green-400 w-full mt-2 border border-black rounded-lg p-0.5";
+	} else if (status === "נכשל") {
+		returnedData.actionText = "נכשל, נסה שנית";
+		returnedData.style = "bg-red-500 w-full mt-2 border border-black rounded-lg p-0.5";
+	} else {
+		returnedData.style =
+			"bg-gray-200 w-full mt-2 border border-black rounded-lg hover:cursor-pointer hover:scale-95 active:scale-95 p-0.5 active:cursor-pointer";
+	}
+
+	return returnedData;
 };

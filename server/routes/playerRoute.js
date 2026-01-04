@@ -7,7 +7,7 @@ const router = express.Router();
 // Entry point: localhost:3000/player 
 
 router.post("/get", async (req, res) => {
-    // By the tournamet id we can fetch the players with populate(players are refereced to the tournaments collection)
+    // By the tournamet id we can fetch the players with populate(players are referenced to the tournaments collection)
     const {tournamentId} = req.body;
     
     try {

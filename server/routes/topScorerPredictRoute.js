@@ -33,32 +33,16 @@ router.post("/getAllByGroup", async (req, res) => {
 	}
 });
 
-router.post("/createPredict", async (req, res) => {
-	const { tournamentId, groupId, topScorerId } = req.body;
-
-	try {
-		const userPredict = await topScorerPredictServices.createPredict(
-			req.user.id,
-			tournamentId,
-			groupId,
-			topScorerId
-		);
-		res.send({ status: true, data: userPredict });
-	} catch (error) {
-		res.send({ status: false, data: "אירעה בעיה ביצירת הניחוש, אנא נסה שנית" });
-	}
-});
-
 // As long as the tournament didn't start, the user can change the predict
 router.patch("/updatePredict", async (req, res) => {
-	const { tournamentId, groupId, topScorerId } = req.body;
+	const { tournament, group, topScorer } = req.body;
 
 	try {
 		const userPredict = await topScorerPredictServices.updatePredict(
 			req.user.id,
-			tournamentId,
-			groupId,
-			topScorerId
+			tournament,
+			group,
+			topScorer
 		);
 		res.send({ status: true, data: userPredict });
 	} catch (error) {

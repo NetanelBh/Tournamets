@@ -6,14 +6,9 @@ export const getTopScorerPredict = (userId, tournamentId, groupId) => {
 	return topScorerPredictRepo.getTopScorerPredict(filterObj);
 };
 
-export const createPredict = (userId, tournamentId, groupId, topScorerId) => {
-    const data = {user: userId, group: groupId, tournament: tournamentId, topScorer: topScorerId};
-    return topScorerPredictRepo.createPredict(data);
-};
-
-export const updatePredict = (userId, tournamentId, groupId, topScorerId) => {
-    const filterObj = {user: userId, group: groupId, tournament: tournamentId};
-    const data = {topScorer: topScorerId};
+export const updatePredict = (user, tournament, group, topScorer) => {
+    const filterObj = {user, group, tournament};
+    const data = {topScorer};
     return topScorerPredictRepo.updatePredict(filterObj, data);
 };
 

@@ -1,13 +1,14 @@
 import styles from "./SaveButton.module.css";
 import { CheckIcon } from "@heroicons/react/24/solid";
 
-const SaveButton = ({status, buttonText, className}) => {
+const SaveButton = ({status, buttonText, className, onClick=undefined}) => {
     // buttonText is the text that be displayed on the button(before saving or saved - different between components)	
 	return (
 		<button
 			className={className}
 			type="submit"
 			disabled={status === "שומר" || status === "נשמר" || status === "נכשל"}
+			onClick={onClick && onClick}
 		>
 			{/* Determine the button text */}
 			{(status === "שמור" || status === "נכשל" || status === "עדכן תוצאה") && buttonText}

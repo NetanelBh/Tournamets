@@ -4,6 +4,7 @@ import { useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 
+import { saveButtonStyle } from "./betsUtils";
 import SaveButton from "../../UI/saveButton/SaveButton";
 import { finalScoreBackground, colorMap, textColorMap } from "./betsUtils";
 
@@ -27,18 +28,10 @@ const MatchListItem = ({ match, onClick, buttonStatus, actionText, user }) => {
 	} text-white rounded-lg p-1 cursor-pointer mt-2 w-full hover:scale-95 active:scale-95`;
 
 	if (user === "regular") {
-		if(buttonStatus === "נשמר") {
-			newActionText = "נשמר"
-			buttonClass = 
-				"bg-green-400 w-full mt-2 border border-black rounded-lg p-0.5"
-		} else if(buttonStatus === "נכשל") {
-			newActionText = "נכשל, נסה שנית"
-			buttonClass = 
-				"bg-red-500 w-full mt-2 border border-black rounded-lg p-0.5"
-		} else {
-			buttonClass = 
-				"bg-gray-200 w-full mt-2 border border-black rounded-lg hover:cursor-pointer hover:scale-95 active:scale-95 p-0.5 active:cursor-pointer"
-		}
+		const {actionText, style} = saveButtonStyle(buttonStatus);
+
+		newActionText = actionText;
+		buttonClass = style;
 	}
 
 

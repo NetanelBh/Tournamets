@@ -33,7 +33,7 @@ const initSocket = (server) => {
 
 				if (updated.kickoffTime) {
 					io.emit("kickoffTimeUpdated", change.fullDocument);
-				} else {					
+				} else {
 					io.emit("finalScoreUpdated", change.fullDocument);
 				}
 			},

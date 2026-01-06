@@ -30,6 +30,9 @@ const MyBets = () => {
 	// To set timeout when saving the final score/winnerTeam/topScorer in DB to make it again save button
 	const timeoutRef = useRef({});
 
+	// Detect if the tournament is started(to run useEffect only once again to get the users after remove unpaid users)
+	const istournamentStartedRef = useRef(false);
+
 	// Ref list for the matches <input> when I want to create a request to send the bets
 	const refs = useRef([]);
 
@@ -61,6 +64,11 @@ const MyBets = () => {
 				const tournamentId = localStorage.getItem("tournamentId");
 				const groupId = localStorage.getItem("groupId");
 				const users = await API.post("/user/allUsers", { tournamentId, groupId });
+				if (!users.data.status) {
+					setOpenModal(true);
+					setModalText("אירעה שגיאה בעת טעינת רשימת המשתמשים, אנא נסה שנית");
+					return;
+				}
 
 				dispatch(userActions.load({ type: "allUsers", data: users.data.data }));
 			} catch (error) {
@@ -73,6 +81,44 @@ const MyBets = () => {
 
 		fetchUsers();
 	}, [allUsers.length, dispatch]);
+
+	useEffect(() => {
+		const fetchUsers = async () => {
+			// Add 15s to let the server remove the relevant unpaid users before fetch
+			const cur = new Date(updatedClock);
+			const delayTime = new Date(cur.getTime() - 1000 * 15);
+
+			const kickoffTime = new Date(currentTourmanent.startTime);
+			const isStarted = kickoffTime < delayTime;
+
+			// Only if the tournament is started and the ref is false, is the first time that detected the tournament is started
+			if (isStarted && !istournamentStartedRef.current) {
+				istournamentStartedRef.current = true;
+
+				console.log("inside");
+				
+
+				setIsLoading(true);
+				try {
+					const users = await API.post("/user/allUsers", { tournamentId, groupId });
+					if (!users.data.status) {
+						setOpenModal(true);
+						setModalText("אירעה שגיאה בעת טעינת רשימת המשתמשים, אנא נסה שנית");
+						return;
+					}
+
+					dispatch(userActions.load({ type: "allUsers", data: users.data.data }));
+				} catch (error) {
+					setOpenModal(true);
+					setModalText("אירעה שגיאה בעת טעינת רשימת המשתמשים, אנא נסה שנית");
+				} finally {
+					setIsLoading(false);
+				}
+			}
+		};
+
+		fetchUsers();
+	}, [dispatch, updatedClock, currentTourmanent]);
 
 	// Variable to determine if the tournament has a top scorer bet
 	const hasTopScorerBet = currentTourmanent?.topScorerBet;
@@ -408,6 +454,8 @@ const MyBets = () => {
 	const { style: topScorerSaveStyle, actionText: topScorerSaveText } = saveButtonStyle(
 		saveStatus["topScorer"] || "שמור"
 	);
+
+	console.log(allUsers);
 
 	return (
 		<>

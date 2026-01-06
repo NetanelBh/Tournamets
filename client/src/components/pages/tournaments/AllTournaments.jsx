@@ -1,13 +1,14 @@
 import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import API from "../../utils/Api";
-import { tournamentsActions } from "../../store/slices/tournamentsSlice";
-import { userActions } from "../../store/slices/userSlice";
-
-import Loading from "../../UI/loading/Loading";
-import Modal from "../../modal/Modal";
-import GenericList from "../../UI/list/GenericList";
 import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+
+
+import API from "../../utils/Api";
+import Modal from "../../modal/Modal";
+import Loading from "../../UI/loading/Loading";
+import GenericList from "../../UI/list/GenericList";
+import { userActions } from "../../store/slices/userSlice";
+import { tournamentsActions } from "../../store/slices/tournamentsSlice";
 
 const AllTournaments = () => {
 	const [modalText, setModalText] = useState({});

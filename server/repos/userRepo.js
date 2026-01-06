@@ -29,6 +29,7 @@ export const addUserToGroup = (userId, groupId) => {
 	return Users.findByIdAndUpdate(userId, { $addToSet: { groups: groupId } }, { new: true });
 };
 
+// TODO: WHEN REMOVE THE UNPAID USERS FROM THE GROUP, IT REMOVES THE USERS FROM THE GROUP BUT NOT THE GROUP FROM THE USRES
 export const leaveGroup = (userId, groupId) => {
 	return Users.findByIdAndUpdate(userId, { $pull: { groups: groupId } }, { new: true });
 };

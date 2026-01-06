@@ -26,7 +26,10 @@ const scheduleTournamentJob = async (tournamentId) => {
                     // Remove the user from the groups collection
 					await groupRepo.leaveGroup(member.id, group._id );
                     // Remove the group from the user's groups list
-                    await leaveGroup(member.id, group._id);
+					// TODO: CHECK THE LOG THEN REMOVE IT AND THE DATA VARIABLE
+                    const data = await leaveGroup(member.id, group._id);
+					console.log(data);
+					
 				}
 			}
 		}

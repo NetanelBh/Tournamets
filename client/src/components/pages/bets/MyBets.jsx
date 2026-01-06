@@ -52,7 +52,6 @@ const MyBets = () => {
 	const groupId = localStorage.getItem("groupId");
 	// Get the current tournament to use the teams for the winner team prediction of the user
 	const currentTourmanent = allTournaments.find((t) => t._id === tournamentId);
-	// TODO: WHEN THE TOURNAMENT START, CALCULATE HERE THE TOTAL MONEY IN THE BANK
 
 	// Fetch the users from the DB only once. When stored in redux, we can use them everywhere in the application
 	useEffect(() => {
@@ -84,9 +83,9 @@ const MyBets = () => {
 
 	useEffect(() => {
 		const fetchUsers = async () => {
-			// Add 15s to let the server remove the relevant unpaid users before fetch
+			// Add 5s to let the server remove the relevant unpaid users before fetch
 			const cur = new Date(updatedClock);
-			const delayTime = new Date(cur.getTime() - 1000 * 15);
+			const delayTime = new Date(cur.getTime() - 1000 * 5);
 
 			const kickoffTime = new Date(currentTourmanent.startTime);
 			const isStarted = kickoffTime < delayTime;
@@ -94,9 +93,6 @@ const MyBets = () => {
 			// Only if the tournament is started and the ref is false, is the first time that detected the tournament is started
 			if (isStarted && !istournamentStartedRef.current) {
 				istournamentStartedRef.current = true;
-
-				console.log("inside");
-				
 
 				setIsLoading(true);
 				try {
@@ -454,8 +450,6 @@ const MyBets = () => {
 	const { style: topScorerSaveStyle, actionText: topScorerSaveText } = saveButtonStyle(
 		saveStatus["topScorer"] || "שמור"
 	);
-
-	console.log(allUsers);
 
 	return (
 		<>

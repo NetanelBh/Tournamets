@@ -11,6 +11,8 @@ const Input = ({data}) => {
 				ref={data.ref}
 				autoComplete={data.autoComplete}
 				placeholder={data.placeholder}
+				// TODO: REMOVE IT AFTER TESTS
+				defaultValue={data.defaultValue}
 			/>
 		</>
 	);

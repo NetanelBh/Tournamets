@@ -8,7 +8,7 @@ const TableRow = ({ data, trClass, thClass, tdClass }) => {
 	}
 
 	return (
-		<tr key={data.i} className={`${rowClass} points_table`} style={{ animationDelay: `${data.i * 0.3}s` }}>
+		<tr key={data.i} className={`${rowClass} points_table`} style={{ animationDelay: `${data.i * 0.35}s` }}>
 			<th className={thClass}>{data.i + 1}</th>
 			<td className={tdClass}>{data.user.username}</td>
 			<td className={tdClass}>{data.user.exacts}</td>

@@ -8,7 +8,7 @@ const Table = ({ data }) => {
 
 	return (
 		<div className="relative overflow-x-auto shadow-md rounded-lg mb-4">
-			<table className="text-center min-w-65 table-auto text-sm font-bold">
+			<table className="text-center min-w-65 table-auto text-sm font-bold fade_up">
 				<thead className="text-md text-center uppercase text-white bg-[#018790]/60">
 					<tr>
 						{data.headers.map((header) => (
@@ -25,7 +25,7 @@ const Table = ({ data }) => {
 								key={i}
 								className={`${
 									colorsMap[data.colors[i]]
-								} font-bold bg-[#F9F8F6] hover:bg-[#EFE9E3] border-b border-blue-400 points_table`}
+								} font-bold bg-[#F9F8F6] hover:bg-[#EFE9E3] border-b border-blue-400 fade_up`}
 							>
 								{row.map((cell, i) => (
 									<td key={i} className="font-medium whitespace-nowrap px-6 py-4">

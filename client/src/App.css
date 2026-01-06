@@ -26,15 +26,11 @@
 
 .points_table {
 	opacity: 0;
-	animation: showup 3.5s forwards;
+	animation: showup 0.8s forwards;
 }
 
 @keyframes showup {
-  from{
-    transform: scaleX(2);
-  }
   to{
-    transform: scaleY(1);
-    opacity: 1;
+	opacity: 1;
   }
 }

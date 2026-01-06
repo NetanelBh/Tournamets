@@ -11,10 +11,10 @@ const router = express.Router();
 
 // Entry point: localhost:3000/tournament
 
-router.get("/getAll", async (req, res) => {	
+router.get("/getAll", async (req, res) => {
 	try {
 		const tournaments = await tournamentServices.getAllTournaments();
-		
+
 		res.send({ status: true, data: tournaments });
 	} catch (error) {
 		res.send({ status: false, data: "אירעה בעיה בקבלת המידע, אנא נסה שנית" });

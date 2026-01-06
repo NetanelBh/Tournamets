@@ -23,7 +23,7 @@ const Table = () => {
 
 	const tournamentId = localStorage.getItem("tournamentId");
 	const groupId = localStorage.getItem("groupId");
-
+	
 	// Fetch all users top scorer and winner team bets(only once)
 	useEffect(() => {
 		const fetchData = async () => {
@@ -74,6 +74,16 @@ const Table = () => {
 	// Sorted users points list to display in table
 	const usersTableData = usersPoints(data);
 
+	// Get the kickoff time to determine if the tournament is already started and show the total money in the group
+	const tournamentKickoffTime = useSelector((state) => state.tournaments.tournaments).find(
+		(tournament) => tournament._id === tournamentId
+	).startTime;
+
+	const currentTime = useSelector((state) => state.clock.now);
+
+	// Calculate the total money
+	const totalMoney = data.allUsers.length * 150;
+
 	return (
 		<>
 			{isLoading && <Loading />}
@@ -82,9 +92,11 @@ const Table = () => {
 				<div className="flex flex-col items-center">
 					<BetsLayout />
 
+					{tournamentKickoffTime < currentTime && <p className="text-yellow-200 text-xl mb-6 font-bold">{` הסכום בקופה: ₪${totalMoney}`}</p>}
+
 					{!openModal && (
 						<div className="flex justify-center w-full sm:px-4">
-							<div className="w-fit overflow-x-auto bg-white shadow sm:rounded-lg border-t border-r md:border-l border-red-300">
+							<div className="w-fit overflow-x-auto bg-transparent shadow sm:rounded-lg border-t border-r md:border-l border-red-300">
 								<table className="w-fit text-sm text-left rtl:text-right">
 									<TableHeader
 										data={tableHeaders}

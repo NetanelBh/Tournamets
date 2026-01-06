@@ -29,10 +29,11 @@ export const addUserToGroup = (userId, groupId) => {
 	return Users.findByIdAndUpdate(userId, { $addToSet: { groups: groupId } }, { new: true });
 };
 
-// TODO: WHEN REMOVE THE UNPAID USERS FROM THE GROUP, IT REMOVES THE USERS FROM THE GROUP BUT NOT THE GROUP FROM THE USRES
 export const leaveGroup = (userId, groupId) => {
 	return Users.findByIdAndUpdate(userId, { $pull: { groups: groupId } }, { new: true });
 };
+
+export const removeGroupFromUnpaidUsers = (groupId, usersIds) => Users.updateMany({_id: { $in: usersIds }}, { $pull: { groups: groupId } });
 
 // When user leave some tournament, we want to remove also the groups that the user joined for this tournament
 export const removeGroupsFromUser = (userId, groupsIds) => {

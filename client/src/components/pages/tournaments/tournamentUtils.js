@@ -12,21 +12,21 @@ export const createTournamentData = [
 		type: "text",
 		clue: "yyyy-mm-dd",
 		// TODO: REMOVE IT AFTER TESTS
-		defaultValue: "2026-01-06"
+		defaultValue: "2026-06-11"
 	},
 	{
 		htmlFor: "endDate",
 		label: "תאריך סיום הטורניר",
 		type: "text",
 		clue: "yyyy-mm-dd",
-		defaultValue: "2026-01-08"
+		defaultValue: "2026-07-19"
 	},
 	{
 		htmlFor: "startTime",
 		label: "שעת פתיחת הטורניר",
 		type: "text",
 		clue: "שעון ישראל לדוגמא: 20:00",
-		defaultValue: "00:00"
+		defaultValue: "22:00"
 	},
 	{
 		htmlFor: "symbol",

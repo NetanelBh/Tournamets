@@ -6,6 +6,10 @@ import express from "express";
 import initSocket from "./socket.js";
 import dbConnection from "./config/mongo.js";
 
+// These functions are used to reschedule the future job for remove unpaid users
+import findUnpaidUsers from "./utils/findUnpaidUsers.js";
+import { getScheduledTournaments } from "./repos/tournamentRepo.js";
+
 import authRouter from "./routes/auth.js";
 import userRouter from "./routes/userRoute.js";
 import betsRouter from "./routes/betsRoute.js";
@@ -25,10 +29,12 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 const allowedOrigins = [process.env.REACT_ADDRESS];
-app.use(cors({
-  origin: allowedOrigins,
-  credentials: true
-}));
+app.use(
+	cors({
+		origin: allowedOrigins,
+		credentials: true,
+	})
+);
 
 // HTTP server wrapper (required for socket.io)
 const server = http.createServer(app);
@@ -39,16 +45,35 @@ await dbConnection();
 // Initialize Socket.IO in a separate file
 initSocket(server);
 
+// ReSchedule the future job for remove unpaid users when tournament start(when server restarts, it always gone)
+const reScheduleOnRestartServer = async (retries = 3) => {
+	try {
+		const notStartedTournaments = await getScheduledTournaments();
+		notStartedTournaments.forEach((t) => findUnpaidUsers(t._id));
+	} catch (error) {
+		if (retries === 0) {
+			throw error;
+		}
+
+		console.log("Retrying... remaining:", retries);
+		await new Promise((res) => setTimeout(res, 1000));
+
+		return findWithRetry(retries - 1);
+	}
+};
+
+reScheduleOnRestartServer();
+
 // There is automatic ping request to server each 5 min to prevent the render server sleep from (uptimerobot.com)
 app.get("/health", (req, res) => {
-  res.status(200).json({ status: "ok" });
+	res.status(200).json({ status: "ok" });
 });
 
-// First, let the user login or create a new account 
+// First, let the user login or create a new account
 app.use("/auth", authRouter);
 
 // Middleware to check if the user logged and sent the token
-app.use(authentication)
+app.use(authentication);
 
 app.use("/user", userRouter);
 app.use("/bets", betsRouter);

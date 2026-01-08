@@ -5,11 +5,19 @@ import { removeGroupFromUnpaidUsers } from "../repos/userRepo.js";
 
 const scheduleTournamentJob = async (tournamentId) => {
 	const tournamentData = await tournamentRepo.getTournamentById(tournamentId);
+	if (!tournamentData) return;
 
 	// If start time is in the past, skip
 	if (tournamentData.startTime <= new Date().toISOString()) return;
 
-	schedule.scheduleJob(tournamentData.startTime, async () => {
+	const jobName = `tournament-${tournamentId}`;
+
+	// 🔁 prevent duplicate jobs
+	if (schedule.scheduledJobs[jobName]) {
+		schedule.scheduledJobs[jobName].cancel();
+	}
+
+	schedule.scheduleJob(jobName, tournamentData.startTime, async () => {
 		try {
 			const mustPaidGroups = await getGroupsByFilter(
 				{
@@ -34,7 +42,7 @@ const scheduleTournamentJob = async (tournamentId) => {
 				await removeGroupFromUnpaidUsers(group._id, unpaidUserIds);
 			}
 		} catch (error) {
-			console.log(error.message);
+			console.log("Tournament job error:", error.message);
 		}
 	});
 };

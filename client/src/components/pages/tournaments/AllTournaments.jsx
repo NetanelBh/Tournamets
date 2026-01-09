@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
-
 import API from "../../utils/Api";
 import Modal from "../../modal/Modal";
 import Loading from "../../UI/loading/Loading";
@@ -31,13 +30,13 @@ const AllTournaments = () => {
 			setIsLoading(true);
 			try {
 				const fetchedTournaments = await API.get("/tournament/getAll");
-				if(!fetchedTournaments.data.status) {
+				if (!fetchedTournaments.data.status) {
 					setOpenModal(true);
 					setModalText({ title: "שגיאה בשרת", text: "אירעה בעיה בטעינת הנתונים, אנא נסה שנית" });
 					setNavigateTo("/");
 					return;
 				}
-				
+
 				dispatch(tournamentsActions.load(fetchedTournaments.data.data));
 			} catch (error) {
 				setOpenModal(true);
@@ -61,7 +60,7 @@ const AllTournaments = () => {
 			setNavigateTo("/layout/all-tournaments");
 			return;
 		}
-		
+
 		setOpenModal(true);
 		setIsLoading(true);
 		try {
@@ -97,12 +96,17 @@ const AllTournaments = () => {
 		btnText: "הצטרף",
 		onClick: joinHandler,
 	};
-	
+
 	return (
 		<>
 			{!isLoading && (
 				<>
-					{!openModal && <GenericList data={data} type="tournament" />}
+					{!openModal && tournaments.length === 0 && (
+						<p className="text-white text-center text-xl text-yellow-200 font-semi-bold mt-12">אין טורנירים פעילים להצגה</p>
+					)}
+
+					{!openModal && tournaments.length > 0 && <GenericList data={data} type="tournament" />}
+					
 					{openModal && <Modal title={modalText.title} text={modalText.text} onClick={closeModalHandler} />}
 				</>
 			)}

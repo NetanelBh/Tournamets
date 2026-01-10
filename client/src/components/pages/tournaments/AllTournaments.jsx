@@ -102,7 +102,7 @@ const AllTournaments = () => {
 			{!isLoading && (
 				<>
 					{!openModal && tournaments.length === 0 && (
-						<p className="text-white text-center text-xl text-yellow-200 font-semi-bold mt-12">אין טורנירים פעילים להצגה</p>
+						<p className="text-red-500 text-center text-xl font-bold mt-12">אין טורנירים פעילים להצגה</p>
 					)}
 
 					{!openModal && tournaments.length > 0 && <GenericList data={data} type="tournament" />}

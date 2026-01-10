@@ -529,7 +529,7 @@ const MyBets = () => {
 
 					{/* If no matches open to bet, render a message */}
 					{notStartedMatches.length === 0 && (
-						<div className="text-red-400 text-xl mt-4">אין משחקים פתוחים להימור</div>
+						<div className="text-red-500 font-bold text-xl mt-4">אין משחקים פתוחים להימור</div>
 					)}
 
 					{openModal && (

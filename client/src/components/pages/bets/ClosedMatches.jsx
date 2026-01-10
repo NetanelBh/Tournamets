@@ -75,7 +75,7 @@ const ClosedMatches = () => {
 			<BetsLayout />
 
 			{startedMathesWithBets.length === 0 && (
-				<h1 className="text-red-400 text-center text-xl mt-2">עדיין לא החלו משחקים</h1>
+				<h1 className="text-red-500 font-bold text-center text-xl mt-2">עדיין לא החלו משחקים</h1>
 			)}
 
 			{startedMathesWithBets.length > 0 && (

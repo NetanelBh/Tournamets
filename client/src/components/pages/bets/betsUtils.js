@@ -41,8 +41,8 @@ export const calculatePoints = (stage, round, finalScore, userBet, pointsRules) 
 	const stageConverter = {
 		roundOf32: "roundOf32",
 		"שמינית גמר": "roundOf16",
-		"רבע גמר": "quarterFinals",
-		"חצי גמר": "semiFinals",
+		"רבע גמר": "quarterFinal",
+		"חצי גמר": "semiFinal",
 		גמר: "final",
 	};
 
@@ -97,7 +97,7 @@ export const calculatePoints = (stage, round, finalScore, userBet, pointsRules) 
 			(userHome - userAway > 0 && realHome - realAway > 0) ||
 			(userHome - userAway < 0 && realHome - realAway < 0) ||
 			(userHome - userAway === 0 && realHome - realAway === 0)
-		) {
+		) {			
 			points.matchPoints = pointsRules.knockoutStage.differentPoints[stageConverter[round]].directionScore;
 			points.resultType = "directions";
 		}
@@ -165,7 +165,7 @@ export const usersPoints = (data) => {
 		const currUserWinnerTeam = data.usersWinnerTeams.find((u) => u.user === user._id);
 		// Check if not undefined because at first time it will be empty until fetch from useEffect in Table page
 		if (currUserWinnerTeam) {
-			if (currUserWinnerTeam.winnerTeam === data.tournamentWinnerTeamId) {
+			if (currUserWinnerTeam.winnerTeam === data.tournamentWinnerTeam) {
 				finalUserPoints.winnerTeamBonus = 10;
 			}
 		}
@@ -236,7 +236,7 @@ export const groupPointsExplain = (pointsRules) => {
 };
 
 const levelsTranslation = {
-	roundOf32: "1/16",
+	roundOf32: "1/32",
 	roundOf16: "שמינית",
 	quarterFinal: "רבע",
 	semiFinal: "חצי",

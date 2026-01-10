@@ -21,9 +21,11 @@ const MyBets = () => {
 	const [modalText, setModalText] = useState("");
 	const [openModal, setOpenModal] = useState(false);
 
+	const bets = useSelector((state) => state.bets);
+
 	// User choices from dropdowns
-	const [userWinnerTeamChoice, setUserWinnerTeamChoice] = useState("");
-	const [userTopScorerChoice, setUserTopScorerChoice] = useState("");
+	const [userWinnerTeamChoice, setUserWinnerTeamChoice] = useState(bets.dbWinnerTeam);
+	const [userTopScorerChoice, setUserTopScorerChoice] = useState(bets.dbTopScorer);
 
 	// State data for the SaveButton component
 	const [saveStatus, setSaveStatus] = useState({});
@@ -35,8 +37,6 @@ const MyBets = () => {
 
 	// Ref list for the matches <input> when I want to create a request to send the bets
 	const refs = useRef([]);
-
-	const bets = useSelector((state) => state.bets);
 
 	const [isLoading, setIsLoading] = useState(false);
 	const allUsers = useSelector((state) => state.user.allUsers);
@@ -298,12 +298,11 @@ const MyBets = () => {
 	const saveWinnerTeamBetHandler = async () => {
 		if (saveStatus["winnerTeam"] === "שומר") return;
 
-		console.log("winnerTeam out");
-
+		// In the first app load, userWinnerTeam is undefined. This case prevent save click onLoad without change team
+		if(!userWinnerTeamChoice && bets.dbWinnerTeam) return;
+		
 		// If the user saved the same team, don't send any request to server
 		if (userWinnerTeamChoice === bets.dbWinnerTeam) return;
-
-		console.log("winnerTeam in");
 
 		setSaveStatus((prev) => ({
 			...prev,
@@ -348,12 +347,11 @@ const MyBets = () => {
 	const saveTopScorerBetHandler = async () => {
 		if (saveStatus["topScorer"] === "שומר") return;
 
-		console.log("topScorer out");
-
+		// In the first app load, userWinnerTeam is undefined. This case prevent save click onLoad without change team
+		if(!userTopScorerChoice && bets.dbTopScorer) return;
+		
 		// If the user saved the same topScorer, don't send any request to server
 		if (userTopScorerChoice === bets.dbTopScorer) return;
-
-		console.log("topScorer in");
 
 		// Get the topScorer id to save in DB as topScorer bet
 		const playerId = topScorersList.find((player) => player.name === userTopScorerChoice)._id;
@@ -449,7 +447,7 @@ const MyBets = () => {
 	// Create data for top scorer save button
 	const { style: topScorerSaveStyle, actionText: topScorerSaveText } = saveButtonStyle(
 		saveStatus["topScorer"] || "שמור"
-	);
+	);	
 
 	return (
 		<>
@@ -531,7 +529,7 @@ const MyBets = () => {
 
 					{/* If no matches open to bet, render a message */}
 					{notStartedMatches.length === 0 && (
-						<div className="text-white text-xl mt-4">אין משחקים פתוחים להימור</div>
+						<div className="text-red-400 text-xl mt-4">אין משחקים פתוחים להימור</div>
 					)}
 
 					{openModal && (

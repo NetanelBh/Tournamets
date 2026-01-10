@@ -23,7 +23,7 @@ const Table = () => {
 
 	const tournamentId = localStorage.getItem("tournamentId");
 	const groupId = localStorage.getItem("groupId");
-	
+
 	// Fetch all users top scorer and winner team bets(only once)
 	useEffect(() => {
 		const fetchData = async () => {
@@ -63,10 +63,15 @@ const Table = () => {
 		usersBets: useSelector((state) => state.bets),
 		// Get the current group points rules(calculate the points for the each user in the table and exact/directions bets)
 		groupPointsRules: useSelector((state) => state.user.user.groups.find((g) => g._id === groupId)).points,
-		// Get the current tournament to get the top scorer bonus and the winner team bonus
+		// Get the current tournament to get the top scorer bonus
 		tournamentTopScorerId: useSelector(
 			(state) => state.tournaments.tournaments.find((t) => t._id === tournamentId).topScorer
 		),
+		// Get the current tournament to get the winner team bonus
+		tournamentWinnerTeam: useSelector(
+			(state) => state.tournaments.tournaments.find((t) => t._id === tournamentId).winnerTeam
+		),
+		
 		usersTopScorers: usersTopScorer,
 		usersWinnerTeams: usersWinnerTeam,
 	};
@@ -92,7 +97,9 @@ const Table = () => {
 				<div className="flex flex-col items-center">
 					<BetsLayout />
 
-					{tournamentKickoffTime < currentTime && <p className="text-yellow-200 text-xl mb-6 font-bold">{` הסכום בקופה: ₪${totalMoney}`}</p>}
+					{tournamentKickoffTime < currentTime && (
+						<p className="text-red-500 text-xl mb-6 font-bold">{` הסכום בקופה: ₪${totalMoney}`}</p>
+					)}
 
 					{!openModal && (
 						<div className="flex justify-center w-full sm:px-4">
@@ -100,7 +107,7 @@ const Table = () => {
 								<table className="w-fit text-sm text-left rtl:text-right">
 									<TableHeader
 										data={tableHeaders}
-										theadClass="bg-gray-900/90 text-white text-xs font-bold border-b border-gray-200 w-fit"
+										theadClass="text-center bg-gray-900/90 text-white text-xs font-bold border-b border-gray-200 w-fit"
 									/>
 
 									<tbody className="divide-y divide-gray-200">
@@ -110,7 +117,8 @@ const Table = () => {
 												data={{ user, i: index }}
 												trClass="bg-white hover:bg-gray-200 text-xs"
 												thClass="px-6 py-4 whitespace-nowrap"
-												tdClass="px-6 py-4 w-fit whitespace-nowrap"
+												tdClass="px-6 text-center py-4 w-fit whitespace-nowrap"
+												type="points"
 											/>
 										))}
 									</tbody>

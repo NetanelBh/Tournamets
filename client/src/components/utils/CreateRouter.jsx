@@ -13,7 +13,7 @@ import AllTournaments from "../pages/tournaments/AllTournaments";
 import CreateTournament from "../pages/tournaments/CreateTournament";
 
 import MyGroups from "../pages/groups/MyGroups";
-import AddMatch from "../pages/groups/AddMatch";
+import AddMatch from "../pages/tournaments/AddMatch";
 import JoinGroup from "../pages/groups/JoinGroup";
 import CreateGroup from "../pages/groups/CreateGroup";
 import GroupsLayout from "../pages/layouts/GroupsLayout";

@@ -14,6 +14,12 @@ const tournamentsSlice = createSlice({
         addTournament(state, action) {
             state.tournaments.push(action.payload);
         },
+        updateTopPlayerOrWinnerTeam(state, action) {
+            // Get the type from the components(WinnerTeamChoice, TopScorerChoice).
+            const { type, data } = action.payload;
+            const relevantTournamet = state.tournaments.find((t) => t._id === data.tournamentId);
+            relevantTournamet[type] = data.data;
+        },
     },
 });
 

@@ -12,6 +12,7 @@ const PointsExplain = () => {
 	const currentGroup = user.groups.find((g) => g._id === localStorage.getItem("groupId"));
 
 	const pointsRules = groupPointsExplain(currentGroup.points);
+	
 	return (
 		<div className="flex flex-col items-center">
 			<BetsLayout />

@@ -30,7 +30,6 @@ const initSocket = (server) => {
 
 			update: (change, io) => {
 				const updated = change.updateDescription.updatedFields;
-
 				if (updated.kickoffTime) {
 					io.emit("kickoffTimeUpdated", change.fullDocument);
 				} else {
@@ -41,18 +40,19 @@ const initSocket = (server) => {
 	});
 
 	/* ================================
-     Watch: winnerTeamPredictions
+     Watch: Tournaments collection - for the winner topScorer and winner team in the tournament
      ================================ */
 	watchCollections({
 		io,
-		collectionName: "winnerteampredictions",
+		collectionName: "tournaments",
 		events: {
-			insert: (change, io) => {
-				io.emit("winnerTeamUpdated", change.fullDocument);
-			},
-
 			update: (change, io) => {
-				io.emit("winnerTeamUpdated", change.fullDocument);
+				const updated = change.updateDescription.updatedFields;				
+				if (updated.topScorer) {
+					io.emit("topScorerUpdated", {tournamentId: change.documentKey._id, data: updated.topScorer});
+				} else {
+					io.emit("winnerTeamUpdated", {tournamentId: change.documentKey._id, data: updated.winnerTeam});
+				}
 			},
 		},
 	});

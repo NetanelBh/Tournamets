@@ -2,7 +2,7 @@ import { io } from "socket.io-client";
 // Import store because is regular js function and we can't use useDiapatch hook
 import { store } from "../../store/store";
 import { matchesActions } from "../../store/slices/matchesSlice";
-import { betsActions } from "../../store/slices/betSlice";
+import { tournamentsActions } from "../../store/slices/tournamentsSlice";
 
 const SOCKET_URL = import.meta.env.VITE_SERVER_URI;
 let socket;
@@ -27,16 +27,16 @@ const initSocketListener = () => {
 		store.dispatch(matchesActions.updateFinalResult(updatedMatch));
 	});
 
-	socket.on("winnerTeamUpdated", (updatedTeam) => {
-		store.dispatch(betsActions.updateWinnerOrTopScorer({ type: "dbWinnerTeam", data: updatedTeam.winnerTeam }));
+	socket.on("winnerTeamUpdated", (data) => {
+		store.dispatch(tournamentsActions.updateTopPlayerOrWinnerTeam({ type: "winnerTeam", data }));
+	});
+
+	socket.on("topScorerUpdated", (data) => {
+		store.dispatch(tournamentsActions.updateTopPlayerOrWinnerTeam({ type: "topScorer", data }));
 	});
 
 	socket.on("disconnect", () => {
 		console.log("Socket disconnected");
-	});
-
-	socket.on("matchDeleted", (matchId) => {
-		store.dispatch(matchesActions.deleteMatch(matchId));
 	});
 };
 

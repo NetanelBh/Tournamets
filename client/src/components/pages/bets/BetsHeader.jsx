@@ -55,7 +55,7 @@ const BetsHeader = () => {
 				<div className="flex gap-2 mt-4">
 					{/* Determine if need to display the group code - for group owner only */}
 					<button
-						className="bg-gray-500 text-yellow-300 px-4 py-2 rounded-full hover:cursor-pointer active:cursor-pointer"
+						className="bg-gray-600/50 text-yellow-300 px-4 py-2 rounded-full hover:cursor-pointer active:cursor-pointer active:cursor-pointer active:scale-95 active:shadow-none border border-red-400 shadow-sm shadow-gray-200"
 						onClick={codeDisplay}
 					>
 						{isCodeDisplay ? currentGroup.code : "שתף את קוד הקבוצה"}
@@ -71,7 +71,7 @@ const BetsHeader = () => {
 				<div className="flex gap-2 mt-4">
 					{/* Determine if need to display the group code - for group owner only */}
 					<button
-						className="bg-gray-500 text-yellow-300 px-4 py-2 rounded-full hover:cursor-pointer active:cursor-pointer"
+						className="bg-gray-600/50 text-yellow-300 px-4 py-2 rounded-full hover:cursor-pointer active:cursor-pointer active:scale-95 active:shadow-none border border-red-400 shadow-sm shadow-gray-200"
 						onClick={pointsExplainHandler}
 					>
 						{pathname.includes("bets-table") ? "הסבר שוברי שויון" : "הסבר חישוב הנקודות"}

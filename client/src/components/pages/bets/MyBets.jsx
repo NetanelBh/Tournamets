@@ -299,8 +299,8 @@ const MyBets = () => {
 		if (saveStatus["winnerTeam"] === "שומר") return;
 
 		// In the first app load, userWinnerTeam is undefined. This case prevent save click onLoad without change team
-		if(!userWinnerTeamChoice && bets.dbWinnerTeam) return;
-		
+		if (!userWinnerTeamChoice && bets.dbWinnerTeam) return;
+
 		// If the user saved the same team, don't send any request to server
 		if (userWinnerTeamChoice === bets.dbWinnerTeam) return;
 
@@ -348,8 +348,8 @@ const MyBets = () => {
 		if (saveStatus["topScorer"] === "שומר") return;
 
 		// In the first app load, userWinnerTeam is undefined. This case prevent save click onLoad without change team
-		if(!userTopScorerChoice && bets.dbTopScorer) return;
-		
+		if (!userTopScorerChoice && bets.dbTopScorer) return;
+
 		// If the user saved the same topScorer, don't send any request to server
 		if (userTopScorerChoice === bets.dbTopScorer) return;
 
@@ -447,7 +447,7 @@ const MyBets = () => {
 	// Create data for top scorer save button
 	const { style: topScorerSaveStyle, actionText: topScorerSaveText } = saveButtonStyle(
 		saveStatus["topScorer"] || "שמור"
-	);	
+	);
 
 	return (
 		<>
@@ -458,13 +458,23 @@ const MyBets = () => {
 					{!openModal && (
 						<div className="flex flex-col mb-6">
 							<div className="flex gap-8">
-								<div className="flex flex-col gap-2 p-4 border border-yellow-100 w-40 sm:w-45 md:w-55">
+								<div className="flex flex-col gap-2 p-4 border border-yellow-100 w-45 sm:w-50 md:w-60">
 									<h3 className="text-md text-yellow-100 text-center">האלופה :</h3>
 									{/* Show the dropdown option only if the tournament didn't start */}
 									{!istournamentStarted && (
-										<div className="w-33 sm:w-40 md:w-50">
-											<Dropdown data={winnerTeamData} />
-										</div>
+										<>
+											{/* Show the dropdown only when the tournament didn't start */}
+											<div className="w-33 sm:w-40 md:w-50">
+												<Dropdown data={winnerTeamData} />
+											</div>
+
+											<SaveButton
+												status={saveStatus["winnerTeam"] || "שמור"}
+												buttonText={winnerTeamSaveText}
+												className={winnerTeamSaveStyle}
+												onClick={saveWinnerTeamBetHandler}
+											/>
+										</>
 									)}
 
 									{/* Show the winner team when the tournament started */}
@@ -473,25 +483,26 @@ const MyBets = () => {
 											{bets.dbWinnerTeam ? bets.dbWinnerTeam : "-"}
 										</h3>
 									)}
-
-									{!istournamentStarted && (
-										<SaveButton
-											status={saveStatus["winnerTeam"] || "שמור"}
-											buttonText={winnerTeamSaveText}
-											className={winnerTeamSaveStyle}
-											onClick={saveWinnerTeamBetHandler}
-										/>
-									)}
 								</div>
 
 								{/* Show the topScorer dropdown only if the tournament defined to be with top scorer bet */}
 								{currentTourmanent.topScorerBet && (
-									<div className="flex flex-col gap-2 p-4 border border-yellow-100 w-40 sm:w-45 md:w-55">
+									<div className="flex flex-col gap-2 p-4 border border-yellow-100 w-45 sm:w-50 md:w-60">
 										<h3 className="text-md text-yellow-100 text-center">מלך השערים :</h3>
 										{!istournamentStarted && (
-											<div className="w-33 sm:w-40 md:w-50">
-												<Dropdown data={playersData} />
-											</div>
+											<>
+												{/* Show the dropdown only when the tournament didn't start */}
+												<div className="w-33 sm:w-40 md:w-50">
+													<Dropdown data={playersData} />
+												</div>
+
+												<SaveButton
+													status={saveStatus["topScorer"] || "שמור"}
+													buttonText={topScorerSaveText}
+													className={topScorerSaveStyle}
+													onClick={saveTopScorerBetHandler}
+												/>
+											</>
 										)}
 
 										{/* Show the winner team when the tournament started */}
@@ -499,15 +510,6 @@ const MyBets = () => {
 											<h3 className="p-2 text-sm text-black-400 text-center bg-yellow-100 font-bold rounded-lg">
 												{bets.dbTopScorer ? bets.dbTopScorer : "-"}
 											</h3>
-										)}
-
-										{!istournamentStarted && (
-											<SaveButton
-												status={saveStatus["topScorer"] || "שמור"}
-												buttonText={topScorerSaveText}
-												className={topScorerSaveStyle}
-												onClick={saveTopScorerBetHandler}
-											/>
 										)}
 									</div>
 								)}

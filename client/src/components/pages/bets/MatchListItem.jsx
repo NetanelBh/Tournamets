@@ -1,5 +1,3 @@
-import styles from "./MatchListItem.module.css";
-
 import { useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
@@ -218,8 +216,8 @@ const MatchListItem = ({ match, onClick, buttonStatus, actionText, user }) => {
 					<button className="hover:cursor-pointer active:cursor-pointer" onClick={friendsBetsHandler}>
 						הימורי החברים{" "}
 						<span className="mr-2">
-							<span className={styles.blink_1}>{">"}</span>
-							<span className={styles.blink_2}>{">"}</span>
+							<span className="blink_1">{">"}</span>
+							<span className="blink_2">{">"}</span>
 						</span>
 					</button>
 				</div>

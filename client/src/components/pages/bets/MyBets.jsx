@@ -479,9 +479,24 @@ const MyBets = () => {
 
 									{/* Show the winner team when the tournament started */}
 									{istournamentStarted && (
-										<h3 className="p-2 text-sm text-black-400 text-center bg-yellow-100 font-bold rounded-lg">
-											{bets.dbWinnerTeam ? bets.dbWinnerTeam : "-"}
-										</h3>
+										<>
+											<h3 className="p-2 text-sm text-black-400 text-center bg-yellow-100 font-bold rounded-lg">
+												{bets.dbWinnerTeam ? bets.dbWinnerTeam : "-"}
+											</h3>
+
+											<div className="w-full bg-teal-700 text-yellow-300 text-sm flex justify-center mt-4 border border-white border-1 hover:cursor-pointer hover:scale-95 active:cursor-pointer active:scale-95 rounded-2xl">
+													<button
+														className="hover:cursor-pointer active:cursor-pointer"
+														onClick={() => friendsBetsHandler("winnerTeam")}
+													>
+														הימורי החברים{" "}
+														<span className="mr-2">
+															<span className="blink_1">{">"}</span>
+															<span className="blink_2">{">"}</span>
+														</span>
+													</button>
+												</div>
+										</>
 									)}
 								</div>
 
@@ -507,9 +522,24 @@ const MyBets = () => {
 
 										{/* Show the winner team when the tournament started */}
 										{istournamentStarted && (
-											<h3 className="p-2 text-sm text-black-400 text-center bg-yellow-100 font-bold rounded-lg">
-												{bets.dbTopScorer ? bets.dbTopScorer : "-"}
-											</h3>
+											<>
+												<h3 className="p-2 text-sm text-black-400 text-center bg-yellow-100 font-bold rounded-lg">
+													{bets.dbTopScorer ? bets.dbTopScorer : "-"}
+												</h3>
+
+												<div className="w-full bg-teal-700 text-yellow-300 text-sm flex justify-center mt-4 border border-white border-1 hover:cursor-pointer hover:scale-95 active:cursor-pointer active:scale-95 rounded-2xl">
+													<button
+														className="hover:cursor-pointer active:cursor-pointer"
+														onClick={() => friendsBetsHandler("topScorer")}
+													>
+														הימורי החברים{" "}
+														<span className="mr-2">
+															<span className="blink_1">{">"}</span>
+															<span className="blink_2">{">"}</span>
+														</span>
+													</button>
+												</div>
+											</>
 										)}
 									</div>
 								)}

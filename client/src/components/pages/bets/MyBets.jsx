@@ -458,7 +458,7 @@ const MyBets = () => {
 					{!openModal && (
 						<div className="flex flex-col mb-6">
 							<div className="flex gap-8">
-								<div className="flex flex-col gap-2 p-4 border border-yellow-100">
+								<div className="flex flex-col gap-2 p-4 border border-yellow-100 w-40 sm:w-45 md:w-55">
 									<h3 className="text-md text-yellow-100 text-center">האלופה :</h3>
 									{/* Show the dropdown option only if the tournament didn't start */}
 									{!istournamentStarted && (
@@ -486,7 +486,7 @@ const MyBets = () => {
 
 								{/* Show the topScorer dropdown only if the tournament defined to be with top scorer bet */}
 								{currentTourmanent.topScorerBet && (
-									<div className="flex flex-col gap-2 p-4 border border-yellow-100">
+									<div className="flex flex-col gap-2 p-4 border border-yellow-100 w-40 sm:w-45 md:w-55">
 										<h3 className="text-md text-yellow-100 text-center">מלך השערים :</h3>
 										{!istournamentStarted && (
 											<div className="w-33 sm:w-40 md:w-50">

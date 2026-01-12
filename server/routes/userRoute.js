@@ -2,23 +2,23 @@ import express from "express";
 
 import * as userServices from "../services/userServices.js";
 import { leaveGroup } from "../services/groupServices.js";
-import {getTournamentById} from "../services/tournamentServices.js";
-import {removeWinnerTeamPrediction} from "../services/winnerTeamPredictServices.js";
-import {removeTopScorerPrediction} from "../services/topScorerPredictServices.js";
+import { getTournamentById } from "../services/tournamentServices.js";
+import { removeWinnerTeamPrediction } from "../services/winnerTeamPredictServices.js";
+import { removeTopScorerPrediction } from "../services/topScorerPredictServices.js";
 
 const router = express.Router();
 
 // Entry point: localhost:3000/user
 
 router.post("/allUsers", async (req, res) => {
-	const {tournamentId, groupId} = req.body;
+	const { tournamentId, groupId } = req.body;
 	try {
-		const users = await userServices.getAllUsers(tournamentId, groupId).select("-password");	
+		const users = await userServices.getAllUsers(tournamentId, groupId).select("-password");
 		res.send({ status: true, data: users });
 	} catch (error) {
 		res.send({ status: false, data: "אירעה בעיה בקבלת המשתמשים, אנא נסה שנית" });
 	}
-})
+});
 // Get the user's list of tournaments he is in
 router.get("/myTournaments", async (req, res) => {
 	try {
@@ -35,12 +35,12 @@ router.get("/myTournaments", async (req, res) => {
 router.delete("/leaveTournament/:id", async (req, res) => {
 	try {
 		const tournamentId = req.params.id;
-		const updatedUser = await userServices.leaveTournament(req.user.id, tournamentId);		
+		const updatedUser = await userServices.leaveTournament(req.user.id, tournamentId);
 		if (!updatedUser) {
 			res.send({ status: false, data: "אירעה שגיאה במהלך יציאה מהטורניר, אנא נסה שנית" });
 			return;
 		}
-		
+
 		res.send({ status: true, data: "המשתמש יצא מהטורניר בהצלחה" });
 	} catch (error) {
 		res.send({ status: false, data: "אירעה שגיאה במהלך יציאה מהטורניר, אנא נסה שנית" });
@@ -60,15 +60,15 @@ router.get("/myGroups", async (req, res) => {
 
 router.post("/leaveGroup", async (req, res) => {
 	try {
-		const {tournamentId, groupId} = req.body;
-		
+		const { tournamentId, groupId } = req.body;
+
 		// Remove the user from the group's members list
-		const updatedGroup = await leaveGroup(req.user.id, groupId);		
+		const updatedGroup = await leaveGroup(req.user.id, groupId);
 		if (!updatedGroup) {
 			res.send({ status: false, data: "המשתמש לא הוסר מהקבוצה, אנא נסה שנית" });
 			return;
 		}
-		
+
 		// Remove the group from the user's groups list
 		const updatedUser = await userServices.leaveGroup(req.user.id, groupId);
 		if (!updatedUser) {
@@ -84,13 +84,28 @@ router.post("/leaveGroup", async (req, res) => {
 
 		// remove the top scorer bet if allowed in the tournament
 		const tournament = await getTournamentById(tournamentId);
-		if(tournament.topScorerBet) {
+		if (tournament.topScorerBet) {
 			await removeTopScorerPrediction(req.user.id, tournamentId, groupId);
 		}
 
 		res.send({ status: true, data: "המשתמש יצא מהקבוצה בהצלחה" });
 	} catch (error) {
 		res.send({ status: false, data: "אירעה שגיאה במהלך יציאה מהקבוצה, אנא נסה שנית" });
+	}
+});
+
+router.post("/topScorerWinnerTeamBets", async (req, res) => {
+	const { groupId, tournamentId } = req.body;
+	try {
+		const resp = await userServices.getGroupPredictions(groupId, tournamentId);
+		if(!resp) {
+			res.send({ status: false, data: "אירעה שגיאה בקבלת הימורי המשתמש" });
+			return;
+		}
+
+		res.send({ status: true, data: resp });
+	} catch (error) {
+		res.send({status: false, data: error.message})
 	}
 });
 

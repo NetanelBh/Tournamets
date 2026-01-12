@@ -1,9 +1,9 @@
 import * as userRepo from "../repos/userRepo.js";
-import {getGroupsByFilter, removeUserFromSelectedGroups} from "../repos/groupRepo.js";
-import {removeBets, removeUserTournamentBets} from "../repos/betRepo.js";
-import {getTournamentById} from "../services/tournamentServices.js";
-import {removeUserWinnerTeamPredictionByTournament} from "../services/winnerTeamPredictServices.js";
-import {removeTopScorerPredictionByTournament} from "../services/topScorerPredictServices.js";
+import { getGroupsByFilter, removeUserFromSelectedGroups } from "../repos/groupRepo.js";
+import { removeBets, removeUserTournamentBets } from "../repos/betRepo.js";
+import { getTournamentById } from "../services/tournamentServices.js";
+import { removeUserWinnerTeamPredictionByTournament } from "../services/winnerTeamPredictServices.js";
+import { removeTopScorerPredictionByTournament } from "../services/topScorerPredictServices.js";
 import bcrypt from "bcrypt";
 
 export const getAllUsers = (tournamentId, groupId) => userRepo.getAllUsers(tournamentId, groupId);
@@ -27,15 +27,15 @@ export const addTournamentToUser = (username, tournamentId) => userRepo.addTourn
 
 export const leaveTournament = async (userId, tournamentId) => {
 	// When leave the tournament we want to remove from the user also the groups that belongs to the tournament
-	
+
 	// Get the user
 	const user = await getUserbyId(userId);
 	// Get all the tournament groups
-	const allGroups = await getGroupsByFilter({tournament: tournamentId});
-	
+	const allGroups = await getGroupsByFilter({ tournament: tournamentId });
+
 	// Filter only the groups that the user joined
-	const filteredGroups = user.groups.filter(group => allGroups.some(g => g._id.toString() === group.toString()));
-	
+	const filteredGroups = user.groups.filter((group) => allGroups.some((g) => g._id.toString() === group.toString()));
+
 	// Remove the groups from the user
 	await userRepo.removeGroupsFromUser(userId, filteredGroups);
 
@@ -50,11 +50,11 @@ export const leaveTournament = async (userId, tournamentId) => {
 
 	// remove the top scorer bet if allowed in the tournament
 	const tournament = await getTournamentById(tournamentId);
-	if(tournament.topScorerBet) {
+	if (tournament.topScorerBet) {
 		await removeTopScorerPredictionByTournament(userId, tournamentId);
 	}
-	
-	return userRepo.leaveTournament(userId, tournamentId)
+
+	return userRepo.leaveTournament(userId, tournamentId);
 };
 
 export const addGroupToUser = (userId, groupId) => userRepo.addUserToGroup(userId, groupId);
@@ -62,3 +62,10 @@ export const addGroupToUser = (userId, groupId) => userRepo.addUserToGroup(userI
 export const leaveGroup = (userId, groupId) => userRepo.leaveGroup(userId, groupId);
 
 export const removeUserBets = (userId, tournamentId, groupId) => removeBets(userId, tournamentId, groupId);
+
+export const getGroupPredictions = async (groupId, tournamentId) => {
+	return userRepo.getGroupPredictions({
+		groupId,
+		tournamentId,
+	});
+};

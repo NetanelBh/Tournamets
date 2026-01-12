@@ -1,4 +1,5 @@
 import Users from "../models/user.js";
+import mongoose from "mongoose";
 
 export const getAllUsers = (tournamentId, groupId) => Users.find({ tournaments: tournamentId, groups: groupId });
 
@@ -33,9 +34,102 @@ export const leaveGroup = (userId, groupId) => {
 	return Users.findByIdAndUpdate(userId, { $pull: { groups: groupId } }, { new: true });
 };
 
-export const removeGroupFromUnpaidUsers = (groupId, usersIds) => Users.updateMany({_id: { $in: usersIds }}, { $pull: { groups: groupId } });
+export const removeGroupFromUnpaidUsers = (groupId, usersIds) =>
+	Users.updateMany({ _id: { $in: usersIds } }, { $pull: { groups: groupId } });
 
 // When user leave some tournament, we want to remove also the groups that the user joined for this tournament
 export const removeGroupsFromUser = (userId, groupsIds) => {
 	return Users.updateOne({ _id: userId }, { $pull: { groups: { $in: groupsIds } } });
+};
+
+// Get all group users predictions for topScorer and winnerTeam(after the tournament is started)
+export const getGroupPredictions = async ({ groupId, tournamentId }) => {
+	tournamentId = new mongoose.Types.ObjectId(tournamentId);
+	groupId = new mongoose.Types.ObjectId(groupId);
+
+	return Users.aggregate([
+		// 1️⃣ Users in group
+		{
+			$match: {
+				groups: groupId,
+			},
+		},
+
+		// 2️⃣ Top scorer prediction
+		{
+			$lookup: {
+				from: "topscorerpredictions",
+				let: { userId: "$_id" },
+				pipeline: [
+					{
+						$match: {
+							$expr: {
+								$and: [
+									{ $eq: ["$user", "$$userId"] },
+									{ $eq: ["$group", groupId] },
+									{ $eq: ["$tournament", tournamentId] },
+								],
+							},
+						},
+					},
+				],
+				as: "topScorerPrediction",
+			},
+		},
+
+		// 3️⃣ Extract topScorer ObjectId
+		{
+			$addFields: {
+				topScorerId: {
+					$arrayElemAt: ["$topScorerPrediction.topScorer", 0],
+				},
+			},
+		},
+
+		// 4️⃣ Join players collection
+		{
+			$lookup: {
+				from: "players",
+				localField: "topScorerId",
+				foreignField: "_id",
+				as: "topScorerPlayer",
+			},
+		},
+
+		// 5️⃣ Winner team prediction
+		{
+			$lookup: {
+				from: "winnerteampredictions",
+				let: { userId: "$_id" },
+				pipeline: [
+					{
+						$match: {
+							$expr: {
+								$and: [
+									{ $eq: ["$user", "$$userId"] },
+									{ $eq: ["$group", groupId] },
+									{ $eq: ["$tournament", tournamentId] },
+								],
+							},
+						},
+					},
+				],
+				as: "winnerTeamPrediction",
+			},
+		},
+
+		// 6️⃣ Final output
+		{
+			$project: {
+				_id: 0,
+				username: 1,
+				topScorer: {
+					$ifNull: [{ $arrayElemAt: ["$topScorerPlayer.name", 0] }, "—"],
+				},
+				winnerTeam: {
+					$ifNull: [{ $arrayElemAt: ["$winnerTeamPrediction.winnerTeam", 0] }, "—"],
+				},
+			},
+		},
+	]);
 };

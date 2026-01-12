@@ -1,10 +1,15 @@
-const Table = ({ data }) => {
+const Table = ({ data, type=undefined }) => {
 	// data prop is an object {headers: [], rows: [], colors: [] - according to the user bet direction/exact/fail}
-	const colorsMap = {
-		green: "text-green-600",
-		blue: "text-blue-600",
-		red: "text-red-600",
-	};
+
+	let colorsMap;
+	// Type is defined only when we want to display the users match bets. For the rest components, is undefined
+	if (type) {
+		colorsMap = {
+			green: "text-green-600",
+			blue: "text-blue-600",
+			red: "text-red-600",
+		};
+	}
 
 	return (
 		<div className="relative overflow-x-auto shadow-md rounded-lg mb-4">
@@ -24,7 +29,7 @@ const Table = ({ data }) => {
 							<tr
 								key={i}
 								className={`${
-									colorsMap[data.colors[i]]
+									colorsMap ? colorsMap[data.colors[i]] : ""
 								} font-bold bg-[#F9F8F6] hover:bg-[#EFE9E3] border-b border-blue-400 fade_up`}
 							>
 								{row.map((cell, i) => (

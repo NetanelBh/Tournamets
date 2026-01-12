@@ -8,6 +8,8 @@ const initialState = {
 	userDbScore: [],
 	// store all users bets for the specific tournament
 	allUsersBets: {},
+	// store the users topScorer bets when the tournament is started
+	allUsersTopScorersAndWinnerTeams: [],
 };
 
 const betSlice = createSlice({
@@ -41,7 +43,6 @@ const betSlice = createSlice({
 			});
 		},
 		updateWinnerOrTopScorer(state, action) {
-			// Get the type from the components(WinnerTeamChoice, TopScorerChoice).
 			const { type, data } = action.payload;
 			state[type] = data;
 		},

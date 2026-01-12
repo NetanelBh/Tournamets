@@ -34,6 +34,7 @@ const MyBets = () => {
 
 	// Detect if the tournament is started(to run useEffect only once again to get the users after remove unpaid users)
 	const istournamentStartedRef = useRef(false);
+	const istopScorerAndWinnerTeamFetchedRef = useRef(false);
 
 	// Ref list for the matches <input> when I want to create a request to send the bets
 	const refs = useRef([]);
@@ -83,14 +84,14 @@ const MyBets = () => {
 
 	useEffect(() => {
 		const fetchUsers = async () => {
-			// Add 5s to let the server remove the relevant unpaid users before fetch
+			// Reduce 5s to let the server remove the relevant unpaid users before fetch
 			const cur = new Date(updatedClock);
 			const delayTime = new Date(cur.getTime() - 1000 * 5);
 
 			const kickoffTime = new Date(currentTourmanent.startTime);
 			const isStarted = kickoffTime < delayTime;
 
-			// Only if the tournament is started and the ref is false, is the first time that detected the tournament is started
+			// The first time that the tournament is started, fetch the users(after the unpaid users are removed)
 			if (isStarted && !istournamentStartedRef.current) {
 				istournamentStartedRef.current = true;
 
@@ -107,6 +108,29 @@ const MyBets = () => {
 				} catch (error) {
 					setOpenModal(true);
 					setModalText("אירעה שגיאה בעת טעינת רשימת המשתמשים, אנא נסה שנית");
+				} finally {
+					setIsLoading(false);
+				}
+			}
+
+			// // The first time that the tournament is started, fetch all users topScorer and winnerTeam bets (only once)
+			if (isStarted && !istopScorerAndWinnerTeamFetchedRef.current) {
+				istopScorerAndWinnerTeamFetchedRef.current = true;
+
+				setIsLoading(true);
+				try {
+					// All users top scorers and winner teams
+					const allUsersBets = await API.post("/user/topScorerWinnerTeamBets", { tournamentId, groupId });
+					if (!allUsersBets.data.status) {
+						setOpenModal(true);
+						setModalText(data.data);
+						return;
+					}
+
+					dispatch(betsActions.updateWinnerOrTopScorer({ type: "allUsersTopScorersAndWinnerTeams", data: allUsersBets.data.data }));
+				} catch (error) {
+					setOpenModal(true);
+					setModalText(error.message);
 				} finally {
 					setIsLoading(false);
 				}
@@ -449,6 +473,10 @@ const MyBets = () => {
 		saveStatus["topScorer"] || "שמור"
 	);
 
+	const friendsBetsHandler = (type) => {
+		// TODO: CREATE A ROUTE TO THE ALL USERS TOP AND WINNER TEAMS BETS PAGE(CREATE ONLY 1 PAGE FOR THEM BOTH- JUST SEND OTHER INFORMATION)
+	};
+
 	return (
 		<>
 			{!isLoading && (
@@ -484,18 +512,18 @@ const MyBets = () => {
 												{bets.dbWinnerTeam ? bets.dbWinnerTeam : "-"}
 											</h3>
 
-											<div className="w-full bg-teal-700 text-yellow-300 text-sm flex justify-center mt-4 border border-white border-1 hover:cursor-pointer hover:scale-95 active:cursor-pointer active:scale-95 rounded-2xl">
-													<button
-														className="hover:cursor-pointer active:cursor-pointer"
-														onClick={() => friendsBetsHandler("winnerTeam")}
-													>
-														הימורי החברים{" "}
-														<span className="mr-2">
-															<span className="blink_1">{">"}</span>
-															<span className="blink_2">{">"}</span>
-														</span>
-													</button>
-												</div>
+											<div className="p-0.5 w-full bg-teal-700 text-yellow-300 text-sm flex justify-center mt-3 border border-white border-1 hover:cursor-pointer hover:scale-95 active:cursor-pointer active:scale-95 rounded-2xl">
+												<button
+													className="hover:cursor-pointer active:cursor-pointer"
+													onClick={() => friendsBetsHandler("winnerTeam")}
+												>
+													הימורי החברים{" "}
+													<span className="mr-1">
+														<span className="blink_1">{">"}</span>
+														<span className="blink_2">{">"}</span>
+													</span>
+												</button>
+											</div>
 										</>
 									)}
 								</div>
@@ -527,13 +555,13 @@ const MyBets = () => {
 													{bets.dbTopScorer ? bets.dbTopScorer : "-"}
 												</h3>
 
-												<div className="w-full bg-teal-700 text-yellow-300 text-sm flex justify-center mt-4 border border-white border-1 hover:cursor-pointer hover:scale-95 active:cursor-pointer active:scale-95 rounded-2xl">
+												<div className="p-0.5 w-full bg-teal-700 text-yellow-300 text-sm font-semi-bold flex justify-center mt-3 border border-white border-1 hover:cursor-pointer hover:scale-95 active:cursor-pointer active:scale-95 rounded-2xl">
 													<button
 														className="hover:cursor-pointer active:cursor-pointer"
 														onClick={() => friendsBetsHandler("topScorer")}
 													>
 														הימורי החברים{" "}
-														<span className="mr-2">
+														<span className="mr-1">
 															<span className="blink_1">{">"}</span>
 															<span className="blink_2">{">"}</span>
 														</span>

@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { useEffect, useState, useRef, createRef } from "react";
 
@@ -17,7 +18,10 @@ import { playersActions } from "../../store/slices/playersSlice";
 const MyBets = () => {
 	// Clear the stored matchId(if stored)
 	localStorage.removeItem("matchId");
+
+	const navigate = useNavigate();
 	const dispatch = useDispatch();
+
 	const [modalText, setModalText] = useState("");
 	const [openModal, setOpenModal] = useState(false);
 
@@ -113,7 +117,7 @@ const MyBets = () => {
 				}
 			}
 
-			// // The first time that the tournament is started, fetch all users topScorer and winnerTeam bets (only once)
+			// The first time that the tournament is started, fetch all users topScorer and winnerTeam bets (only once)
 			if (isStarted && !istopScorerAndWinnerTeamFetchedRef.current) {
 				istopScorerAndWinnerTeamFetchedRef.current = true;
 
@@ -127,7 +131,31 @@ const MyBets = () => {
 						return;
 					}
 
-					dispatch(betsActions.updateWinnerOrTopScorer({ type: "allUsersTopScorersAndWinnerTeams", data: allUsersBets.data.data }));
+					// Get all users winnerTeam bets
+					const allUsersWinnerTeamBets = allUsersBets.data.data.map((user) => {
+						return {
+							username: user.username,
+							winnerTeam: user.winnerTeam,
+						};
+					});
+
+					// Get all users topScorer bets
+					const allUsersTopScorerBets = allUsersBets.data.data.map((user) => {
+						return {
+							username: user.username,
+							topScorer: user.topScorer,
+						};
+					});
+
+					dispatch(
+						betsActions.updateWinnerOrTopScorer({ type: "allUsersTopScorers", data: allUsersTopScorerBets })
+					);
+					dispatch(
+						betsActions.updateWinnerOrTopScorer({
+							type: "allUsersWinnerTeams",
+							data: allUsersWinnerTeamBets,
+						})
+					);
 				} catch (error) {
 					setOpenModal(true);
 					setModalText(error.message);
@@ -474,7 +502,10 @@ const MyBets = () => {
 	);
 
 	const friendsBetsHandler = (type) => {
-		// TODO: CREATE A ROUTE TO THE ALL USERS TOP AND WINNER TEAMS BETS PAGE(CREATE ONLY 1 PAGE FOR THEM BOTH- JUST SEND OTHER INFORMATION)
+		// type is topScorer / winnerTeam
+		localStorage.setItem("showType", type);
+
+		navigate("/layout/all-users-winnerteam-and-topscorer");
 	};
 
 	return (

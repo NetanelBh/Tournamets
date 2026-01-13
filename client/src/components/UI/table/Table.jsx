@@ -1,9 +1,9 @@
-const Table = ({ data, type=undefined }) => {
+const Table = ({ data, isAllUsersMatches=false }) => {
 	// data prop is an object {headers: [], rows: [], colors: [] - according to the user bet direction/exact/fail}
 
 	let colorsMap;
-	// Type is defined only when we want to display the users match bets. For the rest components, is undefined
-	if (type) {
+	// True only when we want to display the users match bets. For the rest components, is false
+	if (isAllUsersMatches) {
 		colorsMap = {
 			green: "text-green-600",
 			blue: "text-blue-600",

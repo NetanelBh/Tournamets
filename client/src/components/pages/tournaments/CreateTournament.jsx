@@ -105,8 +105,6 @@ const CreateTournament = () => {
 										ref: item.ref,
 										autoComplete: "off",
 										placeholder: item.clue,
-										// TODO: REMOVE IT AFTER TESTS
-										defaultValue: item.defaultValue,
 									};
 
 									return <Input key={item.label} data={data} />;

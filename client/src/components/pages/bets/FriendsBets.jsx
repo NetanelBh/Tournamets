@@ -106,7 +106,7 @@ const FriendsBets = () => {
 			<BetsLayout />
 
 			{matchData}
-			<Table data={allUsersBetsData} type="friendsBets" />
+			<Table data={allUsersBetsData} isAllUsersMatches={true} />
 		</div>
 	);
 };

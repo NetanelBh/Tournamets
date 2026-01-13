@@ -18,12 +18,13 @@ import JoinGroup from "../pages/groups/JoinGroup";
 import CreateGroup from "../pages/groups/CreateGroup";
 import GroupsLayout from "../pages/layouts/GroupsLayout";
 
+import Table from "../pages/bets/Table";
 import MyBets from "../pages/bets/MyBets";
-import ClosedMatches from "../pages/bets/ClosedMatches";
 import FriendsBets from "../pages/bets/FriendsBets";
+import ClosedMatches from "../pages/bets/ClosedMatches";
 import PointsExplain from "../pages/bets/PointsExplain";
 import TableRankExplain from "../pages/bets/TableRankExplain";
-import Table from "../pages/bets/Table";
+import AllFriendsWinnerTeamsAndTopScorers from "../pages/bets/AllFriendsWinnerTeamsAndTopScorers";
 
 const CreateRouter = () => {
 	const router = createBrowserRouter([
@@ -55,6 +56,7 @@ const CreateRouter = () => {
 				{ path: "/layout/closed-bets", element: <ClosedMatches /> },
 				{ path: "/layout/points-explain", element: <PointsExplain /> },
 				{ path: "/layout/table-rank-explain", element: <TableRankExplain /> },
+				{ path: "/layout/all-users-winnerteam-and-topscorer", element: <AllFriendsWinnerTeamsAndTopScorers /> },
 			],
 		},
 	]);

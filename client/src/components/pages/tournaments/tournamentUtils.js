@@ -11,7 +11,7 @@ export const createTournamentData = [
 		label: "תאריך תחילת הטורניר",
 		type: "text",
 		clue: "yyyy-mm-dd",
-		// TODO: REMOVE IT AFTER TESTS
+		// TODO: REMOVE IT AFTER TESTS- ALL THE DEFAULT VALUES HERE
 		defaultValue: "2026-06-11"
 	},
 	{

@@ -32,9 +32,9 @@ router.post("/login", async (req, res) => {
 			return;
 		}
 
-		const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET /*, { expiresIn: "12h" }*/);
-		// Get the full user's group to use it in frontend instead of send request each page browsing
+		const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET , { expiresIn: "10m" });
 
+		// Get the full user's group to use it in frontend instead of send request each page browsing
 		user = await user.populate("groups");
 		const returnedUser = user.toObject();
 		// Delete the password from the object
@@ -47,6 +47,29 @@ router.post("/login", async (req, res) => {
 		res.send({ status: false, data: error.message });
 	}
 });
+
+// Refresh token if the user is active in the website
+router.post("/refresh", (req, res) => {
+	const authHeader = req.headers.authorization;
+	if (!authHeader) return res.sendStatus(401);
+  
+	const token = authHeader.split(" ")[1];
+  
+	try {
+	  const decoded = jwt.verify(token, process.env.JWT_SECRET);
+  
+	  const newToken = jwt.sign(
+		{ id: decoded.id },
+		process.env.JWT_SECRET,
+		{ expiresIn: "10m" }
+	  );
+  
+	  res.send({ status: true, token: newToken });
+	} catch {
+	  res.sendStatus(401);
+	}
+  });
+  
 
 router.post("/register", async (req, res) => {
 	const userData = req.body;

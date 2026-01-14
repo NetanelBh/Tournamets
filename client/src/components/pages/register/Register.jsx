@@ -1,3 +1,5 @@
+import "../../../App.css";
+
 import API from "../../utils/Api";
 import { useRef, useState } from "react";
 
@@ -55,8 +57,8 @@ const Register = () => {
 				{!isLoading && (
 					<>
 						{!openModal && (
-							<div className="max-w-md w-full bg-white/90 rounded-xl shadow-lg p-8">
-								<h2 className="text-2xl font-bold text-gray-900 mb-6 text-center">כניסה</h2>
+							<main className="fade_up max-w-md w-full bg-white/90 rounded-xl shadow-lg p-8 mt-8">
+								<h2 className="text-2xl font-bold text-gray-900 mb-6 text-center">הרשמה</h2>
 
 								<form className="space-y-4" onSubmit={registerHandler}>
 									<>
@@ -143,7 +145,7 @@ const Register = () => {
 										הרשמה
 									</button>
 								</form>
-							</div>
+							</main>
 						)}
 
 						{openModal && <Modal title="הרשמה" text={modalText} onClick={closeModalHandler} />}

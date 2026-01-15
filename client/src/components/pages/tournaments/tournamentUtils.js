@@ -4,36 +4,30 @@ export const createTournamentData = [
 		label: "שם הטורניר",
 		type: "text",
 		clue: "name after /wiki/ (from wikipedia)",
-		defaultValue: "2026_FIFA_World_Cup"
 	},
 	{
 		htmlFor: "startDate",
 		label: "תאריך תחילת הטורניר",
 		type: "text",
 		clue: "yyyy-mm-dd",
-		// TODO: REMOVE IT AFTER TESTS- ALL THE DEFAULT VALUES HERE
-		defaultValue: "2026-06-11"
 	},
 	{
 		htmlFor: "endDate",
 		label: "תאריך סיום הטורניר",
 		type: "text",
 		clue: "yyyy-mm-dd",
-		defaultValue: "2026-07-19"
 	},
 	{
 		htmlFor: "startTime",
 		label: "שעת פתיחת הטורניר",
 		type: "text",
 		clue: "שעון ישראל לדוגמא: 20:00",
-		defaultValue: "22:00"
 	},
 	{
 		htmlFor: "symbol",
 		label: "תמונה",
 		type: "text",
 		clue: "Image URL",
-		defaultValue: "https://upload.wikimedia.org/wikipedia/en/1/17/2026_FIFA_World_Cup_emblem.svg"
 	},
 ];
 

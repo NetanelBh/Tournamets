@@ -1,4 +1,4 @@
-import { zonedTimeToUtc } from 'date-fns-tz'; // lightweight and reliable
+import { zonedTimeToUtc } from 'date-fns-tz';
 
 const israelToUTC = (dateStr, timeStr) => {
   // Combine date and time

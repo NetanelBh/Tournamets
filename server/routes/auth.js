@@ -32,7 +32,7 @@ router.post("/login", async (req, res) => {
 			return;
 		}
 
-		const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
+		const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: "15m" });
 
 		// Get the full user's group to use it in frontend instead of send request each page browsing
 		user = await user.populate("groups");

@@ -15,14 +15,17 @@ const TournamentsListItem = ({ item, index, btnText, onClick, leave = undefined 
 
 	// Check if the user joined the tournament already
 	const isJoined = userTournaments.includes(item._id);
-	
+
 	// Variables text to prevent hardcoded strings
 	const finished = "הסתיים";
 	const cannotJoin = "התחיל, לא ניתן להצטרף";
 	const inMyTournaments = "נמצא בתפריט - הטורנירים שלי";
 	const entrance = "כניסה";
 	const canJoin = "ניתן להצטרף";
-	
+
+	// Get the tournament kickoff time and display it on the screen in the list item
+	const kickoffTime = new Date(item.startTime).toLocaleString().replace(",", " -").slice(0, -3);
+
 	// Compate the dates to determine if the tournament is started
 	let tournamentStatus = item.endDate < updatedTime ? finished : false;
 	if (!tournamentStatus) {
@@ -40,10 +43,14 @@ const TournamentsListItem = ({ item, index, btnText, onClick, leave = undefined 
 			{/* This div is an overlay to the next div to make the item transparent */}
 			<div className="absolute inset-0 bg-teal-600/60 group-hover:bg-cyan-900/10 transition duration-100 z-0"></div>
 			<div className="px-4 py-4 sm:px-4 relative z-10">
+				{/* Show the kickoff time only in AllTournaments page */}
+				<div className="mb-4 text-sm text-center text-yellow-200 font-bold">{kickoffTime}</div>
+
 				<div className="flex items-center justify-between h-16">
 					<img src={item.symbol} alt="tournament symbol" style={{ width: "20%", height: "100%" }} />
-					<p className="mt-1 max-w-2xl text-xl text-white font-medium">{item.name}</p>
+					<p className="max-w-2xl text-xl text-white font-medium">{item.name}</p>
 				</div>
+
 				<div className="mt-4 flex items-center justify-between">
 					{/* Show the status only in AllTournaments page(כפתור כניסה זה רק עבור הטורנירים שלי) */}
 					<p className={btnText !== entrance ? "text-sm text-white" : "invisible"}>
@@ -58,9 +65,7 @@ const TournamentsListItem = ({ item, index, btnText, onClick, leave = undefined 
 							type="button"
 							className={`text-white bg-red-700 hover:scale-95 active:scale-95 font-medium rounded-lg shadow-md shadow-gray-700 hover:shadow-sm hover:shadow-gray-400 text-sm px-5 py-2.5 me-2 mb-2 dark:bg-red-600 dark:hover:scale-95 cursor-pointer ${
 								// Only here make it hidden to give more space for the status line
-								pathname.includes("all-tournaments")
-									? "hidden"
-									: ""
+								pathname.includes("all-tournaments") ? "hidden" : ""
 							}`}
 							onClick={() => {
 								leave(item._id);

@@ -14,7 +14,6 @@ const router = express.Router();
 router.get("/getAll", async (req, res) => {
 	try {
 		const tournaments = await tournamentServices.getAllTournaments();
-
 		res.send({ status: true, data: tournaments });
 	} catch (error) {
 		res.send({ status: false, data: "אירעה בעיה בקבלת המידע, אנא נסה שנית" });
@@ -85,8 +84,6 @@ router.post("/create", async (req, res) => {
 
 		res.send({ status: true, data: tournament });
 	} catch (error) {
-		console.log(error);
-
 		res.send({ status: false, data: "אירעה בעיה ביצירת הטורניר, אנא נסה שנית" });
 	}
 });

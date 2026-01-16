@@ -17,4 +17,24 @@ API.interceptors.request.use((config) => {
 	return config;
 });
 
+API.interceptors.response.use(
+	(res) => res,
+	(error) => {
+		if (error.response?.status === 401) {
+			const code = error.response.data?.code;
+
+			if (
+				code === "SESSION_EXPIRED" ||
+				code === "SESSION_INVALID" ||
+				code === "NO_TOKEN"
+			) {
+				alert("לאחר 20 דקות ללא שימוש, יש לבצע כניסה מחדש");
+				window.location.href = "/";
+			}
+		}
+
+		return Promise.reject(error);
+	}
+);
+
 export default API;

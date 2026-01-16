@@ -46,7 +46,7 @@ const fixturesFetch = async (name) => {
 
 		return newFixtures;
 	} catch (error) {
-		console.log(error);
+		console.log(error.message);
 	}
 };
 

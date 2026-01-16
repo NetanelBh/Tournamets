@@ -1,23 +1,44 @@
 import jwt from "jsonwebtoken";
+import Session from "../models/session.js";
 
-const authentication = (req, res, next) => {    
+// 20 minutes
+const INACTIVITY_LIMIT = 1000 * 60 * 20;
+
+const authentication = async (req, res, next) => {
 	try {
-		if (req.headers.authorization) {
-            const token = req.headers.authorization.split(" ")[1];  
-			const payload = jwt.verify(token, process.env.JWT_SECRET);  
-                      
-            if (!payload) {
-                res.send({ status: false, data: "שגיאת אימות" });
-                return;
-            } 
-            
-            req.user = payload;
-            next();
-		} else {
-            res.send({ status: false, data: "שגיאת אימות" });
+		const authHeader = req.headers.authorization;
+		if (!authHeader) {
+			return res.status(401).json({ code: "NO_TOKEN" });
+		}
+
+		const token = authHeader.split(" ")[1];
+		const payload = jwt.verify(token, process.env.JWT_SECRET);
+        
+		const session = await Session.findById(payload.sessionId);
+		if (!session || session.revoked) {
+			return res.status(401).json({ code: "SESSION_INVALID" });
+		}
+
+		const now = Date.now();
+
+		// ⏰ inactivity check
+		if (now - session.lastActivityAt.getTime() > INACTIVITY_LIMIT) {
+			session.revoked = true;
+			await session.save();
+			return res.status(401).json({ code: "SESSION_EXPIRED" });
         }
+
+		// ✅ update activity when the user still send requests
+		session.lastActivityAt = new Date();
+		await session.save();
+
+		req.user = payload.id;
+		req.sessionId = payload.sessionId;
+
+		next();
 	} catch (error) {
-		res.send({ status: false, data: "פג תוקף החיבור, נא להתחבר מחדש" });
+		return res.status(401).json({ code: "INVALID_TOKEN" });
 	}
 };
+
 export default authentication;

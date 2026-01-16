@@ -1,6 +1,7 @@
-import express from "express";
 import bcrypt from "bcrypt";
+import express from "express";
 import jwt from "jsonwebtoken";
+import Session from "../models/session.js";
 import sendEmail from "../utils/nodemailerConfig.js";
 
 import { getUserbyId, getUserbyUsername, createUser, getUserByEmail, updateUser } from "../services/userServices.js";
@@ -32,7 +33,15 @@ router.post("/login", async (req, res) => {
 			return;
 		}
 
-		const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: "15m" });
+		const now = new Date();
+
+		const session = await Session.create({
+			user: user._id,
+			lastActivityAt: now,
+			expiresAt: new Date(now.getTime() + 1000 * 60 * 60 * 24), // 24h
+		});
+
+		const token = jwt.sign({ id: user._id, sessionId: session._id }, process.env.JWT_SECRET);
 
 		// Get the full user's group to use it in frontend instead of send request each page browsing
 		user = await user.populate("groups");

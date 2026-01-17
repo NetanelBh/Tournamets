@@ -1,5 +1,6 @@
 import { useState, useRef } from "react";
 import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 import API from "../../utils/Api";
 import MatchesList from "./MatchesList";
@@ -10,6 +11,7 @@ const ClosedMatches = () => {
 	const [finalScoreUpdateStatus, setFinalScoreUpdateStatus] = useState({});
 	// To set timeout when saving the final score in DB to make it again save button
 	const timeoutRef = useRef({});
+	const navigate = useNavigate();
 
 	// Clear the stored matchId(if stored)
 	localStorage.removeItem("matchId");
@@ -18,7 +20,7 @@ const ClosedMatches = () => {
 	// The clock from matchSlice(the clock update each second to make the components rerender for live matches bet list)
 	const updatedClock = useSelector((state) => state.clock.now);
 	// Get the bets for this tournament and group
-	const bets = useSelector((state) => state.bets);	
+	const bets = useSelector((state) => state.bets);
 
 	// Get only the matches that started
 	const startedMatches = matches.filter((match) => match.kickoffTime < updatedClock);

@@ -7,6 +7,7 @@ const INACTIVITY_LIMIT = 1000 * 60 * 20;
 const authentication = async (req, res, next) => {
 	try {
 		const authHeader = req.headers.authorization;
+        
 		if (!authHeader) {
 			return res.status(401).json({ code: "NO_TOKEN" });
 		}
@@ -15,6 +16,7 @@ const authentication = async (req, res, next) => {
 		const payload = jwt.verify(token, process.env.JWT_SECRET);
         
 		const session = await Session.findById(payload.sessionId);
+        
 		if (!session || session.revoked) {
 			return res.status(401).json({ code: "SESSION_INVALID" });
 		}
@@ -25,14 +27,14 @@ const authentication = async (req, res, next) => {
 		if (now - session.lastActivityAt.getTime() > INACTIVITY_LIMIT) {
 			session.revoked = true;
 			await session.save();
-			return res.status(401).json({ code: "SESSION_EXPIRED" });
+			return res.send({ status: false, data: "SESSION_EXPIRED"});
         }
 
 		// ✅ update activity when the user still send requests
 		session.lastActivityAt = new Date();
 		await session.save();
 
-		req.user = payload.id;
+		req.user = {id: payload.id};
 		req.sessionId = payload.sessionId;
 
 		next();

@@ -22,8 +22,9 @@ const MyBets = () => {
 	const navigate = useNavigate();
 	const dispatch = useDispatch();
 
-	const [modalText, setModalText] = useState("");
+	const [modalText, setModalText] = useState({});
 	const [openModal, setOpenModal] = useState(false);
+	const [navigateTo, setNavigateTo] = useState("");
 
 	const bets = useSelector((state) => state.bets);
 
@@ -70,14 +71,24 @@ const MyBets = () => {
 				const users = await API.post("/user/allUsers", { tournamentId, groupId });
 				if (!users.data.status) {
 					setOpenModal(true);
-					setModalText("אירעה שגיאה בעת טעינת רשימת המשתמשים, אנא נסה שנית");
+					if (users.data.data === "SESSION_EXPIRED") {
+						setModalText({ title: "זמן חיבור עבר", text: "לא היתה פעילות במשך 20 דקות, נא להתחבר מחדש" });
+						setNavigateTo("/");
+					} else {
+						setModalText({
+							title: "ההימורים שלי",
+							text: "אירעה שגיאה בעת טעינת רשימת המשתמשים, אנא נסה שנית",
+						});
+						setNavigateTo("/layout/my-bets");
+					}
 					return;
 				}
 
 				dispatch(userActions.load({ type: "allUsers", data: users.data.data }));
 			} catch (error) {
 				setOpenModal(true);
-				setModalText("אירעה שגיאה בעת טעינת רשימת המשתמשים, אנא נסה שנית");
+				setModalText({ title: "ההימורים שלי", text: "אירעה שגיאה בעת טעינת רשימת המשתמשים, אנא נסה שנית" });
+				setNavigateTo("/layout/my-bets");
 			} finally {
 				setIsLoading(false);
 			}
@@ -104,14 +115,28 @@ const MyBets = () => {
 					const users = await API.post("/user/allUsers", { tournamentId, groupId });
 					if (!users.data.status) {
 						setOpenModal(true);
-						setModalText("אירעה שגיאה בעת טעינת רשימת המשתמשים, אנא נסה שנית");
+						if (users.data.data === "SESSION_EXPIRED") {
+							setModalText({
+								title: "זמן חיבור עבר",
+								text: "לא היתה פעילות במשך 20 דקות, נא להתחבר מחדש",
+							});
+							setNavigateTo("/");
+						} else {
+							setModalText({
+								title: "ההימורים שלי",
+								text: "אירעה שגיאה בעת טעינת רשימת המשתמשים, אנא נסה שנית",
+							});
+							setNavigateTo("/layout/my-bets");
+						}
+
 						return;
 					}
 
 					dispatch(userActions.load({ type: "allUsers", data: users.data.data }));
 				} catch (error) {
 					setOpenModal(true);
-					setModalText("אירעה שגיאה בעת טעינת רשימת המשתמשים, אנא נסה שנית");
+					setModalText({ title: "ההימורים שלי", text: "אירעה שגיאה בעת טעינת רשימת המשתמשים, אנא נסה שנית" });
+					setNavigateTo("/layout/my-bets");
 				} finally {
 					setIsLoading(false);
 				}
@@ -127,7 +152,16 @@ const MyBets = () => {
 					const allUsersBets = await API.post("/user/topScorerWinnerTeamBets", { tournamentId, groupId });
 					if (!allUsersBets.data.status) {
 						setOpenModal(true);
-						setModalText(data.data);
+						if (allUsersBets.data.data === "SESSION_EXPIRED") {
+							setModalText({
+								title: "זמן חיבור עבר",
+								text: "לא היתה פעילות במשך 20 דקות, נא להתחבר מחדש",
+							});
+							setNavigateTo("/");
+						} else {
+							setModalText({title: "ההימורים שלי", text: allUsersBets.data.data});
+							setNavigateTo("/layout/my-bets");
+						}
 						return;
 					}
 
@@ -158,7 +192,7 @@ const MyBets = () => {
 					);
 				} catch (error) {
 					setOpenModal(true);
-					setModalText(error.message);
+					setModalText({ title: "ההימורים שלי", text: "אירעה שגיאה בקבלת הנתונים מהשרת, אנא נסה שנית" });
 				} finally {
 					setIsLoading(false);
 				}
@@ -179,15 +213,27 @@ const MyBets = () => {
 			setIsLoading(true);
 			try {
 				const players = await API.post("player/get", { tournamentId });
-
 				if (!players.data.status) {
-					setModalText("אירעה שגיאה בעת טעינת רשימת השחקנים, אנא נסה שנית");
+					setOpenModal(true);
+					if (players.data.data === "SESSION_EXPIRED") {
+						setModalText({ title: "זמן חיבור עבר", text: "לא היתה פעילות במשך 20 דקות, נא להתחבר מחדש" });
+						setNavigateTo("/");
+					} else {
+						setModalText({
+							title: "ההימורים שלי",
+							text: "אירעה שגיאה בעת טעינת רשימת השחקנים, אנא נסה שנית",
+						});
+						setNavigateTo("/layout/my-bets");
+					}
+
 					return;
 				}
 
 				dispatch(playersActions.load(players.data.data));
 			} catch (error) {
-				setModalText("אירעה שגיאה בעת טעינת רשימת השחקנים, אנא נסה שנית");
+				setOpenModal(true);
+				setModalText({ title: "ההימורים שלי", text: "אירעה שגיאה בעת טעינת רשימת השחקנים, אנא נסה שנית" });
+				setNavigateTo("/layout/my-bets");
 			} finally {
 				setIsLoading(false);
 			}
@@ -207,7 +253,15 @@ const MyBets = () => {
 				// Get the topScorer and winnerTeam predictions from the DB
 				const predictions = await API.post("/bets/get", { tournamentId, groupId });
 				if (!predictions.data.status) {
-					setModalText("אירעה שגיאה בטעינת הנתונים, אנא נסה שנית");
+					setOpenModal(true);
+					if (predictions.data.data === "SESSION_EXPIRED") {
+						setModalText({ title: "זמן חיבור עבר", text: "לא היתה פעילות במשך 20 דקות, נא להתחבר מחדש" });
+						setNavigateTo("/");
+					} else {
+						setModalText({ title: "ההימורים שלי", text: "אירעה שגיאה בטעינת הנתונים, אנא נסה שנית" });
+						setNavigateTo("/layout/my-bets");
+					}
+
 					return;
 				}
 
@@ -219,7 +273,9 @@ const MyBets = () => {
 
 				dispatch(betsActions.load(allPredictions));
 			} catch (error) {
-				setModalText("אירעה שגיאה בטעינת הנתונים, אנא נסה שנית");
+				setOpenModal(true);
+				setModalText({ title: "ההימורים שלי", text: "אירעה שגיאה בטעינת הנתונים, אנא נסה שנית" });
+				setNavigateTo("/layout/my-bets");
 			} finally {
 				setIsLoading(false);
 			}
@@ -235,13 +291,23 @@ const MyBets = () => {
 			try {
 				const matches = await API.post("match/getAll", { tournamentId });
 				if (!matches.data.status) {
-					setModalText("אירעה שגיאה בטעינת המשחקים, אנא נסה שנית");
+					setOpenModal(true);
+					if (matches.data.data === "SESSION_EXPIRED") {
+						setModalText({ title: "זמן חיבור עבר", text: "לא היתה פעילות במשך 20 דקות, נא להתחבר מחדש" });
+						setNavigateTo("/");
+					} else {
+						setModalText({ title: "ההימורים שלי", text: "אירעה שגיאה בטעינת המשחקים, אנא נסה שנית" });
+						setNavigateTo("/layout/my-bets");
+					}
+
 					return;
 				}
 
 				dispatch(matchesActions.load(matches.data.data));
 			} catch (error) {
-				setModalText("אירעה שגיאה בטעינת המשחקים, אנא נסה שנית");
+				setOpenModal(true);
+				setModalText({ title: "ההימורים שלי", text: "אירעה שגיאה בטעינת המשחקים, אנא נסה שנית" });
+				setNavigateTo("/layout/my-bets");
 			} finally {
 				setIsLoading(false);
 			}
@@ -261,11 +327,24 @@ const MyBets = () => {
 					groupId: localStorage.getItem("groupId"),
 				});
 
+				if (!usersBets.data.status) {
+					setOpenModal(true);
+					if (usersBets.data.data === "SESSION_EXPIRED") {
+						setModalText({ title: "זמן חיבור עבר", text: "לא היתה פעילות במשך 20 דקות, נא להתחבר מחדש" });
+						setNavigateTo("/");
+					} else {
+						setModalText({ title: "ההימורים שלי", text: "שגיאה בטעינת תוצאות המשתמשים, אנא נסה שנית" });
+						setNavigateTo("/layout/my-bets");
+					}
+					
+					return;
+				}
+
 				dispatch(betsActions.load([{ type: "usersBetsForMatch", data: usersBets.data.data }]));
 			} catch (error) {
 				setOpenModal(true);
 				setModalText({ title: "ההימורים שלי", text: "שגיאה בטעינת התוצאות, אנא נסה שנית" });
-				setNavigateTo("/layout/closed-bets");
+				setNavigateTo("/layout/my-bets");
 			} finally {
 				setIsLoading(false);
 			}
@@ -276,7 +355,8 @@ const MyBets = () => {
 
 	const closeModalHandler = () => {
 		setOpenModal(false);
-		setModalText("");
+		setModalText({});
+		navigate(navigateTo);
 	};
 
 	const saveBetHandler = async ({ match, homeScore, awayScore }) => {
@@ -319,10 +399,16 @@ const MyBets = () => {
 			});
 
 			if (!resp.data.status) {
-				setSaveStatus((prev) => ({
-					...prev,
-					[match._id]: "נכשל",
-				}));
+				if (resp.data.data === "SESSION_EXPIRED") {
+					setOpenModal(true);
+					setModalText({ title: "זמן חיבור עבר", text: "לא היתה פעילות במשך 20 דקות, נא להתחבר מחדש" });
+					setNavigateTo("/");
+				} else {
+					setSaveStatus((prev) => ({
+						...prev,
+						[match._id]: "נכשל",
+					}));
+				}
 			} else {
 				setSaveStatus((prev) => ({
 					...prev,
@@ -368,10 +454,16 @@ const MyBets = () => {
 			});
 
 			if (!resp.data.status) {
-				setSaveStatus((prev) => ({
-					...prev,
-					["winnerTeam"]: "נכשל",
-				}));
+				if (resp.data.data === "SESSION_EXPIRED") {
+					setOpenModal(true);
+					setModalText({ title: "זמן חיבור עבר", text: "לא היתה פעילות במשך 20 דקות, נא להתחבר מחדש" });
+					setNavigateTo("/");
+				} else {
+					setSaveStatus((prev) => ({
+						...prev,
+						["winnerTeam"]: "נכשל",
+					}));
+				}
 			} else {
 				setSaveStatus((prev) => ({
 					...prev,
@@ -419,10 +511,16 @@ const MyBets = () => {
 				topScorer: playerId,
 			});
 			if (!resp.data.status) {
-				setSaveStatus((prev) => ({
-					...prev,
-					["topScorer"]: "נכשל",
-				}));
+				if (resp.data.data === "SESSION_EXPIRED") {
+					setOpenModal(true);
+					setModalText({ title: "זמן חיבור עבר", text: "לא היתה פעילות במשך 20 דקות, נא להתחבר מחדש" });
+					setNavigateTo("/");
+				} else {
+					setSaveStatus((prev) => ({
+						...prev,
+						["topScorer"]: "נכשל",
+					}));
+				}
 			} else {
 				setSaveStatus((prev) => ({
 					...prev,
@@ -623,9 +721,7 @@ const MyBets = () => {
 						<div className="text-red-500 font-bold text-xl mt-4">אין משחקים פתוחים להימור</div>
 					)}
 
-					{openModal && (
-						<Modal title="שמירת הימורים - חשוב מאוד!" text={modalText} onClick={closeModalHandler} />
-					)}
+					{openModal && <Modal title={modalText.title} text={modalText.text} onClick={closeModalHandler} />}
 				</div>
 			)}
 

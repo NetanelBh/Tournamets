@@ -93,9 +93,11 @@ router.post("/join", async (req, res) => {
 	try {
 		const { tournamentId } = req.body;
 
+		console.log(req.user.id);
 		// Get the user from DB(he exists because he is logged in)
 		const user = await getUserbyId(req.user.id);
 
+		
 		// Update the tournament in the user.tournaments
 		const updatedUser = await addTournamentToUser(user.username, tournamentId);
 

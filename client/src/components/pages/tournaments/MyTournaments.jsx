@@ -11,12 +11,13 @@ import { userActions } from "../../store/slices/userSlice";
 const MyTournaments = () => {
 	const navigate = useNavigate();
 	const dispatch = useDispatch();
-	const [modalText, setModalText] = useState("");
+	const [modalText, setModalText] = useState({});
 	const [isLoading, setIsLoading] = useState(false);
 	const [openModal, setOpenModal] = useState(false);
 	const [tournamentId, setTournamentId] = useState("");
 	// This state determine if the modal ok button will be leave group or just close the modal
 	const [isOkButton, setIsOkButton] = useState(false);
+	const [navigateTo, setNavigateTo] = useState("");
 	
 	const myTournaments = useSelector((state) => state.user.user.tournaments);
 	const allTournaments = useSelector((state) => state.tournaments.tournaments);
@@ -38,31 +39,37 @@ const MyTournaments = () => {
 
 	const leaveTournamentHandler = (id) => {
 		setOpenModal(true);
-		setModalText("יציאה מהטורניר תגרום למחיקת כל ההימורים.\nהאם אתה בטוח? ");
+		setModalText({title: "יציאה מטורניר", text: "יציאה מהטורניר תגרום למחיקת כל ההימורים.\nהאם אתה בטוח? "});
 		setTournamentId(id);
 	};
 
 	const exitTournamentHandler = async () => {
 		setIsLoading(true);
+		setOpenModal(true);
 		try {
 			const resp = await API.delete(`/user/leaveTournament/${tournamentId}`);
 			// If we reached here, the user approved the exit, we want to create only ok button in the modal
 			setIsOkButton(true);
 			// If the delete succeed, will remove it also from redux
 			if (!resp.data.status) {
-				setOpenModal(true);
-				setModalText(resp.data.data);
+				if (resp.data.data === "SESSION_EXPIRED") {
+					setModalText({title: "זמן חיבור עבר", text: "לא היתה פעילות במשך 20 דקות, נא להתחבר מחדש"});
+					setNavigateTo("/");
+				} else {
+					setModalText({title: "הטורנירים שלי", text: resp.data.data});
+					setNavigateTo("/layout/my-tournaments");
+				}
+				
 				return;
 			}
 
 			dispatch(userActions.leaveTournament(tournamentId));
-			setModalText(resp.data.data);
+			setModalText({title: "הטורנירים שלי", text: resp.data.data});
+			setNavigateTo("/layout/my-tournaments");
 		} catch (error) {
-			setModalText(error.message);
-			setOpenModal(true);
+			setModalText({title: "שגיאה בשרת", text: error.message});
 		} finally {
 			setIsLoading(false);
-			navigate("/layout/my-tournaments");
 		}
 	};
 
@@ -72,7 +79,8 @@ const MyTournaments = () => {
 
 	const onCancleHandler = () => {
 		setOpenModal(false);
-		setModalText("");
+		setModalText({});
+		navigate(navigateTo);
 	};
 
 	// send props object to generic list component
@@ -91,8 +99,8 @@ const MyTournaments = () => {
 				<>
 					{openModal && (
 						<Modal
-							title="הטורנירים שלי"
-							text={modalText}
+							title={modalText.title}
+							text={modalText.text}
 							onClick={!isOkButton ? exitTournamentHandler : onCancleHandler}
 							isExit={true}
 							onCancle={onCancleHandler}
@@ -103,7 +111,7 @@ const MyTournaments = () => {
 							{filteredTournamets.length > 0 && <GenericList data={data} type="tournament" />}
 							{filteredTournamets.length === 0 && (
 								<Modal
-									title="הטורנירים שלי"
+									title={modalText.title}
 									text="לא הצטרפת עדיין לאף טורניר"
 									onClick={joinTournamentHandler}
 								/>

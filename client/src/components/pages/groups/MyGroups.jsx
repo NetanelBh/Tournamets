@@ -17,9 +17,10 @@ const MyGroups = () => {
 	const [groupId, setGroupId] = useState("");
 	// This state determine if the modal ok button will be leave group or just close the modal
 	const [isOkButton, setIsOkButton] = useState(false);
-	const [modalText, setModalText] = useState("");
+	const [modalText, setModalText] = useState({});
 	const [openModal, setOpenModal] = useState(false);
 	const [isLoading, setIsLoading] = useState(false);
+	const [navigateTo, setNavigateTo] = useState("");
 
 	// Clear the bets in redux storage(in bets slice, the imformation stored per specific tournament and group)
 	useEffect(() => {
@@ -43,34 +44,43 @@ const MyGroups = () => {
 
 	const leaveGroupHandler = (group) => {
 		setOpenModal(true);
-		setModalText("יציאה מהקבוצה תגרום למחיקת כל ההימורים.\nהאם אתה בטוח? ");
+		setModalText({ title: "הקבוצות שלי", text: "יציאה מהקבוצה תגרום למחיקת כל ההימורים.\nהאם אתה בטוח? " });
 		setGroupId(group);
 	};
 
 	// If the user click cancle after the leave group warning showed, just clear the modal
 	const onCancleHandler = () => {
 		setOpenModal(false);
-		setModalText("");
+		setModalText({});
+		navigate(navigateTo);
 	};
 
 	const exitgroupHandler = async () => {
 		setIsLoading(true);
+		setOpenModal(true);
 		try {
 			const user = await API.post("/user/leaveGroup", { tournamentId, groupId });
 
 			// If we reached here, the user approved the exit, we want to create only ok button in the modal
 			setIsOkButton(true);
 			if (!user.data.status) {
-				setOpenModal(true);
-				setModalText("אירעה שגיאה בעת היציאה מהקבוצה, אנא נסה שנית");
+				if (user.data.data === "SESSION_EXPIRED") {
+					setModalText({ title: "זמן חיבור עבר", text: "לא היתה פעילות במשך 20 דקות, נא להתחבר מחדש" });
+					setNavigateTo("/");
+				} else {
+					setModalText({ title: "הקבוצות שלי", text: "אירעה שגיאה בעת היציאה מהקבוצה, אנא נסה שנית" });
+					setNavigateTo("/layout/my-groups");
+				}
+
 				return;
 			}
 
 			// If the group removed from the user in DB, remove it also from redux
 			dispatch(userActions.leaveGroup(groupId));
-			setModalText("היציאה מהקבוצה בוצעה בהצלחה");
+			setModalText({ title: "הקבוצות שלי", text: "היציאה מהקבוצה בוצעה בהצלחה" });
 		} catch (error) {
-			setModalText("אירעה שגיאה בעת היציאה מהקבוצה, אנא נסה שנית");
+			setModalText({ title: "הקבוצות שלי", text: "אירעה שגיאה בעת היציאה מהקבוצה, אנא נסה שנית" });
+			setNavigateTo("/layout/my-groups");
 		} finally {
 			setIsLoading(false);
 		}
@@ -92,8 +102,8 @@ const MyGroups = () => {
 				<>
 					{openModal && (
 						<Modal
-							title="הקבוצות שלי"
-							text={modalText}
+							title={modalText.title}
+							text={modalText.text}
 							onClick={!isOkButton ? exitgroupHandler : onCancleHandler}
 							isExit={true}
 							onCancle={onCancleHandler}

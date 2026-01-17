@@ -34,6 +34,18 @@ const Table = () => {
 					API.post("/winnerTeamBet/getAllByGroup", { tournamentId, groupId }),
 				]);
 
+				if (!allUsersTopScorers.data.stataus || !allUsersWinnerTeams.data.stataus) {
+					setOpenModal(true);
+					if (allUsersTopScorers.data.data === "SESSION_EXPIRED" || allUsersWinnerTeams.data.data === "SESSION_EXPIRED") {
+						setModalText({ title: "זמן חיבור עבר", text: "לא היתה פעילות במשך 20 דקות, נא להתחבר מחדש" });
+						setNavigateTo("/");
+					} else {
+						setModalText({ title: "טבלה", text: "אירעה שגיאה בטעינת הטבלה אנא נסה שנית" });
+						setNavigateTo("/layout/bets-table");
+					}
+					return;
+				}
+
 				setUsersTopScorer(allUsersTopScorers.data.data);
 				setUsersWinnerTeam(allUsersWinnerTeams.data.data);
 			} catch (error) {

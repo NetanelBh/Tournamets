@@ -11,7 +11,7 @@ import { userActions } from "../../store/slices/userSlice";
 
 const JoinGroup = () => {
 	const [openModal, setOpenModal] = useState(false);
-	const [modalText, setModalText] = useState("");
+	const [modalText, setModalText] = useState({});
 	const [navigateTo, setNavigateTo] = useState("");
 	const [isLoading, setIsLoading] = useState(false);
 	const navigate = useNavigate();
@@ -37,21 +37,27 @@ const JoinGroup = () => {
 
 		try {
 			const resp = await API.post("/group/join", newGroup);
-
 			setOpenModal(true);
 
-			if (resp.data.status) {
-				setNavigateTo("/layout/groups-layout/my-groups");
-				setModalText("הצטרפת לקבוצה בהצלחה");
-				// Update the redux - the data contains the joined group id
-				dispatch(userActions.joinGroup(resp.data.data));
-			} else {
-				setModalText(resp.data.data);
-				setNavigateTo("/layout/groups-layout/join-group");
+			if (!resp.data.status) {
+				if (resp.data.data === "SESSION_EXPIRED") {
+					setModalText({ title: "זמן חיבור עבר", text: "לא היתה פעילות במשך 20 דקות, נא להתחבר מחדש" });
+					setNavigateTo("/");
+				} else {
+					setModalText({ title: "הצטרפות לקבוצה", text: resp.data.data });
+					setNavigateTo("/layout/groups-layout/join-group");
+				}
+
+				return;
 			}
+
+			setNavigateTo("/layout/groups-layout/my-groups");
+			setModalText({ title: "הצטרפות לקבוצה", text: "הצטרפת לקבוצה בהצלחה" });
+			// Update the redux - the data contains the joined group id
+			dispatch(userActions.joinGroup(resp.data.data));
 		} catch (error) {
 			setOpenModal(true);
-			setModalText("אירעה שגיאה בעת הצטרפות לקבוצה, אנא נסה שנית");
+			setModalText({ title: "הצטרפות לקבוצה", text: "אירעה שגיאה בעת הצטרפות לקבוצה, אנא נסה שנית" });
 			setNavigateTo("/layout/groups-layout/join-group");
 		} finally {
 			setIsLoading(false);
@@ -60,7 +66,7 @@ const JoinGroup = () => {
 
 	const closeModalHandler = () => {
 		setOpenModal(false);
-		setModalText("");
+		setModalText({});
 		navigate(navigateTo);
 	};
 
@@ -91,7 +97,7 @@ const JoinGroup = () => {
 				</>
 			)}
 
-			{openModal && <Modal title="הצטרפות לקבוצה" text={modalText} onClick={closeModalHandler} />}
+			{openModal && <Modal title={modalText.title} text={modalText.text} onClick={closeModalHandler} />}
 		</>
 	);
 };

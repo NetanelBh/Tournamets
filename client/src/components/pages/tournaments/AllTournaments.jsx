@@ -26,21 +26,26 @@ const AllTournaments = () => {
 	localStorage.removeItem("matchId");
 
 	useEffect(() => {
-		const fetchData = async () => {
+		const fetchData = async () => {			
 			setIsLoading(true);
 			try {
-				const fetchedTournaments = await API.get("/tournament/getAll");
+				const fetchedTournaments = await API.get("/tournament/getAll");			
 				if (!fetchedTournaments.data.status) {
 					setOpenModal(true);
-					setModalText({ title: "שגיאה בשרת", text: "אירעה בעיה בטעינת הנתונים, אנא נסה שנית" });
+					if (fetchedTournaments.data.data === "SESSION_EXPIRED") {
+						setModalText({ title: "זמן חיבור עבר", text: "לא היתה פעילות במשך 20 דקות, נא להתחבר מחדש" });	
+					} else {
+						setModalText({ title: "שגיאה בשרת", text: "אירעה בעיה בטעינת הנתונים, אנא נסה שנית" });
+					}
 					setNavigateTo("/");
 					return;
 				}
 
 				dispatch(tournamentsActions.load(fetchedTournaments.data.data));
-			} catch (error) {				
+			} catch (error) {								
 				setOpenModal(true);
-				setModalText({ title: "שגיאה בשרת", text: "אירעה בעיה בשרת, אנא נסה שנית" });
+				// setModalText({ title: "שגיאה בשרת", text: "אירעה בעיה בשרת, אנא נסה שנית" });
+				setModalText({ title: "שגיאה בשרת", text: error.message });
 				setNavigateTo("/layout/all-tournaments");
 			} finally {
 				setIsLoading(false);
@@ -65,18 +70,22 @@ const AllTournaments = () => {
 		setIsLoading(true);
 		try {
 			const resp = (await API.post("/tournament/join", { tournamentId: item._id })).data;
+			
+			if (!resp.status) {
+				if (resp.data === "SESSION_EXPIRED") {
+					setModalText({ title: "זמן חיבור עבר", text: "לא היתה פעילות במשך 20 דקות, נא להתחבר מחדש" });	
+					setNavigateTo("/");
+				} else {
+					setModalText({ title: torunamentJoin, text: "אירעה שגיאה בהצטרפת לטורניר, אנא נסה שנית" })
+					setNavigateTo("/layout/all-tournaments");
+				}
+				return;
+			}			
 
-			if (resp.status) {
-				// Add the tournament to the user
-				dispatch(userActions.joinTournament(item._id));
-				const modalObj = { title: torunamentJoin, text: "הצטרפת לטורניר בהצלחה" };
-				setModalText({ ...modalObj });
-				setNavigateTo("/layout/my-tournaments");
-			} else {
-				const modalObj = { title: torunamentJoin, text: "אירעה שגיאה בהצטרפת לטורניר, אנא נסה שנית" };
-				setModalText({ ...modalObj });
-				setNavigateTo("/layout/all-tournaments");
-			}
+			// Add the tournament to the user
+			dispatch(userActions.joinTournament(item._id));
+			setModalText({ title: torunamentJoin, text: "הצטרפת לטורניר בהצלחה" });
+			setNavigateTo("/layout/my-tournaments");
 		} catch (error) {
 			setModalText("אירעה שגיאה בהצטרפות לטורניר, אנא נסה שנית");
 			setNavigateTo("/layout/all-tournaments");

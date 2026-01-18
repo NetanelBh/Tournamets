@@ -64,13 +64,15 @@ const MatchListItem = ({ match, onClick, buttonStatus, actionText, user }) => {
 	const kickoffTime = new Date(match.kickoffTime).toLocaleString().replace(",", " |").slice(0, -3);
 
 	return (
-		<li className="grid grid-cols-13 gap-2 pr-4 pl-4 pb-2 bg-gray-700 hover:bg-gray-700/80 font-bold rounded-lg shadow-[0_2px_5px_2px_theme(colors.yellow.300)] mb-6 mr-2 ml-2">
+		// TODO: CREATE MAP FOR FLAGS ACCORDING TO THE TEAMS NAMES
+		<li className="grid grid-cols-13 gap-2 pr-1 pl-1 pb-2 bg-gray-700 hover:bg-gray-700/80 font-bold rounded-lg shadow-[0_2px_5px_2px_theme(colors.yellow.300)] mb-6 mr-2 ml-2">
 			<div
 				className={`sm:text-xl col-span-4 p-2 text-white ${
 					match.kickoffTime > updatedClock ? "pt-8" : ""
-				} text-center flex items-center justify-center`}
-			>
-				{match.homeTeam}
+				} text-center flex items-center justify-between`}
+			>	
+				<img src="https://upload.wikimedia.org/wikipedia/commons/4/41/Flag_of_Austria.svg" alt="Austria flag" className="w-8 h-8"/>
+				<p>{match.homeTeam}</p>
 			</div>
 
 			{/* If the match is not started yet, let the user place his bet */}
@@ -205,9 +207,10 @@ const MatchListItem = ({ match, onClick, buttonStatus, actionText, user }) => {
 			<div
 				className={`sm:text-xl col-span-4 p-2 text-white ${
 					match.kickoffTime > updatedClock ? "pt-8" : ""
-				} text-center flex items-center justify-center`}
+				} text-center flex items-center justify-between`}
 			>
-				{match.awayTeam}
+				<p>{match.awayTeam}</p>
+				<img src="https://upload.wikimedia.org/wikipedia/commons/0/05/Flag_of_Brazil.svg" alt="Austria flag" className="w-8 h-8"/>
 			</div>
 
 			{/* Friends bets button - show only if the match is started*/}

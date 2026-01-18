@@ -21,9 +21,10 @@ const AddMatch = () => {
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
 
-	const [modalText, setModalText] = useState("");
+	const [modalText, setModalText] = useState({});
 	const [isLoading, setIsLoading] = useState(false);
 	const [openModal, setOpenModal] = useState(false);
+	const [navigateTo, setNavigateTo] = useState("");
 
 	addMatch[0].ref = homeTeamRef;
 	addMatch[1].ref = awayTeamRef;
@@ -49,18 +50,25 @@ const AddMatch = () => {
 
 		setIsLoading(true);
 		try {
-			const resp = await API.post("/match/create", { match });
-			if (resp.data.status) {
-				setOpenModal(true);
-				setModalText("המשחק נוצר בהצלחה");
+			setOpenModal(true);
+			setNavigateTo("/layout/groups-layout/add-match");
 
-				dispatch(matchesActions.addMatch(resp.data.data));
-			} else {
-				setOpenModal(true);
-				setModalText(resp.data.data);
+			const resp = await API.post("/match/create", { match });
+			if (!resp.data.status) {
+				if (resp.data.data === "SESSION_EXPIRED") {
+					setModalText({ title: "זמן חיבור עבר", text: "לא היתה פעילות במשך 20 דקות, נא להתחבר מחדש" });
+					setNavigateTo("/");
+				} else {
+					setModalText({title: "יצירת משחק", text: resp.data.data});
+				}
+
+				return;
 			}
+
+			setModalText({ title: "יצירת משחק", text: "המשחק נוצר בהצלחה" });
+			dispatch(matchesActions.addMatch(resp.data.data));
 		} catch (error) {
-			setModalText(error.message);
+			setModalText({ title: "יצירת משחק", text: "error.message" });
 		} finally {
 			setIsLoading(false);
 		}
@@ -68,8 +76,8 @@ const AddMatch = () => {
 
 	const closeModalHandler = () => {
 		setOpenModal(false);
-		setModalText("");
-		navigate("/layout/groups-layout/add-match");
+		setModalText({});
+		navigate(navigateTo);
 	};
 
 	return (
@@ -98,7 +106,7 @@ const AddMatch = () => {
 						</div>
 					)}
 
-					{openModal && <Modal title="הוספת משחק" text={modalText} onClick={closeModalHandler} />}
+					{openModal && <Modal title={modalText.title} text={modalText.text} onClick={closeModalHandler} />}
 				</>
 			)}
 		</>

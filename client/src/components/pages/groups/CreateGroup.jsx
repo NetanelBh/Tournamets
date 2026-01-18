@@ -16,7 +16,7 @@ const CreateGroup = () => {
 	// "samePoints" or "differentPoints" for knockout matches
 	const navigate = useNavigate();
 	const dispatch = useDispatch();
-	const [modalText, setModalText] = useState("");
+	const [modalText, setModalText] = useState({});
 	const [isLoading, setIsLoading] = useState(false);
 	const [openModal, setOpenModal] = useState(false);
 	const [pointsMethod, setPointsMethod] = useState("samePoints");
@@ -117,21 +117,28 @@ const CreateGroup = () => {
 
 		setIsLoading(true);
 		try {
-			const resp = await API.post("/group/create", newGroup);
-
 			setOpenModal(true);
-			if (resp.data.status) {
-				// Update the redux - attach the group to the the user who created it
-				dispatch(userActions.joinGroup(resp.data.data));
-				setNavigateTo("/layout/groups-layout/my-groups");
-				setModalText("הקבוצה נוצרה בהצלחה");
-			} else {
-				setModalText(resp.data.data);
-				setNavigateTo("/layout/groups-layout/create-group");
+
+			const resp = await API.post("/group/create", newGroup);	
+			if (!resp.data.status) {
+				if (resp.data.data === "SESSION_EXPIRED") {
+					setModalText({ title: "זמן חיבור עבר", text: "לא היתה פעילות במשך 20 דקות, נא להתחבר מחדש" });
+					setNavigateTo("/");
+				} else {
+					setModalText({ title: "יצירת קבוצה", text: resp.data.data });
+					setNavigateTo("/layout/groups-layout/create-group");
+				}
+
+				return;
 			}
+
+			// Update the redux - attach the group to the the user who created it
+			dispatch(userActions.joinGroup(resp.data.data));
+			setNavigateTo("/layout/groups-layout/my-groups");
+			setModalText({ title: "יצירת קבוצה", text: "הקבוצה נוצרה בהצלחה" });
 		} catch (error) {
 			setOpenModal(true);
-			setModalText("אירעה שגיאה ביצירת הקבוצה, אנא נסה שנית");
+			setModalText({ title: "יצירת קבוצה", text: "אירעה שגיאה ביצירת הקבוצה, אנא נסה שנית" });
 			setNavigateTo("/layout/groups-layout/create-group");
 		} finally {
 			setIsLoading(false);
@@ -140,7 +147,7 @@ const CreateGroup = () => {
 
 	const closeModalHandler = () => {
 		setOpenModal(false);
-		setModalText("");
+		setModalText({});
 		navigate(navigateTo);
 	};
 
@@ -201,7 +208,7 @@ const CreateGroup = () => {
 							</form>
 						</div>
 					)}
-					{openModal && <Modal title="יצירת קבוצה" text={modalText} onClick={closeModalHandler} />}
+					{openModal && <Modal title={modalText.title} text={modalText.text} onClick={closeModalHandler} />}
 				</>
 			)}
 		</>

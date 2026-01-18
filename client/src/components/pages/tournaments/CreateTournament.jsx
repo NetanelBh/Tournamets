@@ -23,11 +23,14 @@ const CreateTournament = () => {
 	// Modal states
 	const [openModal, setOpenModal] = useState(true);
 	const [isLoading, setIsLoading] = useState(false);
-	const [modalText, setModalText] = useState("בעת יצירת הטורניר, יש ליצור את המשחקים ל DB");
+	const [modalText, setModalText] = useState({
+		title: "יצירת טורניר",
+		text: "בעת יצירת הטורניר, יש ליצור את המשחקים ל DB",
+	});
 	const [navigateTo, setNavigateTo] = useState("/layout/create-tournament");
 	// State for topScorer bet
 	const [topScorerBet, setTopScorerBet] = useState(false);
-	
+
 	// Navigation
 	const navigate = useNavigate();
 	const dispatch = useDispatch();
@@ -52,28 +55,35 @@ const CreateTournament = () => {
 			startTime: startTimeRef.current.value,
 			topScorerBet: topScorerBet,
 			imgUrl: imgRef.current.value,
-			topScorersList: topScorerBet ?topScorersRef.current.value.split(",") : "s"
+			topScorersList: topScorerBet ? topScorersRef.current.value.split(",") : "s",
 		};
 
 		setIsLoading(true);
 		try {
 			const resp = await API.post("/tournament/create", newTournamentData);
 
-			setNavigateTo("/layout/all-tournaments");
 			// Always open the modal for both cases if the tournament created or occurred an error
 			setOpenModal(true);
 
-			// If the resopnse is true, it means the tournament successfully created and will store in redux
-			if (resp.data.status) {
-				dispatch(tournamentsActions.addTournament(resp.data.data));
-				setModalText("הטורניר נוצר בהצלחה");
-			} else {
-				setModalText(resp.data.data);
+			if (!resp.data.status) {
+				if (resp.data.data === "SESSION_EXPIRED") {
+					setModalText({ title: "זמן חיבור עבר", text: "לא היתה פעילות במשך 20 דקות, נא להתחבר מחדש" });
+					setNavigateTo("/");
+				} else {
+					setModalText({ title: "יצירת טורניר", text: resp.data.data });
+				}
+
+				return;
 			}
+
+			// If the resopnse is true, it means the tournament successfully created and will store in redux
+			dispatch(tournamentsActions.addTournament(resp.data.data));
+			setModalText({title: "יצירת טורניר", text: "הטורניר נוצר בהצלחה"});
+			setNavigateTo("/layout/all-tournaments");
 		} catch (error) {
 			setNavigateTo("/layout/all-tournaments");
 			setOpenModal(true);
-			setModalText("אירעה שגיאה ביצירת הטורניר, אנא נסה שנית");
+			setModalText({title: "יצירת טורניר", text: "אירעה שגיאה ביצירת הטורניר, אנא נסה שנית"});
 		} finally {
 			setIsLoading(false);
 		}
@@ -81,14 +91,14 @@ const CreateTournament = () => {
 
 	const closeModalHandler = () => {
 		setOpenModal(false);
-		setModalText("");
+		setModalText({});
 		navigate(navigateTo);
 	};
 
 	return (
 		<>
 			{isLoading && <Loading />}
-			
+
 			{!isLoading && (
 				<>
 					{!openModal && (
@@ -117,7 +127,14 @@ const CreateTournament = () => {
 									onChange={setTopScorerBet}
 								/>
 								{topScorerBet && (
-									<Input data={{...topScorers, ref: topScorersRef, placeholder: topScorers.clue, defaultValue: ""}}/>
+									<Input
+										data={{
+											...topScorers,
+											ref: topScorersRef,
+											placeholder: topScorers.clue,
+											defaultValue: "",
+										}}
+									/>
 								)}
 
 								<button
@@ -130,7 +147,7 @@ const CreateTournament = () => {
 						</div>
 					)}
 
-					{openModal && <Modal title="יצירת טורניר" text={modalText} onClick={closeModalHandler} />}
+					{openModal && <Modal title={modalText.title} text={modalText.text} onClick={closeModalHandler} />}
 				</>
 			)}
 		</>

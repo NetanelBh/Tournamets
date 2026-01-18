@@ -3,12 +3,16 @@ import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
 import API from "../../utils/Api";
+import Modal from "../../modal/Modal";
 import MatchesList from "./MatchesList";
 import BetsLayout from "../layouts/BetsLayout";
 
 const ClosedMatches = () => {
 	// State data for the SaveButton component
 	const [finalScoreUpdateStatus, setFinalScoreUpdateStatus] = useState({});
+	const [openModal, setOpenModal] = useState(false);
+	const [modalText, setModalText] = useState({});
+	const [navigateTo, setNavigateTo] = useState("");
 	// To set timeout when saving the final score in DB to make it again save button
 	const timeoutRef = useRef({});
 	const navigate = useNavigate();
@@ -59,9 +63,17 @@ const ClosedMatches = () => {
 
 		try {
 			const resp = await API.patch(`/match/update/${match._id}`, { finalScore });
-			if (resp.data.status) {
-				setFinalScoreUpdateStatus((prev) => ({ ...prev, [match._id]: "נשמר" }));
+			if (!resp.data.status) {
+				setOpenModal(true);
+				if (resp.data.data === "SESSION_EXPIRED") {
+					setModalText({ title: "זמן חיבור עבר", text: "לא היתה פעילות במשך 20 דקות, נא להתחבר מחדש" });
+					setNavigateTo("/");
+				}
+
+				return;
 			}
+
+			setFinalScoreUpdateStatus((prev) => ({ ...prev, [match._id]: "נשמר" }));
 		} catch (error) {
 			setFinalScoreUpdateStatus((prev) => ({ ...prev, [match._id]: "עדכן תוצאה" }));
 		} finally {
@@ -72,24 +84,36 @@ const ClosedMatches = () => {
 		}
 	};
 
+	const closeModalHandler = () => {
+		setOpenModal(false);
+		setModalText({});
+		navigate(navigateTo);
+	};
+
 	return (
-		<div className="flex flex-col items-center">
-			<BetsLayout />
+		<>
+			{!openModal && (
+				<div className="flex flex-col items-center">
+					<BetsLayout />
 
-			{startedMathesWithBets.length === 0 && (
-				<h1 className="text-red-500 font-bold text-center text-xl mt-2">עדיין לא החלו משחקים</h1>
+					{startedMathesWithBets.length === 0 && (
+						<h1 className="text-red-500 font-bold text-center text-xl mt-2">עדיין לא החלו משחקים</h1>
+					)}
+
+					{startedMathesWithBets.length > 0 && (
+						<MatchesList
+							matches={startedMathesWithBets}
+							onClick={updateFinalScoreHandler}
+							buttonStatus={finalScoreUpdateStatus}
+							actionText="עדכן תוצאה"
+							user="admin"
+						/>
+					)}
+				</div>
 			)}
 
-			{startedMathesWithBets.length > 0 && (
-				<MatchesList
-					matches={startedMathesWithBets}
-					onClick={updateFinalScoreHandler}
-					buttonStatus={finalScoreUpdateStatus}
-					actionText="עדכן תוצאה"
-					user="admin"
-				/>
-			)}
-		</div>
+			{openModal && <Modal title={modalText.title} text={modalText.text} onClick={closeModalHandler} />}
+		</>
 	);
 };
 

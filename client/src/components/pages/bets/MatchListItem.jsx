@@ -61,7 +61,7 @@ const MatchListItem = ({ match, onClick, buttonStatus, actionText, user }) => {
 	const scoreColor = finalScoreBackground(match.matchScoreBet ? match.matchScoreBet.betScore : null, scoreFromDb);
 
 	// Get the match's kickoff time and display it on the screen in the list item
-	const kickoffTime = new Date(match.kickoffTime).toLocaleString().replace(",", " |").slice(0, -3);
+	const kickoffTime = new Date(match.kickoffTime).toLocaleString().replace(",", " -").slice(0, -3);
 
 	return (
 		<li className="grid grid-cols-13 gap-2 pr-4 pl-4 pb-2 bg-gray-700 hover:bg-gray-700/80 font-bold rounded-lg shadow-[0_2px_5px_2px_theme(colors.yellow.300)] mb-6 mr-2 ml-2">

@@ -49,7 +49,9 @@ initSocket(server);
 const reScheduleOnRestartServer = async (retries = 3) => {
 	try {
 		const notStartedTournaments = await getScheduledTournaments();
-		notStartedTournaments.forEach((t) => findUnpaidUsers(t._id));
+		await Promise.all(
+			notStartedTournaments.map((t) => findUnpaidUsers(t._id))
+		);
 	} catch (error) {
 		if (retries === 0) {
 			throw error;
@@ -58,7 +60,7 @@ const reScheduleOnRestartServer = async (retries = 3) => {
 		console.log("Retrying... remaining:", retries);
 		await new Promise((res) => setTimeout(res, 1000));
 
-		return findWithRetry(retries - 1);
+		return reScheduleOnRestartServer(retries - 1);
 	}
 };
 

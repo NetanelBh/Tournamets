@@ -50,6 +50,7 @@ const reScheduleOnRestartServer = async (retries = 3) => {
 	try {
 		const notStartedTournaments = await getScheduledTournaments();
 		await Promise.all(
+			// Use map function because forEach doens't wait for async fuctions
 			notStartedTournaments.map((t) => findUnpaidUsers(t._id))
 		);
 	} catch (error) {

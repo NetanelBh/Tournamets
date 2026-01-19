@@ -1,6 +1,7 @@
 import { io } from "socket.io-client";
 // Import store because is regular js function and we can't use useDiapatch hook
 import { store } from "../../store/store";
+import { userActions } from "../../store/slices/userSlice";
 import { matchesActions } from "../../store/slices/matchesSlice";
 import { tournamentsActions } from "../../store/slices/tournamentsSlice";
 
@@ -33,6 +34,14 @@ const initSocketListener = () => {
 
 	socket.on("topScorerUpdated", (data) => {
 		store.dispatch(tournamentsActions.updateTopPlayerOrWinnerTeam({ type: "topScorer", data }));
+	});
+
+	socket.on("userGroups", (data) => {
+		store.dispatch(userActions.updateGroups(data.groups));
+	});
+
+	socket.on("userTournaments", (data) => {
+		store.dispatch(userActions.updateTournaments(data.tournaments));
 	});
 
 	socket.on("disconnect", () => {

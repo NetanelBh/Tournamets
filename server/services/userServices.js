@@ -61,7 +61,7 @@ export const addGroupToUser = (userId, groupId) => userRepo.addUserToGroup(userI
 
 export const leaveGroup = (userId, groupId) => userRepo.leaveGroup(userId, groupId);
 
-export const removeUserBets = (userId, tournamentId, groupId) => removeBets(userId, tournamentId, groupId);
+export const removeUserBets = (usersIds, tournamentId, groupId) => removeBets(usersIds, tournamentId, groupId);
 
 export const getGroupPredictions = async (groupId, tournamentId) => {
 	return userRepo.getGroupPredictions({

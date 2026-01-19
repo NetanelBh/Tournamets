@@ -16,10 +16,20 @@ import { matchesActions } from "../../store/slices/matchesSlice";
 import { playersActions } from "../../store/slices/playersSlice";
 
 const MyBets = () => {
+	const navigate = useNavigate();
+	const groupId = localStorage.getItem("groupId");
+	const user = useSelector((state) => state.user.user);
+
+	// In case the tournament started and the user sent out of tournament and he inside some page, redirect to muGroups
+	const isUserExistInGroup = user.groups.some((g) => g._id === groupId);
+	if (!isUserExistInGroup) {
+		navigate("/layout/groups-layout/my-groups");
+		return null;
+	}
+
 	// Clear the stored matchId(if stored)
 	localStorage.removeItem("matchId");
 
-	const navigate = useNavigate();
 	const dispatch = useDispatch();
 
 	const [modalText, setModalText] = useState({});
@@ -53,9 +63,7 @@ const MyBets = () => {
 	const topScorersList = useSelector((state) => state.players.players);
 	const allTournaments = useSelector((state) => state.tournaments.tournaments);
 
-	const userId = useSelector((state) => state.user.user._id);
 	const tournamentId = localStorage.getItem("tournamentId");
-	const groupId = localStorage.getItem("groupId");
 	// Get the current tournament to use the teams for the winner team prediction of the user
 	const currentTourmanent = allTournaments.find((t) => t._id === tournamentId);
 
@@ -159,7 +167,7 @@ const MyBets = () => {
 							});
 							setNavigateTo("/");
 						} else {
-							setModalText({title: "ההימורים שלי", text: allUsersBets.data.data});
+							setModalText({ title: "ההימורים שלי", text: allUsersBets.data.data });
 							setNavigateTo("/layout/my-bets");
 						}
 						return;
@@ -336,7 +344,7 @@ const MyBets = () => {
 						setModalText({ title: "ההימורים שלי", text: "שגיאה בטעינת תוצאות המשתמשים, אנא נסה שנית" });
 						setNavigateTo("/layout/my-bets");
 					}
-					
+
 					return;
 				}
 
@@ -382,7 +390,7 @@ const MyBets = () => {
 		const userBetToSave = {
 			tournamentId,
 			groupId,
-			userId,
+			userId: user._id,
 			matchId: match._id,
 			betScore: {
 				homeScore,

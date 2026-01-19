@@ -14,6 +14,17 @@ import { useNavigate } from "react-router-dom";
 
 const Table = () => {
 	const navigate = useNavigate();
+	const groupId = localStorage.getItem("groupId");
+	const user = useSelector((state) => state.user.user);
+	const tournamentId = localStorage.getItem("tournamentId");
+
+	// In case the tournament started and the user sent out of tournament and he inside some page, redirect to muGroups
+	const isUserExistInGroup = user.groups.some((g) => g._id === groupId);
+	if (!isUserExistInGroup) {
+		navigate("/layout/groups-layout/my-groups");
+		return null;
+	}
+
 	const [modalText, setModalText] = useState({});
 	const [navigateTo, setNavigateTo] = useState("");
 	const [isLoading, setIsLoading] = useState(false);
@@ -21,8 +32,6 @@ const Table = () => {
 	const [usersWinnerTeam, setUsersWinnerTeam] = useState([]);
 	const [usersTopScorer, setUsersTopScorer] = useState([]);
 
-	const tournamentId = localStorage.getItem("tournamentId");
-	const groupId = localStorage.getItem("groupId");
 
 	// Fetch all users top scorer and winner team bets(only once)
 	useEffect(() => {
@@ -75,7 +84,7 @@ const Table = () => {
 		// Get all users bets for the current tournament - it's an object {matchId: [bets]}
 		usersBets: useSelector((state) => state.bets),
 		// Get the current group points rules(calculate the points for the each user in the table and exact/directions bets)
-		groupPointsRules: useSelector((state) => state.user.user.groups.find((g) => g._id === groupId)).points,
+		groupPointsRules: useSelector((state) => user.groups.find((g) => g._id === groupId)).points,
 		// Get the current tournament to get the top scorer bonus
 		tournamentTopScorerId: useSelector(
 			(state) => state.tournaments.tournaments.find((t) => t._id === tournamentId).topScorer

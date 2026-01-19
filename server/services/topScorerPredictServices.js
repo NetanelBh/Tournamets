@@ -17,9 +17,8 @@ export const getAllByGroup = (tournamentId, groupId) => {
     return topScorerPredictRepo.getAllByGroup(filterObj);
 };
 
-export const removeTopScorerPrediction = (user, tournament, group) => {
-    const filterObj = {user, group, tournament};
-    return topScorerPredictRepo.removeTopScorerPrediction(filterObj);
+export const removeTopScorerPrediction = (userIds, tournament, group) => {
+    return topScorerPredictRepo.removeTopScorerPrediction(userIds, tournament, group);
 };
 
 export const removeTopScorerPredictionByTournament = (user, tournament) => {

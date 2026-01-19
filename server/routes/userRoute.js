@@ -76,16 +76,16 @@ router.post("/leaveGroup", async (req, res) => {
 			return;
 		}
 
-		// Remove the user matches bets for this group
-		await userServices.removeUserBets(req.user.id, tournamentId, groupId);
+		// Remove the user matches bets for this group(send as array for the removeMany function)
+		await userServices.removeUserBets([req.user.id], tournamentId, groupId);
 
 		// remove the winner team bet
-		await removeWinnerTeamPrediction(req.user.id, tournamentId, groupId);
+		await removeWinnerTeamPrediction([req.user.id], tournamentId, groupId);
 
 		// remove the top scorer bet if allowed in the tournament
 		const tournament = await getTournamentById(tournamentId);
 		if (tournament.topScorerBet) {
-			await removeTopScorerPrediction(req.user.id, tournamentId, groupId);
+			await removeTopScorerPrediction([req.user.id], tournamentId, groupId);
 		}
 
 		res.send({ status: true, data: "המשתמש יצא מהקבוצה בהצלחה" });

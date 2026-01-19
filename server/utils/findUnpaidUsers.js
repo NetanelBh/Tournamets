@@ -1,7 +1,10 @@
 import schedule from "node-schedule";
+import {removeUserBets} from "../services/userServices.js";
 import * as tournamentRepo from "../repos/tournamentRepo.js";
-import { removeUnpaidUsers, getGroupsByFilter } from "../repos/groupRepo.js";
 import { removeGroupFromUnpaidUsers } from "../repos/userRepo.js";
+import { removeUnpaidUsers, getGroupsByFilter } from "../repos/groupRepo.js";
+import { removeWinnerTeamPrediction } from "../services/winnerTeamPredictServices.js";
+import { removeTopScorerPrediction } from "../services/topScorerPredictServices.js";
 
 const scheduleTournamentJob = async (tournamentId) => {
 	const tournamentData = await tournamentRepo.getTournamentById(tournamentId);
@@ -40,6 +43,17 @@ const scheduleTournamentJob = async (tournamentId) => {
 
 				// Remove the group from the user's groups list
 				await removeGroupFromUnpaidUsers(group._id, unpaidUserIds);
+
+				// Remove the user matches bets for this group
+				await removeUserBets(unpaidUserIds, tournamentId, group._id);
+
+				// Remove the winnerTeam(if the user bet)
+				await removeWinnerTeamPrediction(unpaidUserIds, tournamentId, group._id);
+
+				// Remove the topScorer(if the user bet) and if the tournament defined with topScorer
+				if(tournamentData.topScorerBet){
+					await removeTopScorerPrediction(unpaidUserIds, tournamentId, group._id);
+				}
 			}
 		} catch (error) {
 			console.log("Tournament job error:", error.message);

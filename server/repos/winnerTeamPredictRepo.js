@@ -7,7 +7,12 @@ export const updatePredict = (filterObj, data) =>
 
 export const getAllByGroup = (filterObj) => winnerTeamPredictionModel.find(filterObj);
 
-export const removeWinnerTeamPrediction = (filterObj) => winnerTeamPredictionModel.findOneAndDelete(filterObj);
+export const removeWinnerTeamPrediction = (usersids, tournament, group) =>
+	winnerTeamPredictionModel.deleteMany({
+		user: { $in: usersids },
+		group,
+		tournament,
+	});
 
 export const removeUserWinnerTeamPredictionByTournament = (user, tournament) =>
 	winnerTeamPredictionModel.deleteMany({ user, tournament });

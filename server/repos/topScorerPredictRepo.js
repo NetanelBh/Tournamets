@@ -7,7 +7,8 @@ export const updatePredict = (filterObj, data) =>
 
 export const getAllByGroup = (filterObj) => topScorerPredictionModel.find(filterObj);
 
-export const removeTopScorerPrediction = (filterObj) => topScorerPredictionModel.findOneAndDelete(filterObj);
+export const removeTopScorerPrediction = (userIds, tournament, group) =>
+	topScorerPredictionModel.deleteMany({ user: { $in: userIds }, tournament, group });
 
 export const removeTopScorerPredictionByTournament = (user, tournament) =>
 	topScorerPredictionModel.deleteMany({ user, tournament });

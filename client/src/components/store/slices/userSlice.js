@@ -26,6 +26,14 @@ const userSlice = createSlice({
 		leaveGroup(state, action) {			
 			state.user.groups = state.user.groups.filter((g) => g._id !== action.payload);
 		},
+		// In case of user got out from group
+		updateGroups(state, action) {
+			state.user.groups = action.payload;
+		},
+		// In case of user got out from tournament
+		updateTournaments(state, action) {
+			state.user.tournaments = action.payload;
+		}
 	},
 });
 

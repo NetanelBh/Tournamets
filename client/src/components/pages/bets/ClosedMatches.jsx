@@ -8,6 +8,17 @@ import MatchesList from "./MatchesList";
 import BetsLayout from "../layouts/BetsLayout";
 
 const ClosedMatches = () => {
+	const navigate = useNavigate();
+	const groupId = localStorage.getItem("groupId");
+	const user = useSelector((state) => state.user.user);
+
+	// In case the tournament started and the user sent out of tournament and he inside some page, redirect to muGroups
+	const isUserExistInGroup = user.groups.some((g) => g._id === groupId);
+	if (!isUserExistInGroup) {
+		navigate("/layout/groups-layout/my-groups");
+		return null;
+	}
+
 	// State data for the SaveButton component
 	const [finalScoreUpdateStatus, setFinalScoreUpdateStatus] = useState({});
 	const [openModal, setOpenModal] = useState(false);
@@ -15,7 +26,6 @@ const ClosedMatches = () => {
 	const [navigateTo, setNavigateTo] = useState("");
 	// To set timeout when saving the final score in DB to make it again save button
 	const timeoutRef = useRef({});
-	const navigate = useNavigate();
 
 	// Clear the stored matchId(if stored)
 	localStorage.removeItem("matchId");

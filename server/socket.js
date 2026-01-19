@@ -56,6 +56,25 @@ const initSocket = (server) => {
 			},
 		},
 	});
+
+	/* ================================
+     Watch: Users collection - When tournament started and the user unpaid, need to update redux for the new group list
+	 Or in case the user leave tournament, we want to update the new user tournaments list(because it fetch only once)
+     ================================ */
+	 watchCollections({
+		io,
+		collectionName: "users",
+		events: {
+			update: (change, io) => {
+				const updated = change.updateDescription.updatedFields;		
+				if (updated.groups) {
+					io.emit("userGroups", updated);
+				} else if(updated.tournaments) {
+					io.emit("userTournaments", updated);
+				}
+			},
+		},
+	});
 };
 
 export default initSocket;

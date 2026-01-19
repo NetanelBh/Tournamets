@@ -45,7 +45,7 @@ await dbConnection();
 // Initialize Socket.IO in a separate file
 initSocket(server);
 
-// ReSchedule the future job for remove unpaid users when tournament start(when server restarts, it always gone)
+// ReSchedule the future job for remove unpaid users when tournament start (when server restarts, it always gone)
 const reScheduleOnRestartServer = async (retries = 3) => {
 	try {
 		const notStartedTournaments = await getScheduledTournaments();

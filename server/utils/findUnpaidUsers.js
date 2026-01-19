@@ -6,7 +6,7 @@ import { removeUnpaidUsers, getGroupsByFilter } from "../repos/groupRepo.js";
 import { removeWinnerTeamPrediction } from "../services/winnerTeamPredictServices.js";
 import { removeTopScorerPrediction } from "../services/topScorerPredictServices.js";
 
-const scheduleTournamentJob = async (tournamentId) => {
+const scheduleTournamentJob = async (tournamentId) => {	
 	const tournamentData = await tournamentRepo.getTournamentById(tournamentId);
 	if (!tournamentData) return;
 

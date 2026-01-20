@@ -5,6 +5,8 @@ import { useSelector } from "react-redux";
 import { saveButtonStyle } from "./betsUtils";
 import SaveButton from "../../UI/saveButton/SaveButton";
 import { finalScoreBackground, colorMap, textColorMap } from "./betsUtils";
+import teamsFlagsMap from "../../utils/flagsMap";
+import flagsMap from "../../utils/flagsMap";
 
 const MatchListItem = ({ match, onClick, buttonStatus, actionText, user }) => {	
 	const navigate = useNavigate();
@@ -64,15 +66,12 @@ const MatchListItem = ({ match, onClick, buttonStatus, actionText, user }) => {
 	const kickoffTime = new Date(match.kickoffTime).toLocaleString().replace(",", " |").slice(0, -3);
 
 	return (
-		// TODO: CREATE MAP FOR FLAGS ACCORDING TO THE TEAMS NAMES
 		<li className="grid grid-cols-13 gap-2 pr-1 pl-1 pb-2 bg-gray-700 hover:bg-gray-700/80 font-bold rounded-lg shadow-[0_2px_5px_2px_theme(colors.yellow.300)] mb-6 mr-2 ml-2">
 			<div
-				className={`sm:text-xl col-span-4 p-2 text-white ${
-					match.kickoffTime > updatedClock ? "pt-8" : ""
-				} text-center flex items-center justify-between`}
+				className="sm:text-xl col-span-4 p-2 text-white pt-0 text-center flex flex-col items-center justify-center gap-4"
 			>	
-				<img src="https://upload.wikimedia.org/wikipedia/commons/4/41/Flag_of_Austria.svg" alt="Austria flag" className="w-8 h-8"/>
-				<p>{match.homeTeam}</p>
+				<img src={teamsFlagsMap[match.homeTeam]} alt={match.homeTeam} className="h-8 w-12 shadow-[0_0_3px_2px_theme(colors.gray.300)]"/>
+				<p className="text-center break-words whitespace-normal max-w-full">{match.homeTeam}</p>
 			</div>
 
 			{/* If the match is not started yet, let the user place his bet */}
@@ -205,12 +204,10 @@ const MatchListItem = ({ match, onClick, buttonStatus, actionText, user }) => {
 			)}
 
 			<div
-				className={`sm:text-xl col-span-4 p-2 text-white ${
-					match.kickoffTime > updatedClock ? "pt-8" : ""
-				} text-center flex items-center justify-between`}
+				className="sm:text-xl col-span-4 p-2 text-white pt-0 text-center flex flex-col items-center justify-center gap-4"
 			>
-				<p>{match.awayTeam}</p>
-				<img src="https://upload.wikimedia.org/wikipedia/commons/0/05/Flag_of_Brazil.svg" alt="Austria flag" className="w-8 h-8"/>
+				<img src={flagsMap[match.awayTeam]} alt={match.awayTeam} className="h-8 w-12 shadow-[0_0_3px_2px_theme(colors.gray.300)]"/>
+				<p className="text-center break-words whitespace-normal max-w-full">{match.awayTeam}</p>
 			</div>
 
 			{/* Friends bets button - show only if the match is started*/}

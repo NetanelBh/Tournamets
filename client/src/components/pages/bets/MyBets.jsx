@@ -16,6 +16,9 @@ import { matchesActions } from "../../store/slices/matchesSlice";
 import { playersActions } from "../../store/slices/playersSlice";
 
 const MyBets = () => {
+	// Remove the localStorage for top scorer and winner team friends bet
+	localStorage.removeItem("showType");
+
 	const navigate = useNavigate();
 	const groupId = localStorage.getItem("groupId");
 	const user = useSelector((state) => state.user.user);

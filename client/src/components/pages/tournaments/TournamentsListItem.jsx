@@ -24,7 +24,7 @@ const TournamentsListItem = ({ item, index, btnText, onClick, leave = undefined 
 	const canJoin = "ניתן להצטרף";
 
 	// Get the tournament kickoff time and display it on the screen in the list item
-	const kickoffTime = new Date(item.startTime).toLocaleString().replace(",", " -").slice(0, -3);
+	const kickoffTime = new Date(item.startTime).toLocaleString().replace(",", " ⏱️").slice(0, -3);
 
 	// Compate the dates to determine if the tournament is started
 	let tournamentStatus = item.endDate < updatedTime ? finished : false;

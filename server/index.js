@@ -24,6 +24,8 @@ import topScorerPredictionRouter from "./routes/topScorerPredictRoute.js";
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+// TODO: TEST - CHECK IF THE UNPAID USERS REMOVED FROM TOURNAMENT WHEN SERVER RESTARTS
+
 // body-parser is a built-in middleware function in Express after version 4.16.0
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));

@@ -9,13 +9,15 @@ const TableRow = ({ data, trClass, thClass, tdClass, type=undefined }) => {
 		if (data.i === 0) {
 			rowClass = "bg-[#2626FF]/80 hover:bg-[#0000B8]/80 text-white font-medium text-xs";
 		} else if (data.i === 1) {
-			rowClass = "bg-[#FFCF69]/80 hover:bg-[#FFB81F]/80 text-black font-medium text-xs";
+			rowClass = "bg-[#FFFF00]/80 hover:bg-[#FFDF00]/80 text-black font-medium text-xs";
 		}
 	}
 
 	return (
 		<tr key={data.i} className={`${rowClass} points_table`} style={{ animationDelay: `${data.i * 0.35}s` }}>
-			<th className={thClass}>{data.i + 1}</th>
+			{data.i > 1 && <th className={thClass}>{data.i + 1}</th>}
+			{data.i === 1 && <th className={thClass}>🥈</th>}
+			{data.i === 0 && <th className={thClass}>🏆</th>}
 			<td className={tdClass}>{data.user.username}</td>
 			<td className={tdClass}>{data.user.exacts}</td>
 			<td className={tdClass}>{data.user.directions}</td>

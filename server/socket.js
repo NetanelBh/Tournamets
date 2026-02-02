@@ -47,10 +47,11 @@ const initSocket = (server) => {
 		collectionName: "tournaments",
 		events: {
 			update: (change, io) => {
-				const updated = change.updateDescription.updatedFields;				
+				const updated = change.updateDescription.updatedFields;	
 				if (updated.topScorer) {
 					io.emit("topScorerUpdated", {tournamentId: change.documentKey._id, data: updated.topScorer});
-				} else {
+				} 
+				if (updated.winnerTeam) {
 					io.emit("winnerTeamUpdated", {tournamentId: change.documentKey._id, data: updated.winnerTeam});
 				}
 			},

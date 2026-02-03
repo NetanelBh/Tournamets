@@ -68,11 +68,11 @@ const CreateTournament = () => {
 			if (!resp.data.status) {
 				if (resp.data.data === "SESSION_EXPIRED") {
 					setModalText({ title: "זמן חיבור עבר", text: "לא היתה פעילות במשך 20 דקות, נא להתחבר מחדש" });
-					setNavigateTo("/");
 				} else {
-					setModalText({ title: "יצירת טורניר", text: resp.data.data });
+					setModalText({ title: "יצירת טורניר", text: "אירעה שגיאה, אנא התחבר שנית" });
 				}
-
+				
+				setNavigateTo("/");
 				return;
 			}
 
@@ -81,9 +81,9 @@ const CreateTournament = () => {
 			setModalText({title: "יצירת טורניר", text: "הטורניר נוצר בהצלחה"});
 			setNavigateTo("/layout/all-tournaments");
 		} catch (error) {
-			setNavigateTo("/layout/all-tournaments");
 			setOpenModal(true);
-			setModalText({title: "יצירת טורניר", text: "אירעה שגיאה ביצירת הטורניר, אנא נסה שנית"});
+			setModalText({title: "יצירת טורניר", text: "אירעה שגיאה, אנא התחבר שנית"});
+			setNavigateTo("/");
 		} finally {
 			setIsLoading(false);
 		}

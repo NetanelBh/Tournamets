@@ -47,12 +47,11 @@ const Table = () => {
 					setOpenModal(true);
 					if (allUsersTopScorers.data.data === "SESSION_EXPIRED" || allUsersWinnerTeams.data.data === "SESSION_EXPIRED") {
 						setModalText({ title: "זמן חיבור עבר", text: "לא היתה פעילות במשך 20 דקות, נא להתחבר מחדש" });
-						setNavigateTo("/");
 					} else {
-						setModalText({ title: "טבלה", text: "אירעה שגיאה בטעינת הטבלה אנא נסה שנית" });
-						setNavigateTo("/layout/bets-table");
+						setModalText({ title: "טבלה", text: "אירעה שגיאה, אנא התחבר שנית" });
 					}
-
+					
+					setNavigateTo("/");
 					return;
 				}
 
@@ -60,8 +59,8 @@ const Table = () => {
 				setUsersWinnerTeam(allUsersWinnerTeams.data.data);
 			} catch (error) {
 				setOpenModal(true);
-				setModalText({ title: "טבלה", text: "אירעה שגיאה בטעינת הטבלה אנא נסה שנית" });
-				setNavigateTo("/layout/bets-table");
+				setModalText({ title: "טבלה", text: "אירעה שגיאה, אנא התחבר שנית" });
+				setNavigateTo("/");
 			} finally {
 				setIsLoading(false);
 			}

@@ -66,12 +66,11 @@ const MyGroups = () => {
 			if (!user.data.status) {
 				if (user.data.data === "SESSION_EXPIRED") {
 					setModalText({ title: "זמן חיבור עבר", text: "לא היתה פעילות במשך 20 דקות, נא להתחבר מחדש" });
-					setNavigateTo("/");
 				} else {
 					setModalText({ title: "הקבוצות שלי", text: "אירעה שגיאה בעת היציאה מהקבוצה, אנא נסה שנית" });
-					setNavigateTo("/layout/my-groups");
 				}
-
+				
+				setNavigateTo("/");
 				return;
 			}
 
@@ -79,8 +78,8 @@ const MyGroups = () => {
 			dispatch(userActions.leaveGroup(groupId));
 			setModalText({ title: "הקבוצות שלי", text: "היציאה מהקבוצה בוצעה בהצלחה" });
 		} catch (error) {
-			setModalText({ title: "הקבוצות שלי", text: "אירעה שגיאה בעת היציאה מהקבוצה, אנא נסה שנית" });
-			setNavigateTo("/layout/my-groups");
+			setModalText({ title: "הקבוצות שלי", text: "אירעה שגיאה, אנא התחבר שנית" });
+			setNavigateTo("/");
 		} finally {
 			setIsLoading(false);
 		}

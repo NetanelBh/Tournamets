@@ -123,12 +123,11 @@ const CreateGroup = () => {
 			if (!resp.data.status) {
 				if (resp.data.data === "SESSION_EXPIRED") {
 					setModalText({ title: "זמן חיבור עבר", text: "לא היתה פעילות במשך 20 דקות, נא להתחבר מחדש" });
-					setNavigateTo("/");
 				} else {
-					setModalText({ title: "יצירת קבוצה", text: resp.data.data });
-					setNavigateTo("/layout/groups-layout/create-group");
+					setModalText({ title: "יצירת קבוצה", text: "אירעה שגיאה, אנא התחבר שנית" });
 				}
-
+				
+				setNavigateTo("/");
 				return;
 			}
 
@@ -138,8 +137,8 @@ const CreateGroup = () => {
 			setModalText({ title: "יצירת קבוצה", text: "הקבוצה נוצרה בהצלחה" });
 		} catch (error) {
 			setOpenModal(true);
-			setModalText({ title: "יצירת קבוצה", text: "אירעה שגיאה ביצירת הקבוצה, אנא נסה שנית" });
-			setNavigateTo("/layout/groups-layout/create-group");
+			setModalText({ title: "יצירת קבוצה", text: "אירעה שגיאה, אנא התחבר שנית" });
+			setNavigateTo("/");
 		} finally {
 			setIsLoading(false);
 		}

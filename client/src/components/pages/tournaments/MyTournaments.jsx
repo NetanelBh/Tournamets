@@ -54,12 +54,11 @@ const MyTournaments = () => {
 			if (!resp.data.status) {
 				if (resp.data.data === "SESSION_EXPIRED") {
 					setModalText({title: "זמן חיבור עבר", text: "לא היתה פעילות במשך 20 דקות, נא להתחבר מחדש"});
-					setNavigateTo("/");
 				} else {
-					setModalText({title: "הטורנירים שלי", text: resp.data.data});
-					setNavigateTo("/layout/my-tournaments");
+					setModalText({title: "הטורנירים שלי", text: "אירעה שגיאה, אנא התחבר שנית"});
 				}
 				
+				setNavigateTo("/");
 				return;
 			}
 

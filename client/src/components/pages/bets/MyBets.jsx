@@ -84,22 +84,22 @@ const MyBets = () => {
 					setOpenModal(true);
 					if (users.data.data === "SESSION_EXPIRED") {
 						setModalText({ title: "זמן חיבור עבר", text: "לא היתה פעילות במשך 20 דקות, נא להתחבר מחדש" });
-						setNavigateTo("/");
 					} else {
 						setModalText({
 							title: "ההימורים שלי",
-							text: "אירעה שגיאה בעת טעינת רשימת המשתמשים, אנא נסה שנית",
+							text: "אירעה שגיאה, אנא התחבר שנית",
 						});
-						setNavigateTo("/layout/my-bets");
 					}
+
+					setNavigateTo("/");
 					return;
 				}
 
 				dispatch(userActions.load({ type: "allUsers", data: users.data.data }));
 			} catch (error) {
 				setOpenModal(true);
-				setModalText({ title: "ההימורים שלי", text: "אירעה שגיאה בעת טעינת רשימת המשתמשים, אנא נסה שנית" });
-				setNavigateTo("/layout/my-bets");
+				setModalText({ title: "ההימורים שלי", text: "אירעה שגיאה בעת, אנא התחבר שנית" });
+				setNavigateTo("/");
 			} finally {
 				setIsLoading(false);
 			}
@@ -131,23 +131,22 @@ const MyBets = () => {
 								title: "זמן חיבור עבר",
 								text: "לא היתה פעילות במשך 20 דקות, נא להתחבר מחדש",
 							});
-							setNavigateTo("/");
 						} else {
 							setModalText({
 								title: "ההימורים שלי",
-								text: "אירעה שגיאה בעת טעינת רשימת המשתמשים, אנא נסה שנית",
+								text: "אירעה שגיאה, אנא התחבר שנית",
 							});
-							setNavigateTo("/layout/my-bets");
 						}
 
+						setNavigateTo("/");
 						return;
 					}
 
 					dispatch(userActions.load({ type: "allUsers", data: users.data.data }));
 				} catch (error) {
 					setOpenModal(true);
-					setModalText({ title: "ההימורים שלי", text: "אירעה שגיאה בעת טעינת רשימת המשתמשים, אנא נסה שנית" });
-					setNavigateTo("/layout/my-bets");
+					setModalText({ title: "ההימורים שלי", text: "אירעה שגיאה בעת, אנא התחבר שנית" });
+					setNavigateTo("/");
 				} finally {
 					setIsLoading(false);
 				}
@@ -170,8 +169,8 @@ const MyBets = () => {
 							});
 							setNavigateTo("/");
 						} else {
-							setModalText({ title: "ההימורים שלי", text: allUsersBets.data.data });
-							setNavigateTo("/layout/my-bets");
+							setModalText({ title: "ההימורים שלי", text: "אירעה שגיאה, אנא התחבר שנית" });
+							setNavigateTo("/");
 						}
 						return;
 					}
@@ -193,17 +192,21 @@ const MyBets = () => {
 					});
 
 					dispatch(
-						betsActions.updateWinnerOrTopScorer({ type: "allUsersTopScorers", data: allUsersTopScorerBets })
+						betsActions.updateWinnerOrTopScorer({
+							type: "allUsersTopScorers",
+							data: allUsersTopScorerBets,
+						}),
 					);
 					dispatch(
 						betsActions.updateWinnerOrTopScorer({
 							type: "allUsersWinnerTeams",
 							data: allUsersWinnerTeamBets,
-						})
+						}),
 					);
 				} catch (error) {
 					setOpenModal(true);
-					setModalText({ title: "ההימורים שלי", text: "אירעה שגיאה בקבלת הנתונים מהשרת, אנא נסה שנית" });
+					setModalText({ title: "ההימורים שלי", text: "אירעה שגיאה, אנא התחבר שנית" });
+					setNavigateTo("/");
 				} finally {
 					setIsLoading(false);
 				}
@@ -228,23 +231,22 @@ const MyBets = () => {
 					setOpenModal(true);
 					if (players.data.data === "SESSION_EXPIRED") {
 						setModalText({ title: "זמן חיבור עבר", text: "לא היתה פעילות במשך 20 דקות, נא להתחבר מחדש" });
-						setNavigateTo("/");
 					} else {
 						setModalText({
 							title: "ההימורים שלי",
-							text: "אירעה שגיאה בעת טעינת רשימת השחקנים, אנא נסה שנית",
+							text: "אירעה שגיאה, אנא התחבר שנית",
 						});
-						setNavigateTo("/layout/my-bets");
 					}
 
+					setNavigateTo("/");
 					return;
 				}
 
 				dispatch(playersActions.load(players.data.data));
 			} catch (error) {
 				setOpenModal(true);
-				setModalText({ title: "ההימורים שלי", text: "אירעה שגיאה בעת טעינת רשימת השחקנים, אנא נסה שנית" });
-				setNavigateTo("/layout/my-bets");
+				setModalText({ title: "ההימורים שלי", text: "אירעה שגיאה, אנא התחבר שנית" });
+				setNavigateTo("/");
 			} finally {
 				setIsLoading(false);
 			}
@@ -267,12 +269,11 @@ const MyBets = () => {
 					setOpenModal(true);
 					if (predictions.data.data === "SESSION_EXPIRED") {
 						setModalText({ title: "זמן חיבור עבר", text: "לא היתה פעילות במשך 20 דקות, נא להתחבר מחדש" });
-						setNavigateTo("/");
 					} else {
-						setModalText({ title: "ההימורים שלי", text: "אירעה שגיאה בטעינת הנתונים, אנא נסה שנית" });
-						setNavigateTo("/layout/my-bets");
+						setModalText({ title: "ההימורים שלי", text: "אירעה שגיאה, אנא התחבר שנית" });
 					}
-
+					
+					setNavigateTo("/");
 					return;
 				}
 
@@ -285,8 +286,8 @@ const MyBets = () => {
 				dispatch(betsActions.load(allPredictions));
 			} catch (error) {
 				setOpenModal(true);
-				setModalText({ title: "ההימורים שלי", text: "אירעה שגיאה בטעינת הנתונים, אנא נסה שנית" });
-				setNavigateTo("/layout/my-bets");
+				setModalText({ title: "ההימורים שלי", text: "אירעה שגיאה, אנא התחבר שנית" });
+				setNavigateTo("/");
 			} finally {
 				setIsLoading(false);
 			}
@@ -305,20 +306,19 @@ const MyBets = () => {
 					setOpenModal(true);
 					if (matches.data.data === "SESSION_EXPIRED") {
 						setModalText({ title: "זמן חיבור עבר", text: "לא היתה פעילות במשך 20 דקות, נא להתחבר מחדש" });
-						setNavigateTo("/");
 					} else {
 						setModalText({ title: "ההימורים שלי", text: "אירעה שגיאה בטעינת המשחקים, אנא נסה שנית" });
-						setNavigateTo("/layout/my-bets");
 					}
-
+					
+					setNavigateTo("/");
 					return;
 				}
 
 				dispatch(matchesActions.load(matches.data.data));
 			} catch (error) {
 				setOpenModal(true);
-				setModalText({ title: "ההימורים שלי", text: "אירעה שגיאה בטעינת המשחקים, אנא נסה שנית" });
-				setNavigateTo("/layout/my-bets");
+				setModalText({ title: "ההימורים שלי", text: "אירעה שגיאה, אנא התחבר שנית" });
+				setNavigateTo("/");
 			} finally {
 				setIsLoading(false);
 			}
@@ -342,20 +342,19 @@ const MyBets = () => {
 					setOpenModal(true);
 					if (usersBets.data.data === "SESSION_EXPIRED") {
 						setModalText({ title: "זמן חיבור עבר", text: "לא היתה פעילות במשך 20 דקות, נא להתחבר מחדש" });
-						setNavigateTo("/");
 					} else {
 						setModalText({ title: "ההימורים שלי", text: "שגיאה בטעינת תוצאות המשתמשים, אנא נסה שנית" });
-						setNavigateTo("/layout/my-bets");
 					}
-
+					
+					setNavigateTo("/");
 					return;
 				}
 
 				dispatch(betsActions.load([{ type: "usersBetsForMatch", data: usersBets.data.data }]));
 			} catch (error) {
 				setOpenModal(true);
-				setModalText({ title: "ההימורים שלי", text: "שגיאה בטעינת התוצאות, אנא נסה שנית" });
-				setNavigateTo("/layout/my-bets");
+				setModalText({ title: "ההימורים שלי", text: "אירעה שגיאה, אנא התחבר שנית" });
+				setNavigateTo("/");
 			} finally {
 				setIsLoading(false);
 			}
@@ -603,11 +602,11 @@ const MyBets = () => {
 
 	// Create data for winner team save button
 	const { style: winnerTeamSaveStyle, actionText: winnerTeamSaveText } = saveButtonStyle(
-		saveStatus["winnerTeam"] || "שמור"
+		saveStatus["winnerTeam"] || "שמור",
 	);
 	// Create data for top scorer save button
 	const { style: topScorerSaveStyle, actionText: topScorerSaveText } = saveButtonStyle(
-		saveStatus["topScorer"] || "שמור"
+		saveStatus["topScorer"] || "שמור",
 	);
 
 	const friendsBetsHandler = (type) => {

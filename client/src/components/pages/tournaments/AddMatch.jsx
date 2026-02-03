@@ -57,18 +57,19 @@ const AddMatch = () => {
 			if (!resp.data.status) {
 				if (resp.data.data === "SESSION_EXPIRED") {
 					setModalText({ title: "זמן חיבור עבר", text: "לא היתה פעילות במשך 20 דקות, נא להתחבר מחדש" });
-					setNavigateTo("/");
 				} else {
 					setModalText({title: "יצירת משחק", text: resp.data.data});
 				}
-
+				
+				setNavigateTo("/");
 				return;
 			}
 
 			setModalText({ title: "יצירת משחק", text: "המשחק נוצר בהצלחה" });
 			dispatch(matchesActions.addMatch(resp.data.data));
 		} catch (error) {
-			setModalText({ title: "יצירת משחק", text: "error.message" });
+			setModalText({ title: "יצירת משחק", text: "אירעה שגיאה, אנא התחבר שנית" });
+			setNavigateTo("/");
 		} finally {
 			setIsLoading(false);
 		}

@@ -42,12 +42,11 @@ const JoinGroup = () => {
 			if (!resp.data.status) {
 				if (resp.data.data === "SESSION_EXPIRED") {
 					setModalText({ title: "זמן חיבור עבר", text: "לא היתה פעילות במשך 20 דקות, נא להתחבר מחדש" });
-					setNavigateTo("/");
 				} else {
 					setModalText({ title: "הצטרפות לקבוצה", text: resp.data.data });
-					setNavigateTo("/layout/groups-layout/join-group");
 				}
-
+				
+				setNavigateTo("/");
 				return;
 			}
 
@@ -57,8 +56,8 @@ const JoinGroup = () => {
 			dispatch(userActions.joinGroup(resp.data.data));
 		} catch (error) {
 			setOpenModal(true);
-			setModalText({ title: "הצטרפות לקבוצה", text: "אירעה שגיאה בעת הצטרפות לקבוצה, אנא נסה שנית" });
-			setNavigateTo("/layout/groups-layout/join-group");
+			setModalText({ title: "הצטרפות לקבוצה", text: "אירעה שגיאה, אנא התחבר שנית" });
+			setNavigateTo("/");
 		} finally {
 			setIsLoading(false);
 		}

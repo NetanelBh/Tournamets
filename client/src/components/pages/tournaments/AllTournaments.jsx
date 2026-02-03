@@ -73,11 +73,11 @@ const AllTournaments = () => {
 			if (!resp.status) {
 				if (resp.data === "SESSION_EXPIRED") {
 					setModalText({ title: "זמן חיבור עבר", text: "לא היתה פעילות במשך 20 דקות, נא להתחבר מחדש" });	
-					setNavigateTo("/");
 				} else {
 					setModalText({ title: torunamentJoin, text: "אירעה שגיאה בהצטרפת לטורניר, אנא נסה שנית" })
-					setNavigateTo("/layout/all-tournaments");
 				}
+				
+				setNavigateTo("/");
 				return;
 			}			
 
@@ -86,8 +86,8 @@ const AllTournaments = () => {
 			setModalText({ title: torunamentJoin, text: "הצטרפת לטורניר בהצלחה" });
 			setNavigateTo("/layout/my-tournaments");
 		} catch (error) {
-			setModalText("אירעה שגיאה בהצטרפות לטורניר, אנא נסה שנית");
-			setNavigateTo("/layout/all-tournaments");
+			setModalText("אירעה שגיאה, אנא התחבר שנית");
+			setNavigateTo("/");
 		} finally {
 			setIsLoading(false);
 		}

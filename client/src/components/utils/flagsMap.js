@@ -1,6 +1,7 @@
 // Downloaded from: https://flagpedia.net/download/icons
 
 const flagsMap = {
+    // countries in hebrew
 	"ישראל": "https://flagcdn.com/w40/il.png",
 	"ארצות הברית": "https://flagcdn.com/w40/us.png",
 	"קנדה": "https://flagcdn.com/w40/ca.png",
@@ -154,7 +155,33 @@ const flagsMap = {
     "ליטא": "https://flagcdn.com/w40/lt.png",
     "קוראסאו": "https://flagcdn.com/w40/cw.png",
     "קאבו ורדה": "https://flagcdn.com/w40/cv.png",
-    "לוקסמבורג": "https://flagcdn.com/w40/lu.png"
+    "לוקסמבורג": "https://flagcdn.com/w40/lu.png",
+
+    // Clubs in hebrew:
+    "פריס סן ז'רמן": "https://upload.wikimedia.org/wikipedia/en/a/a7/Paris_Saint-Germain_F.C..svg",
+    "גלאטסראיי": "https://upload.wikimedia.org/wikipedia/en/4/49/Galatasaray_SK_football_logo.png",
+    "יובנטוס": "https://upload.wikimedia.org/wikipedia/commons/e/ed/Juventus_FC_-_logo_black_%28Italy%2C_2020%29.svg",
+    "בנפיקה": "https://upload.wikimedia.org/wikipedia/en/a/a2/SL_Benfica_logo.svg",
+    "ריאל מדריד": "https://upload.wikimedia.org/wikipedia/en/5/56/Real_Madrid_CF.svg",
+    "דורטמונד": "https://upload.wikimedia.org/wikipedia/commons/6/67/Borussia_Dortmund_logo.svg",
+    "אטאלנטה": "https://upload.wikimedia.org/wikipedia/en/6/66/AtalantaBC.svg",
+    "מונקו": "https://upload.wikimedia.org/wikipedia/en/c/cf/LogoASMonacoFC2021.svg",
+    "קרבאח": "https://upload.wikimedia.org/wikipedia/en/f/fe/Qaraba%C4%9F_FK_logo.svg",
+    "ניוקאסל": "https://upload.wikimedia.org/wikipedia/en/5/56/Newcastle_United_Logo.svg",
+    "בודו גלימט": "https://upload.wikimedia.org/wikipedia/en/8/8d/FK_Bodo_Glimt_logo.svg",
+    "אינטר": "https://upload.wikimedia.org/wikipedia/commons/0/05/FC_Internazionale_Milano_2021.svg",
+    "ברוז'": "https://upload.wikimedia.org/wikipedia/en/d/d0/Club_Brugge_KV_logo.svg",
+    "אתלטיקו מדריד": "https://upload.wikimedia.org/wikipedia/en/f/f9/Atletico_Madrid_Logo_2024.svg",
+    "אולימפיאקוס": "https://upload.wikimedia.org/wikipedia/en/a/a2/Olympiacos_FC_crest.svg",
+    "באייר לברקוזן": "https://upload.wikimedia.org/wikipedia/en/5/59/Bayer_04_Leverkusen_logo.svg",
+    "ברצלונה": "https://upload.wikimedia.org/wikipedia/en/4/47/FC_Barcelona_%28crest%29.svg",
+    "צ'לסי": "https://upload.wikimedia.org/wikipedia/en/c/cc/Chelsea_FC.svg",
+    "ליברפול": "https://upload.wikimedia.org/wikipedia/en/0/0c/Liverpool_FC.svg",
+    "טוטנהאם": "https://upload.wikimedia.org/wikipedia/en/b/b4/Tottenham_Hotspur.svg",
+    "ספורטינג": "https://upload.wikimedia.org/wikipedia/en/9/95/Sporting_CP_crest.svg",
+    "מנצ'סטר סיטי": "https://upload.wikimedia.org/wikipedia/en/e/eb/Manchester_City_FC_badge.svg",
+    "ארסנל": "https://upload.wikimedia.org/wikipedia/en/5/53/Arsenal_FC.svg",
+    "באיירן מינכן": "https://upload.wikimedia.org/wikipedia/commons/8/8d/FC_Bayern_M%C3%BCnchen_logo_%282024%29.svg"
 };
 
 export default flagsMap;

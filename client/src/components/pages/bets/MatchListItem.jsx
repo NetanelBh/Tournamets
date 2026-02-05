@@ -66,11 +66,11 @@ const MatchListItem = ({ match, onClick, buttonStatus, actionText, user }) => {
 	const kickoffTime = new Date(match.kickoffTime).toLocaleString().replace(",", " ⏱️").slice(0, -3);
 	
 	return (
-		<li className="grid grid-cols-13 gap-2 pr-1 pl-1 pb-2 bg-gray-700 hover:bg-gray-700/80 font-bold rounded-lg shadow-[0_2px_5px_2px_theme(colors.yellow.300)] mb-6 mr-2 ml-2">
+		<li className="grid grid-cols-13 gap-2 pr-1 pl-1 pb-2 bg-gray-600 hover:bg-gray-700/80 font-bold rounded-lg shadow-[0_2px_5px_2px_theme(colors.yellow.300)] mb-6 mr-2 ml-2">
 			<div
 				className="sm:text-xl col-span-4 p-2 text-white pt-0 text-center flex flex-col items-center mt-6"
 			>	
-				<img src={teamsFlagsMap[match.homeTeam]} alt={`${match.homeTeam} flag`} className="h-8 w-12 shadow-[0_0_5px_1px_theme(colors.gray.300)] mb-4"/>
+				<img src={teamsFlagsMap[match.homeTeam]} alt={`${match.homeTeam} flag`} className="h-8 w-12 mb-4"/>
 				<p className="text-center break-words whitespace-normal max-w-full">{match.homeTeam}</p>
 			</div>
 
@@ -206,7 +206,7 @@ const MatchListItem = ({ match, onClick, buttonStatus, actionText, user }) => {
 			<div
 				className="sm:text-xl col-span-4 p-2 text-white pt-0 text-center flex flex-col items-center mt-6"
 			>
-				<img src={flagsMap[match.awayTeam]} alt={`${match.awayTeam} flag`} className="h-8 w-12 shadow-[0_0_5px_1px_theme(colors.gray.300)] mb-4"/>
+				<img src={flagsMap[match.awayTeam]} alt={`${match.awayTeam} flag`} className="h-8 w-12 mb-4"/>
 				<p className="text-center break-words whitespace-normal max-w-full">{match.awayTeam}</p>
 			</div>
 

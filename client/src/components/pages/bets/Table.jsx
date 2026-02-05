@@ -18,6 +18,8 @@ const Table = () => {
 	const user = useSelector((state) => state.user.user);
 	const tournamentId = localStorage.getItem("tournamentId");
 
+	const currentGroup = user.groups.find((g) => g._id === groupId);
+
 	// In case the tournament started and the user sent out of tournament and he inside some page, redirect to muGroups
 	const isUserExistInGroup = user.groups.some((g) => g._id === groupId);
 	if (!isUserExistInGroup) {
@@ -83,7 +85,7 @@ const Table = () => {
 		// Get all users bets for the current tournament - it's an object {matchId: [bets]}
 		usersBets: useSelector((state) => state.bets),
 		// Get the current group points rules(calculate the points for the each user in the table and exact/directions bets)
-		groupPointsRules: useSelector((state) => user.groups.find((g) => g._id === groupId)).points,
+		groupPointsRules: currentGroup.points,
 		// Get the current tournament to get the top scorer bonus
 		tournamentTopScorerId: useSelector(
 			(state) => state.tournaments.tournaments.find((t) => t._id === tournamentId).topScorer
@@ -95,7 +97,7 @@ const Table = () => {
 		
 		usersTopScorers: usersTopScorer,
 		usersWinnerTeams: usersWinnerTeam,
-	};
+	};	
 
 	// Sorted users points list to display in table
 	const usersTableData = usersPoints(data);
@@ -106,7 +108,7 @@ const Table = () => {
 	).startTime;
 
 	const currentTime = useSelector((state) => state.clock.now);
-
+	
 	// Calculate the total money
 	const totalMoney = data.allUsers.length * 150;
 
@@ -118,7 +120,7 @@ const Table = () => {
 				<div className="flex flex-col items-center">
 					<BetsLayout />
 
-					{tournamentKickoffTime < currentTime && (
+					{tournamentKickoffTime < currentTime && currentGroup.isPaid && (
 						<p className="text-red-700 text-xl mb-6 font-bold bg-yellow-200 px-4 py-2 rounded-sm">{` הסכום בקופה: ₪${totalMoney}`}</p>
 					)}
 

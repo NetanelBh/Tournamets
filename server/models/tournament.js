@@ -13,7 +13,7 @@ const tournamentSchema = new Schema({
   // The players candidates list for the tournament
   players: [{type: Schema.Types.ObjectId, ref: "Player", required: true}],
   winnerTeam: {type: String},
-  symbol: {type: String, required: true},
+  symbol: {type: String},
 }, { versionKey: false });
 
 const Tournament = model("Tournament", tournamentSchema);

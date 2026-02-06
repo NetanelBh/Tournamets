@@ -47,10 +47,11 @@ const TournamentsListItem = ({ item, index, btnText, onClick, leave = undefined 
 				<div className="mb-4 text-sm text-center text-yellow-200 font-bold">{kickoffTime}</div>
 
 				<div className="flex items-center justify-between h-16">
-					<img src={item.symbol} alt="tournament symbol" style={{ width: "20%", height: "100%" }} />
+					{/* If no image url in tournament document, get from the local images dir(by tournamentId) */}
+					<img src={item.symbol || `/images/${item._id}.png` || `/images/${item._id}.jpg`} alt="tournament symbol" style={{ width: "20%", height: "100%" }} />
 					<p className="max-w-2xl text-xl text-white font-medium">{item.name}</p>
 				</div>
-
+				
 				<div className="mt-4 flex items-center justify-between">
 					{/* Show the status only in AllTournaments page(כפתור כניסה זה רק עבור הטורנירים שלי) */}
 					<p className={btnText !== entrance ? "text-sm text-white" : "invisible"}>

@@ -158,7 +158,7 @@ const flagsMap = {
     "לוקסמבורג": "https://flagcdn.com/w40/lu.png",
 
     // Clubs in hebrew:
-    "פריס סן ז'רמן": "https://upload.wikimedia.org/wikipedia/en/a/a7/Paris_Saint-Germain_F.C..svg",
+    "פסז'": "https://upload.wikimedia.org/wikipedia/en/a/a7/Paris_Saint-Germain_F.C..svg",
     "גלאטסראיי": "https://upload.wikimedia.org/wikipedia/en/4/49/Galatasaray_SK_football_logo.png",
     "יובנטוס": "https://upload.wikimedia.org/wikipedia/commons/e/ed/Juventus_FC_-_logo_black_%28Italy%2C_2020%29.svg",
     "בנפיקה": "https://upload.wikimedia.org/wikipedia/en/a/a2/SL_Benfica_logo.svg",

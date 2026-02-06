@@ -66,7 +66,7 @@ const MatchListItem = ({ match, onClick, buttonStatus, actionText, user }) => {
 	const kickoffTime = new Date(match.kickoffTime).toLocaleString().replace(",", " ⏱️").slice(0, -3);
 	
 	return (
-		<li className="grid grid-cols-15 gap-2 pr-1 pl-1 pb-2 bg-gray-600 hover:bg-gray-700/80 font-bold rounded-lg shadow-[0_2px_5px_2px_theme(colors.yellow.300)] mb-6">
+		<li className="grid grid-cols-15 gap-2 pr-1 pl-1 pb-2 bg-gray-600 hover:bg-gray-700/80 font-bold shadow-[0_2px_5px_2px_theme(colors.yellow.300)] mb-6">
 			<div
 				className="sm:text-xl col-span-5 pt-2 pb-2 pl-2 text-white pt-0 text-center flex flex-col items-center mt-6"
 			>	

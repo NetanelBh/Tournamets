@@ -37,7 +37,7 @@ const TournamentsListItem = ({ item, index, btnText, onClick, leave = undefined 
 	} else if (isJoined) {
 		statusColor = "text-yellow-400 font-bold";
 	}
-
+	
 	return (
 		<li className={main_style} style={{ animationDelay: `${index * 0.15}s` }}>
 			{/* This div is an overlay to the next div to make the item transparent */}
@@ -48,7 +48,7 @@ const TournamentsListItem = ({ item, index, btnText, onClick, leave = undefined 
 
 				<div className="flex items-center justify-between h-16">
 					{/* If no image url in tournament document, get from the local images dir(by tournamentId) */}
-					<img src={item.symbol || `/images/${item._id}.png` || `/images/${item._id}.jpg`} alt="tournament symbol" style={{ width: "20%", height: "100%" }} />
+					<img src={item.symbol || `/images/${item.name}.png` || `/images/${item._id}.jpg`} alt="tournament symbol" style={{ width: "20%", height: "100%" }} />
 					<p className="max-w-2xl text-xl text-white font-medium">{item.name}</p>
 				</div>
 				

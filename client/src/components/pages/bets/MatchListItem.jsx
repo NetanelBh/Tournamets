@@ -17,7 +17,7 @@ const MatchListItem = ({ match, onClick, buttonStatus, actionText, user }) => {
 	// The clock from matchSlice(the clock update each second to make the components rerender for live matches bet list)
 	const updatedClock = useSelector((state) => state.clock.now);
 	// Get the admin status to determine if the user can update the final score(instead do it manually in MongoDB)
-	const isAdmin = sessionStorage.getItem("isAdmin");
+	const isAdmin = sessionStorage.getItem("isAdmin") === "true";
 
 	// Sometimes when save the bets, there is a failure, we want to display the fail message on the button
 	let newActionText = actionText;
@@ -25,7 +25,7 @@ const MatchListItem = ({ match, onClick, buttonStatus, actionText, user }) => {
 	// This buttonClass for the admin when need to update the final score
 	let buttonClass = `${
 		buttonStatus === "נשמר" ? "bg-green-400" : "bg-red-600"
-	} text-white rounded-lg p-1 cursor-pointer mt-2 w-full hover:scale-95 active:scale-95`;
+	} text-white rounded-lg p-1 cursor-pointer mt-1 w-full hover:scale-95 active:scale-95`;
 
 	if (user === "regular") {
 		const {actionText, style} = saveButtonStyle(buttonStatus);
@@ -63,7 +63,7 @@ const MatchListItem = ({ match, onClick, buttonStatus, actionText, user }) => {
 	const scoreColor = finalScoreBackground(match.matchScoreBet ? match.matchScoreBet.betScore : null, scoreFromDb);
 
 	// Get the match's kickoff time and display it on the screen in the list item
-	const kickoffTime = new Date(match.kickoffTime).toLocaleString().replace(",", " ⏱️").slice(0, -3);
+	const kickoffTime = new Date(match.kickoffTime).toLocaleString().replace(",", " ⏱️").slice(0, -3);	
 	
 	return (
 		<li className="grid grid-cols-15 pr-1 pl-1 pb-2 bg-gray-600 hover:bg-gray-700/80 font-bold shadow-[0_2px_5px_2px_theme(colors.yellow.300)] mb-6">
@@ -212,7 +212,7 @@ const MatchListItem = ({ match, onClick, buttonStatus, actionText, user }) => {
 
 			{/* Friends bets button - show only if the match is started*/}
 			{match.kickoffTime < updatedClock && (
-				<div className="lg:w-col-span-5 lg:col-start-4 col-span-7 col-start-4 flex justify-center mt-2 mb-1 border border-white border-2 hover:cursor-pointer hover:scale-95 active:cursor-pointer active:scale-95 rounded-2xl bg-teal-700 text-yellow-300 text-lg">
+				<div className="lg:w-col-span-5 lg:col-start-5 col-span-7 col-start-5 flex justify-center mt-2 mb-1 border border-white border-2 hover:cursor-pointer hover:scale-95 active:cursor-pointer active:scale-95 rounded-2xl bg-teal-700 text-yellow-300 text-lg">
 					<button className="hover:cursor-pointer active:cursor-pointer" onClick={friendsBetsHandler}>
 						הימורי החברים{" "}
 						<span className="mr-2">

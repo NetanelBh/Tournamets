@@ -14,7 +14,7 @@ const AllFriendsWinnerTeamsAndTopScorers = () => {
 	const winnerTeamRows = allWinnerTeams.map((row) => [
 		row.username,
 		<div className="flex items-center gap-4">
-			<img src={flagsMap[row.winnerTeam]} alt="" className="h-8 w-12 object-contain"/>
+			<img src={flagsMap[row.winnerTeam]} className="h-8 w-12 object-contain"/>
 			<span>{row.winnerTeam}</span>
 		</div>,
 	]);

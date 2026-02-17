@@ -130,7 +130,7 @@ const Table = () => {
 								<table className="w-fit text-sm text-left rtl:text-right">
 									<TableHeader
 										data={tableHeaders}
-										theadClass="text-center bg-gray-900/90 text-white text-xs font-bold border-b border-gray-200 w-fit"
+										theadClass="text-center bg-gray-800/90 text-white text-xs font-bold border-b border-gray-200 w-fit"
 									/>
 
 									<tbody className="divide-y divide-gray-200">
@@ -138,7 +138,7 @@ const Table = () => {
 											<TableRow
 												key={index}
 												data={{ user, i: index }}
-												trClass="bg-white hover:bg-gray-200 text-xs"
+												trClass="bg-white/80 hover:bg-gray-200 text-xs"
 												thClass="px-6 py-4 whitespace-nowrap"
 												tdClass="px-6 text-center py-4 w-fit whitespace-nowrap"
 												type="points"

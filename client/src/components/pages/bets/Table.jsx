@@ -46,23 +46,23 @@ const Table = () => {
 				]);
 
 				if (!allUsersTopScorers.data.status || !allUsersWinnerTeams.data.status) {
-					setOpenModal(true);
 					if (allUsersTopScorers.data.data === "SESSION_EXPIRED" || allUsersWinnerTeams.data.data === "SESSION_EXPIRED") {
+						setOpenModal(true);
 						setModalText({ title: "זמן חיבור עבר", text: "לא היתה פעילות במשך 20 דקות, נא להתחבר מחדש" });
-					} else {
-						setModalText({ title: "טבלה", text: "אירעה שגיאה, אנא התחבר שנית" });
+
+						setNavigateTo("/");
+						return;
 					}
 					
-					setNavigateTo("/");
+					navigate("/");
 					return;
 				}
 
 				setUsersTopScorer(allUsersTopScorers.data.data);
 				setUsersWinnerTeam(allUsersWinnerTeams.data.data);
 			} catch (error) {
-				setOpenModal(true);
-				setModalText({ title: "טבלה", text: "אירעה שגיאה, אנא התחבר שנית" });
-				setNavigateTo("/");
+				navigate("/");
+				return;
 			} finally {
 				setIsLoading(false);
 			}

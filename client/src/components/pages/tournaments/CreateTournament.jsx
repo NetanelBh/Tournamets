@@ -62,28 +62,27 @@ const CreateTournament = () => {
 		try {
 			const resp = await API.post("/tournament/create", newTournamentData);
 
-			// Always open the modal for both cases if the tournament created or occurred an error
-			setOpenModal(true);
-
 			if (!resp.data.status) {
 				if (resp.data.data === "SESSION_EXPIRED") {
+					setOpenModal(true);
 					setModalText({ title: "זמן חיבור עבר", text: "לא היתה פעילות במשך 20 דקות, נא להתחבר מחדש" });
-				} else {
-					setModalText({ title: "יצירת טורניר", text: "אירעה שגיאה, אנא התחבר שנית" });
+
+					setNavigateTo("/");
+					return;
 				}
 				
-				setNavigateTo("/");
+				navigate("/");
 				return;
 			}
 
 			// If the resopnse is true, it means the tournament successfully created and will store in redux
 			dispatch(tournamentsActions.addTournament(resp.data.data));
-			setModalText({title: "יצירת טורניר", text: "הטורניר נוצר בהצלחה"});
 			setNavigateTo("/layout/all-tournaments");
-		} catch (error) {
 			setOpenModal(true);
-			setModalText({title: "יצירת טורניר", text: "אירעה שגיאה, אנא התחבר שנית"});
-			setNavigateTo("/");
+			setModalText({title: "יצירת טורניר", text: "הטורניר נוצר בהצלחה"});
+		} catch (error) {
+			navigate("/");
+			return;
 		} finally {
 			setIsLoading(false);
 		}

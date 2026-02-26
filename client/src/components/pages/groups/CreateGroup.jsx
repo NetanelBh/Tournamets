@@ -117,28 +117,28 @@ const CreateGroup = () => {
 
 		setIsLoading(true);
 		try {
-			setOpenModal(true);
-
 			const resp = await API.post("/group/create", newGroup);	
 			if (!resp.data.status) {
 				if (resp.data.data === "SESSION_EXPIRED") {
+					setOpenModal(true);
 					setModalText({ title: "זמן חיבור עבר", text: "לא היתה פעילות במשך 20 דקות, נא להתחבר מחדש" });
-				} else {
-					setModalText({ title: "יצירת קבוצה", text: "אירעה שגיאה, אנא התחבר שנית" });
+					
+					setNavigateTo("/");
+					return;
 				}
 				
-				setNavigateTo("/");
+				navigate("/");
 				return;
 			}
 
 			// Update the redux - attach the group to the the user who created it
 			dispatch(userActions.joinGroup(resp.data.data));
 			setNavigateTo("/layout/groups-layout/my-groups");
+			setOpenModal(true);
 			setModalText({ title: "יצירת קבוצה", text: "הקבוצה נוצרה בהצלחה" });
 		} catch (error) {
-			setOpenModal(true);
-			setModalText({ title: "יצירת קבוצה", text: "אירעה שגיאה, אנא התחבר שנית" });
-			setNavigateTo("/");
+			navigate("/");
+			return;
 		} finally {
 			setIsLoading(false);
 		}

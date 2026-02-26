@@ -37,27 +37,28 @@ const JoinGroup = () => {
 
 		try {
 			const resp = await API.post("/group/join", newGroup);
-			setOpenModal(true);
-
+		
 			if (!resp.data.status) {
 				if (resp.data.data === "SESSION_EXPIRED") {
+					setOpenModal(true);
 					setModalText({ title: "זמן חיבור עבר", text: "לא היתה פעילות במשך 20 דקות, נא להתחבר מחדש" });
-				} else {
-					setModalText({ title: "הצטרפות לקבוצה", text: resp.data.data });
+
+					setNavigateTo("/");
+					return;
 				}
 				
-				setNavigateTo("/");
+				avigate("/");
 				return;
 			}
 
 			setNavigateTo("/layout/groups-layout/my-groups");
+			setOpenModal(true);
 			setModalText({ title: "הצטרפות לקבוצה", text: "הצטרפת לקבוצה בהצלחה" });
 			// Update the redux - the data contains the joined group id
 			dispatch(userActions.joinGroup(resp.data.data));
 		} catch (error) {
-			setOpenModal(true);
-			setModalText({ title: "הצטרפות לקבוצה", text: "אירעה שגיאה, אנא התחבר שנית" });
-			setNavigateTo("/");
+			navigate("/");
+			return;
 		} finally {
 			setIsLoading(false);
 		}

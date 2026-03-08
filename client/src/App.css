@@ -49,3 +49,33 @@
 	animation: blink 0.9s infinite;
 	animation-delay: 0.2s;
   }
+
+@keyframes ballBounce {
+  0% {
+    transform: translateY(0) translateX(0) rotate(0deg);
+  }
+
+  /* big jump */
+  33% {
+    transform: rotateZ(120deg);
+  }
+
+  66% {
+    transform: rotateZ(240deg);
+  }
+
+  /* small bounce */
+  83% {
+    transform: rotateZ(300deg);
+  }
+
+  100% {
+    transform: rotateZ(360deg);
+  }
+}
+
+.login_ball {
+  display: inline-block;
+  animation: ballBounce 2s linear infinite;
+  transform-origin: center;
+}

@@ -30,52 +30,57 @@
 }
 
 @keyframes showup {
-  to{
-	opacity: 1;
-  }
+	to {
+		opacity: 1;
+	}
 }
 
 /* Section for the friends bets button */
 @keyframes blink {
-	0%, 100% { opacity: 0; }
-	50% { opacity: 1; }
-  }
-  
-  .blink_1 {
+	0%,
+	100% {
+		opacity: 0;
+	}
+	50% {
+		opacity: 1;
+	}
+}
+
+.blink_1 {
 	animation: blink 0.9s infinite;
-  }
-  
-  .blink_2 {
+}
+
+.blink_2 {
 	animation: blink 0.9s infinite;
 	animation-delay: 0.2s;
-  }
+}
 
 @keyframes ballBounce {
-  0% {
-    transform: translateY(0) translateX(0) rotate(0deg);
-  }
+	0% {
+		transform: translateY(0) rotateZ(0deg);
+	}
 
-  /* big jump */
-  33% {
-    transform: rotateZ(120deg);
-  }
+	/* big jump */
+	33% {
+		transform: translateY(-60px) rotateZ(120deg);
+	}
 
-  66% {
-    transform: rotateZ(240deg);
-  }
+	66% {
+		transform: translateY(0) rotateZ(240deg);
+	}
 
-  /* small bounce */
-  83% {
-    transform: rotateZ(300deg);
-  }
+	/* small bounce */
+	83% {
+		transform: translateY(-25px) rotateZ(300deg);
+	}
 
-  100% {
-    transform: rotateZ(360deg);
-  }
+	100% {
+		transform: translateY(0) rotateZ(360deg);
+	}
 }
 
 .login_ball {
-  display: inline-block;
-  animation: ballBounce 2s linear infinite;
-  transform-origin: center;
+	display: inline-block;
+	animation: ballBounce 1.8s linear 1s;
+	transform-origin: center;
 }

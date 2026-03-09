@@ -1,18 +1,29 @@
-// import nodemailer from "nodemailer";
-import sgmail from "@sendgrid/mail";
+import nodemailer from "nodemailer";
 
-sgmail.setApiKey(process.env.SENDGRID_API_KEY);
+// Create transporter using Gmail
+const transporter = nodemailer.createTransport({
+	service: "gmail",
+	auth: {
+		user: process.env.MY_EMAIL, // your Gmail address
+		pass: process.env.GMAIL_APP_PASSWORD, // your 16-char App Password
+	},
+});
 
-const sendEmail = async(to, subject, html) => {
+const sendEmail = async (to, subject, html) => {
+	const mailOptions = {
+		from: process.env.GMAIL_USER,
+		to,
+		subject,
+		html,
+	};
+
 	try {
-		await sgmail.send({
-			to,
-			from: process.env.MY_EMAIL,
-			subject,
-			html,	
-		})
+		const info = await transporter.sendMail(mailOptions);
+		console.log("Email sent: " + info.response);
+		return info;
 	} catch (error) {
 		console.error("Error sending email:", error);
+		throw error;
 	}
 };
 

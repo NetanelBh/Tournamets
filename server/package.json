@@ -12,7 +12,6 @@
   "license": "ISC",
   "description": "Gambling tournament",
   "dependencies": {
-    "@sendgrid/mail": "^8.1.6",
     "axios": "^1.10.0",
     "bcrypt": "^6.0.0",
     "cheerio": "^1.1.2",
@@ -22,6 +21,7 @@
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.15.1",
     "node-schedule": "^2.1.1",
+    "nodemailer": "^8.0.2",
     "socket.io": "^4.8.1"
   },
   "devDependencies": {

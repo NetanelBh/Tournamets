@@ -11,6 +11,8 @@ const transporter = nodemailer.createTransport({
 	},
 	logger: true,
 	debug: true,
+	socketTimeout: 10000,
+	family: 4,
 });
 
 const sendEmail = async (to, subject, html) => {

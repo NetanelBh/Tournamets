@@ -1,33 +1,40 @@
-import nodemailer from "nodemailer";
+import axios from "axios";
 
-// Create transporter using Gmail
-const transporter = nodemailer.createTransport({
-	host: "smtp.gmail.com",
-	port: 587, // SSL port
-	secure: false,
-	auth: {
-		user: process.env.MY_EMAIL, // your Gmail address
-		pass: process.env.GMAIL_APP_PASSWORD, // your 16-char App Password
-	},
-	logger: true,
-	debug: true,
-	family: 4,
-});
+const BREVO_URL = "https://api.brevo.com/v3/smtp/email";
 
 const sendEmail = async (to, subject, html) => {
-	const mailOptions = {
-		from: process.env.MY_EMAIL,
-		to,
-		subject,
-		html,
-	};
-
 	try {
-		const info = await transporter.sendMail(mailOptions);
-		console.log("Email sent: " + info.response);
-		return info;
+		const response = await axios.post(
+			BREVO_URL,
+			{
+				sender: {
+					email: process.env.MY_EMAIL,
+				},
+
+				to: [
+					{
+						email: to,
+					},
+				],
+
+				subject: subject,
+
+				htmlContent: html,
+			},
+			{
+				headers: {
+					"api-key": process.env.BREVO_API_KEY,
+					"Content-Type": "application/json",
+				},
+			},
+		);
+
+		console.log("Email sent successfully:", response.data);
+
+		return response.data;
 	} catch (error) {
-		console.error("Error sending email:", error);
+		console.error("Brevo email error:", error.response?.data || error.message);
+
 		throw error;
 	}
 };

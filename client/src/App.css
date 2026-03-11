@@ -61,26 +61,30 @@
 	}
 
 	/* big jump */
-	33% {
+	25% {
 		transform: translateY(-60px) rotateZ(120deg);
 	}
 
-	66% {
+	50% {
 		transform: translateY(0) rotateZ(240deg);
 	}
 
 	/* small bounce */
-	83% {
+	63% {
 		transform: translateY(-25px) rotateZ(300deg);
 	}
 
-	100% {
+	75% {
+		transform: translateY(0) rotateZ(360deg);
+	}
+
+	100%{
 		transform: translateY(0) rotateZ(360deg);
 	}
 }
 
 .login_ball {
 	display: inline-block;
-	animation: ballBounce 1.8s linear 1s;
+	animation: ballBounce 2s linear 1s infinite;
 	transform-origin: center;
 }

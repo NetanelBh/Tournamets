@@ -55,7 +55,7 @@ const ClosedMatches = () => {
 			return matchwithBet;
 		})
 		// Sort the matches by date(oldest to newest)
-		.sort((match1, match2) => new Date(match1.kickoffTime) - new Date(match2.kickoffTime));
+		.sort((match1, match2) => new Date(match2.kickoffTime) - new Date(match1.kickoffTime));
 
 	// Update the final score
 	const updateFinalScoreHandler = async ({ match, homeScore, awayScore }) => {

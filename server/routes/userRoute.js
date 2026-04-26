@@ -19,6 +19,7 @@ router.post("/allUsers", async (req, res) => {
 		res.send({ status: false, data: "אירעה בעיה בקבלת המשתמשים, אנא נסה שנית" });
 	}
 });
+
 // Get the user's list of tournaments he is in
 router.get("/myTournaments", async (req, res) => {
 	try {

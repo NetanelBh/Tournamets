@@ -4,11 +4,10 @@ import { useNavigate } from "react-router-dom";
 
 import API from "../../utils/Api";
 import Modal from "../../modal/Modal";
-import { addMatch } from "../tournaments/tournamentUtils";
+import { addMatch, israelToUTC } from "../tournaments/tournamentUtils";
 import Input from "../../UI/input/Input";
 import Loading from "../../UI/loading/Loading";
 import { matchesActions } from "../../store/slices/matchesSlice";
-import israelToUTC from "../../../../../server/utils/ConvertIsraelTimeToUtc";
 
 const AddMatch = () => {
 	const homeTeamRef = useRef();

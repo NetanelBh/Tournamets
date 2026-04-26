@@ -34,7 +34,7 @@ router.post("/create", async (req, res) => {
 		}
 
 		// Should convert the date entered to DATE object as UTC
-		const utcDate = israelToUTC(startDate, startTime);
+		const utcDate = israelToUTC(startDate, startTime);	
 
 		// Get the fixtures from wikipedia (translated to hebrew)
 		const fixtures = await fetchFixtures(name);
@@ -93,7 +93,6 @@ router.post("/join", async (req, res) => {
 	try {
 		const { tournamentId } = req.body;
 
-		console.log(req.user.id);
 		// Get the user from DB(he exists because he is logged in)
 		const user = await getUserbyId(req.user.id);
 

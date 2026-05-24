@@ -19,8 +19,17 @@ const PointsExplain = () => {
 
 			<div className="bg-gray-300 block max-w-sm p-6 border border-default rounded-lg shadow-[0_0_8px_3px_theme(colors.teal.200)] hover:bg-neutral-secondary-medium fade_up mb-4">
 				<ExplainDataHeader header="הסבר שיטת ניקוד המשחקים" />
+				<br></br>
+
+				<p className="text-body font-bold underline">בונוס ניחוש האלופה:</p>
+				<p className="text-body mb-2">15 נקודת</p>
+				
+				<p className="text-body font-bold underline">בונוס ניחוש מלך השערים:</p>
+				<p className="text-body mb-2">20 נקודת</p>
+
 				<p className="text-body font-bold underline">שלב הבתים:</p>
 				<ExplainData data={pointsRules.groupStage} />
+				<p className="mb-2"></p>
 
 				<p className="text-body font-bold underline">שלב הנוקאאוט:</p>
 				<ExplainData data={pointsRules.knockoutStage} />

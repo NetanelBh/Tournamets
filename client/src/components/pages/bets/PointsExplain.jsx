@@ -22,10 +22,10 @@ const PointsExplain = () => {
 				<br></br>
 
 				<p className="text-body font-bold underline">בונוס ניחוש האלופה:</p>
-				<p className="text-body mb-2">15 נקודת</p>
+				<p className="text-body mb-2">15 נקודות</p>
 				
 				<p className="text-body font-bold underline">בונוס ניחוש מלך השערים:</p>
-				<p className="text-body mb-2">20 נקודת</p>
+				<p className="text-body mb-2">20 נקודות</p>
 
 				<p className="text-body font-bold underline">שלב הבתים:</p>
 				<ExplainData data={pointsRules.groupStage} />

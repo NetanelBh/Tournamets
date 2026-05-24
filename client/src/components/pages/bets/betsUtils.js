@@ -36,9 +36,6 @@ export const finalScoreBackground = (userBet, realFinalScore) => {
 	}
 };
 
-export const winnerTeamBonus = 15;
-export const topScorerBonus = 20;
-
 export const calculatePoints = (stage, round, finalScore, userBet, pointsRules) => {
 	// Used to convert the data in hebrew and the keys in the DB to compare for the points calculation
 	const stageConverter = {
@@ -118,6 +115,9 @@ export const tableHeaders = [
 	{ label: "בונוס מלך השערים", className: "px-4 py-3 font-bold" },
 	{ label: `סה"כ`, className: "px-4 py-3 font-bold" },
 ];
+
+export const winnerTeamBonus = 15;
+export const topScorerBonus = 20;
 
 export const usersPoints = (data) => {
 	const returendData = data.allUsers.map((user) => {

@@ -36,6 +36,9 @@ export const finalScoreBackground = (userBet, realFinalScore) => {
 	}
 };
 
+export const winnerTeamBonus = 15;
+export const topScorerBonus = 20;
+
 export const calculatePoints = (stage, round, finalScore, userBet, pointsRules) => {
 	// Used to convert the data in hebrew and the keys in the DB to compare for the points calculation
 	const stageConverter = {
@@ -157,7 +160,7 @@ export const usersPoints = (data) => {
 		// Check if not undefined because at first time it will be empty until fetch from useEffect in Table page
 		if (currUserTopScorer) {
 			if (currUserTopScorer.topScorer === data.tournamentTopScorerId) {
-				finalUserPoints.topScorerBonus = 10;
+				finalUserPoints.topScorerBonus = topScorerBonus;
 			}
 		}
 
@@ -166,7 +169,7 @@ export const usersPoints = (data) => {
 		// Check if not undefined because at first time it will be empty until fetch from useEffect in Table page
 		if (currUserWinnerTeam) {
 			if (currUserWinnerTeam.winnerTeam === data.tournamentWinnerTeam) {
-				finalUserPoints.winnerTeamBonus = 10;
+				finalUserPoints.winnerTeamBonus = winnerTeamBonus;
 			}
 		}
 

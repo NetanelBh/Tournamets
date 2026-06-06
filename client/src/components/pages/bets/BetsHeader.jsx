@@ -19,9 +19,12 @@ const BetsHeader = () => {
 
 	const currentGroup = user.groups.find((g) => g._id === localStorage.getItem("groupId"));
 
-	// const groupName = user.groups.find((g) => g._id === localStorage.getItem("groupId"))?.name || "";
 	// Find if the current user is the group's owner(to determine if display the group code on his screen)
 	const isGroupOwner = user.groups.some((g) => g.owner === user._id && currentGroup.name === g.name);
+
+	const membersStatusHandler = () => {
+		navigate("/layout/group-members-status");
+	};
 
 	const codeDisplay = () => {
 		setIsCodeDisplay((prev) => !prev);
@@ -59,6 +62,14 @@ const BetsHeader = () => {
 						onClick={codeDisplay}
 					>
 						{isCodeDisplay ? currentGroup.code : "שתף את קוד הקבוצה"}
+					</button>
+
+					{/* Show the payment status of the group members */}
+					<button
+						className="bg-gray-600/50 text-yellow-300 px-4 py-2 rounded-full hover:cursor-pointer active:scale-95 active:shadow-none border border-red-400 shadow-sm shadow-gray-200"
+						onClick={membersStatusHandler}
+					>
+						סטטוס תשלום חברים
 					</button>
 
 					{/* If the group code is displayed, let the owner the option to share it on whatsapp */}

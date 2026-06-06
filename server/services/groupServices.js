@@ -21,3 +21,11 @@ export const addGroupMember = (groupId, userId) => {
 export const leaveGroup = (userId, groupId) => {
 	return groupRepo.leaveGroup(userId, groupId);
 };
+
+export const getGroupMembersStatus = (groupId) => {
+	return groupRepo.getGroupMembersStatus(groupId);
+};
+
+export const updateMemberHasPaid = (groupId, memberId, hasPaid) => {
+	return groupRepo.updateMemberHasPaid(groupId, memberId, hasPaid);
+};

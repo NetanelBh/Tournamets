@@ -13,6 +13,7 @@ const GroupMembersStatus = () => {
 	const [openModal, setOpenModal] = useState(false);
 	const [modalText, setModalText] = useState({});
 	const [navigateTo, setNavigateTo] = useState("");
+	const [activeList, setActiveList] = useState("paid");
 	const [confirmModal, setConfirmModal] = useState({
 		open: false,
 		memberId: null,
@@ -132,11 +133,7 @@ const GroupMembersStatus = () => {
 
 	const isHebrewName = (name) => /[\u0590-\u05FF]/.test(name);
 
-	const sortedMembers = [...members].sort((a, b) => {
-		if (a.hasPaid !== b.hasPaid) {
-			return a.hasPaid ? -1 : 1;
-		}
-
+	const sortByName = (a, b) => {
 		const nameA = getDisplayName(a);
 		const nameB = getDisplayName(b);
 
@@ -148,9 +145,15 @@ const GroupMembersStatus = () => {
 		}
 
 		return nameA.localeCompare(nameB, aHebrew ? "he" : "en");
-	});
+	};
+
+	const paidMembers = members.filter((member) => member.hasPaid).sort(sortByName);
+	const unpaidMembers = members.filter((member) => !member.hasPaid).sort(sortByName);
+
+	const displayedMembers = activeList === "paid" ? paidMembers : unpaidMembers;
 
 	const paidCount = members.filter((member) => member.hasPaid).length;
+	const unpaidCount = members.length - paidCount;
 
 	return (
 		<>
@@ -169,8 +172,36 @@ const GroupMembersStatus = () => {
 						סה״כ שילמו: {paidCount} מתוך {members.length}
 					</p>
 
-					<div className="space-y-4">
-						{sortedMembers.map((member) => {
+					<nav className="flex justify-evenly items-center w-full text-md mb-6">
+						<button
+							onClick={() => setActiveList("paid")}
+							className={`hover:text-gray-300 transition-all hover:cursor-pointer ${
+								activeList === "paid"
+									? "text-yellow-400 font-semibold hover:text-yellow-400 underline"
+									: ""
+							}`}
+						>
+							שילמו ({paidCount})
+						</button>
+
+						<button
+							onClick={() => setActiveList("unpaid")}
+							className={`hover:text-gray-300 transition-all hover:cursor-pointer ${
+								activeList === "unpaid"
+									? "text-yellow-400 font-semibold hover:text-yellow-400 underline"
+									: ""
+							}`}
+						>
+							לא שילמו ({unpaidCount})
+						</button>
+					</nav>
+
+					<div className="space-y-4 pb-4">
+						{displayedMembers.length === 0 && (
+							<p className="text-center text-red-400 font-bold">אין משתמשים להצגה ברשימה זו</p>
+						)}
+
+						{displayedMembers.map((member) => {
 							const user = member.id;
 							const memberId = user._id;
 
@@ -216,8 +247,8 @@ const GroupMembersStatus = () => {
 					</div>
 
 					{openModal && <Modal title={modalText.title} text={modalText.text} onClick={closeModalHandler} />}
-					
-                    {confirmModal.open && (
+
+					{confirmModal.open && (
 						<Modal
 							title="אישור ביטול תשלום"
 							text="האם אתה בטוח שברצונך לבטל את התשלום למשתמש זה?"

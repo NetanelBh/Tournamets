@@ -81,7 +81,7 @@ router.post("/register", async (req, res) => {
 			return;
 		}
 
-		const token = jwt.sign({ id: createdUser._id }, process.env.JWT_SECRET, { expiresIn: "5m" });
+		const token = jwt.sign({ id: createdUser._id }, process.env.JWT_SECRET, { expiresIn: "1d" });
 		const verificationLink = `${process.env.REACT_ADDRESS}/verify/${token}`;
 		await sendEmail(
 			createdUser.email,

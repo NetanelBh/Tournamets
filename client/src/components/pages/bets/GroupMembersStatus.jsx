@@ -196,7 +196,7 @@ const GroupMembersStatus = () => {
 						</button>
 					</nav>
 
-					<div className="space-y-4 pb-4">
+					<div className="space-y-4 pb-10">
 						{displayedMembers.length === 0 && (
 							<p className="text-center text-red-400 font-bold">אין משתמשים להצגה ברשימה זו</p>
 						)}

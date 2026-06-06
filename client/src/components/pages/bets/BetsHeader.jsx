@@ -55,7 +55,7 @@ const BetsHeader = () => {
 
 			{/* Group code - available only for the group owner */}
 			{isGroupOwner && (
-				<div className="flex gap-2 mt-4">
+				<div className="flex gap-2 mt-4 flex-col items-center">
 					{/* Determine if need to display the group code - for group owner only */}
 					<button
 						className="bg-gray-600/50 text-yellow-300 px-4 py-2 rounded-full hover:cursor-pointer active:cursor-pointer active:cursor-pointer active:scale-95 active:shadow-none border border-red-400 shadow-sm shadow-gray-200"
@@ -66,7 +66,7 @@ const BetsHeader = () => {
 
 					{/* Show the payment status of the group members */}
 					<button
-						className="bg-gray-600/50 text-yellow-300 px-4 py-2 rounded-full hover:cursor-pointer active:scale-95 active:shadow-none border border-red-400 shadow-sm shadow-gray-200"
+						className="mt-2 bg-gray-600/50 text-yellow-300 px-4 py-2 rounded-full hover:cursor-pointer active:scale-95 active:shadow-none border border-red-400 shadow-sm shadow-gray-200"
 						onClick={membersStatusHandler}
 					>
 						סטטוס תשלום חברים

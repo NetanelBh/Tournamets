@@ -24,6 +24,7 @@ import FriendsBets from "../pages/bets/FriendsBets";
 import ClosedMatches from "../pages/bets/ClosedMatches";
 import PointsExplain from "../pages/bets/PointsExplain";
 import TableRankExplain from "../pages/bets/TableRankExplain";
+import GroupMembersStatus from "../pages/bets/GroupMembersStatus";
 import AllFriendsWinnerTeamsAndTopScorers from "../pages/bets/AllFriendsWinnerTeamsAndTopScorers";
 
 const CreateRouter = () => {
@@ -55,6 +56,7 @@ const CreateRouter = () => {
 				{ path: "/layout/friends-bets", element: <FriendsBets /> },
 				{ path: "/layout/closed-bets", element: <ClosedMatches /> },
 				{ path: "/layout/points-explain", element: <PointsExplain /> },
+				{ path: "/layout/group-members-status", element: <GroupMembersStatus /> },
 				{ path: "/layout/table-rank-explain", element: <TableRankExplain /> },
 				{ path: "/layout/all-users-winnerteam-and-topscorer", element: <AllFriendsWinnerTeamsAndTopScorers /> },
 			],

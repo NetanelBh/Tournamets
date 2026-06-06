@@ -24,3 +24,15 @@ export const removeUnpaidUsers = (groupId) => GroupModel.updateOne({_id: groupId
 export const removeUserFromSelectedGroups = (userId) => {
     return GroupModel.updateMany({"members.id": userId}, {$pull: {members: {id: userId}}});
 }
+
+export const getGroupMembersStatus = (groupId) => {
+	return GroupModel.findById(groupId).populate("members.id", "firstname lastname username email");
+};
+
+export const updateMemberHasPaid = (groupId, memberId, hasPaid) => {
+	return GroupModel.findOneAndUpdate(
+		{ _id: groupId, "members.id": memberId },
+		{ $set: { "members.$.hasPaid": hasPaid } },
+		{ new: true }
+	).populate("members.id", "firstname lastname username email");
+};

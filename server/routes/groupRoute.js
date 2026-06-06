@@ -81,4 +81,46 @@ router.post("/join", async (req, res) => {
 	}
 });
 
+router.get("/:groupId/members-status", async (req, res) => {
+	try {
+		const { groupId } = req.params;
+		const userId = req.user.id;
+
+		const group = await groupServices.getGroupMembersStatus(groupId);
+
+		if (!group) {
+			res.send({ status: false, data: "הקבוצה לא נמצאה" });
+			return;
+		}
+
+		res.send({ status: true, data: group });
+	} catch (error) {
+		res.send({ status: false, data: "אירעה שגיאה בטעינת חברי הקבוצה" });
+	}
+});
+
+router.patch("/:groupId/member/:memberId/has-paid", async (req, res) => {
+	try {
+		const { groupId, memberId } = req.params;
+		const { hasPaid } = req.body;
+		const userId = req.user.id;
+
+		if (typeof hasPaid !== "boolean") {
+			res.send({ status: false, data: "סטטוס לא תקין" });
+			return;
+		}
+
+		const updatedGroup = await groupServices.updateMemberHasPaid(groupId, memberId, hasPaid);
+
+		if (!updatedGroup) {
+			res.send({ status: false, data: "המשתמש לא נמצא בקבוצה" });
+			return;
+		}
+
+		res.send({ status: true, data: updatedGroup });
+	} catch (error) {
+		res.send({ status: false, data: "אירעה שגיאה בעדכון הסטטוס" });
+	}
+});
+
 export default router;

@@ -64,16 +64,16 @@ const BetsHeader = () => {
 						{isCodeDisplay ? currentGroup.code : "שתף את קוד הקבוצה"}
 					</button>
 
+					{/* If the group code is displayed, let the owner the option to share it on whatsapp */}
+					{isCodeDisplay && <WhatsAppButton message={whatsappMessage} />}
+
 					{/* Show the payment status of the group members */}
 					<button
 						className="mt-2 bg-gray-600/50 text-yellow-300 px-4 py-2 rounded-full hover:cursor-pointer active:scale-95 active:shadow-none border border-red-400 shadow-sm shadow-gray-200"
 						onClick={membersStatusHandler}
-					>
+						>
 						סטטוס תשלום חברים
 					</button>
-
-					{/* If the group code is displayed, let the owner the option to share it on whatsapp */}
-					{isCodeDisplay && <WhatsAppButton message={whatsappMessage} />}
 				</div>
 			)}
 

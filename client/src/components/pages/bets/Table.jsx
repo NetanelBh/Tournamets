@@ -125,7 +125,7 @@ const Table = () => {
 					)}
 
 					{!openModal && (
-						<div className="flex justify-center w-full sm:px-4">
+						<div className="flex justify-center w-full sm:px-4 mb-4">
 							<div className="w-fit overflow-x-auto bg-transparent shadow sm:rounded-lg border-t border-r md:border-l border-red-300">
 								<table className="w-fit text-sm text-left rtl:text-right">
 									<TableHeader

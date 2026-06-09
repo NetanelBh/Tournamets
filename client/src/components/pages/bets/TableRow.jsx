@@ -14,7 +14,7 @@ const TableRow = ({ data, trClass, thClass, tdClass, type=undefined }) => {
 	}
 
 	return (
-		<tr key={data.i} className={`${rowClass} points_table`} style={{ animationDelay: `${data.i * 0.35}s` }}>
+		<tr key={data.i} className={`${rowClass} points_table`} style={{ animationDelay: `${data.i * 0.15}s` }}>
 			{data.i > 1 && <th className={thClass}>{data.i + 1}</th>}
 			{data.i === 1 && <th className={thClass}>🥈</th>}
 			{data.i === 0 && <th className={thClass}>🏆</th>}

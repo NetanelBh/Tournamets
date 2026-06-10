@@ -8,7 +8,7 @@ import { finalScoreBackground, colorMap, textColorMap } from "./betsUtils";
 import teamsFlagsMap from "../../utils/flagsMap";
 import flagsMap from "../../utils/flagsMap";
 
-const MatchListItem = ({ match, onClick, buttonStatus, actionText, user }) => {	
+const MatchListItem = ({ match, onClick, buttonStatus, actionText, user }) => {
 	const navigate = useNavigate();
 
 	// Referenced for update the final score(only admin can update the final score, instead do it manually in MongoDB)
@@ -21,19 +21,18 @@ const MatchListItem = ({ match, onClick, buttonStatus, actionText, user }) => {
 
 	// Sometimes when save the bets, there is a failure, we want to display the fail message on the button
 	let newActionText = actionText;
-	
+
 	// This buttonClass for the admin when need to update the final score
 	let buttonClass = `${
 		buttonStatus === "נשמר" ? "bg-green-400" : "bg-red-600"
 	} text-white rounded-lg p-1 cursor-pointer mt-1 w-full hover:scale-95 active:scale-95`;
 
 	if (user === "regular") {
-		const {actionText, style} = saveButtonStyle(buttonStatus);
+		const { actionText, style } = saveButtonStyle(buttonStatus);
 
 		newActionText = actionText;
 		buttonClass = style;
 	}
-
 
 	const saveClickedHandler = (e) => {
 		e.preventDefault();
@@ -43,11 +42,11 @@ const MatchListItem = ({ match, onClick, buttonStatus, actionText, user }) => {
 
 		// In case the user clicked save without insert scores
 		if (Number.isNaN(homeScore) || Number.isNaN(awayScore)) return;
-		
+
 		onClick({
 			match,
 			homeScore,
-			awayScore
+			awayScore,
 		});
 	};
 
@@ -63,14 +62,16 @@ const MatchListItem = ({ match, onClick, buttonStatus, actionText, user }) => {
 	const scoreColor = finalScoreBackground(match.matchScoreBet ? match.matchScoreBet.betScore : null, scoreFromDb);
 
 	// Get the match's kickoff time and display it on the screen in the list item
-	const kickoffTime = new Date(match.kickoffTime).toLocaleString().replace(",", " ⏱️").slice(0, -3);	
-	
+	const kickoffTime = new Date(match.kickoffTime).toLocaleString().replace(",", " ⏱️").slice(0, -3);
+
 	return (
 		<li className="grid grid-cols-15 pr-1 pl-1 pb-2 bg-gray-500 hover:bg-gray-700/80 font-bold shadow-[0_2px_5px_2px_theme(colors.yellow.300)] mb-6">
-			<div
-				className="sm:text-xl col-span-5 pt-2 pb-2 pl-2 text-white pt-0 text-center flex flex-col items-center mt-6"
-			>	
-				<img src={teamsFlagsMap[match.homeTeam]} alt={`${match.homeTeam} flag`} className="h-10 w-14 mb-4"/>
+			<div className="sm:text-xl col-span-5 pt-2 pb-2 pl-2 text-white pt-0 text-center flex flex-col items-center mt-6">
+				<img
+					src={teamsFlagsMap[match.homeTeam]}
+					alt={`${match.homeTeam} flag`}
+					className="h-10 w-14 mb-4 drop-shadow-[0_6px_12px_rgba(0,0,0,0.45)]"
+				/>
 				<p className="text-center break-words whitespace-normal max-w-full">{match.homeTeam}</p>
 			</div>
 
@@ -203,10 +204,12 @@ const MatchListItem = ({ match, onClick, buttonStatus, actionText, user }) => {
 				</div>
 			)}
 
-			<div
-				className="sm:text-xl col-span-5 pr-2 pt-2 pb-2 text-white pt-0 text-center flex flex-col items-center mt-6"
-			>
-				<img src={flagsMap[match.awayTeam]} alt={`${match.awayTeam} flag`} className="h-10 w-14 mb-4"/>
+			<div className="sm:text-xl col-span-5 pr-2 pt-2 pb-2 text-white pt-0 text-center flex flex-col items-center mt-6">
+				<img
+					src={teamsFlagsMap[match.awayTeam]}
+					alt={`${match.awayTeam} flag`}
+					className="h-10 w-14 mb-4 drop-shadow-[0_6px_12px_rgba(0,0,0,0.45)]"
+				/>
 				<p className="text-center break-words whitespace-normal max-w-full">{match.awayTeam}</p>
 			</div>
 

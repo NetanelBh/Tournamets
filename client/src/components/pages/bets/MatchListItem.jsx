@@ -70,7 +70,7 @@ const MatchListItem = ({ match, onClick, buttonStatus, actionText, user }) => {
 				<img
 					src={teamsFlagsMap[match.homeTeam]}
 					alt={`${match.homeTeam} flag`}
-					className="h-10 w-14 mb-4 drop-shadow-[0_10px_16px_rgba(0,0,0,0.55)] brightness-[1.03]"
+					className="h-10 w-14 mb-4 drop-shadow-[0_10px_16px_rgba(0,0,0,0.6)] brightness-[1.03]"
 				/>
 				<p className="text-center break-words whitespace-normal max-w-full">{match.homeTeam}</p>
 			</div>
@@ -208,7 +208,7 @@ const MatchListItem = ({ match, onClick, buttonStatus, actionText, user }) => {
 				<img
 					src={teamsFlagsMap[match.awayTeam]}
 					alt={`${match.awayTeam} flag`}
-					className="h-10 w-14 mb-4 drop-shadow-[0_10px_16px_rgba(0,0,0,0.55)] brightness-[1.03]"
+					className="h-10 w-14 mb-4 drop-shadow-[0_10px_16px_rgba(0,0,0,0.6)] brightness-[1.03]"
 				/>
 				<p className="text-center break-words whitespace-normal max-w-full">{match.awayTeam}</p>
 			</div>

@@ -19,6 +19,7 @@ const PointsExplain = () => {
 
 			<div className="bg-gray-300 block max-w-sm p-6 border border-default rounded-lg shadow-[0_0_8px_3px_theme(colors.teal.200)] hover:bg-neutral-secondary-medium fade_up mb-4">
 				<ExplainDataHeader header="הסבר שיטת ניקוד המשחקים" />
+				<h2 className="text-red-600 font-bold text-center">תום 90 דקות ללא הארכה ופנדלים</h2>
 				<br></br>
 
 				<p className="text-body font-bold underline">בונוס ניחוש האלופה:</p>

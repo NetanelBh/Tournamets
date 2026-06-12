@@ -23,7 +23,7 @@ const TableRow = ({ data, trClass, thClass, tdClass, type=undefined }) => {
 			<td className={tdClass}>{data.user.directions}</td>
 			<td className={tdClass}>{data.user.winnerTeamBonus}</td>
 			<td className={tdClass}>{data.user.topScorerBonus}</td>
-			<td className={tdClass}>{data.user.totalMatchesPoints}</td>
+			<td className={`${tdClass} font-bold`}>{data.user.totalMatchesPoints}</td>
 		</tr>
 	);
 };

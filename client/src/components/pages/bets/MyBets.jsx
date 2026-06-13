@@ -615,7 +615,7 @@ const MyBets = () => {
 					{!openModal && (
 						<div className="flex flex-col mb-6">
 							<div className="flex gap-8">
-								<div className="flex flex-col gap-2 p-4 border border-yellow-100 w-40 sm:w-50 md:w-60">
+								<div className="flex flex-col justify-between gap-2 p-4 border border-yellow-100 w-40 sm:w-50 md:w-60">
 									<h3 className="text-md text-yellow-100 text-center">האלופה :</h3>
 									{/* Show the dropdown option only if the tournament didn't start */}
 									{!istournamentStarted && (

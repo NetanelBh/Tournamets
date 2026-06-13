@@ -75,7 +75,7 @@ const Login = () => {
 			{isLoading && <Loading />}
 
 			{!isLoading && (
-				<div className="min-h-dvh bg-[url('/images/login.jpg')] bg-cover bg-center flex flex-col items-center p-4">
+				<div className="min-h-dvh worldcup-bg flex flex-col items-center p-4">
 					<>
 						{!isError && (
 							<main className="fade_up max-w-md w-full bg-white/90 rounded-xl shadow-lg p-8 mt-8">
@@ -152,7 +152,9 @@ const Login = () => {
 						{isError && <Modal title="שגיאה" text="שגיאה בהתחברות, אנא נסה שנית" onClick={closeModal} />}
 
 						<footer className="flex items-center justify-center mt-auto pb-3 md:pb-8 text-center text-md text-white font-bold md:text-lg">
-							<span>Devel<span className="login_ball">⚽</span>ped by Netanel Ben Hamo</span>
+							<span>
+								Devel<span className="login_ball">⚽</span>ped by Netanel Ben Hamo
+							</span>
 						</footer>
 					</>
 				</div>

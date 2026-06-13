@@ -1,5 +1,23 @@
 @import "tailwindcss";
 
+.worldcup-bg {
+  background-image: url("/images/worldcup-seamless.png");
+  background-repeat: repeat;
+  background-size: 900px auto;
+  background-position: 0 0;
+  animation: moveWorldcupBg 140s linear infinite;
+}
+
+@keyframes moveWorldcupBg {
+  from {
+    background-position: 0 0;
+  }
+
+  to {
+    background-position: -900px -900px;
+  }
+}
+
 .fade_up {
 	opacity: 0;
 	transform: translateY(15vh);
@@ -78,7 +96,7 @@
 		transform: translateY(0) rotateZ(360deg);
 	}
 
-	100%{
+	100% {
 		transform: translateY(0) rotateZ(360deg);
 	}
 }

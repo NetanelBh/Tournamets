@@ -25,7 +25,7 @@ const ForgotPassword = () => {
 	}
 
 	return (
-		<div className="min-h-screen bg-[url('/images/login.jpg')] bg-cover bg-center flex flex-col items-center p-4">
+		<div className="min-h-dvh worldcup-bg flex flex-col items-center p-4">
 			{!openModal && <>
 			<div className="max-w-md w-full bg-white rounded-xl shadow-lg p-8 mt-8">
 				<h2 className="text-2xl font-bold text-gray-900 mb-6 text-center">איפוס סיסמא</h2>

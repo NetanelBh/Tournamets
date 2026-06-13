@@ -53,7 +53,7 @@ const Register = () => {
 		<>
 			{isLoading && <Loading />}
 
-			<div className="min-h-screen bg-[url('/images/login.jpg')] bg-cover bg-center flex flex-col items-center p-4">
+			<div className="min-h-dvh worldcup-bg flex flex-col items-center p-4">
 				{!isLoading && (
 					<>
 						{!openModal && (

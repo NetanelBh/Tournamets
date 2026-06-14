@@ -26,7 +26,7 @@ const App = () => {
 	}, []);
 
 	return (
-		<div className="bg-[url('/images/background.jpg')] bg-top bg-[length:100%] bg-repeat-y min-h-screen">
+		<div className="worldcup-bg bg-top bg-[length:100%] bg-repeat-y min-h-screen">
 			<RouterProvider router={router} />
 		</div>
 	);

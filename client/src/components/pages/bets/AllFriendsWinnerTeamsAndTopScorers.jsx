@@ -30,9 +30,9 @@ const AllFriendsWinnerTeamsAndTopScorers = () => {
 			<BetsLayout />
 
 			{dataType === "winnerTeam" ? (
-				<div className="text-center text-yellow-300 mb-4">הימורי הקבוצה הזוכה</div>
+				<div className="text-center text-yellow-300 mb-4 font-bold text-lg">הימורי הקבוצה הזוכה</div>
 			) : (
-				<div className="text-center text-yellow-300 mb-4">הימורי מלך השערים</div>
+				<div className="text-center text-yellow-300 mb-4 font-bold text-lg">הימורי מלך השערים</div>
 			)}
 
 			<Table data={allUsersBetsData} />

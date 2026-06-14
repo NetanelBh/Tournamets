@@ -615,7 +615,7 @@ const MyBets = () => {
 					{!openModal && (
 						<div className="flex flex-col mb-6">
 							<div className="flex gap-8">
-								<div className="flex flex-col justify-between gap-2 p-4 border border-yellow-100 w-40 sm:w-50 md:w-60">
+								<div className="flex flex-col justify-between gap-2 p-4 border border-yellow-100 w-40 sm:w-50 md:w-60 bg-blue-800/90">
 									<h3 className="text-md text-yellow-100 text-center">האלופה :</h3>
 									{/* Show the dropdown option only if the tournament didn't start */}
 									{!istournamentStarted && (
@@ -641,7 +641,7 @@ const MyBets = () => {
 												{bets.dbWinnerTeam ? bets.dbWinnerTeam : "-"}
 											</h3>
 
-											<div className="p-0.5 w-full bg-teal-700 text-yellow-300 text-sm flex justify-center mt-3 border border-white border-1 hover:cursor-pointer hover:scale-95 active:cursor-pointer active:scale-95 rounded-2xl">
+											<div className="p-0.5 w-full bg-gray-800 text-yellow-300 text-sm flex justify-center mt-3 border border-white border-1 hover:cursor-pointer hover:scale-95 active:cursor-pointer active:scale-95 rounded-2xl">
 												<button
 													className="hover:cursor-pointer active:cursor-pointer"
 													onClick={() => friendsBetsHandler("winnerTeam")}
@@ -659,7 +659,7 @@ const MyBets = () => {
 
 								{/* Show the topScorer dropdown only if the tournament defined to be with top scorer bet */}
 								{currentTourmanent.topScorerBet && (
-									<div className="flex flex-col gap-2 p-4 border border-yellow-100 w-40 sm:w-50 md:w-60">
+									<div className="flex flex-col gap-2 p-4 border border-yellow-100 w-40 sm:w-50 md:w-60 bg-blue-800/90">
 										<h3 className="text-md text-yellow-100 text-center">מלך השערים :</h3>
 										{!istournamentStarted && (
 											<>
@@ -684,7 +684,7 @@ const MyBets = () => {
 													{bets.dbTopScorer ? bets.dbTopScorer : "-"}
 												</h3>
 
-												<div className="p-0.5 w-full bg-teal-700 text-yellow-300 text-sm font-semi-bold flex justify-center mt-3 border border-white border-1 hover:cursor-pointer hover:scale-95 active:cursor-pointer active:scale-95 rounded-2xl">
+												<div className="p-0.5 w-full bg-gray-800 text-yellow-300 text-sm font-semi-bold flex justify-center mt-3 border border-white border-1 hover:cursor-pointer hover:scale-95 active:cursor-pointer active:scale-95 rounded-2xl">
 													<button
 														className="hover:cursor-pointer active:cursor-pointer"
 														onClick={() => friendsBetsHandler("topScorer")}

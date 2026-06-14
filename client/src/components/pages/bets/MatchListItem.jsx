@@ -65,7 +65,7 @@ const MatchListItem = ({ match, onClick, buttonStatus, actionText, user }) => {
 	const kickoffTime = new Date(match.kickoffTime).toLocaleString().replace(",", " ⏱️").slice(0, -3);
 
 	return (
-		<li className="grid grid-cols-15 pr-1 pl-1 pb-2 bg-gray-500 hover:bg-gray-700/80 font-bold shadow-[0_2px_5px_2px_theme(colors.yellow.300)] mb-6">
+		<li className="grid grid-cols-15 pr-1 pl-1 pb-2 bg-gray-500/85 hover:bg-gray-700/80 font-bold shadow-[0_2px_5px_2px_theme(colors.yellow.300)] mb-6">
 			<div className="sm:text-xl col-span-5 pt-2 pb-2 pl-2 text-white pt-0 text-center flex flex-col items-center mt-6">
 				<img
 					src={teamsFlagsMap[match.homeTeam]}
@@ -215,7 +215,7 @@ const MatchListItem = ({ match, onClick, buttonStatus, actionText, user }) => {
 
 			{/* Friends bets button - show only if the match is started*/}
 			{match.kickoffTime < updatedClock && (
-				<div className="lg:w-col-span-5 lg:col-start-5 col-span-7 col-start-5 flex justify-center mt-2 mb-1 border border-white border-2 hover:cursor-pointer hover:scale-95 active:cursor-pointer active:scale-95 rounded-2xl bg-teal-700 text-yellow-300 text-lg">
+				<div className="lg:w-col-span-5 lg:col-start-5 col-span-7 col-start-5 flex justify-center mt-2 mb-1 border border-white border-2 hover:cursor-pointer hover:scale-95 active:cursor-pointer active:scale-95 rounded-2xl bg-gray-800 text-yellow-300 text-lg">
 					<button className="hover:cursor-pointer active:cursor-pointer" onClick={friendsBetsHandler}>
 						הימורי החברים{" "}
 						<span className="mr-2">

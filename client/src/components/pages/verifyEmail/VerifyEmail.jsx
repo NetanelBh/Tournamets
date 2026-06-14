@@ -37,7 +37,7 @@ function VerifyEmail() {
   }
 
 	return (
-		<div className="min-h-screen bg-[url('/images/login.jpg')] bg-cover bg-center flex flex-col items-center p-4">
+		<div className="min-h-screen worldcup-bg bg-cover bg-center flex flex-col items-center p-4">
       {openModal && <Modal title="אימות משתמש" text={modalText} onClick={closeModalHandler}/>}
     </div>
 	);

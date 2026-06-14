@@ -14,7 +14,7 @@ const Table = ({ data, isAllUsersMatches=false }) => {
 	return (
 		<div className="relative overflow-x-auto shadow-md rounded-lg mb-4">
 			<table className="text-center min-w-65 table-auto text-sm font-bold fade_up">
-				<thead className="text-md text-center uppercase text-white bg-[#018790]/60">
+				<thead className="text-md text-center uppercase text-white bg-blue-600/90">
 					<tr>
 						{data.headers.map((header) => (
 							<th key={header} scope="col" className="px-6 py-3">

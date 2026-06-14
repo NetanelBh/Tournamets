@@ -89,7 +89,7 @@ const AddMatch = () => {
 					{!openModal && (
 						<div className="flex flex-col items-center">
 							<form
-								className="show_up max-w-md sm:w-full bg-cyan-900/50 rounded-xl p-6 mt-2 mb-8 space-y-4 shadow-sm shadow-gray-400"
+								className="show_up max-w-md sm:w-full bg-blue-700/90 rounded-xl p-6 mt-2 mb-8 space-y-4 shadow-sm shadow-gray-400"
 								onSubmit={createMatchHandler}
 							>
 								{addMatch.map((input) => (
@@ -97,7 +97,7 @@ const AddMatch = () => {
 								))}
 
 								<button
-									className="mt-4 w-full bg-gradient-to-r from-teal-500 to-teal-800 shadow-md shadow-gray-400/80 hover:shadow-sm hover:scale-95 active:scale-95 active:bg-gradient-to-r from-teal-500 to-teal-800 text-yellow-300 font-bold py-2.5 rounded-lg transition-colors"
+									className="mt-4 w-full bg-gray-800 shadow-md shadow-gray-400/80 hover:shadow-sm hover:scale-95 active:scale-95 active:bg-gradient-to-r from-teal-500 to-teal-800 text-yellow-300 font-bold py-2.5 rounded-lg transition-colors"
 									type="submit"
 								>
 									צור משחק

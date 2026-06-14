@@ -15,7 +15,7 @@ const GroupsHeader = () => {
 
 	return (
 		<>
-			<h1 className="text-transparent bg-clip-text bg-gradient-to-l from-yellow-400 to-red-600 text-center text-2xl font-bold mt-10 underline">
+			<h1 className="text-transparent bg-clip-text bg-gradient-to-l from-yellow-400 to-red-400 text-center text-2xl font-bold mt-10 underline">
 				{tournamentName}
 			</h1>
 
@@ -26,9 +26,9 @@ const GroupsHeader = () => {
 						<nav className="flex justify-evenly items-center w-full text-md md:w-4/6 lg:w-1/2">
 							<NavLink
 								to="/layout/groups-layout/my-groups"
-								className={`hover:text-gray-300 transition-all ${
+								className={`text-blue-600 font-semibold hover:text-blue-800 transition-all bg-yellow-200/90 p-1 rounded-md ${
 									pathname.includes("my-groups")
-										? "text-yellow-400 font-semibold hover:text-yellow-400 underline"
+										? "text-gray-800 font-semibold underline bg-yellow-500"
 										: ""
 								}`}
 							>
@@ -37,9 +37,9 @@ const GroupsHeader = () => {
 
 							<NavLink
 								to="/layout/groups-layout/join-group"
-								className={`hover:text-gray-300 transition-all ${
+								className={`text-blue-500 font-semibold hover:text-blue-700 transition-all bg-yellow-200/90 p-1 rounded-md ${
 									pathname.includes("join-group")
-										? "text-yellow-400 font-semibold hover:text-yellow-400 underline"
+										? "text-gray-800 font-semibold underline bg-yellow-500"
 										: ""
 								}`}
 							>
@@ -53,9 +53,9 @@ const GroupsHeader = () => {
 									{!isStarted && (
 										<NavLink
 											to="/layout/groups-layout/create-group"
-											className={`hover:text-gray-300 transition-all ${
+											className={`text-blue-500 font-semibold hover:text-blue-700 transition-all bg-yellow-200/90 p-1 rounded-md ${
 												pathname.includes("create-group")
-													? "text-yellow-400 font-semibold hover:text-yellow-400 underline"
+													? "text-gray-800 font-semibold underline bg-yellow-500"
 													: ""
 											}`}
 										>
@@ -65,9 +65,9 @@ const GroupsHeader = () => {
 
 									<NavLink
 										to="/layout/groups-layout/add-match"
-										className={`hover:text-gray-300 transition-all ${
+										className={`text-blue-500 font-semibold hover:text-blue-700 transition-all bg-yellow-200/90 p-1 rounded-md ${
 											pathname.includes("add-match")
-												? "text-yellow-400 font-semibold hover:text-yellow-400 underline"
+												? "text-gray-800 font-semibold underline bg-yellow-500"
 												: ""
 										}`}
 									>

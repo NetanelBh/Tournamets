@@ -97,7 +97,7 @@ export const calculatePoints = (stage, round, finalScore, userBet, pointsRules) 
 			(userHome - userAway > 0 && realHome - realAway > 0) ||
 			(userHome - userAway < 0 && realHome - realAway < 0) ||
 			(userHome - userAway === 0 && realHome - realAway === 0)
-		) {			
+		) {
 			points.matchPoints = pointsRules.knockoutStage.differentPoints[stageConverter[round]].directionScore;
 			points.resultType = "directions";
 		}
@@ -143,7 +143,7 @@ export const usersPoints = (data) => {
 						match.round,
 						match.finalScore,
 						userBet,
-						data.groupPointsRules
+						data.groupPointsRules,
 					);
 
 					// Only if exact or direction, add 1 to the statistics
@@ -159,7 +159,10 @@ export const usersPoints = (data) => {
 		const currUserTopScorer = data.usersTopScorers.find((u) => u.user === user._id);
 		// Check if not undefined because at first time it will be empty until fetch from useEffect in Table page
 		if (currUserTopScorer) {
-			if (currUserTopScorer.topScorer === data.tournamentTopScorerId) {
+			const tournamentTopScorerIds = data.tournamentTopScorerIds.map((id) => id.toString());
+			const userTopScorerId = currUserTopScorer.topScorer.toString();
+
+			if (tournamentTopScorerIds.includes(userTopScorerId)) {
 				finalUserPoints.topScorerBonus = topScorerBonus;
 			}
 		}
@@ -185,7 +188,7 @@ export const usersPoints = (data) => {
 			b.exacts - a.exacts ||
 			b.directions - a.directions ||
 			b.winnerTeamBonus - a.winnerTeamBonus ||
-			b.topScorerBonus - a.topScorerBonus
+			b.topScorerBonus - a.topScorerBonus,
 	);
 
 	return sortedUsers;
@@ -226,12 +229,12 @@ export const groupPointsExplain = (pointsRules) => {
 		rules.knockoutStage.push(
 			`${levelsTranslation[score.level]} גמר: ${exactTemplate}${
 				differentPoints[score.level].exactScore
-			} ${pointsTemplate}`
+			} ${pointsTemplate}`,
 		);
 		rules.knockoutStage.push(
 			`${levelsTranslation[score.level]} גמר: ${directionTemplate}${
 				differentPoints[score.level].directionScore
-			} ${pointsTemplate}`
+			} ${pointsTemplate}`,
 		);
 	}
 

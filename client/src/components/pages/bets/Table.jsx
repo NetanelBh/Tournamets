@@ -34,7 +34,6 @@ const Table = () => {
 	const [usersWinnerTeam, setUsersWinnerTeam] = useState([]);
 	const [usersTopScorer, setUsersTopScorer] = useState([]);
 
-
 	// Fetch all users top scorer and winner team bets(only once)
 	useEffect(() => {
 		const fetchData = async () => {
@@ -46,14 +45,17 @@ const Table = () => {
 				]);
 
 				if (!allUsersTopScorers.data.status || !allUsersWinnerTeams.data.status) {
-					if (allUsersTopScorers.data.data === "SESSION_EXPIRED" || allUsersWinnerTeams.data.data === "SESSION_EXPIRED") {
+					if (
+						allUsersTopScorers.data.data === "SESSION_EXPIRED" ||
+						allUsersWinnerTeams.data.data === "SESSION_EXPIRED"
+					) {
 						setOpenModal(true);
 						setModalText({ title: "זמן חיבור עבר", text: "לא היתה פעילות במשך 20 דקות, נא להתחבר מחדש" });
 
 						setNavigateTo("/");
 						return;
 					}
-					
+
 					navigate("/");
 					return;
 				}
@@ -87,28 +89,28 @@ const Table = () => {
 		// Get the current group points rules(calculate the points for the each user in the table and exact/directions bets)
 		groupPointsRules: currentGroup.points,
 		// Get the current tournament to get the top scorer bonus
-		tournamentTopScorerId: useSelector(
-			(state) => state.tournaments.tournaments.find((t) => t._id === tournamentId).topScorer
+		tournamentTopScorerIds: useSelector(
+			(state) => state.tournaments.tournaments.find((t) => t._id === tournamentId).topScorers || [],
 		),
 		// Get the current tournament to get the winner team bonus
 		tournamentWinnerTeam: useSelector(
-			(state) => state.tournaments.tournaments.find((t) => t._id === tournamentId).winnerTeam
+			(state) => state.tournaments.tournaments.find((t) => t._id === tournamentId).winnerTeam,
 		),
-		
+
 		usersTopScorers: usersTopScorer,
 		usersWinnerTeams: usersWinnerTeam,
-	};	
+	};
 
 	// Sorted users points list to display in table
 	const usersTableData = usersPoints(data);
 
 	// Get the kickoff time to determine if the tournament is already started and show the total money in the group
 	const tournamentKickoffTime = useSelector((state) => state.tournaments.tournaments).find(
-		(tournament) => tournament._id === tournamentId
+		(tournament) => tournament._id === tournamentId,
 	).startTime;
 
 	const currentTime = useSelector((state) => state.clock.now);
-	
+
 	// Calculate the total money
 	const totalMoney = data.allUsers.length * 150;
 

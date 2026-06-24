@@ -140,7 +140,7 @@ const Table = () => {
 											<TableRow
 												key={index}
 												data={{ user, i: index }}
-												trClass="bg-white/80 hover:bg-gray-200 text-xs"
+												trClass="bg-white/90 hover:bg-gray-200 text-xs font-semibold"
 												thClass="px-6 py-4 whitespace-nowrap"
 												tdClass="px-6 text-center py-4 w-fit whitespace-nowrap"
 												type="points"

@@ -7,11 +7,11 @@ const TableRow = ({ data, trClass, thClass, tdClass, type=undefined }) => {
 	if(type) {
 		// Determine the color of the 1st and 2nd places
 		if (data.i === 0) {
-			rowClass = "bg-[#2626FF]/80 hover:bg-[#0000B8]/80 text-white font-medium text-xs";
+			rowClass = "bg-[#6EE6E2]/90 hover:bg-[#47C4BF]/90 text-black font-bold text-xs";
 		} else if (data.i === 1) {
-			rowClass = "bg-[#FFFF00]/80 hover:bg-[#FFDF00]/80 text-black font-medium text-xs";
+			rowClass = "bg-[#FFFF00]/90 hover:bg-[#FFDF00]/90 text-black font-bold text-xs";
 		} else if (data.i === 2) {
-			rowClass = "bg-[#CDB4FF]/80 hover:bg-[#B388FF]/80 text-black font-medium text-xs";
+			rowClass = "bg-[#CDB4FF]/90 hover:bg-[#B388FF]/90 text-black font-bold text-xs";
 		}
 	}
 
@@ -26,7 +26,7 @@ const TableRow = ({ data, trClass, thClass, tdClass, type=undefined }) => {
 			<td className={tdClass}>{data.user.directions}</td>
 			<td className={tdClass}>{data.user.winnerTeamBonus}</td>
 			<td className={tdClass}>{data.user.topScorerBonus}</td>
-			<td className={`${tdClass} font-bold`}>{data.user.totalMatchesPoints}</td>
+			<td className={`${tdClass} text-red-500 font-bold`}>{data.user.totalMatchesPoints}</td>
 		</tr>
 	);
 };

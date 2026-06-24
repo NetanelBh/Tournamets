@@ -23,16 +23,16 @@ const authentication = async (req, res, next) => {
 
 		const now = Date.now();
 
-		// ⏰ inactivity check
-		if (now - session.lastActivityAt.getTime() > INACTIVITY_LIMIT) {
-			session.revoked = true;
-			await session.save();
-			return res.send({ status: false, data: "SESSION_EXPIRED"});
-        }
+		// // ⏰ inactivity check
+		// if (now - session.lastActivityAt.getTime() > INACTIVITY_LIMIT) {
+		// 	session.revoked = true;
+		// 	await session.save();
+		// 	return res.send({ status: false, data: "SESSION_EXPIRED"});
+        // }
 
-		// ✅ update activity when the user still send requests
-		session.lastActivityAt = new Date();
-		await session.save();
+		// // ✅ update activity when the user still send requests
+		// session.lastActivityAt = new Date();
+		// await session.save();
 
 		req.user = {id: payload.id};
 		req.sessionId = payload.sessionId;

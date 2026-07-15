@@ -48,6 +48,10 @@ const GroupSchema = new Schema(
 						exactScore: Number,
 						directionScore: Number,
 					},
+					thirdPlace: {
+						exactScore: Number,
+						directionScore: Number,
+					},
 				},
 			},
 		},

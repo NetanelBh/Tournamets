@@ -56,6 +56,10 @@ export const knockoutDifferentPoints = [
 		header: "גמר",
 		data: [{ title: "מדויק" }, { title: "כיוון" }],
 	},
+	{
+		header: "מקום שלישי",
+		data: [{ title: "מדויק" }, { title: "כיוון" }],
+	},
 ];
 
 export const joinGroupData = [

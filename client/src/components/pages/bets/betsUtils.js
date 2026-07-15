@@ -44,6 +44,7 @@ export const calculatePoints = (stage, round, finalScore, userBet, pointsRules) 
 		"רבע גמר": "quarterFinal",
 		"חצי גמר": "semiFinal",
 		גמר: "final",
+		"מקום שלישי": "thirdPlace",
 	};
 
 	const points = { matchPoints: 0, resultType: "fail" };
@@ -58,7 +59,7 @@ export const calculatePoints = (stage, round, finalScore, userBet, pointsRules) 
 	const userAway = userBet.betScore.awayScore;
 	const realHome = finalScore.homeScore;
 	const realAway = finalScore.awayScore;
-	// Get the points methos for the knockout stage
+	// Get the points method for the knockout stage
 	const knockoutMethod = pointsRules.knockoutStage.pointsMethod;
 
 	// If it's the group stage, calculate the points for this match according to the group stage points rules

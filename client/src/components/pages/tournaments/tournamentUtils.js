@@ -84,7 +84,7 @@ export const addMatch = [
 		label: "סיבוב",
 		type: "text",
 		autoComplete: "off",
-		placeholder: "גמר/חצי גמר/רבע גמר/שמינית גמר/roundOf32",
+		placeholder: "/שמינית גמר/roundOf32/מקום שלישי/",
 	}
 ]
 

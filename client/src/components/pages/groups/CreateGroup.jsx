@@ -52,6 +52,8 @@ const CreateGroup = () => {
 	const semiFinalDirectionRef = useRef();
 	const finalExactRef = useRef();
 	const finalDirectionRef = useRef();
+	const thirdPlaceExactRef = useRef();
+	const thirdPlaceDirectionRef = useRef();
 	groupUtils.knockoutDifferentPoints[0].data[0].ref = roundOf32ExactRef;
 	groupUtils.knockoutDifferentPoints[0].data[1].ref = roundOf32DirectionRef;
 	groupUtils.knockoutDifferentPoints[1].data[0].ref = roundOf16ExactRef;
@@ -62,7 +64,8 @@ const CreateGroup = () => {
 	groupUtils.knockoutDifferentPoints[3].data[1].ref = semiFinalDirectionRef;
 	groupUtils.knockoutDifferentPoints[4].data[0].ref = finalExactRef;
 	groupUtils.knockoutDifferentPoints[4].data[1].ref = finalDirectionRef;
-
+	groupUtils.knockoutDifferentPoints[5].data[0].ref = thirdPlaceExactRef;
+	groupUtils.knockoutDifferentPoints[5].data[1].ref = thirdPlaceDirectionRef;
 	// Get the tournament id from local storage to determine the tournament the group is belongs
 	const tournamentId = localStorage.getItem("tournamentId");
 
@@ -111,6 +114,10 @@ const CreateGroup = () => {
 				final: {
 					exactScore: Number(finalExactRef.current.value),
 					directionScore: Number(finalDirectionRef.current.value),
+				},
+				thirdPlace: {
+					exactScore: Number(thirdPlaceExactRef.current.value),
+					directionScore: Number(thirdPlaceDirectionRef.current.value),
 				},
 			};
 		}
